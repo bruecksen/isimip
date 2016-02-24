@@ -1,0 +1,16 @@
+.*
+*.egg-info
+*.pyc
+*.swp
+coverage.xml
+build/
+dist/
+docs/_build/
+media/
+static-collected/
+emails/
+whoosh_index/
+!.coveragerc
+!.gitignore
+
+
