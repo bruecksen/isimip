@@ -50,6 +50,9 @@ CMS_APPS = (
     'compressor',
     'taggit',
 
+    'blog',
+    'django_tables2',
+
 )
 THIRD_PARTY_APPS = (
     # 'crispy_forms',  # Form layouts
@@ -60,9 +63,12 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
+    'isi_mip.home',
+    'isi_mip.search',
     'isi_mip.climatemodels',
     # 'isi_mip.users',  # custom users app
     'isi_mip.choiceorotherfield',
+    'isi_mip.contrib',
     # Your stuff: custom apps go here
     # 'mswissenschaft.core',
     # 'mswissenschaft.tours',
@@ -183,6 +189,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.request',
                 # Your stuff: custom template context processors go here
             ],
             # 'builtins': ['overextends.templatetags.overextends_tags'],

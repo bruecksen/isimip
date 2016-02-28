@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.core import urlresolvers
 
 from isi_mip.climatemodels.models import ClimateDataSet, ClimateVariable, ReferencePaper, SocioEconomicInputVariables
-from .models import General, Sector, Water, AgroEconomicModelling
+from .models import General, Sector, Water, Biomes
 
 # class WaterAdmin(admin.StackedInline):
 #     model = Water
@@ -10,14 +10,10 @@ from .models import General, Sector, Water, AgroEconomicModelling
 # class GeneralAdmin(admin.ModelAdmin):
 #     inlines = [WaterAdmin]
 
-class WaterAdmin(admin.StackedInline):
-    model = Water
 
-    list_display = ('id', 'general','technological_progress')
-
-class ReferencePaperInlineAdmin(admin.TabularInline):
-    model = ReferencePaper
-    extra = 1
+# class ReferencePaperInlineAdmin(admin.TabularInline):
+#     model = ReferencePaper
+#     extra = 1
 
 class GeneralAdmin(admin.ModelAdmin):
     def sector(self, obj):
@@ -35,12 +31,12 @@ class GeneralAdmin(admin.ModelAdmin):
     trenner.short_description = 'trennerli'
     readonly_fields = ('sector','trenner')
 
-    inlines = [WaterAdmin, ReferencePaperInlineAdmin]
+    # inlines = [ReferencePaperInlineAdmin]
 
     fieldsets = [
         ('Basic Information', {
             'fields':['name', 'sector', 'region', 'contact_person','version',
-                      'main_reference_paper', 'short_description']}
+                      'main_reference_paper', 'additional_papers', 'short_description']}
          ),
         ('Technical Information', {
             'fields': [
@@ -65,4 +61,5 @@ admin.site.register(ClimateDataSet)
 admin.site.register(ClimateVariable)
 admin.site.register(SocioEconomicInputVariables)
 admin.site.register(ReferencePaper)
-# admin.site.register(Water)
+admin.site.register(Water)
+admin.site.register(Biomes)

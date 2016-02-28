@@ -10,6 +10,9 @@ from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtail.wagtailcore import urls as wagtail_urls
 from wagtail.wagtaildocs import urls as wagtaildocs_urls
 
+from isi_mip.search import views as search_views
+from isi_mip.climatemodels import views as climatemodels_views
+
 urlpatterns = [
     # url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name="home"),
     # url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
@@ -19,6 +22,12 @@ urlpatterns = [
 
     url(r'^admin/', include(wagtailadmin_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
+
+    url(r'^blog/', include('blog.urls', namespace="blog")),
+
+    url(r'^search/$', search_views.search, name='search'),
+
+    url(r'^models/$', climatemodels_views.list, name='climatemodels'),
 
     url(r'', include(wagtail_urls)),
 

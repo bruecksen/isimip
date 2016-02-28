@@ -29,7 +29,6 @@ class MyChoiceFieldRenderer(ChoiceFieldRenderer):
                                       choice_value=force_text(w), sub_widgets=''))
 
         choicee = self.value in [x[0] for x in self.choices]
-        print("value", self.value)
         if not choicee:
             valuee = self.value
             valuer = self.value
