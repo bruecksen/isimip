@@ -45,6 +45,21 @@ class SocioEconomicInputVariables(models.Model):
 
 class General(models.Model):
     name = models.CharField(max_length=500)
+    SECTOR_CHOICES = (
+        ('Agriculture', 'Agriculture'),
+        ('Energy', 'Energy'),
+        ('Water (global)', 'Water (global)'),
+        ('Water (regional)', 'Water (regional)'),
+        ('Biomes', 'Biomes'),
+        ('Forests', 'Forests'),
+        ('Marine Ecosystems and Fisheries (global)', 'Marine Ecosystems and Fisheries (global)'),
+        ('Marine Ecosystems and Fisheries (regional)', 'Marine Ecosystems and Fisheries (regional)'),
+        ('Biodiversity', 'Biodiversity'),
+        ('Health', 'Health'),
+        ('Coastal Infrastructure', 'Coastal Infrastructure'),
+        ('Permafrost', 'Permafrost'),
+    )
+    sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
     region = models.ManyToManyField(Region)
     contact_person = models.ForeignKey(User, null=True, blank=True)
     version = models.CharField(max_length=500, null=True, blank=True)
@@ -53,7 +68,7 @@ class General(models.Model):
     short_description = models.TextField(null=True, blank=True)
 
     # technical information
-    RESOLUTION_CHOICES = ( ('0.5°x0.5°', '0.5°x0.5°'), )
+    RESOLUTION_CHOICES = (('0.5°x0.5°', '0.5°x0.5°'), )
     resolution = ChoiceOrOtherField(max_length=500, choices=RESOLUTION_CHOICES, blank=True, null=True)
     TEMPORAL_RESOLUTION_CLIMATE_CHOICES = (('daily', 'daily'), ('monthly', 'monthly'), ('annual', 'annual'),)
     temporal_resolution_climate = ChoiceOrOtherField(max_length=500, choices=TEMPORAL_RESOLUTION_CLIMATE_CHOICES, blank=True, null=True)
@@ -83,7 +98,7 @@ class General(models.Model):
     CACHE_KEY = "climatemodels/general/sector/%d"
 
     @property
-    def sector(self):
+    def fk_sector(self):
         _sector = cache.get(self.CACHE_KEY % self.id)
         if not _sector:
             for i in Sector.subsectors:
@@ -95,13 +110,16 @@ class General(models.Model):
         cache.set(self.CACHE_KEY % self.id, _sector)
         return _sector
 
-    @sector.setter
-    def sector(self, value):
-        print(value)
+    # @sector.setter
+    # def sector(self, value):
+    #     print(value)
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
     # sector = property(get_sector,set_sector)
+
+    class Meta:
+        unique_together = ('name', 'sector')
 
 
 class Sector(models.Model):

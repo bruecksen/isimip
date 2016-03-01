@@ -52,6 +52,7 @@ CMS_APPS = (
 
     'blog',
     'django_tables2',
+    'django_filters',
 
 )
 THIRD_PARTY_APPS = (
@@ -63,9 +64,12 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
+    'isi_mip',
     'isi_mip.home',
     'isi_mip.search',
     'isi_mip.climatemodels',
+    'isi_mip.pages',
+
     # 'isi_mip.users',  # custom users app
     'isi_mip.choiceorotherfield',
     'isi_mip.contrib',
