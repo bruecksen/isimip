@@ -34,14 +34,7 @@ class ReferencePaper(models.Model):
     doi = models.CharField(max_length=500, null=True, blank=True, unique=True)
 
     def __str__(self):
-        return "%s (%s)" %(self.name,self.doi) if self.doi else self.name
-
-
-class ClimateDataSet(models.Model):
-    name = models.CharField(max_length=500, unique=True)
-
-    def __str__(self):
-        return self.name
+        return "%s (%s)" % (self.name, self.doi) if self.doi else self.name
 
 
 class ClimateDataType(models.Model):
@@ -100,7 +93,7 @@ class General(models.Model):
     temporal_resolution_soil = ChoiceOrOtherField(max_length=500, choices=(('annual', 'annual'),), blank=True, null=True)
 
     # input data
-    climate_data_sets = models.ManyToManyField(ClimateDataSet, blank=True)
+    climate_data_sets = models.ManyToManyField('InputData', blank=True)
     climate_variables = models.ManyToManyField(ClimateVariable, blank=True)
     socioeconomic_input_variables = models.ManyToManyField(SocioEconomicInputVariables, blank=True)
     soil_dataset = models.TextField(null=True, blank=True, help_text='Soil dataset')
@@ -329,7 +322,7 @@ class Permafrost(Sector): pass
 
 
 class InputData(models.Model):
-    data_set = models.ForeignKey(ClimateDataSet)
+    data_set = models.CharField(max_length=500, unique=True)
     data_type = models.ForeignKey(ClimateDataType)
     description = models.TextField()
     phase = models.ForeignKey(InputPhase)
@@ -342,7 +335,7 @@ class OutputData(models.Model):
     sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
     model = models.ForeignKey(General)
     scenario = models.ForeignKey(Scenario)
-    drivers = models.ManyToManyField(ClimateDataSet)
+    drivers = models.ManyToManyField(InputData)
     data = models.DateField()
 
     class Meta:

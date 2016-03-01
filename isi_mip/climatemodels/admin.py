@@ -77,7 +77,6 @@ admin.site.register(Health, HideAdmin)
 admin.site.register(CoastalInfrastructure, HideAdmin)
 admin.site.register(Permafrost, HideAdmin)
 
-admin.site.register(ClimateDataSet, HideAdmin)
 admin.site.register(ClimateDataType, HideAdmin)
 admin.site.register(ClimateVariable, HideAdmin)
 admin.site.register(InputPhase, HideAdmin)
