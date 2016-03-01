@@ -21,6 +21,9 @@
     <thead>
     <tr><th>Name</th><th>Sector</th><th>Contact person</th></tr>
     </thead>
+    <tfoot>
+    <tr><th>Name</th><th>Sector</th><th>Contact person</th></tr>
+    </tfoot>
     <tbody>
     {% for row in general %}
         <tr><td>{{ row.name }}</td><td>{{ row.sector }}</td><td>{{ row.contact_person }}</td></tr>
@@ -35,11 +38,36 @@
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <script>
     $(document).ready(function() {
-        $('.datatablestable').DataTable({"bFilter": false});
+        $('.datatablestable').DataTable({
+            "iDisplayLength": 4,
+            "bLengthChange": false,
+            initComplete: function () {
+                this.api().columns([0,':contains(Sector)']).every(function(){
+                    var column = this;
+                    var header = $(".dataTables_filter");
+                    var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
+
+                });
+            }
+
+
+        });
 
     } );
-
-
 
     </script>
 {% endblock %}

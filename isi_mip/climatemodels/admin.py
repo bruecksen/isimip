@@ -1,8 +1,6 @@
 from django.contrib import admin
-from django.core import urlresolvers
 
-from isi_mip.climatemodels.models import ClimateDataSet, ClimateVariable, ReferencePaper, SocioEconomicInputVariables
-from .models import General, Sector, Water, Biomes
+from .models import *
 
 
 # class WaterAdmin(admin.StackedInline):
@@ -58,11 +56,32 @@ class GeneralAdmin(admin.ModelAdmin):
     ]
 
 
+class HideAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
 admin.site.register(General, GeneralAdmin)
-# admin.site.register(General)
-admin.site.register(ClimateDataSet)
-admin.site.register(ClimateVariable)
-admin.site.register(SocioEconomicInputVariables)
-admin.site.register(ReferencePaper)
-admin.site.register(Water)
-admin.site.register(Biomes)
+admin.site.register(InputData)
+admin.site.register(OutputData)
+
+admin.site.register(Agriculture, HideAdmin)
+admin.site.register(Energy, HideAdmin)
+admin.site.register(Water, HideAdmin)
+admin.site.register(Biomes, HideAdmin)
+admin.site.register(MarineEcosystems, HideAdmin)
+admin.site.register(Biodiversity, HideAdmin)
+admin.site.register(Health, HideAdmin)
+admin.site.register(CoastalInfrastructure, HideAdmin)
+admin.site.register(Permafrost, HideAdmin)
+
+admin.site.register(ClimateDataSet, HideAdmin)
+admin.site.register(ClimateDataType, HideAdmin)
+admin.site.register(ClimateVariable, HideAdmin)
+admin.site.register(InputPhase, HideAdmin)
+admin.site.register(ReferencePaper, HideAdmin)
+admin.site.register(Region, HideAdmin)
+admin.site.register(Scenario, HideAdmin)
+admin.site.register(SocioEconomicInputVariables, HideAdmin)

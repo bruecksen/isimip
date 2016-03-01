@@ -6,8 +6,24 @@ from django.db import models
 from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
 
 
+SECTOR_CHOICES = (
+    ('Agriculture', 'Agriculture'),
+    ('Energy', 'Energy'),
+    ('Water (global)', 'Water (global)'),
+    ('Water (regional)', 'Water (regional)'),
+    ('Biomes', 'Biomes'),
+    ('Forests', 'Forests'),
+    ('Marine Ecosystems and Fisheries (global)', 'Marine Ecosystems and Fisheries (global)'),
+    ('Marine Ecosystems and Fisheries (regional)', 'Marine Ecosystems and Fisheries (regional)'),
+    ('Biodiversity', 'Biodiversity'),
+    ('Health', 'Health'),
+    ('Coastal Infrastructure', 'Coastal Infrastructure'),
+    ('Permafrost', 'Permafrost'),
+)
+
+
 class Region(models.Model):
-    name = models.CharField(max_length=500)
+    name = models.CharField(max_length=500, unique=True)
 
     def __str__(self):
         return self.name
@@ -15,14 +31,21 @@ class Region(models.Model):
 
 class ReferencePaper(models.Model):
     name = models.CharField(max_length=500)
-    doi = models.CharField(max_length=500, null=True, blank=True)
+    doi = models.CharField(max_length=500, null=True, blank=True, unique=True)
 
     def __str__(self):
         return "%s (%s)" %(self.name,self.doi) if self.doi else self.name
 
 
 class ClimateDataSet(models.Model):
-    name = models.CharField(max_length=500)
+    name = models.CharField(max_length=500, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class ClimateDataType(models.Model):
+    name = models.CharField(max_length=500, unique=True)
 
     def __str__(self):
         return self.name
@@ -36,8 +59,22 @@ class ClimateVariable(models.Model):
         return "%s (%s)" % (self.name, self.abbrevation)
 
 
+class InputPhase(models.Model):
+    name = models.CharField(max_length=500, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class SocioEconomicInputVariables(models.Model):
-    name = models.CharField(max_length=500)
+    name = models.CharField(max_length=500, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Scenario(models.Model):
+    name = models.CharField(max_length=500, unique=True)
 
     def __str__(self):
         return self.name
@@ -45,20 +82,6 @@ class SocioEconomicInputVariables(models.Model):
 
 class General(models.Model):
     name = models.CharField(max_length=500)
-    SECTOR_CHOICES = (
-        ('Agriculture', 'Agriculture'),
-        ('Energy', 'Energy'),
-        ('Water (global)', 'Water (global)'),
-        ('Water (regional)', 'Water (regional)'),
-        ('Biomes', 'Biomes'),
-        ('Forests', 'Forests'),
-        ('Marine Ecosystems and Fisheries (global)', 'Marine Ecosystems and Fisheries (global)'),
-        ('Marine Ecosystems and Fisheries (regional)', 'Marine Ecosystems and Fisheries (regional)'),
-        ('Biodiversity', 'Biodiversity'),
-        ('Health', 'Health'),
-        ('Coastal Infrastructure', 'Coastal Infrastructure'),
-        ('Permafrost', 'Permafrost'),
-    )
     sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
     region = models.ManyToManyField(Region)
     contact_person = models.ForeignKey(User, null=True, blank=True)
@@ -110,16 +133,19 @@ class General(models.Model):
         cache.set(self.CACHE_KEY % self.id, _sector)
         return _sector
 
-    # @sector.setter
-    # def sector(self, value):
-    #     print(value)
-
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
-    # sector = property(get_sector,set_sector)
+
+    def save(self, *args, **kwargs):
+        # do_something()
+        super(General, self).save(*args, **kwargs) # Call the "real" save() method.
+        
+        # do_something_else()
+
 
     class Meta:
         unique_together = ('name', 'sector')
+        verbose_name_plural = 'Climate Models'
 
 
 class Sector(models.Model):
@@ -300,3 +326,24 @@ class Biodiversity(Sector): pass
 class Health(Sector): pass
 class CoastalInfrastructure(Sector): pass
 class Permafrost(Sector): pass
+
+
+class InputData(models.Model):
+    data_set = models.ForeignKey(ClimateDataSet)
+    data_type = models.ForeignKey(ClimateDataType)
+    description = models.TextField()
+    phase = models.ForeignKey(InputPhase)
+
+    class Meta:
+        verbose_name_plural = 'Input data'
+
+
+class OutputData(models.Model):
+    sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
+    model = models.ForeignKey(General)
+    scenario = models.ForeignKey(Scenario)
+    drivers = models.ManyToManyField(ClimateDataSet)
+    data = models.DateField()
+
+    class Meta:
+        verbose_name_plural = 'Output data'
