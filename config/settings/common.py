@@ -51,9 +51,6 @@ CMS_APPS = (
     'taggit',
 
     'blog',
-    'django_tables2',
-    'django_filters',
-
 )
 THIRD_PARTY_APPS = (
     # 'crispy_forms',  # Form layouts
