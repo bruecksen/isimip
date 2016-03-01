@@ -53,3 +53,5 @@ INSTALLED_APPS += ("gunicorn", )
 
 DATABASES['default'] = env.db("DATABASE_URL")
 
+ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['isi-mip.net'])
+
