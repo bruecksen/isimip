@@ -14,6 +14,7 @@ from __future__ import absolute_import, unicode_literals
 
 import logging
 
+import os
 
 from .common import *  # noqa
 
@@ -55,3 +56,4 @@ DATABASES['default'] = env.db("DATABASE_URL")
 
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['isi-mip.net'])
 
+STATIC_ROOT = os.path.join(ROOT_DIR, 'static-collected')
