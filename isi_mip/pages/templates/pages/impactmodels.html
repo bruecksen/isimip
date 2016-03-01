@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load wagtailcore_tags %}
-{% load render_table from django_tables2 %}
 
 {% block css %}
     {{ block.super }}
@@ -11,12 +10,7 @@
 {% block content %}
     {{ page.description|richtext }}
     <div>
-{#    <form action="" method="get">#}
-{#        {{ filter.form.as_p }}#}
-{#        <input type="submit" />#}
-{#    </form>#}
-{#    {% render_table table %}#}
-{#    {{ general }}#}
+
     <table class="datatablestable">
     <thead>
     <tr><th>Name</th><th>Sector</th><th>Contact person</th></tr>
