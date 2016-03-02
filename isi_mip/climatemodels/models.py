@@ -151,7 +151,7 @@ class ImpactModel(models.Model):
         #     if ImpactModel.objects.get(id=self.pk).sector != self.sector:
         #         import ipdb; ipdb.set_trace()
         super(ImpactModel, self).save(*args, **kwargs) # Call the "real" save() method.
-        print(SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self))
+        SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self)
 
 
     class Meta:
@@ -340,6 +340,20 @@ class CoastalInfrastructure(Sector): pass
 class Permafrost(Sector): pass
 
 
+class OutputData(models.Model):
+    sector = models.CharField(max_length=500, choices=ImpactModel.SECTOR_CHOICES)
+    model = models.ForeignKey(ImpactModel)
+    scenario = models.ForeignKey(Scenario)
+    drivers = models.ManyToManyField(InputData)
+    date = models.DateField()
+
+    def __str__(self):
+        return "%s : %s : %s" % (self.sector, self.model.name, self.scenario.name)
+
+    class Meta:
+        verbose_name_plural = 'Output data'
+
+
 SECTOR_MAPPING ={
     'Agriculture': Agriculture,
     'Energy': Energy,
@@ -354,17 +368,3 @@ SECTOR_MAPPING ={
     'Coastal Infrastructure': CoastalInfrastructure,
     'Permafrost': Permafrost
 }
-
-
-class OutputData(models.Model):
-    sector = models.CharField(max_length=500, choices=ImpactModel.SECTOR_CHOICES)
-    model = models.ForeignKey(ImpactModel)
-    scenario = models.ForeignKey(Scenario)
-    drivers = models.ManyToManyField(InputData)
-    date = models.DateField()
-
-    def __str__(self):
-        return "%s : %s : %s" % (self.sector, self.model.name, self.scenario.name)
-
-    class Meta:
-        verbose_name_plural = 'Output data'
