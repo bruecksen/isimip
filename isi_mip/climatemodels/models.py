@@ -1,25 +1,12 @@
+from django.apps import apps
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
-
-
-SECTOR_CHOICES = (
-    ('Agriculture', 'Agriculture'),
-    ('Energy', 'Energy'),
-    ('Water (global)', 'Water (global)'),
-    ('Water (regional)', 'Water (regional)'),
-    ('Biomes', 'Biomes'),
-    ('Forests', 'Forests'),
-    ('Marine Ecosystems and Fisheries (global)', 'Marine Ecosystems and Fisheries (global)'),
-    ('Marine Ecosystems and Fisheries (regional)', 'Marine Ecosystems and Fisheries (regional)'),
-    ('Biodiversity', 'Biodiversity'),
-    ('Health', 'Health'),
-    ('Coastal Infrastructure', 'Coastal Infrastructure'),
-    ('Permafrost', 'Permafrost'),
-)
 
 
 class Region(models.Model):
@@ -73,11 +60,41 @@ class Scenario(models.Model):
         return self.name
 
 
-class General(models.Model):
+class InputData(models.Model):
+    data_set = models.CharField(max_length=500, unique=True)
+    data_type = models.ForeignKey(ClimateDataType, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    phase = models.ForeignKey(InputPhase, null=True, blank=True)
+
+    def __str__(self):
+        return self.data_set
+
+    class Meta:
+        verbose_name_plural = 'Input data'
+
+class ImpactModel(models.Model):
     name = models.CharField(max_length=500)
+    SECTOR_CHOICES = (
+    ('Agriculture', 'Agriculture'),
+    ('Energy', 'Energy'),
+    ('Water (global)', 'Water (global)'),
+    ('Water (regional)', 'Water (regional)'),
+    ('Biomes', 'Biomes'),
+    ('Forests', 'Forests'),
+    ('Marine Ecosystems and Fisheries (global)', 'Marine Ecosystems and Fisheries (global)'),
+    ('Marine Ecosystems and Fisheries (regional)', 'Marine Ecosystems and Fisheries (regional)'),
+    ('Biodiversity', 'Biodiversity'),
+    ('Health', 'Health'),
+    ('Coastal Infrastructure', 'Coastal Infrastructure'),
+    ('Permafrost', 'Permafrost'),
+    )
     sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
     region = models.ManyToManyField(Region)
-    contact_person = models.ForeignKey(User, null=True, blank=True)
+
+    contact_person_name = models.CharField(max_length=500, null=True, blank=True)
+    contact_person_email = models.EmailField(null=True, blank=True)
+    contact_person_institute = models.CharField(max_length=500, null=True, blank=True)
+
     version = models.CharField(max_length=500, null=True, blank=True)
     main_reference_paper = models.ForeignKey(ReferencePaper, null=True, blank=True, related_name='main_ref')
     additional_papers = models.ManyToManyField(ReferencePaper, blank=True)
@@ -93,7 +110,7 @@ class General(models.Model):
     temporal_resolution_soil = ChoiceOrOtherField(max_length=500, choices=(('annual', 'annual'),), blank=True, null=True)
 
     # input data
-    climate_data_sets = models.ManyToManyField('InputData', blank=True)
+    climate_data_sets = models.ManyToManyField(InputData, blank=True)
     climate_variables = models.ManyToManyField(ClimateVariable, blank=True)
     socioeconomic_input_variables = models.ManyToManyField(SocioEconomicInputVariables, blank=True)
     soil_dataset = models.TextField(null=True, blank=True, help_text='Soil dataset')
@@ -111,45 +128,47 @@ class General(models.Model):
     anything_else = models.TextField(null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output')
     comments = models.TextField(null=True, blank=True, help_text='Additional comments')
 
-    CACHE_KEY = "climatemodels/general/sector/%d"
+    owner = models.ForeignKey(User)
+
+
+    CACHE_KEY = "climatemodels/impact_model/sector/%d"
 
     @property
     def fk_sector(self):
-        _sector = cache.get(self.CACHE_KEY % self.id)
-        if not _sector:
-            for i in Sector.subsectors:
-                try:
-                    _sector = self.__getattribute__(i)
-                    break
-                except ObjectDoesNotExist:
-                    pass
-        cache.set(self.CACHE_KEY % self.id, _sector)
-        return _sector
+        sector = SECTOR_MAPPING[self.sector]
+        sectorname = sector._meta.label_lower.rsplit('.')[-1]
+        return getattr(self, sectorname)
+        # TODO: check if the upper doesnt hit the database like the lower does.
+        # return sector.objects.get(impact_model=self)
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
 
     def save(self, *args, **kwargs):
-        # do_something()
-        super(General, self).save(*args, **kwargs) # Call the "real" save() method.
-        
-        # do_something_else()
+        if not self.owner_id:
+            self.owner_id =1
+        # if self.sector:
+        #     if ImpactModel.objects.get(id=self.pk).sector != self.sector:
+        #         import ipdb; ipdb.set_trace()
+        super(ImpactModel, self).save(*args, **kwargs) # Call the "real" save() method.
+        print(SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self))
 
 
     class Meta:
         unique_together = ('name', 'sector')
-        verbose_name_plural = 'Climate Models'
+        # verbose_name_plural = 'Impact Models'
 
 
 class Sector(models.Model):
-    general = models.OneToOneField(General)
+    impact_model = models.OneToOneField(ImpactModel)
 
     subsectors = ['agriculture', 'energy', 'water', 'biomes', 'marineecosystems',
                   'biodiversity', 'health', 'coastalinfrastructure', 'permafrost']
 
     @staticmethod
     def get(name):
-        if name.lower().strip() == 'water' or name == Water:
+
+        if name.lower().strip() == 'water':
             return Water
 
 
@@ -321,22 +340,31 @@ class CoastalInfrastructure(Sector): pass
 class Permafrost(Sector): pass
 
 
-class InputData(models.Model):
-    data_set = models.CharField(max_length=500, unique=True)
-    data_type = models.ForeignKey(ClimateDataType)
-    description = models.TextField()
-    phase = models.ForeignKey(InputPhase)
-
-    class Meta:
-        verbose_name_plural = 'Input data'
+SECTOR_MAPPING ={
+    'Agriculture': Agriculture,
+    'Energy': Energy,
+    'Water (global)': Water,
+    'Water (regional)': Water,
+    'Biomes': Biomes,
+    'Forests': Biomes,
+    'Marine Ecosystems and Fisheries (global)': MarineEcosystems,
+    'Marine Ecosystems and Fisheries (regional)': MarineEcosystems,
+    'Biodiversity': Biodiversity,
+    'Health': Health,
+    'Coastal Infrastructure': CoastalInfrastructure,
+    'Permafrost': Permafrost
+}
 
 
 class OutputData(models.Model):
-    sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
-    model = models.ForeignKey(General)
+    sector = models.CharField(max_length=500, choices=ImpactModel.SECTOR_CHOICES)
+    model = models.ForeignKey(ImpactModel)
     scenario = models.ForeignKey(Scenario)
     drivers = models.ManyToManyField(InputData)
-    data = models.DateField()
+    date = models.DateField()
+
+    def __str__(self):
+        return "%s : %s : %s" % (self.sector, self.model.name, self.scenario.name)
 
     class Meta:
         verbose_name_plural = 'Output data'

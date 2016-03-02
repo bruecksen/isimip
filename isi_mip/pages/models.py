@@ -2,7 +2,7 @@ from wagtail.wagtailadmin.edit_handlers import FieldPanel
 from wagtail.wagtailcore.fields import RichTextField
 from wagtail.wagtailcore.models import Page
 
-from isi_mip.climatemodels.models import General
+from isi_mip.climatemodels.models import ImpactModel
 
 
 class ImpactModelsPage(Page):
@@ -15,7 +15,7 @@ class ImpactModelsPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super(ImpactModelsPage, self).get_context(request, *args, **kwargs)
-        context['general'] = General.objects.all()
+        context['general'] = ImpactModel.objects.all()
         return context
 
     class Meta:

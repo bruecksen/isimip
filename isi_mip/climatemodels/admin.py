@@ -1,41 +1,31 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericTabularInline
+from django.core import urlresolvers
 
 from .models import *
 
-
-# class WaterAdmin(admin.StackedInline):
-#     model = Water
-#
-# class GeneralAdmin(admin.ModelAdmin):
-#     inlines = [WaterAdmin]
-
-
-# class ReferencePaperInlineAdmin(admin.TabularInline):
-#     model = ReferencePaper
-#     extra = 1
-
-class GeneralAdmin(admin.ModelAdmin):
-    # def sector(self, obj):
-    #     try:
-    #         adminurl = "admin:%s_change" % obj.sector._meta.db_table
-    #         link=urlresolvers.reverse(adminurl, args=[obj.sector.id])
-    #         return '<a href="%s">%s</a>' % (link,obj.sector)
-    #     except:
-    #         return
-    # sector.allow_tags = True
+class ImpactModelAdmin(admin.ModelAdmin):
+    def sector_link(self, obj):
+        try:
+            adminurl = "admin:%s_change" % obj.fk_sector._meta.db_table
+            link=urlresolvers.reverse(adminurl, args=[obj.fk_sector.id])
+            return '<a href="%s">%s</a>' % (link,obj.fk_sector)
+        except:
+            return
+    sector_link.allow_tags = True
+    sector_link.short_description = 'Sector link'
     #
     # def trenner(self, obj):
     #     return '<hl />'
     #
     # trenner.allow_tags = True
     # trenner.short_description = 'trennerli'
-    # readonly_fields = ('sector', 'trenner')
-
-    # inlines = [ReferencePaperInlineAdmin]
+    readonly_fields = ('sector_link', )
 
     fieldsets = [
         ('Basic Information', {
-            'fields': ['name', 'sector', 'region', 'contact_person', 'version',
+            'fields': ['name', 'sector', 'sector_link', 'region', 'version',
+                       'contact_person_name', 'contact_person_email', 'contact_person_institute',
                        'main_reference_paper', 'additional_papers', 'short_description']}
          ),
         ('Technical Information', {
@@ -63,19 +53,24 @@ class HideAdmin(admin.ModelAdmin):
         """
         return {}
 
-admin.site.register(General, GeneralAdmin)
+
+class HideSectorAdmin(HideAdmin):
+    # readonly_fields = ('impact_model',)
+    pass
+
+admin.site.register(ImpactModel, ImpactModelAdmin)
 admin.site.register(InputData)
 admin.site.register(OutputData)
 
-admin.site.register(Agriculture, HideAdmin)
-admin.site.register(Energy, HideAdmin)
-admin.site.register(Water, HideAdmin)
-admin.site.register(Biomes, HideAdmin)
-admin.site.register(MarineEcosystems, HideAdmin)
-admin.site.register(Biodiversity, HideAdmin)
-admin.site.register(Health, HideAdmin)
-admin.site.register(CoastalInfrastructure, HideAdmin)
-admin.site.register(Permafrost, HideAdmin)
+admin.site.register(Agriculture, HideSectorAdmin)
+admin.site.register(Energy, HideSectorAdmin)
+admin.site.register(Water, HideSectorAdmin)
+admin.site.register(Biomes, HideSectorAdmin)
+admin.site.register(MarineEcosystems, HideSectorAdmin)
+admin.site.register(Biodiversity, HideSectorAdmin)
+admin.site.register(Health, HideSectorAdmin)
+admin.site.register(CoastalInfrastructure, HideSectorAdmin)
+admin.site.register(Permafrost, HideSectorAdmin)
 
 admin.site.register(ClimateDataType, HideAdmin)
 admin.site.register(ClimateVariable, HideAdmin)

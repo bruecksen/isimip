@@ -1,5 +1,5 @@
-from isi_mip.climatemodels.models import General, Water, Region, Sector, Biomes, ReferencePaper, \
-    SocioEconomicInputVariables, ClimateDataSet
+from isi_mip.climatemodels.models import ImpactModel, Water, Region, Sector, Biomes, ReferencePaper, \
+    SocioEconomicInputVariables, InputData
 import pyexcel as pe
 import pyexcel.ext.xlsx
 import crossrefpy
@@ -16,13 +16,13 @@ class XLSImport:
 
     def run_general(self, zeile):
         SpecificSector = Sector.get(zeile[0])
-        general = General.objects.filter(name=zeile[2])
+        general = ImpactModel.objects.filter(name=zeile[2])
         if general:
-            sector = SpecificSector.objects.get(general__in=general)
-            general = sector.general
+            sector = SpecificSector.objects.get(impact_model__in=general)
+            general = sector.impact_model
         else:
-            general = General.objects.create(name=zeile[2])
-            sector = SpecificSector.objects.create(general = general)
+            general = ImpactModel.objects.create(name=zeile[2],sector='Water (global)')
+            sector = general.fk_sector
 
         general.region.add(Region.objects.get_or_create(name=zeile[1])[0])
         general.version = zeile[6]
@@ -56,7 +56,7 @@ class XLSImport:
             x = SocioEconomicInputVariables.objects.get_or_create(name=vari)[0]
             general.socioeconomic_input_variables.add(x)
         for vari in zeile[17].split(','):
-            x = ClimateDataSet.objects.get_or_create(name=vari)[0]
+            x = InputData.objects.get_or_create(data_set=vari)[0]
             general.climate_data_sets.add(x)
 
         general.soil_dataset = zeile[16]
@@ -85,7 +85,10 @@ class XLSImport:
             if _line[0] == self.general.name:
                 line1 = _line
                 break
-        water.technological_progress = line1[1]
+        try:
+            water.technological_progress = line1[1]
+        except:
+            print(self.general)
         water.soil = line1[2]
         water.water_use = line1[3]
         water.water_sectors = line1[4]

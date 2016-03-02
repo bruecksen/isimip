@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from isi_mip.climatemodels.forms import GeneralForm
-from isi_mip.climatemodels.models import General
+from isi_mip.climatemodels.models import ImpactModel
 
 
 #
@@ -15,7 +15,7 @@ from isi_mip.climatemodels.models import General
 
 def edit(request, id=None):
     if id:
-        gen = General.objects.get(id=id)
+        gen = ImpactModel.objects.get(id=id)
         context = {'form': GeneralForm(instance=gen)}
     else:
         context = {'form': GeneralForm()}

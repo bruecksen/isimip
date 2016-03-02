@@ -5,13 +5,11 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views import defaults as default_views
-from django.views.generic import TemplateView
 from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtail.wagtailcore import urls as wagtail_urls
 from wagtail.wagtaildocs import urls as wagtaildocs_urls
+from wagtail.wagtailsearch import urls as wagtailsearch_urls
 
-from isi_mip.search import views as search_views
-from isi_mip.climatemodels import views as climatemodels_views
 from isi_mip.climatemodels import urls as climatemodels_urls
 
 urlpatterns = [
@@ -19,19 +17,17 @@ urlpatterns = [
     # url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
 
     # Django Admin, use {% url 'admin:index' %}
-    url(settings.ADMIN_URL, include(admin.site.urls)),
+    url(r'^django-admin/', include(admin.site.urls)),
 
     url(r'^admin/', include(wagtailadmin_urls)),
+    url(r'^search/', include(wagtailsearch_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
 
     url(r'^blog/', include('blog.urls', namespace="blog")),
 
-    url(r'^search/$', search_views.search, name='search'),
-
-    # url(r'^models/$', climatemodels_views.list, name='climatemodels'),
     url(r'^models/', include(climatemodels_urls)),
-    url(r'', include(wagtail_urls)),
 
+    url(r'', include(wagtail_urls)),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
@@ -39,7 +35,6 @@ urlpatterns = [
 if settings.DEBUG:
     from django.conf.urls.static import static
     from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-    from django.views.generic import TemplateView
 
     # Serve static and media files from development server
     urlpatterns += staticfiles_urlpatterns()
