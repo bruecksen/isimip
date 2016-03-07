@@ -66,6 +66,7 @@ LOCAL_APPS = (
     'isi_mip.search',
     'isi_mip.climatemodels',
     'isi_mip.pages',
+    'isi_mip.invitation',
 
     # 'isi_mip.users',  # custom users app
     'isi_mip.choiceorotherfield',
@@ -269,3 +270,5 @@ ADMIN_URL = env('DJANGO_ADMIN_URL', default='admin')
 # ------------------------------------------------------------------------------
 WAGTAIL_SITE_NAME = 'ISI MIP'
 WAGTAIL_ENABLE_UPDATE_CHECK = False
+
+INVITATION_VALID_DAYS = 7

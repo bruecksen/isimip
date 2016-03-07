@@ -4,6 +4,8 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.views import defaults as default_views
 from wagtail.wagtailadmin import urls as wagtailadmin_urls
 from wagtail.wagtailcore import urls as wagtail_urls
@@ -11,6 +13,16 @@ from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailsearch import urls as wagtailsearch_urls
 
 from isi_mip.climatemodels import urls as climatemodels_urls
+from isi_mip.invitation.views import InvitationView, RegistrationView
+
+
+def superuser_required(view):
+    def f(request, *args, **kwargs):
+        if request.user.is_superuser:
+            return view(request, *args, **kwargs)
+        return HttpResponseRedirect(reverse('admin:login')+'?next='+request.META['PATH_INFO'])
+    return f
+
 
 urlpatterns = [
     # url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name="home"),
@@ -18,16 +30,20 @@ urlpatterns = [
 
     # Django Admin, use {% url 'admin:index' %}
     url(r'^django-admin/', include(admin.site.urls)),
-
     url(r'^admin/', include(wagtailadmin_urls)),
+
+    url(r'^models/', include(climatemodels_urls, namespace='climatemodels')),
+
+
     url(r'^search/', include(wagtailsearch_urls)),
     url(r'^documents/', include(wagtaildocs_urls)),
+    url(r'^accounts/invite/$', superuser_required(InvitationView.as_view()), name='account_invite'),
+    url(r'^accounts/register/(?P<pk>\d+)/(?P<token>[0-9a-f]{40})/$', RegistrationView.as_view(), name='account_register'),
+    # url(r'^accounts/', include('allauth.urls')),
 
     url(r'^blog/', include('blog.urls', namespace="blog")),
 
-    url(r'^models/', include(climatemodels_urls)),
-
-    url(r'', include(wagtail_urls)),
+    # url(r'', include(wagtail_urls)),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
