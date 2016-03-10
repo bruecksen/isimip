@@ -4,6 +4,11 @@ from django.core import urlresolvers
 
 from .models import *
 
+
+class ContactPersonAdmin(admin.TabularInline):
+    model = ContactPerson
+    extra = 1
+
 class ImpactModelAdmin(admin.ModelAdmin):
     def sector_link(self, obj):
         try:
@@ -22,10 +27,11 @@ class ImpactModelAdmin(admin.ModelAdmin):
     # trenner.short_description = 'trennerli'
     readonly_fields = ('sector_link', )
 
+    inlines = [ContactPersonAdmin]
+
     fieldsets = [
         ('Basic Information', {
             'fields': ['name', 'sector', 'sector_link', 'region', 'version',
-                       'contact_person_name', 'contact_person_email', 'contact_person_institute',
                        'main_reference_paper', 'additional_papers', 'short_description']}
          ),
         ('Technical Information', {
@@ -79,3 +85,4 @@ admin.site.register(ReferencePaper, HideAdmin)
 admin.site.register(Region, HideAdmin)
 admin.site.register(Scenario, HideAdmin)
 admin.site.register(SocioEconomicInputVariables, HideAdmin)
+admin.site.register(ContactPerson, HideAdmin)

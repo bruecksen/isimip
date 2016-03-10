@@ -60,6 +60,16 @@ class Scenario(models.Model):
         return self.name
 
 
+class ContactPerson(models.Model):
+    name = models.CharField(max_length=500, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    institute = models.CharField(max_length=500, null=True, blank=True)
+    impact_model = models.ForeignKey('ImpactModel', null=True, blank=True)
+
+    def __str__(self):
+        return "%s (%s) - %s" % (self.name, self.institute, self.email)
+
+
 class InputData(models.Model):
     data_set = models.CharField(max_length=500, unique=True)
     data_type = models.ForeignKey(ClimateDataType, null=True, blank=True)
@@ -72,28 +82,27 @@ class InputData(models.Model):
     class Meta:
         verbose_name_plural = 'Input data'
 
+
 class ImpactModel(models.Model):
     name = models.CharField(max_length=500)
     SECTOR_CHOICES = (
-    ('Agriculture', 'Agriculture'),
-    ('Energy', 'Energy'),
-    ('Water (global)', 'Water (global)'),
-    ('Water (regional)', 'Water (regional)'),
-    ('Biomes', 'Biomes'),
-    ('Forests', 'Forests'),
-    ('Marine Ecosystems and Fisheries (global)', 'Marine Ecosystems and Fisheries (global)'),
-    ('Marine Ecosystems and Fisheries (regional)', 'Marine Ecosystems and Fisheries (regional)'),
-    ('Biodiversity', 'Biodiversity'),
-    ('Health', 'Health'),
-    ('Coastal Infrastructure', 'Coastal Infrastructure'),
-    ('Permafrost', 'Permafrost'),
+        ('Agriculture', 'Agriculture'),
+        ('Energy', 'Energy'),
+        ('Water (global)', 'Water (global)'),
+        ('Water (regional)', 'Water (regional)'),
+        ('Biomes', 'Biomes'),
+        ('Forests', 'Forests'),
+        ('Marine Ecosystems and Fisheries (global)', 'Marine Ecosystems and Fisheries (global)'),
+        ('Marine Ecosystems and Fisheries (regional)', 'Marine Ecosystems and Fisheries (regional)'),
+        ('Biodiversity', 'Biodiversity'),
+        ('Health', 'Health'),
+        ('Coastal Infrastructure', 'Coastal Infrastructure'),
+        ('Permafrost', 'Permafrost'),
     )
     sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
     region = models.ManyToManyField(Region)
 
-    contact_person_name = models.CharField(max_length=500, null=True, blank=True)
-    contact_person_email = models.EmailField(null=True, blank=True)
-    contact_person_institute = models.CharField(max_length=500, null=True, blank=True)
+    # contact_person = models.ForeignKey(ContactPerson, null=True, blank=True)
 
     version = models.CharField(max_length=500, null=True, blank=True)
     main_reference_paper = models.ForeignKey(ReferencePaper, null=True, blank=True, related_name='main_ref')
@@ -146,13 +155,12 @@ class ImpactModel(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.owner_id:
-            self.owner_id =1
+            self.owner_id = 1
         # if self.sector:
         #     if ImpactModel.objects.get(id=self.pk).sector != self.sector:
         #         import ipdb; ipdb.set_trace()
         super(ImpactModel, self).save(*args, **kwargs) # Call the "real" save() method.
         SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self)
-
 
     class Meta:
         unique_together = ('name', 'sector')
@@ -170,7 +178,6 @@ class Sector(models.Model):
 
         if name.lower().strip() == 'water':
             return Water
-
 
     class Meta:
         abstract = True

@@ -29,8 +29,8 @@ urlpatterns = [
     # url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
 
     # Django Admin, use {% url 'admin:index' %}
-    url(r'^django-admin/', include(admin.site.urls)),
-    url(r'^admin/', include(wagtailadmin_urls)),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^cms/', include(wagtailadmin_urls)),
 
     url(r'^models/', include(climatemodels_urls, namespace='climatemodels')),
 
@@ -43,7 +43,7 @@ urlpatterns = [
 
     url(r'^blog/', include('blog.urls', namespace="blog")),
 
-    # url(r'', include(wagtail_urls)),
+    url(r'', include(wagtail_urls)),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
