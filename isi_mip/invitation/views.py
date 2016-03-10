@@ -1,7 +1,6 @@
 import hashlib
 import os
 
-from allauth.utils import build_absolute_uri
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -51,7 +50,7 @@ class InvitationView(FormView):
         register_link = reverse('account_register', kwargs={'pk':user.id,'token':self.invite.token} )
 
         context = {
-            'url': build_absolute_uri(self.request, register_link),
+            'url': self.request.build_absolute_uri(register_link),
             'expiration_days': self.valid_until,
             'site': get_current_site(self.request)
         }
