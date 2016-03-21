@@ -62,6 +62,9 @@ THIRD_PARTY_APPS = (
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'isi_mip',
+    'isi_mip.core',
+    'isi_mip.styleguide',
+
     'isi_mip.home',
     'isi_mip.search',
     'isi_mip.climatemodels',

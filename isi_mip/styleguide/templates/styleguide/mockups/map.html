@@ -1,0 +1,19 @@
+{% extends "styleguide/base.html" %}
+{% load static %}
+
+{% block viewport %}<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />{% endblock %}
+
+
+{% block header %}
+	{{ header_fixed_output }}
+{% endblock %}
+
+{% block content %}
+	<div style="height: 100vh;">
+		{{ fullscreen_map_output }}
+	</div>
+{% endblock %}
+
+{% block footer %}
+{{ footer_fixed_output }}
+{% endblock %}

@@ -13,7 +13,7 @@ from wagtail.wagtaildocs import urls as wagtaildocs_urls
 from wagtail.wagtailsearch import urls as wagtailsearch_urls
 
 from isi_mip.climatemodels import urls as climatemodels_urls
-from isi_mip.invitation.views import InvitationView, RegistrationView
+from isi_mip.invitation import urls as invitations_urls
 
 
 def superuser_required(view):
@@ -27,21 +27,22 @@ def superuser_required(view):
 urlpatterns = [
     # url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name="home"),
     # url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
+    # url(r'^search/', include(wagtailsearch_urls)),
+    # url(r'^documents/', include(wagtaildocs_urls)),
 
-    # Django Admin, use {% url 'admin:index' %}
+    url(r'^styleguide/', include("isi_mip.styleguide.urls", namespace="styleguide")),
+
     url(r'^admin/', include(admin.site.urls)),
     url(r'^cms/', include(wagtailadmin_urls)),
 
     url(r'^models/', include(climatemodels_urls, namespace='climatemodels')),
-
-
-    url(r'^search/', include(wagtailsearch_urls)),
-    url(r'^documents/', include(wagtaildocs_urls)),
-    url(r'^accounts/invite/$', superuser_required(InvitationView.as_view()), name='account_invite'),
-    url(r'^accounts/register/(?P<pk>\d+)/(?P<token>[0-9a-f]{40})/$', RegistrationView.as_view(), name='account_register'),
-    # url(r'^accounts/', include('allauth.urls')),
+    url(r'^accounts/', include(invitations_urls), name='account'),
 
     url(r'^blog/', include('blog.urls', namespace="blog")),
+
+    # url(r'^accounts/invite/$', superuser_required(InvitationView.as_view()), name='account_invite'),
+    # url(r'^accounts/register/(?P<pk>\d+)/(?P<token>[0-9a-f]{40})/$', RegistrationView.as_view(), name='account_register'),
+    # url(r'^accounts/', include('allauth.urls')),
 
     url(r'', include(wagtail_urls)),
 

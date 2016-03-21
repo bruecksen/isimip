@@ -1,0 +1,2 @@
+# Styleguide dependencies go here
+Django==1.9.4

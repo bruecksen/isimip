@@ -1,0 +1,5 @@
+<div class="widget-messages">
+	{% for message in messages %}
+		<div class="alert {% if message.tags == 'info' %}alert-info{% elif message.tags == "success" %}alert-success{% elif message.tags == "warning" %}alert-warning{% elif message.tags == "error" %}alert-danger{% else %}alert-info{% endif %}">{{ message.text }}</div>
+	{% endfor %}
+</div>
