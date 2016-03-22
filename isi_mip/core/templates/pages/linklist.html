@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content_container %}
+    {{ page.title }}
+
+    <div class="content-container">
+        <div class="container">
+            {% block content %}
+                {{ page.links }}
+            {% endblock %}
+        </div><!-- container -->
+        <br><br>
+    </div><!-- content-container -->
+{% endblock %}

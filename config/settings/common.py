@@ -1,13 +1,3 @@
-"""
-Django settings for ISI-MIP project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/dev/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/dev/ref/settings/
-"""
-
 import environ
 
 ROOT_DIR = environ.Path(__file__) - 3  # (/config/settings/common.py - 3 = /)
@@ -46,6 +36,10 @@ CMS_APPS = (
     'wagtail.wagtailadmin',
     'wagtail.wagtailcore',
 
+
+    'wagtail.contrib.settings',
+    # 'wagtail.contrib.wagtailstyleguide',
+
     'modelcluster',
     'compressor',
     'taggit',
@@ -63,23 +57,15 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'isi_mip',
     'isi_mip.core',
+    'isi_mip.contrib',
     'isi_mip.styleguide',
 
-    'isi_mip.home',
-    'isi_mip.search',
-    'isi_mip.climatemodels',
     'isi_mip.pages',
-    'isi_mip.invitation',
+    'isi_mip.climatemodels',
+    # 'isi_mip.search',
 
-    # 'isi_mip.users',  # custom users app
+    'isi_mip.invitation',
     'isi_mip.choiceorotherfield',
-    'isi_mip.contrib',
-    # Your stuff: custom apps go here
-    # 'mswissenschaft.core',
-    # 'mswissenschaft.tours',
-    # 'mswissenschaft.entries',
-    # 'mswissenschaft.pages',
-    # 'mswissenschaft.styleguide',
 )
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + CMS_APPS
@@ -126,7 +112,7 @@ EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.s
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ("""Eraldo Energy""", 'eraldo@eraldo.org'),
+    ("""Sinnwerkstatt Admin""", 'webmaster@sinnwerkstatt.com'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers

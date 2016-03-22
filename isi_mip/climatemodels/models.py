@@ -104,7 +104,7 @@ class ImpactModel(models.Model):
 
     # contact_person = models.ForeignKey(ContactPerson, null=True, blank=True)
 
-    version = models.CharField(max_length=500, null=True, blank=True)
+    version = models.CharField(max_length=500, null=True, blank=True, verbose_name='Model Version')
     main_reference_paper = models.ForeignKey(ReferencePaper, null=True, blank=True, related_name='main_ref')
     additional_papers = models.ManyToManyField(ReferencePaper, blank=True)
     short_description = models.TextField(null=True, blank=True)

@@ -1,21 +1,64 @@
-from wagtail.wagtailadmin.edit_handlers import FieldPanel
-from wagtail.wagtailcore import blocks
+from modelcluster.models import ClusterableModel
+from wagtail.contrib.settings.models import BaseSetting
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.wagtailcore.blocks import RichTextBlock
 from wagtail.wagtailcore.fields import RichTextField, StreamField
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.wagtailcore.models import Page, Orderable
 
 from isi_mip.climatemodels.models import ImpactModel
+from isi_mip.pages.blocks import SmallTeaserBlock, PaperBlock, LinkBlock, FAQBlock
+
+BASE_BLOCKS = [
+    ('rich_text', RichTextBlock()),
+]
 
 
-class ContentPage(Page):
-    content = StreamField([
-        ('heading', blocks.CharBlock(classname="full title")),
-        ('paragraph', blocks.RichTextBlock()),
-        ('image', ImageChooserBlock()),
+class HomePage(Page):
+    template = 'pages/home.html'
+    parent_page_types = ['wagtailcore.Page']
+    teasers = StreamField([
+        ('teaser', SmallTeaserBlock())
+    ])
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('teasers'),
+    ]
+
+
+class OutcomesPage(Page):
+    template = 'pages/outcomes.html'
+
+    papers = StreamField([
+        ('paper', PaperBlock()),
     ])
     content_panels = Page.content_panels + [
-        FieldPanel('content'),
+        StreamFieldPanel('papers'),
     ]
+
+
+class LinkListPage(Page):
+    template = 'pages/linklist.html'
+    links = StreamField([
+        ('link', LinkBlock()),
+    ])
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('links'),
+    ]
+
+
+class FAQPage(Page):
+    template = 'pages/faq.html'
+    for_modelers = StreamField([
+        ('faq', FAQBlock()),
+    ])
+    for_researchers = StreamField([
+        ('faq', FAQBlock()),
+    ])
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('for_modelers'),
+        StreamFieldPanel('for_researchers'),
+    ]
+
 
 class ImpactModelsPage(Page):
     description = RichTextField()
@@ -32,3 +75,11 @@ class ImpactModelsPage(Page):
 
     class Meta:
         verbose_name = "Impact Models"
+
+
+class NewsPage(Page):
+    template = 'pages/news.html'
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['news'] = ''
+        return context
