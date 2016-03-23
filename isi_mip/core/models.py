@@ -18,11 +18,14 @@ class HeaderLinks(ClusterableModel, BaseSetting):
 
 class HeaderLink(Orderable, models.Model):
     header = ParentalKey(HeaderLinks, related_name='header_links')
-    name = models.CharField(max_length=255)
     target = models.ForeignKey('wagtailcore.Page')
+    _name = models.CharField(max_length=255, null=True, blank=True, verbose_name='Alt. name',
+                             help_text='If left empty, the target\'s title will be used.')
+    name = property(lambda self: self._name or self.target.title)
+
     panels = [
-        FieldPanel('name'),
         PageChooserPanel('target'),
+        FieldPanel('_name'),
     ]
 
 
@@ -35,9 +38,12 @@ class FooterLinks(ClusterableModel, BaseSetting):
 
 class FooterLink(Orderable, models.Model):
     footer = ParentalKey(FooterLinks, related_name='footer_links')
-    name = models.CharField(max_length=255)
     target = models.ForeignKey('wagtailcore.Page')
+    _name = models.CharField(max_length=255, null=True, blank=True, verbose_name='Alt. name',
+                             help_text='If left empty, the target\'s title will be used.')
+    name = property(lambda self: self._name or self.target.title)
+
     panels = [
-        FieldPanel('name'),
         PageChooserPanel('target'),
+        FieldPanel('_name'),
     ]
