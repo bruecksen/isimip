@@ -1,0 +1,11 @@
+<div class="widget-page-teaser">
+	{% if image %}
+		{% if href %}
+			{% include 'widgets/image.html' with url=image.url name=title href=href %}
+		{% else %}
+			{% include 'widgets/image.html' with url=image.url name=title %}
+		{% endif %}
+	{% endif %}
+
+	{% include "widgets/page-teaser-text.html" with href=href text=text %}
+</div>

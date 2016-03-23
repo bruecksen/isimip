@@ -1,0 +1,41 @@
+<div class="widget-page-teaser-text">
+{% if text.author %}
+	<p class="widget-page-teaser-text-author"><em>{{ text.author }}</em></p>
+{% endif %}
+{% if text.title %}
+	<h3>
+		{% if href %}
+			<a href="{{ href }}">
+				{{ text.title }}
+			</a>
+		{% else %}
+			{{ text.title }}
+		{% endif %}
+	</h3>
+{% endif %}
+{% if text.date %}
+	<p class="widget-page-teaser-text-date">
+		<em>
+			<i class="fa fa-clock-o"></i>
+			{{ text.date }}
+		</em>
+	</p>
+{% endif %}
+{% if text.date %}
+	<p class="widget-page-teaser-text-journal"><em>{{ text.journal }}</em></p>
+{% endif %}
+{% if text.description %}
+	<p class="widget-page-teaser-text-description">{{ text.description }}</p>
+{% endif %}
+{% if text.source %}
+	<p class="widget-page-teaser-text-source">
+		<a href="{{ text.source.href }}">
+			<i class="fa fa-external-link"></i>
+			{{ text.source.description }}
+		</a>
+	</p>
+{% endif %}
+{% if text.arrow_right_link %}
+	{% include "widgets/arrow-right-link.html" with href=href %}
+{% endif %}
+</div><!-- widget-page-teaser-text -->

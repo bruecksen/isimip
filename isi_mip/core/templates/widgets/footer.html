@@ -1,2 +1,30 @@
 {% load staticfiles i18n %}
-{% for link in links %} <a href="{{ link.url }}">{{ link.text }}</a> {% endfor %}
+<div class="widget-footer{% if fixed %} footer-fixed{% endif %}">
+	<div class="widget-footer-navbar">
+		<ul class="nav text-center">
+			{% for link in links %}
+				<li role="presentation"{% if link.active %} class="active"{% endif %}><a
+						href="{{ link.url }}">{{ link.text }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="widget-footer-logos">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-2">
+					<div class="row">
+						<div class="col-xs-4 col-xs-offset-4 col-sm-10 col-sm-offset-1">
+							<img src="{% static 'images/footer-logo.png' %}" class="image">
+						</div>
+					</div><!-- row -->
+				</div>
+				<div class="col-sm-3 col-sm-offset-4">
+					Konzeption, Gestaltung und Umsetzung: sinnwerkstatt Medienagentur GmbH
+				</div>
+				<div class="col-sm-3">
+					Lizenz
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!-- widget-footer -->

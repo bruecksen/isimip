@@ -1,8 +1,0 @@
-<div class="link">
-    {% if url %}<a href="{{ url }}">{{ title }}</a>
-    {% else %}
-    {{ title }}
-    {% endif %}
-    {% include 'widgets/image.html' with url=image.url name=image.name %}
-    {{ text }}
-</div>

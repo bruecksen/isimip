@@ -1,0 +1,18 @@
+<div class="widget-page-teaser-wide">
+	{% if image %}
+		<div class="row">
+			<div class="col-sm-4">
+				{% if href %}
+					{% include 'widgets/image.html' with url=image.url name=title href=href %}
+				{% else %}
+					{% include 'widgets/image.html' with url=image.url name=title %}
+				{% endif %}
+			</div>
+			<div class="col-sm-8">
+				{% include "widgets/page-teaser-text.html" with href=href text=text %}
+			</div>
+		</div>
+	{% else %}
+		{% include "widgets/page-teaser-text.html" with href=href text=text %}
+	{% endif %}
+</div>
