@@ -17,7 +17,7 @@ class HeaderLinks(ClusterableModel, BaseSetting):
 
 
 class HeaderLink(Orderable, models.Model):
-    footer = ParentalKey(HeaderLinks, related_name='header_links')
+    header = ParentalKey(HeaderLinks, related_name='header_links')
     name = models.CharField(max_length=255)
     target = models.ForeignKey('wagtailcore.Page')
     panels = [

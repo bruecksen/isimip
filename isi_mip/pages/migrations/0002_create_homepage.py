@@ -4,54 +4,90 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
-def create_homepage(apps, schema_editor):
-    # Get models
-    ContentType = apps.get_model('contenttypes.ContentType')
+class RichPage:
+    def __init__(self, apps, type, ctlabel, ctmodel):
+        ContentType = apps.get_model('contenttypes.ContentType')
+        self.Page = apps.get_model(type)
+
+        self.page_content_type, created = ContentType.objects.get_or_create(
+            model=ctmodel, app_label=ctlabel)
+        self.parent = None
+
+    def page(self, title, slug):
+        self.page = self.Page(
+            title=title,
+            slug=slug,
+            content_type=self.page_content_type,
+            numchild=0,
+        )
+
+    def save(self):
+        if not self.parent:
+            self.page.path = '00010001'
+            self.page.depth = 2
+            self.page.url_path='/%s/' % self.page.slug
+        self.page.save()
+
+    # @staticmethod
+    def add_child(self, child):
+        child.page.path = self.page.path + '%04d' % (self.page.numchild + 1)
+        child.page.url_path = self.page.url_path + '%s/' % child.page.slug
+        child.page.depth = self.page.depth + 1
+        self.page.numchild += 1
+
+        child.parent = self
+        child.page.save()
+        self.page.save()
+
+
+def  create_structure(apps, schema_editor):
     Page = apps.get_model('wagtailcore.Page')
     Site = apps.get_model('wagtailcore.Site')
-    HomePage = apps.get_model('pages.HomePage')
-    # Delete the default homepage
     Page.objects.get(id=2).delete()
-
-    # Create content type for homepage model
-    homepage_content_type, created = ContentType.objects.get_or_create(
-        model='homepage', app_label='pages')
-
-    # Create a new homepage
-    homepage = HomePage.objects.create(
-        title="Homepage",
-        slug='home',
-        content_type=homepage_content_type,
-        path='00010001',
-        depth=2,
-        numchild=0,
-        url_path='/home/',
-    )
-
-    # Create a site with the new homepage set as the root
-    Site.objects.create(
-        hostname='localhost', root_page=homepage, is_default_site=True)
-
-    return homepage
-    # import ipdb; ipdb.set_trace()
-
-def create_pages(apps, schema_editor):
-    homepage = create_homepage(apps, schema_editor)
-    ContentType = apps.get_model('contenttypes.ContentType')
-
-    FAQPage = apps.get_model('pages.FAQPage')
-    faqpage_content_type, created = ContentType.objects.get_or_create(
-        model='homepage', app_label='pages')
-    FAQPage.objects.create(
-        title="FAQ",
-        slug='faq',
-        content_type=faqpage_content_type,
-        path='000100010001',
-        depth=3,
-        numchild=0,
-        url_path='/home/faq/')
-    homepage.numchild=1
+    homepage = RichPage(apps,'pages.HomePage','pages','homepage')
+    homepage.page("Homepage", "home")
     homepage.save()
+
+    site = Site.objects.create(
+        hostname='localhost', root_page=homepage.page, is_default_site=True)
+
+    HeaderLinks = apps.get_model('core.HeaderLinks')
+    hls = HeaderLinks.objects.create(site=site)
+    HeaderLink = apps.get_model('core.HeaderLink')
+    FooterLinks = apps.get_model('core.FooterLinks')
+    fls = FooterLinks.objects.create(site=site)
+    FooterLink = apps.get_model('core.FooterLink')
+
+    faqpage = RichPage(apps, 'pages.FAQPage', 'pages', 'faqpage')
+    faqpage.page('FAQ', 'faq')
+    homepage.add_child(faqpage)
+    HeaderLink.objects.create(name='FAQ', header=hls, target=faqpage.page)
+
+    outcomespage = RichPage(apps, 'pages.OutcomesPage', 'pages', 'outcomespage')
+    outcomespage.page('Outcomes', 'outcomes')
+    homepage.add_child(outcomespage)
+    HeaderLink.objects.create(name='Outcomes', header=hls, target=outcomespage.page)
+
+    impactmodelspage = RichPage(apps, 'pages.ImpactModelsPage', 'pages', 'impactmodelspage')
+    impactmodelspage.page('Impact Models', 'impactmodels')
+    homepage.add_child(impactmodelspage)
+    HeaderLink.objects.create(name='Impact Models', header=hls, target=impactmodelspage.page)
+
+
+    linklistpage = RichPage(apps, 'pages.LinkListPage', 'pages', 'linklistpage')
+    linklistpage.page('Press','press')
+    homepage.add_child(linklistpage)
+    FooterLink.objects.create(name='Press', footer=fls, target=linklistpage.page)
+
+    linklistpage = RichPage(apps, 'pages.LinkListPage', 'pages', 'linklistpage')
+    linklistpage.page('Supporters','supporters')
+    homepage.add_child(linklistpage)
+    FooterLink.objects.create(name='Supporters', footer=fls, target=linklistpage.page)
+
+    linklistpage = RichPage(apps, 'pages.LinkListPage', 'pages', 'linklistpage')
+    linklistpage.page('Links','links')
+    homepage.add_child(linklistpage)
+    FooterLink.objects.create(name='Links', footer=fls, target=linklistpage.page)
 
 
 class Migration(migrations.Migration):
@@ -61,5 +97,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(create_pages),
+        migrations.RunPython(create_structure),
     ]
