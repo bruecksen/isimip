@@ -7,16 +7,42 @@
 {% endblock %}
 
 {% block content %}
-	<div class="container">
-		<h1>Styleguide for ISI-MIP</h1>
-	</div>
-	{{ header }}
+	{{ header_output }}
 
-	<div class="content-container">
-		<div class="container">
-			{{ messages }}
-		</div><!-- container -->
-	</div><!-- content-container -->
+	<div class="backgroundimage" style="background-image: url(/static/images/mountain-range.jpg);">
+		{{ teaser_output }}
+
+		<div class="content-container">
+			<div class="container" style="background-color: white;">
+				<div class="content-container-border">
+					<div class="content-container-inner">
+
+
+						<h1>Styleguide for ISI-MIP</h1>
+
+						{{ header_meta }}
+						{{ teaser_meta }}
+
+						{{ messages }}
+
+						{{ breadcrumb }}
+
+						{{ heading1 }}
+						{{ heading2 }}
+						{{ heading3 }}
+
+					</div><!-- content-container-inner -->
+				</div><!-- content-container-border -->
+			</div><!-- container -->
+		</div><!-- content-container -->
+
+		<br>
+		<br>
+
+	</div>
+
+
+
 	{{ footer }}
 
 

@@ -1,0 +1,36 @@
+<div class="widget-header">
+	<nav class="navbar navbar-default{% if fixed %} navbar-fixed-top{% endif %}">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#widget-header-{{ id }}" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">ISI-MIP</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="widget-header-{{ id }}">
+				<ul class="nav navbar-nav">
+					{% for link in links %}
+						<li{% if link.active %} class="active"{% endif %}>
+							<a href="{{ link.url }}">{{ link.text }}</a>
+							{% if link.sublinks %}
+								<ul>
+								{% for sublink in link.sublinks %}
+									<li{% if sublink.active %} class="active"{% endif %}>
+										<a href="{{ sublink.url }}">{{ sublink.text }}</a>
+									</li>
+								{% endfor %}
+								</ul>
+							{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+
+			</div><!-- navbar-collapse -->
+		</div><!-- container -->
+	</nav>
+</div><!-- widget-header -->

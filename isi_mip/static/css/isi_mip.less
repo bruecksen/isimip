@@ -1,0 +1,95 @@
+
+
+@color-white: white;
+@color-black: black;
+@color-neutral: #4a4a4a;
+@color-secondary: #f5ab35;
+@color-primary: #0681be;
+
+
+body {
+}
+
+
+.backgroundimage {
+	background-position: center;
+	background-size: cover;
+}
+
+
+.content-container {
+	> .container {
+		@media(min-width:768px) {
+			padding-left: 0;
+			padding-right: 0;
+
+			> .content-container-border {
+				border: 2px solid green;
+
+				> .content-container-inner {
+					padding-left: 30px;
+					padding-right: 30px;
+				}
+			}
+		}
+	}
+}
+
+
+
+
+.widget-header {
+	.navbar.navbar-default {
+		margin-bottom: 0;
+	}
+}
+
+
+.widget-teaser{
+	.container {
+		text-align: center;
+
+		.widget-teaser-divider {
+			width: 100px;
+			margin: 30px auto;
+			background-color: red;
+			height: 2px;
+		}
+	}
+}
+
+
+
+.widget-button {
+
+	a, button {
+		margin: 0 0 15px 0;
+		padding: 0 10px 0 10px;
+
+		border: 2px solid @color-black;
+		background-color: transparent;
+
+		color: @color-black;
+		&:hover, &:active, &:focus {
+			color: @color-secondary;
+		}
+		display: inline-block;
+		position: relative;
+
+		.widget-button-text-wrapper {
+			display: block;
+			padding: 0 0 0 0;
+			min-height: 50px;
+			line-height: 48px;
+
+			.widget-button-text {
+				line-height: 1.3em;
+				font-size: 14px;
+				vertical-align: middle;
+				display: inline-block;
+			}
+		}
+	}
+}
+
+
