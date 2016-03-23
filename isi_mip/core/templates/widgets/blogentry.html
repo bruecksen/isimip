@@ -1,0 +1,7 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<div>
+    {% if entry.header_image %}{% image entry.header_image max-1200x1200 %}<br/>{% endif %}
+    {{ entry.title }}<br/>
+    {{ entry.date }}<br/>
+    {{ entry.body|richtext }}
+</div>

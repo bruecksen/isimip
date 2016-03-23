@@ -1,12 +1,13 @@
 from modelcluster.models import ClusterableModel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
-from wagtail.wagtailcore.blocks import RichTextBlock
+from wagtail.wagtailcore.blocks import RichTextBlock, ListBlock, CharBlock
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
 
 from isi_mip.climatemodels.models import ImpactModel
-from isi_mip.pages.blocks import SmallTeaserBlock, PaperBlock, LinkBlock, FAQBlock
+from isi_mip.contrib.blocks import BlogBlock
+from isi_mip.pages.blocks import SmallTeaserBlock, PaperBlock, LinkBlock, FAQBlock, BigTeaserBlock
 
 BASE_BLOCKS = [
     ('rich_text', RichTextBlock()),
@@ -15,11 +16,17 @@ BASE_BLOCKS = [
 
 class HomePage(Page):
     # parent_page_types = ['wagtailcore.Page']
-    teasers = StreamField([
-        ('teaser', SmallTeaserBlock())
+    content = StreamField([
+        ('rich_text', CharBlock(label='Mission Statement Teaser')),
+        ('teasers', ListBlock(SmallTeaserBlock())),
+        ('bigteaser', BigTeaserBlock()),
+        ('news', BlogBlock()),
     ])
+    # teasers = StreamField([
+    #     ('teaser', SmallTeaserBlock())
+    # ])
     content_panels = Page.content_panels + [
-        StreamFieldPanel('teasers'),
+        StreamFieldPanel('content'),
     ]
 
 

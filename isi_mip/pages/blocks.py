@@ -9,13 +9,34 @@ class SmallTeaserBlock(blocks.StructBlock):
     link = blocks.PageChooserBlock(required=True)
 
     class Meta:
-        classname = 'small teaser'
         icon = 'image'
         template = 'widgets/smallteaser.html'
 
     def get_context(self, value):
         context = super().get_context(value)
         context['title'] = value.get('title')
+        image = value.get('picture')
+        rendition = image.get_rendition('max-1200x1200')
+        context['image'] = {'url': rendition.url, 'name': image.title}
+        context['text'] = value.get('text')
+        context['url'] = value.get('link').url
+        return context
+
+class BigTeaserBlock(blocks.StructBlock):
+    title = blocks.CharBlock(required=True)
+    subtitle = blocks.CharBlock(required=False)
+    picture = ImageChooserBlock()
+    text = blocks.RichTextBlock()
+    link = blocks.PageChooserBlock(required=True)
+
+    class Meta:
+        icon = 'image'
+        template = 'widgets/bigteaser.html'
+
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['title'] = value.get('title')
+        context['subtitle'] = value.get('subtitle')
         image = value.get('picture')
         rendition = image.get_rendition('max-1200x1200')
         context['image'] = {'url': rendition.url, 'name': image.title}

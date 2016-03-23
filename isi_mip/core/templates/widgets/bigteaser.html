@@ -1,0 +1,7 @@
+<div>
+    {{ title }}
+    {{ subtitle }}
+    {% include 'widgets/image.html' with url=image.url name=image.name %}
+    {{ text }}
+    <a href="{{ url }}">mehr</a>
+</div>

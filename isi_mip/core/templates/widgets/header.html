@@ -1,10 +1,2 @@
 {% load staticfiles i18n %}
-<div class="widget-footer{% if fixed %} footer-fixed{% endif %}">
-	<div class="widget-footer-navbar">
-		<ul class="nav text-center">
-			{% for link in links %}
-				<li role="presentation"{% if link.active %} class="active"{% endif %}><a
-						href="{{ link.url }}">{{ link.text }}</a></li>
-			{% endfor %}
-		</ul>
-	</div>
+{% for link in links %} <a href="{{ link.url }}">{{ link.text }}</a> {% endfor %}
