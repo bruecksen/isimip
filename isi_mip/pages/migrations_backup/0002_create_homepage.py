@@ -9,14 +9,13 @@ def create_homepage(apps, schema_editor):
     ContentType = apps.get_model('contenttypes.ContentType')
     Page = apps.get_model('wagtailcore.Page')
     Site = apps.get_model('wagtailcore.Site')
-    HomePage = apps.get_model('home.HomePage')
-
+    HomePage = apps.get_model('pages.HomePage')
     # Delete the default homepage
     Page.objects.get(id=2).delete()
 
     # Create content type for homepage model
     homepage_content_type, created = ContentType.objects.get_or_create(
-        model='homepage', app_label='home')
+        model='homepage', app_label='pages')
 
     # Create a new homepage
     homepage = HomePage.objects.create(
@@ -33,11 +32,12 @@ def create_homepage(apps, schema_editor):
     Site.objects.create(
         hostname='localhost', root_page=homepage, is_default_site=True)
 
+    # import ipdb; ipdb.set_trace()
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('home', '0001_initial'),
+        ('pages', '0001_initial'),
     ]
 
     operations = [

@@ -10,7 +10,7 @@
 	{{ header_output }}
 
 	<div class="backgroundimage" style="background-image: url(/static/images/mountain-range.jpg);">
-		{{ teaser_output }}
+		{{ head_super_output }}
 
 		<div class="content-container">
 			<div class="container" style="background-color: white;">
@@ -21,7 +21,7 @@
 						<h1>Styleguide for ISI-MIP</h1>
 
 						{{ header_meta }}
-						{{ teaser_meta }}
+						{{ head_super_meta }}
 
 						{{ messages }}
 
@@ -30,6 +30,48 @@
 						{{ heading1 }}
 						{{ heading2 }}
 						{{ heading3 }}
+
+						{{ image }}
+						{{ image_link }}
+						{{ arrow_right_link }}
+
+						{{ richtext }}
+						{{ embed }}
+
+						<div class="row">
+							<div class="col-sm-4">
+								{{ page_teaser_text_output }}
+							</div>
+							<div class="col-sm-8">
+								{{ page_teaser_text_meta }}
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-sm-4">
+								{{ page_teaser_output }}
+							</div>
+							<div class="col-sm-8">
+								{{ page_teaser_meta }}
+							</div>
+						</div>
+
+						{{ page_teaser_wide }}
+
+
+
+						<div class="row">
+							<div class="col-sm-4">
+								{{ page_teaser_paper_output }}
+							</div>
+							<div class="col-sm-8">
+								{{ page_teaser_paper_meta }}
+							</div>
+						</div>
+
+
+						{{ page_teaser_flat }}
 
 					</div><!-- content-container-inner -->
 				</div><!-- content-container-border -->

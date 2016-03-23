@@ -49,9 +49,9 @@ data = {
     },
 
 
-    'teaser': {
-        'name': 'Teaser',
-        'template': 'widgets/teaser.html',
+    'head_super': {
+        'name': 'Super in Head',
+        'template': 'widgets/head-super.html',
         'context': {
             'title': 'Teaser',
             'text': 'Sed ut perspiciatis unde omnis iste natus error sit\nvoluptatem accusantium doloremque laudantium. ',
@@ -101,5 +101,153 @@ data = {
     },
 
 
+
+    'image': {
+        'name': 'Image',
+        'template': 'widgets/image.html',
+        'context': {
+            'url': '/static/styleguide/test-images/header1-3by1.jpg',
+            'name': 'Meere und Ozeane',
+        },
+    },
+
+    'image_link': {
+        'name': 'Image with Link',
+        'template': 'widgets/image.html',
+        'context': {
+            'url': '/static/styleguide/test-images/header2-3by1.jpg',
+            'name': 'Meere und Ozeane',
+            'href': 'http://xxx',
+        },
+    },
+
+
+    'arrow_right_link': {
+        'name': 'Arrow Right Link',
+        'template': 'widgets/arrow-right-link.html',
+        'context': {
+            'href': 'http://bing.de/',
+        },
+    },
+
+
+
+
+    'richtext': {
+        'name': 'Richtext',
+        'template': 'widgets/richtext-content.html',
+        'context': {
+            'content': '<div class="rich-text"><p><img class="richtext-image right" src="/static/styleguide/test-images/header3.jpg" alt="Schönes Bild">Jemand musste Josef K. verleumdet haben, denn ohne dass er etwas Böses getan hätte, wurde er <a href="#">eines Morgens</a> verhaftet. »Wie ein Hund!« sagte er, es war, als sollte die Scham ihn überleben. Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt. Und es war ihnen wie eine Bestätigung ihrer neuen Träume und guten Absichten, als am Ziele ihrer Fahrt die Tochter als erste sich erhob und ihren jungen Körper dehnte. »Es ist ein eigentümlicher Apparat«, sagte der Offizier zu dem Forschungsreisenden und überblickte mit einem gewissermaßen bewundernden Blick den ihm doch wohlbekannten Apparat. Sie hätten noch ins Boot springen können, aber der Reisende hob ein schweres, geknotetes Tau vom Boden, drohte ihnen damit und hielt sie dadurch von dem Sprunge ab.</p><div style="padding-bottom: 56.25%;" class="responsive-object"><iframe src="https://www.youtube.com/embed/SywPPK8ixiw?feature=oembed" allowfullscreen="" width="480" frameborder="0" height="270"></iframe></div><h3>Yolo!</h3><p>Jemand musste Josef K. verleumdet haben, denn ohne dass er etwas Böses getan hätte, wurde er eines Morgens verhaftet. »Wie ein Hund!« sagte er, es war, als sollte die Scham ihn überleben. Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt. Und es war ihnen wie eine Bestätigung ihrer neuen Träume und guten Absichten, als am Ziele ihrer Fahrt die Tochter als erste sich erhob und ihren jungen Körper dehnte. »Es ist ein eigentümlicher Apparat«, sagte der Offizier zu dem Forschungsreisenden und überblickte mit einem gewissermaßen bewundernden Blick den ihm doch wohlbekannten Apparat. Sie hätten noch ins Boot springen können, aber der Reisende hob ein schweres, geknotetes Tau vom Boden, drohte ihnen damit und hielt sie dadurch von dem Sprunge ab.</p></div>',
+        },
+    },
+
+    'embed': {
+        'name': 'Embed',
+        'template': 'widgets/embed.html',
+        'context': {
+            'embed': '<div style="padding-bottom: 56.25%;" class="responsive-object"><iframe src="https://www.youtube.com/embed/BrPYsOhRj4I?feature=oembed" allowfullscreen="" width="480" frameborder="0" height="270"></iframe></div>',
+        },
+    },
+
+
+    'page_teaser_text': {
+        'name': 'Page Teaser Text (use only in other page-teaser templates)',
+        'template': 'widgets/page-teaser-text.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'text': {
+                'title': 'Getting started',
+                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+                'arrow_right_link': True,
+            },
+        },
+    },
+
+
+    'page_teaser': {
+        'name': 'Page Teaser',
+        'template': 'widgets/page-teaser.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'image': {
+                'url': '/static/styleguide/test-images/dog.jpg',
+            },
+            'text': {
+                'title': 'Output Data',
+                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+                'arrow_right_link': True,
+            },
+        },
+    },
+
+
+    'page_teaser_wide': {
+        'name': 'Page Teaser Wide',
+        'template': 'widgets/page-teaser-wide.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'image': {
+                'url': '/static/styleguide/test-images/silhouette.jpg',
+            },
+                'text': {
+                'title': 'Impact Models',
+                'date': '8/12/2016',
+                'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui.',
+                'arrow_right_link': True,
+            },
+        },
+    },
+
+
+
+
+    'page_teaser_paper': {
+        'name': 'Page Teaser Paper',
+        'template': 'widgets/page-teaser.html',
+        'context': {
+            'image': {
+                'url': '/static/styleguide/test-images/header4.jpg',
+            },
+            'text': {
+                'author': 'Prof. Dr. Motte et al',
+               'title': 'Impact Models in an industrialized semipermeable meta world',
+                'journal': 'Biotech Publishing 7/2016, 2834ff',
+                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+                'source': {
+                    'description': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/',
+                    'href': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/',
+                },
+                'arrow_right_link': True,
+            },
+        },
+    },
+
+
+
+    'page_teaser_flat': {
+        'name': 'Page Teaser Flat',
+        'template': 'widgets/page-teaser-flat.html',
+        'context': {
+                'date': '8/12/2016',
+                'text': {
+                'title': 'Impact Models in an industrialized semipermeable meta world',
+                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            },
+        },
+    },
+
+
+
+    'footer': {
+        'name': 'Footer',
+        'template': 'widgets/footer.html',
+        'context': {
+            'links': [
+                { 'url': 'http://google.de', 'text': 'Kontakt' },
+                { 'url': 'http://bing.de', 'text': 'Presse', 'active': True },
+                { 'url': 'http://google.de', 'text': 'Newsletter' },
+            ],
+        },
+    },
 
 }

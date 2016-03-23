@@ -5,18 +5,33 @@ from django.core import urlresolvers
 from .models import *
 
 
+class HideAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        """
+        return {}
+
+
+class HideSectorAdmin(HideAdmin):
+    # readonly_fields = ('impact_model',)
+    pass
+
+
 class ContactPersonAdmin(admin.TabularInline):
     model = ContactPerson
     extra = 1
+
 
 class ImpactModelAdmin(admin.ModelAdmin):
     def sector_link(self, obj):
         try:
             adminurl = "admin:%s_change" % obj.fk_sector._meta.db_table
-            link=urlresolvers.reverse(adminurl, args=[obj.fk_sector.id])
-            return '<a href="%s">%s</a>' % (link,obj.fk_sector)
+            link = urlresolvers.reverse(adminurl, args=[obj.fk_sector.id])
+            return '<a href="%s">%s</a>' % (link, obj.fk_sector)
         except:
             return
+
     sector_link.allow_tags = True
     sector_link.short_description = 'Sector link'
     #
@@ -25,7 +40,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
     #
     # trenner.allow_tags = True
     # trenner.short_description = 'trennerli'
-    readonly_fields = ('sector_link', )
+    readonly_fields = ('sector_link',)
 
     inlines = [ContactPersonAdmin]
 
@@ -52,23 +67,39 @@ class ImpactModelAdmin(admin.ModelAdmin):
     ]
 
 
-class HideAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+class AgricultureAdmin(HideSectorAdmin):
+    fieldsets = [
+        ('Key input and management', {
+            'fields': [
+                'crops', 'land_coverage', 'planting_date_decision',
+                'planting_density', 'crop_cultivars', 'fertilizer_application',
+                'irrigation', 'crop_residue', 'initial_soil_water',
+                'initial_soil_nitrate_and_ammonia',
+                'initial_soil_C_and_OM', 'initial_crop_residue'
+            ]}
+         ),
+        ('Key model processes', {
+            'fields': [
+                'lead_area_development', 'light_interception', 'light_utilization', 'yield_formation',
+                'crop_phenology', 'root_distribution_over_depth', 'stresses_involved', 'type_of_water_stress',
+                'type_of_heat_stress', 'water_dynamics', 'evapo_transpiration', 'soil_CN_modeling',
+                'co2_effects',
+            ],
+        }),
+        ('Methods for model calibration and validation', {
+            'fields': [
+                'parameters_number_and_description', 'calibrated_values', 'output_variable_and_dataset',
+                'spatial_scale_of_calibration_validation', 'temporal_scale_of_calibration_validation',
+                'criteria_for_evaluation']
+        })
+    ]
 
-
-class HideSectorAdmin(HideAdmin):
-    # readonly_fields = ('impact_model',)
-    pass
 
 admin.site.register(ImpactModel, ImpactModelAdmin)
 admin.site.register(InputData)
 admin.site.register(OutputData)
 
-admin.site.register(Agriculture, HideSectorAdmin)
+admin.site.register(Agriculture, AgricultureAdmin)
 admin.site.register(Energy, HideSectorAdmin)
 admin.site.register(Water, HideSectorAdmin)
 admin.site.register(Biomes, HideSectorAdmin)

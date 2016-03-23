@@ -1,14 +1,14 @@
-<div class="widget-teaser">
+<div class="widget-head-super">
 	<div class="container">
-		<div class="widget-teaser-title">
+		<div class="widget-head-super-title">
 			<h1>{{ title|linebreaksbr }}</h1>
 		</div>
-		<div class="widget-teaser-divider"></div>
+		<div class="widget-head-super-divider"></div>
 		{% if text %}
-			<div class="widget-teaser-text">
+			<div class="widget-head-super-text">
 				{{ text|linebreaksbr }}
 			</div>
 		{% endif %}
 		{% if button %}{% include "widgets/button.html" with url=button.url text=button.text fontawesome=button.fontawesome %}{% endif %}
 	</div>
-</div><!-- widget-teaser -->
+</div><!-- widget-head-super -->

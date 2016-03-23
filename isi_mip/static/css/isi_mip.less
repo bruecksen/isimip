@@ -16,6 +16,14 @@ body {
 	background-size: cover;
 }
 
+a {
+	color: @color-secondary;
+
+	&:hover {
+		color: @color-black;
+	}
+}
+
 
 .content-container {
 	> .container {
@@ -36,6 +44,15 @@ body {
 }
 
 
+.image {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+
+
+// ############# Widgets
 
 
 .widget-header {
@@ -45,20 +62,109 @@ body {
 }
 
 
-.widget-teaser{
+.widget-footer {
+	background-color: @color-neutral;
+	color: @color-white;
+
+	a {
+		color: @color-white;
+	}
+}
+
+
+.widget-head-super {
 	.container {
 		text-align: center;
 
-		.widget-teaser-divider {
+		.widget-head-super-divider {
 			width: 100px;
 			margin: 30px auto;
-			background-color: red;
+			background-color: @color-secondary;
 			height: 2px;
 		}
 	}
 }
 
 
+
+
+
+
+.widget-richtext-content {
+	margin: 0 0 15px 0;
+
+	img.richtext-image {
+		display: block;
+		width: 100%;
+		height: auto;
+
+		@media (min-width: 768px) {
+			&.left {
+				clear: both;
+				float: left;
+				width: 50%;
+				margin: 0 15px 15px 0;
+			}
+
+			&.right {
+				clear: both;
+				float: right;
+				width: 50%;
+				margin: 0 0 15px 15px;
+			}
+		}
+
+		@media (min-width: 992px) {
+			&.left, &.right {
+				width: 33%;
+			}
+		}
+	}
+
+	.responsive-object {
+		margin-top: 15px;
+		clear: both;
+	}
+
+	*:first-child {
+		margin-top: 0;
+	}
+	*:last-child {
+		margin-bottom: 0;
+	}
+}
+.widget-embed {
+	margin-bottom: 15px;
+}
+.widget-embed, .widget-richtext-content {
+	.responsive-object {
+		position:relative;
+
+		iframe, object, embed {
+			position:absolute;
+			top:0;
+			left:0;
+			width:100%;
+			height:100%;
+		}
+	}
+}
+
+
+
+.widget-page-teaser, .widget-page-teaser-wide, .widget-page-teaser-flat {
+	margin-bottom: 15px;
+}
+
+.widget-page-teaser-flat {
+	h3 {
+		margin-top: 0;
+	}
+}
+
+.widget-image {
+	margin-bottom: 15px;
+}
 
 .widget-button {
 
