@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 
 from isi_mip.climatemodels.import_xlsx import XLSImport
 
+
 class Command(BaseCommand):
     help = 'Import XLSx file'
 

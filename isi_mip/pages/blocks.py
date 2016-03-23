@@ -10,7 +10,8 @@ class SmallTeaserBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'image'
-        template = 'widgets/smallteaser.html'
+        template = 'widgets/page-teaser-wide.html'
+
 
     def get_context(self, value):
         context = super().get_context(value)

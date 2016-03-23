@@ -4,6 +4,7 @@ import pyexcel as pe
 import pyexcel.ext.xlsx
 import crossrefpy
 
+
 class XLSImport:
     def __init__(self, filename):
         self.filename = filename
@@ -21,7 +22,7 @@ class XLSImport:
             sector = SpecificSector.objects.get(impact_model__in=general)
             general = sector.impact_model
         else:
-            general = ImpactModel.objects.create(name=zeile[2],sector='Water (global)')
+            general = ImpactModel.objects.create(name=zeile[2], sector='Water (global)')
             sector = general.fk_sector
 
         general.region.add(Region.objects.get_or_create(name=zeile[1])[0])
@@ -34,7 +35,7 @@ class XLSImport:
         except crossrefpy.ReferenceException:
             doi = None
             title = zeile[7]
-        general.main_reference_paper = ReferencePaper.objects.get_or_create(name=title,doi=doi)[0]
+        general.main_reference_paper = ReferencePaper.objects.get_or_create(name=title, doi=doi)[0]
         for paper in zeile[8].split('\n\n'):
             try:
                 ref = crossrefpy.query(paper)
@@ -43,7 +44,7 @@ class XLSImport:
             except crossrefpy.ReferenceException:
                 doi = None
                 title = zeile[7]
-            addpaper = ReferencePaper.objects.get_or_create(name=title,doi=doi)[0]
+            addpaper = ReferencePaper.objects.get_or_create(name=title, doi=doi)[0]
             general.additional_papers.add(addpaper)
 
         general.resolution = zeile[10]

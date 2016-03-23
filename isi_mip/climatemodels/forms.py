@@ -8,6 +8,7 @@ class ImpactModelStartForm(ModelForm):
         model = ImpactModel
         fields = ('name', 'sector', 'owner')
 
+
 class ImpactModelForm(ModelForm):
     class Meta:
         model = ImpactModel
