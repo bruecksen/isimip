@@ -2,8 +2,14 @@
 {% if text.author %}
 	<p class="widget-page-teaser-text-author"><em>{{ text.author }}</em></p>
 {% endif %}
+{% if text.date and text.datebeforetitle %}
+	<p class="widget-page-teaser-text-date">
+		<i class="fa fa-clock-o"></i>
+		{{ text.date }}
+	</p>
+{% endif %}
 {% if text.title %}
-	<h3>
+	<div class="h4">
 		{% if href %}
 			<a href="{{ href }}">
 				{{ text.title }}
@@ -11,18 +17,19 @@
 		{% else %}
 			{{ text.title }}
 		{% endif %}
-	</h3>
+	</div>
 {% endif %}
-{% if text.date %}
+{% if text.date and not text.datebeforetitle %}
 	<p class="widget-page-teaser-text-date">
-		<em>
-			<i class="fa fa-clock-o"></i>
-			{{ text.date }}
-		</em>
+		<i class="fa fa-clock-o"></i>
+		{{ text.date }}
 	</p>
 {% endif %}
 {% if text.date %}
 	<p class="widget-page-teaser-text-journal"><em>{{ text.journal }}</em></p>
+{% endif %}
+{% if text.divider %}
+	<hr>
 {% endif %}
 {% if text.description %}
 	<p class="widget-page-teaser-text-description">{{ text.description }}</p>
@@ -37,5 +44,9 @@
 {% endif %}
 {% if text.arrow_right_link %}
 	{% include "widgets/arrow-right-link.html" with href=href %}
+{% endif %}
+{% if text.text_right_link %}
+	<a href="{{ href }}" class="btn btn-default pull-right">{{ text.text_right_link_text }}</a>
+	<div class="clearfix"></div>
 {% endif %}
 </div><!-- widget-page-teaser-text -->

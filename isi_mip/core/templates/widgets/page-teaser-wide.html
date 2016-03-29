@@ -1,14 +1,14 @@
 <div class="widget-page-teaser-wide">
 	{% if image %}
 		<div class="row">
-			<div class="col-sm-4">
+			<div class="col-sm-{% if wideimage %}6{% else %}4{% endif %}">
 				{% if href %}
 					{% include 'widgets/image.html' with url=image.url name=title href=href %}
 				{% else %}
 					{% include 'widgets/image.html' with url=image.url name=title %}
 				{% endif %}
 			</div>
-			<div class="col-sm-8">
+			<div class="col-sm-{% if wideimage %}6{% else %}8{% endif %}">
 				{% include "widgets/page-teaser-text.html" with href=href text=text %}
 			</div>
 		</div>

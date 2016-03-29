@@ -99,6 +99,34 @@ data = {
             'text': 'Die Fotografie von Geistern',
         },
     },
+    'heading3a': {
+        'name': 'Heading 3',
+        'template': 'widgets/heading3.html',
+        'context': {
+            'text': 'Getting started',
+        },
+    },
+    'heading3b': {
+        'name': 'Heading 3',
+        'template': 'widgets/heading3.html',
+        'context': {
+            'text': 'Impact Models',
+        },
+    },
+    'heading3c': {
+        'name': 'Heading 3',
+        'template': 'widgets/heading3.html',
+        'context': {
+            'text': 'Output Data',
+        },
+    },
+    'heading3d': {
+        'name': 'Heading 3',
+        'template': 'widgets/heading3.html',
+        'context': {
+            'text': 'Outcomes',
+        },
+    },
 
 
 
@@ -180,6 +208,20 @@ data = {
         },
     },
 
+    'page_teaser_noimage': {
+        'name': 'Page Teaser no Image',
+        'template': 'widgets/page-teaser.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'text': {
+                'title': 'Output Data',
+                'description': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit.',
+                'arrow_right_link': True,
+            },
+        },
+    },
+
+
 
     'page_teaser_wide': {
         'name': 'Page Teaser Wide',
@@ -199,6 +241,27 @@ data = {
     },
 
 
+    'page_teaser_wide_wideimage': {
+        'name': 'Page Teaser Wide with wide image',
+        'template': 'widgets/page-teaser-wide.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'wideimage': True,
+            'image': {
+                'url': '/static/styleguide/test-images/header3-3by1.jpg',
+            },
+                'text': {
+                'title': 'Impact Models',
+                'datebeforetitle': True,
+                'date': '8/12/2016',
+                'divider': True,
+                'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui.',
+                'arrow_right_link': False,
+                'text_right_link': True,
+                'text_right_link_text': 'Learn more',
+            },
+        },
+    },
 
 
     'page_teaser_paper': {
@@ -236,6 +299,43 @@ data = {
         },
     },
 
+
+
+
+    'indicator': {
+        'name': 'Indicator',
+        'template': 'widgets/indicator.html',
+        'context': {
+            'number': '17&#8239;000',
+            'title': 'Indicator swag',
+            'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem  doloremque laudantium.',
+        },
+    },
+
+    'readmorelink': {
+        'name': 'Read more link',
+        'template': 'widgets/read-more-link.html',
+        'context': {
+            'text': 'weiterlesen',
+            'url': 'http://x',
+        },
+    },
+    'readmorelink_right': {
+        'name': 'Read more link – right align',
+        'template': 'widgets/read-more-link.html',
+        'context': {
+            'text': 'weiterlesen',
+            'url': 'http://x',
+            'align': 'right',
+        },
+    },
+
+    'horizontal_ruler': {
+        'name': 'Horizontal Ruler',
+        'template': 'widgets/horizontal-ruler.html',
+        'context': {
+        },
+    },
 
 
     'footer': {

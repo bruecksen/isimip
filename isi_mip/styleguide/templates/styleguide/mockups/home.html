@@ -1,0 +1,84 @@
+{% extends "styleguide/base.html" %}
+{% load static %}
+
+{% block viewport %}<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />{% endblock %}
+
+
+{% block header %}
+	{{ header_output }}
+{% endblock %}
+
+{% block content %}
+	<div class="backgroundimage" style="background-image: url({% static 'images/mountain-range.jpg' %});">
+		{{ head_super_output }}
+
+		<div class="content-container">
+			<div class="container" style="background-color: white;">
+				<div class="content-container-border">
+					<div class="content-container-inner">
+						<div class="row">
+							<div class="col-sm-3">
+								{{ heading3a_output }}
+								{{ page_teaser_output }}
+							</div>
+							<div class="col-sm-3">
+								{{ heading3b_output }}
+								{{ page_teaser_output }}
+							</div>
+							<div class="col-sm-3">
+								{{ heading3c_output }}
+								{{ page_teaser_output }}
+							</div>
+							<div class="col-sm-3">
+								{{ heading3d_output }}
+								{{ page_teaser_output }}
+							</div>
+						</div>
+
+						<div class="super">
+							{{ heading3d_output }}
+							{{ page_teaser_wide_wideimage_output }}
+						</div>
+
+						{{ horizontal_ruler_output }}
+
+
+
+						<div class="row">
+							<div class="col-sm-9">
+								{{ heading3a_output }}
+								<div class="row">
+									<div class="col-sm-4">
+										{{ page_teaser_output }}
+									</div>
+									<div class="col-sm-4">
+										{{ page_teaser_output }}
+									</div>
+									<div class="col-sm-4">
+										{{ page_teaser_noimage_output }}
+									</div>
+								</div>
+								{{ readmorelink_right_output }}
+							</div>
+							<div class="col-sm-3">
+								{{ heading3b_output }}
+								{{ indicator_output }}
+								{{ indicator_output }}
+								{{ readmorelink_right_output }}
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<br>
+		<br>
+	</div>
+{% endblock %}
+
+{% block footer %}
+{{ footer_output }}
+{% endblock %}

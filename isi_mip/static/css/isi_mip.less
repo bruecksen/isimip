@@ -2,7 +2,8 @@
 
 @color-white: white;
 @color-black: black;
-@color-neutral: #4a4a4a;
+@color-neutral: #a4a4a4;
+@color-neutral-dark: #4a4a4a;
 @color-secondary: #f5ab35;
 @color-primary: #0681be;
 
@@ -32,7 +33,7 @@ a {
 			padding-right: 0;
 
 			> .content-container-border {
-				border: 2px solid green;
+				border: 1px solid @color-neutral;
 
 				> .content-container-inner {
 					padding-left: 30px;
@@ -50,6 +51,56 @@ a {
 	height: auto;
 }
 
+.super {
+	background-color: @color-primary;
+	padding: 15px;
+	margin-bottom: 30px;
+	color: @color-white;
+
+	*:first-child {
+		margin-top: 0;
+	}
+	*:last-child {
+		margin-bottom: 0;
+	}
+}
+
+
+h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
+	color: @color-primary;
+}
+h1, .h1, h2, .h2, h3, .h3 {
+	text-transform: uppercase;
+}
+.super {
+	h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
+		color: @color-white;
+	}
+}
+
+
+
+.btn {
+	border-radius: 0;
+	border-color: @color-black;
+}
+.super {
+	.btn {
+		border-color: @color-white;
+		color: @color-white;
+	}
+
+	.btn.btn-default {
+		background-color: @color-primary;
+		-webkit-transition: background-color 0.5s;
+		transition: background-color 0.5s;
+
+		&:hover, &:focus {
+			background-color: @color-white;
+			color: @color-primary;
+		}
+	}
+}
 
 
 // ############# Widgets
@@ -58,12 +109,33 @@ a {
 .widget-header {
 	.navbar.navbar-default {
 		margin-bottom: 0;
+
+		.navbar-header {
+			.navbar-brand {
+				img {
+					width: 140px;
+					display: block;
+					height: auto;
+				}
+			}
+		}
+		.navbar-collapse {
+			ul.navbar-nav {
+				> li {
+					> a {
+						padding: 35px 10px 35px 10px;
+					}
+				}
+			}
+		}
 	}
+
+
 }
 
 
 .widget-footer {
-	background-color: @color-neutral;
+	background-color: @color-neutral-dark;
 	color: @color-white;
 
 	a {
@@ -73,6 +145,8 @@ a {
 
 
 .widget-head-super {
+	margin-bottom: 30px;
+
 	.container {
 		text-align: center;
 
@@ -81,6 +155,9 @@ a {
 			margin: 30px auto;
 			background-color: @color-secondary;
 			height: 2px;
+		}
+		.btn.btn-default {
+			background-color: transparent;
 		}
 	}
 }
@@ -152,50 +229,55 @@ a {
 
 
 
+.widget-page-teaser-text {
+	// Enthalten in den anderen widget-page-teasers.
+	.widget-page-teaser-text-date {
+		font-style: italic;
+	}
+}
+
 .widget-page-teaser, .widget-page-teaser-wide, .widget-page-teaser-flat {
 	margin-bottom: 15px;
 }
 
 .widget-page-teaser-flat {
-	h3 {
+	.h4 {
 		margin-top: 0;
 	}
 }
+
 
 .widget-image {
 	margin-bottom: 15px;
 }
 
-.widget-button {
 
-	a, button {
-		margin: 0 0 15px 0;
-		padding: 0 10px 0 10px;
 
-		border: 2px solid @color-black;
-		background-color: transparent;
+.widget-horizontal-ruler {
+	margin-bottom: 30px;
 
-		color: @color-black;
-		&:hover, &:active, &:focus {
-			color: @color-secondary;
-		}
-		display: inline-block;
-		position: relative;
-
-		.widget-button-text-wrapper {
-			display: block;
-			padding: 0 0 0 0;
-			min-height: 50px;
-			line-height: 48px;
-
-			.widget-button-text {
-				line-height: 1.3em;
-				font-size: 14px;
-				vertical-align: middle;
-				display: inline-block;
-			}
-		}
+	hr {
+		border-top-color: @color-black;
+		margin: 0;
 	}
 }
 
+
+
+
+.widget-indicator {
+	margin-bottom: 30px;
+
+	.widget-indicator-number {
+		padding: 15px;
+		border: 2px dashed @color-secondary;
+	}
+}
+
+.widget-readmorelink {
+	margin-bottom: 30px;
+	a {
+		display: block;
+	}
+}
 

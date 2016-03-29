@@ -1,19 +1,11 @@
 <div class="widget-button{% if fontawesome %} widget-button-fontawesome{% endif %}">
 	{% if url %}
-	<a href="{{ url }}">
-		<span class="widget-button-text-wrapper">
-			<span class="widget-button-text">
-				{{ text|linebreaksbr|safe }}
-			</span>
-		</span>
+	<a href="{{ url }}" class="btn btn-default">
+		{{ text|safe }}
 	</a>
 	{% else %}
-	<button>
-		<span class="widget-button-text-wrapper">
-			<span class="widget-button-text">
-				{{ text|linebreaksbr|safe }}
-			</span>
-		</span>
+	<button class="btn btn-default">
+		{{ text|safe }}
 	</button>
 	{% endif %}
 </div><!-- widget-button -->
