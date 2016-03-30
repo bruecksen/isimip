@@ -1,6 +1,7 @@
+from django.db import models
 from modelcluster.models import ClusterableModel
 from wagtail.contrib.settings.models import BaseSetting
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, MultiFieldPanel, PageChooserPanel, RichTextFieldPanel
 from wagtail.wagtailcore.blocks import RichTextBlock, ListBlock, CharBlock
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
@@ -16,19 +17,42 @@ BASE_BLOCKS = [
 
 class HomePage(Page):
     # parent_page_types = ['wagtailcore.Page']
+    teaser_title = models.CharField(max_length=500)
+    teaser_text = RichTextField()
+    teaser_link = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+    )
     content = StreamField([
-        ('rich_text', CharBlock(label='Mission Statement Teaser')),
-        ('teasers', ListBlock(SmallTeaserBlock())),
+        ('teasers', ListBlock(SmallTeaserBlock(), template='widgets/listblock.html')),
         ('bigteaser', BigTeaserBlock()),
         ('news', BlogBlock()),
     ])
-    # teasers = StreamField([
-    #     ('teaser', SmallTeaserBlock())
-    # ])
+
     content_panels = Page.content_panels + [
+        MultiFieldPanel([
+            FieldPanel('teaser_title'),
+            RichTextFieldPanel('teaser_text'),
+            PageChooserPanel('teaser_link'),
+        ],heading='Teaser'),
         StreamFieldPanel('content'),
     ]
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['teaser'] = {
+            'title': self.teaser_title,
+            'text': self.teaser_text,
+            'button': {
+                'url': self.teaser_link.url,
+                'text': 'Read more',
+                'fontawesome': 'facebook',
+            }
+        }
+        return context
 
 # Header Pages
 class AboutPage(Page):

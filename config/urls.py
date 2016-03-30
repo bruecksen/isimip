@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
 
     url(r'^models/', include(climatemodels_urls, namespace='climatemodels')),
-    url(r'^accounts/', include(invitations_urls), name='account'),
+    url(r'^accounts/', include(invitations_urls, namespace='accounts')),
 
     url(r'^blog/', include('blog.urls', namespace="blog")),
 

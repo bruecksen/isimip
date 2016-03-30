@@ -3,7 +3,7 @@
 
 {% block object-tools-items %}
     <li>
-      <a href="{% url 'account_invite' %}" class="addlink">
+      <a href="{% url 'accounts:invite' %}" class="addlink">
         {% blocktrans with cl.opts.verbose_name as name %}Invite {{ name }}{% endblocktrans %}
       </a>
     </li>

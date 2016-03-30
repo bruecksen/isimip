@@ -1,6 +1,23 @@
+from django.utils import formats
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
+# class MissionStatementTeaserBlock(blocks.StructBlock):
+#     title = blocks.CharBlock(required=True)
+#     text = blocks.TextBlock(required=True)
+#     link = blocks.PageChooserBlock(required=True)
+#
+#     class Meta:
+#         template = 'widgets/head-super.html'
+#
+#     def get_context(self, value):
+#         context = super().get_context(value)
+#         context['button'] = {
+#             'url': value.get('link'),
+#             'text': 'Read more',
+#             'fontawesome': 'facebook',
+#         }
+#         return context
 
 class SmallTeaserBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True)
@@ -10,17 +27,20 @@ class SmallTeaserBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'image'
-        template = 'widgets/page-teaser-wide.html'
+        template = 'widgets/small_teaser_block.html'
 
 
     def get_context(self, value):
         context = super().get_context(value)
         context['title'] = value.get('title')
         image = value.get('picture')
-        rendition = image.get_rendition('max-1200x1200')
+        rendition = image.get_rendition('max-800x800')
         context['image'] = {'url': rendition.url, 'name': image.title}
-        context['text'] = value.get('text')
-        context['url'] = value.get('link').url
+        context['href'] = value.get('link').url
+        context['text'] = {
+            'description': value.get('text'),
+            'arrow_right_link': True
+        }
         return context
 
 class BigTeaserBlock(blocks.StructBlock):
@@ -29,6 +49,8 @@ class BigTeaserBlock(blocks.StructBlock):
     picture = ImageChooserBlock()
     text = blocks.RichTextBlock()
     link = blocks.PageChooserBlock(required=True)
+    from_date = blocks.DateBlock(required=False)
+    to_date = blocks.DateBlock(required=False)
 
     class Meta:
         icon = 'image'
@@ -37,12 +59,20 @@ class BigTeaserBlock(blocks.StructBlock):
     def get_context(self, value):
         context = super().get_context(value)
         context['title'] = value.get('title')
-        context['subtitle'] = value.get('subtitle')
+
         image = value.get('picture')
-        rendition = image.get_rendition('max-1200x1200')
+        rendition = image.get_rendition('fill-1920x640-c100')
         context['image'] = {'url': rendition.url, 'name': image.title}
-        context['text'] = value.get('text')
-        context['url'] = value.get('link').url
+        context['href'] = value.get('link').url
+        context['text'] = {
+            'title': value.get('subtitle'),
+            'description': value.get('text'),
+            'text_right_link': True,
+            'text_right_link_text': 'Learn more',
+            'divider': True,
+            'date': "%s to %s" % (formats.date_format(value.get('from_date'), "SHORT_DATE_FORMAT"),
+                                  formats.date_format(value.get('to_date'), "SHORT_DATE_FORMAT")),
+        }
         return context
 
 

@@ -1,7 +1,4 @@
-<div>
-    {{ title }}
-    {{ subtitle }}
-    {% include 'widgets/image.html' with url=image.url name=image.name %}
-    {{ text }}
-    <a href="{{ url }}">mehr</a>
+<div class="super">
+    {% include 'widgets/heading3.html' with text=title %}
+    {% include 'widgets/page-teaser-wide.html' %}
 </div>

@@ -29,7 +29,29 @@ class BlogBlock(blocks.StructBlock):
             entries = entries.filter(categories__category=blog_category)
         if entry_count is not None:
             entries = entries[:entry_count]
-        context['entries'] = entries
+
+        context['title'] = 'News'
+        context['entries'] = []
+        for entry in entries:
+            entry_context = {
+                'href': entry.url,
+                'text': {
+                    'description': entry.body,
+                    'title': entry.title,
+                    'arrow_right_link': True
+                }
+            }
+            try:
+                rendition = entry.header_image.get_rendition('max-800x800')
+                entry_context['image'] = {
+                    'url': rendition.url,
+                    'name': entry.header_image.title
+                 }
+            except:
+                pass
+
+            context['entries'] += [entry_context]
+
         return context
         # context['entries'] = []
         # for entry in entries:

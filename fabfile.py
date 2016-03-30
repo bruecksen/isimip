@@ -29,7 +29,7 @@ def reload_webserver():
 
 def migrate():
     with virtualenv(env.virtualenv_path):
-        run("%(path)s/manage.py migrate" % env)
+        run("%(path)s/manage.py migrate --settings=config.settings.production" % env)
 
 
 def ping():
@@ -42,8 +42,7 @@ def deploy():
         run("git pull %(push_remote)s %(push_branch)s" % env)
         with virtualenv(env.virtualenv_path):
             run("pip install -Ur requirements/production.txt")
-            run("./manage.py collectstatic --noinput")
-            # run("cd yooweedoo_contest && ../manage.py compilemessages")
+            run("./manage.py collectstatic --noinput --settings=config.settings.production")
 
     migrate()
     reload_webserver()
