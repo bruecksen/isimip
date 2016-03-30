@@ -130,6 +130,53 @@ data = {
 
 
 
+    'columns_1_1': {
+        'name': 'Columns 1:1',
+        'template': 'widgets/columns-1-1.html',
+        'context': {
+            'left_column': '<h2 style="background-color: #eee;">Left Column</h2>',
+            'right_column': '<h2 style="background-color: #eee;">Right Column</h2>',
+        },
+    },
+    'columns_2_1': {
+        'name': 'Columns 2:1',
+        'template': 'widgets/columns-2-1.html',
+        'context': {
+            'left_column': '<h2 style="background-color: #eee;">Left Column</h2>',
+            'right_column': '<h2 style="background-color: #eee;">Right Column</h2>',
+        },
+    },
+    'columns_1_2': {
+        'name': 'Columns 1:2',
+        'template': 'widgets/columns-1-2.html',
+        'context': {
+            'left_column': '<h2 style="background-color: #eee;">Left Column</h2>',
+            'right_column': '<h2 style="background-color: #eee;">Right Column</h2>',
+        },
+    },
+    'columns_1_1_1': {
+        'name': 'Columns 1:1:1',
+        'template': 'widgets/columns-1-1-1.html',
+        'context': {
+            'left_column': '<h2 style="background-color: #eee;">Left Column</h2>',
+            'center_column': '<h2 style="background-color: #eee;">Center Column</h2>',
+            'right_column': '<h2 style="background-color: #eee;">Right Column</h2>',
+        },
+    },
+    'columns_1_1_1_1': {
+        'name': 'Columns 1:1:1:1',
+        'template': 'widgets/columns-1-1-1-1.html',
+        'context': {
+            'first_column': '<h2 style="background-color: #eee;">First Column</h2>',
+            'second_column': '<h2 style="background-color: #eee;">Second Column</h2>',
+            'third_column': '<h2 style="background-color: #eee;">Third Column</h2>',
+            'fourth_column': '<h2 style="background-color: #eee;">Fourth Column</h2>',
+        },
+    },
+
+
+
+
     'image': {
         'name': 'Image',
         'template': 'widgets/image.html',
@@ -214,13 +261,28 @@ data = {
         'context': {
             'href': 'http://bing.de/',
             'text': {
-                'title': 'Output Data',
+                'title': 'Input Data',
                 'description': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit.',
                 'arrow_right_link': True,
             },
         },
     },
 
+
+    'page_teaser_notitle': {
+        'name': 'Page Teaser',
+        'template': 'widgets/page-teaser.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'image': {
+                'url': '/static/styleguide/test-images/dog.jpg',
+            },
+            'text': {
+                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+                'arrow_right_link': True,
+            },
+        },
+    },
 
 
     'page_teaser_wide': {
