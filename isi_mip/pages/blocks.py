@@ -2,22 +2,6 @@ from django.utils import formats
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
-# class MissionStatementTeaserBlock(blocks.StructBlock):
-#     title = blocks.CharBlock(required=True)
-#     text = blocks.TextBlock(required=True)
-#     link = blocks.PageChooserBlock(required=True)
-#
-#     class Meta:
-#         template = 'widgets/head-super.html'
-#
-#     def get_context(self, value):
-#         context = super().get_context(value)
-#         context['button'] = {
-#             'url': value.get('link'),
-#             'text': 'Read more',
-#             'fontawesome': 'facebook',
-#         }
-#         return context
 
 class SmallTeaserBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True)
@@ -48,7 +32,9 @@ class BigTeaserBlock(blocks.StructBlock):
     subtitle = blocks.CharBlock(required=False)
     picture = ImageChooserBlock()
     text = blocks.RichTextBlock()
-    link = blocks.PageChooserBlock(required=True)
+    external_link= blocks.URLBlock(required=False, help_text="Will be ignored if an internal link is provided")
+    internal_link = blocks.PageChooserBlock(required=False, help_text='If set, this has precedence over the external link.')
+
     from_date = blocks.DateBlock(required=False)
     to_date = blocks.DateBlock(required=False)
 
@@ -63,7 +49,10 @@ class BigTeaserBlock(blocks.StructBlock):
         image = value.get('picture')
         rendition = image.get_rendition('fill-1920x640-c100')
         context['image'] = {'url': rendition.url, 'name': image.title}
-        context['href'] = value.get('link').url
+        if value.get('internal_link'):
+            context['href'] = value.get('internal_link').url
+        else:
+            context['href'] = value.get('external_link')
         context['text'] = {
             'title': value.get('subtitle'),
             'description': value.get('text'),

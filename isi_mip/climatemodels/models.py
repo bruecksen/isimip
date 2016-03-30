@@ -363,14 +363,14 @@ class Water(Sector):
     dams_reservoirs = models.TextField(null=True, blank=True, verbose_name='Dams & Reservoirs',
                                        help_text='Describe how are dams and reservoirs are implemented')
 
-    calibration = models.NullBooleanField(verbose_name='Was the model calibrated?')
+    calibration = models.BooleanField(verbose_name='Was the model calibrated?', default=False)
     calibration_years = models.TextField(null=True, blank=True, verbose_name='Which years were used for calibration?')
     calibration_dataset = models.TextField(null=True, blank=True, verbose_name='Which dataset was used for calibration?',
                                            help_text='E.g. WFD, GSWP3')
     calibration_catchments = models.TextField(null=True, blank=True,
                                               verbose_name='How many catchments were callibrated?')
-    vegetation = models.NullBooleanField(verbose_name='Is CO2 fertilisation accounted for?')
-    vegetation_presentation = models.TextField(null=True, blank=True, verbose_name='How is vegetation represented?')
+    vegetation = models.BooleanField(verbose_name='Is CO2 fertilisation accounted for?', default=False)
+    vegetation_representation = models.TextField(null=True, blank=True, verbose_name='How is vegetation represented?')
     methods_evapotraspiration = models.TextField(null=True, blank=True, verbose_name='Potential evapotraspiration')
     methods_snowmelt = models.TextField(null=True, blank=True, verbose_name='Snow melt')
 

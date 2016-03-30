@@ -47,7 +47,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Basic Information', {
             'fields': ['name', 'sector', 'sector_link', 'region', 'version',
-                       'main_reference_paper', 'additional_papers', 'short_description']}
+                       'main_reference_paper', 'other_references', 'short_description']}
          ),
         ('Technical Information', {
             'fields': [
@@ -59,7 +59,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
                 'socioeconomic_input_variables', 'soil_dataset', 'additional_input_data_sets',
                 # more
                 'exceptions_to_protocol', 'spin_up', 'spin_up_design',
-                'natural_vegetation_partition', 'natural_vegetation_simulation', 'natural_vegetation_cover_dataset',
+                'natural_vegetation_partition', 'natural_vegetation_dynamics', 'natural_vegetation_cover_dataset',
                 'management', 'extreme_events',
                 'anything_else', 'comments'
             ],
