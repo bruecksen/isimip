@@ -1,4 +1,8 @@
+import csv
+
 from django.db import models
+from django.http.response import JsonResponse, HttpResponse
+from django.template.response import TemplateResponse
 from modelcluster.models import ClusterableModel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, MultiFieldPanel, PageChooserPanel, RichTextFieldPanel, \
@@ -6,6 +10,7 @@ from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel, Mul
 from wagtail.wagtailcore.blocks import RichTextBlock, ListBlock, CharBlock
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route, RoutablePage
 
 from isi_mip.climatemodels.models import ImpactModel
 from isi_mip.contrib.blocks import BlogBlock
@@ -77,7 +82,7 @@ class GettingStartedPage(Page):
     pass
 
 
-class ImpactModelsPage(Page):
+class ImpactModelsPage(RoutablePage):
     description = RichTextField()
 
     content_panels = Page.content_panels + [
@@ -88,6 +93,27 @@ class ImpactModelsPage(Page):
         context = super(ImpactModelsPage, self).get_context(request, *args, **kwargs)
         context['general'] = ImpactModel.objects.all()
         return context
+
+    @route(r'^$')
+    def base(self, request):
+        return TemplateResponse(
+            request,
+            self.get_template(request),
+            self.get_context(request)
+        )
+
+    @route(r'^csv/$')
+    def csv(self, request):
+        # Create the HttpResponse object with the appropriate CSV header.
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+        writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+
+        return response
+
 
     class Meta:
         verbose_name = "Impact Models"
