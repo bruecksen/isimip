@@ -1,0 +1,6 @@
+<div class="widget-download-link">
+	{% include "widgets/button.html" with right=True href=button.href text=button.text primary=True %}
+	{% if fontawesome %}<i class="fa fa-{{ fontawesome }} fa-3x widget-download-link-icon"></i>{% endif %}
+	<span class="widget-download-link-text">{{ description }}</span>
+	<div class="clearfix"></div>
+</div><!-- widget-download-link -->

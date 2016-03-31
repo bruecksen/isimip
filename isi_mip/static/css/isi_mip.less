@@ -81,23 +81,38 @@ h1, .h1, h2, .h2, h3, .h3 {
 
 
 .btn {
-	border-radius: 0;
 	border-color: @color-black;
-}
-.super {
-	.btn {
-		border-color: @color-white;
-		color: @color-white;
+
+	&.btn-default {
+		border-radius: 0;
 	}
 
-	.btn.btn-default {
-		background-color: @color-primary;
+	&.btn-primary {
+		border-color: @color-secondary;
+		background-color: @color-secondary;
 		-webkit-transition: background-color 0.5s;
 		transition: background-color 0.5s;
 
 		&:hover, &:focus {
 			background-color: @color-white;
-			color: @color-primary;
+			color: @color-secondary;
+		}
+	}
+}
+.super {
+	.btn {
+		border-color: @color-white;
+		color: @color-white;
+
+		&.btn-default {
+			background-color: @color-primary;
+			-webkit-transition: background-color 0.5s;
+			transition: background-color 0.5s;
+
+			&:hover, &:focus {
+				background-color: @color-white;
+				color: @color-primary;
+			}
 		}
 	}
 }
@@ -263,6 +278,74 @@ h1, .h1, h2, .h2, h3, .h3 {
 }
 
 
+.widget-download-link {
+	border: 1px solid @color-neutral-dark;
+	padding: 15px;
+	margin-bottom: 30px;
+
+	.widget-download-link-icon {
+		color: @color-primary;
+		margin-right: 15px;
+	}
+}
+
+
+
+.widget-link-list {
+	margin-bottom: 30px;
+
+	> ul {
+		> li {
+			display: block;
+			padding: 20px 0;
+			font-size: 18px;
+
+
+			+ li {
+				border-top: 2px dashed @color-neutral;
+			}
+		}
+	}
+}
+
+
+.widget-table {
+	.widget-table-showmore-button {
+		cursor: pointer;
+		font-size: 18px;
+		text-align: center;
+		background-color: @color-neutral;
+	}
+	.widget-table-pagination-pagelink {
+		font-size: 18px;
+		padding: 5px;
+		border-radius: 50%;
+
+		&:hover {
+			background-color: @color-secondary;
+		}
+
+		&.widget-table-pagination-pagelink-active {
+			background-color: @color-secondary;
+		}
+	}
+	.widget-table-pagination-prevbutton, .widget-table-pagination-nextbutton {
+		font-size: 18px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: @color-secondary;
+		}
+
+		&.disabled {
+			color: @color-neutral;
+
+			&:hover {
+				background-color: transparent;
+			}
+		}
+	}
+}
 
 
 .widget-indicator {

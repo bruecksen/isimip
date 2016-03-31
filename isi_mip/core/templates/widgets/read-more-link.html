@@ -1,3 +1,10 @@
 <div class="widget-readmorelink{% if align == "right" %} text-right{% endif %}">
-	<a href="{{ url }}"{% if external %} target="_blank" {% endif %}>{{ text }} &gt;</a>
-</div>
+	<a href="{{ url }}"{% if external %} target="_blank" {% endif %}>
+		{{ text }}
+		{% if arrow %}
+			<i class="fa fa-arrow-circle-right fa-2x"></i>
+		{% else %}
+			&gt;
+		{% endif %}
+	</a>
+</div><!-- widget-readmorelink -->

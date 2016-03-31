@@ -56,7 +56,7 @@ data = {
             'title': 'Teaser',
             'text': 'Sed ut perspiciatis unde omnis iste natus error sit\nvoluptatem accusantium doloremque laudantium. ',
             'button': {
-                'url': 'http://google.ru',
+                'href': 'http://google.ru',
                 'text': 'Facebook',
                 'fontawesome': 'facebook',
             },
@@ -363,6 +363,21 @@ data = {
 
 
 
+    'download_link': {
+        'name': 'Download Link',
+        'template': 'widgets/download-link.html',
+        'context': {
+            'button': {
+                'href': 'https://www.mozilla.org/de/firefox/new/',
+                'text': 'Download',
+            },
+            'description': 'Download PDF Mission / Implementation',
+            'fontawesome': 'file-pdf-o',
+        },
+    },
+
+
+
 
     'indicator': {
         'name': 'Indicator',
@@ -391,6 +406,16 @@ data = {
             'align': 'right',
         },
     },
+    'readmorelink_rightarrow': {
+        'name': 'Read more link – with arrow',
+        'template': 'widgets/read-more-link.html',
+        'context': {
+            'arrow': True,
+            'text': 'weiterlesen',
+            'url': 'http://x',
+            'align': 'right',
+        },
+    },
 
     'horizontal_ruler': {
         'name': 'Horizontal Ruler',
@@ -398,6 +423,203 @@ data = {
         'context': {
         },
     },
+
+    'link_list': {
+        'name': 'Link List',
+        'template': 'widgets/link-list.html',
+        'context': {
+            'links': [
+                { 'fontawesome': 'clock-o', 'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
+                { 'fontawesome': 'clock-o', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
+                { 'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
+                { 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
+            ],
+        },
+    },
+
+
+
+    'table': {
+        'name': 'Table',
+        'template': 'widgets/table.html',
+        'context': {
+            'head': {
+                'cols': [
+                    { 'text': 'Data Set', },
+                    { 'text': 'Data Type', },
+                    { 'text': 'Data set', },
+                ],
+            },
+            'body': {
+                'rows': [
+                    {
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Socio Economic', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                    {
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Economic Socio', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.', },
+                        ],
+                    },
+                    {
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Climate', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                ],
+            },
+        },
+    },
+
+
+
+    'table_limit': {
+        'name': 'Table with row limit',
+        'template': 'widgets/table.html',
+        'context': {
+            'head': {
+                'cols': [
+                    { 'text': 'Data Set', },
+                    { 'text': 'Data Type', },
+                    { 'text': 'Data set', },
+                ],
+            },
+            'body': {
+                'rowlimit': {
+                    'rownumber': 3,
+                    'buttontext': 'See all <i class="fa fa-chevron-down"></i>',
+                },
+                'rows': [
+                    {
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Socio Economic', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                    {
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Economic Socio', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.', },
+                        ],
+                    },
+                    {
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Climate', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                    {
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Alimate 2', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                    {
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Glimac 3', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                ],
+            },
+        },
+    },
+
+
+
+
+
+
+    'table_pagination': {
+        'name': 'Table with pagination',
+        'template': 'widgets/table.html',
+        'context': {
+            'head': {
+                'cols': [
+                    { 'text': 'Data Set', },
+                    { 'text': 'Data Type', },
+                    { 'text': 'Data set', },
+                ],
+            },
+            'body': {
+                'rowlimit': {
+                    'rownumber': 3,
+                    'pagination': [1, 2, 3], # rows.length % rownumber
+                },
+                'rows': [
+                    {
+                        'pagenumber': 1,
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Socio Economic', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                    {
+                        'pagenumber': 1,
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Economic Socio', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.', },
+                        ],
+                    },
+                    {
+                        'pagenumber': 1,
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Climate F', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                    {
+                        'pagenumber': 2,
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Alimate 2 E', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                    {
+                        'pagenumber': 2,
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Glimac 3 Z', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                    {
+                        'pagenumber': 2,
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Alimate 2 W', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                    {
+                        'pagenumber': 3,
+                        'cols': [
+                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'Glimac 3 Q', },
+                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                        ],
+                    },
+                ],
+            },
+        },
+    },
+
 
 
     'footer': {

@@ -1,0 +1,11 @@
+<div class="widget-link-list">
+	<ul>
+		{% for link in links %}
+			<li>
+				{% if link.fontawesome %}<i class="fa fa-fw fa-{{ link.fontawesome }}"></i>{% endif %}
+				{% if link.prepend %}{{ link.prepend }} – {% endif %}
+				<a href="href">{{ link.text }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+</div><!-- widget-link-list -->

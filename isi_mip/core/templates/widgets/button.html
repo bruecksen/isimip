@@ -1,6 +1,6 @@
-<div class="widget-button{% if fontawesome %} widget-button-fontawesome{% endif %}">
-	{% if url %}
-	<a href="{{ url }}" class="btn btn-default">
+<div class="widget-button{% if right %} pull-right{% endif %}">
+	{% if href %}
+	<a href="{{ href }}" class="btn btn-{% if primary %}primary{% else %}default{% endif %}">
 		{{ text|safe }}
 	</a>
 	{% else %}
