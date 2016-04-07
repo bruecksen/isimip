@@ -1,3 +1,6 @@
+from blog.models import BlogIndexPage
+from blog.models import BlogPage
+from django.shortcuts import render
 from django.template.response import TemplateResponse
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -11,10 +14,10 @@ from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
-from isi_mip.climatemodels.models import ImpactModel
+from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.contrib.blocks import BlogBlock
 from isi_mip.pages.blocks import SmallTeaserBlock, PaperBlock, LinkBlock, FAQBlock, BigTeaserBlock, RowBlock, \
-    IsiNumbersBlock, TwitterBlock, Columns1To1Block, ImageBlock, PDFBlock
+    IsiNumbersBlock, TwitterBlock, Columns1To1Block, ImageBlock, PDFBlock, ContactsBlock
 
 
 class RoutablePageWithDefault(RoutablePage):
@@ -30,7 +33,7 @@ class RoutablePageWithDefault(RoutablePage):
         abstract = True
 
 
-class HomePage(Page):
+class HomePage(RoutablePageWithDefault):
     parent_page_types = ['wagtailcore.Page']
 
     teaser_title = models.CharField(max_length=500)
@@ -88,6 +91,18 @@ class HomePage(Page):
         }
         return context
     #
+
+    @route(r'^blog/$')
+    @route(r'^blog/(?P<slug>\w+)/$')
+    def blog(self, request, slug=None):
+        if slug:
+            blogs = BlogIndexPage.objects.get(slug=slug).blogs
+        else:
+            blogs = BlogPage.objects.all().order_by('-date')
+        template = 'pages/blog_list.html'
+        context = {'entries':blogs}
+        return render(request, template, context)
+
     # @route(r'^ical/$')
     # def ical(self, request):
     #     filename = "event.ics"
@@ -143,21 +158,30 @@ class AboutPage(AbstractRegisterFormPage):
     bottom_content = StreamField([
         ('columns_1_to_1', Columns1To1Block()),
         ('image', ImageBlock()),
-        ('pdf', PDFBlock())
+        ('pdf', PDFBlock()),
+        ('paper', PaperBlock()),
     ])
 
     content_panels = [StreamFieldPanel('top_content')] + AbstractRegisterFormPage.content_panels + \
                      [StreamFieldPanel('bottom_content')]
 
 
-class GettingStartedPage(Page):
+class GettingStartedPage(RoutablePageWithDefault):
     parent_page_types = [HomePage]
     content = StreamField([
         ('input_data', InputDataBlock()),
+        ('contact', ContactsBlock()),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
+
+    @route(r'^details/(\d+)/$')
+    def details(self, request, id):
+        inda= InputData.objects.get(id=id)
+        template = 'pages/input_data_details_page.html'
+        context = {'inda': inda}
+        return render(request, template, context)
 
 class ImpactModelsPage(RoutablePageWithDefault):
     parent_page_types = [HomePage]
@@ -168,6 +192,13 @@ class ImpactModelsPage(RoutablePageWithDefault):
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
+
+    @route(r'^details/(\d+)/$')
+    def details(self, request, id):
+        im = ImpactModel.objects.get(id=id)
+        template = 'pages/impact_models_details_page.html'
+        context = {'im': im}
+        return render(request, template, context)
 
     # @route(r'^csv/$')
     # def csv(self, request):
@@ -231,13 +262,3 @@ class NewsletterPage(Page):
 
 class DashboardPage(Page):
     pass
-
-
-# Extra Pages
-class NewsPage(Page):
-    template = 'pages/news.html'
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        context['news'] = ''
-        return context

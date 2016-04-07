@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+    {% include 'widgets/heading1.html' with text='Input Data Set: '|add:inda.data_set%}
+    Intro Text unde omnis iste natus error sit voluptatem accusantium totam.<br/>
+    data-type: {{ inda.data_type }}<br/>
+    scenario: {{ inda.scenario }}<br/>
+    phase: {{ inda.phase }}<br/>
+    variables: {{ inda.variables }}<br/>
+    description: {{ inda.description }}<br/>
+    caveats: {{ inda.caveats }}<br/>
+{% endblock %}

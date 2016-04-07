@@ -46,6 +46,10 @@ class IntegerBlock(FieldBlock):
         self.field = forms.IntegerField(required=required, help_text=help_text)
         super().__init__(**kwargs)
 
+class EmailBlock(FieldBlock):
+    def __init__(self, required=True, help_text=None, **kwargs):
+        self.field = forms.EmailField(required=required, help_text=help_text)
+        super().__init__(**kwargs)
 
 
 class BlogBlock(blocks.StructBlock):
@@ -67,6 +71,7 @@ class BlogBlock(blocks.StructBlock):
         context['teaser_template'] = 'widgets/page-teaser.html'
         context['count'] = entry_count
         context['title'] = blog_index.title if blog_index else 'Blog'
+        context['slug'] = blog_index.slug if blog_index else ''
         context['outter_col'] = int(3 * entry_count)
         context['inner_col'] = int(12 / entry_count)
 

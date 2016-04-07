@@ -1,10 +1,15 @@
 from django.utils import formats
 from wagtail.wagtailcore.blocks import CharBlock, StructBlock, TextBlock, StreamBlock, PageChooserBlock, RichTextBlock, \
-    URLBlock, DateBlock
+    URLBlock, DateBlock, ListBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
+from isi_mip.contrib.blocks import EmailBlock
+
+BASE_BLOCKS = [
+    ('rich_text', RichTextBlock()),
+]
 
 class RowBlock(StreamBlock):
     class Meta:
@@ -111,13 +116,14 @@ class TwitterBlock(StructBlock):
 class PaperBlock(StructBlock):
     picture = ImageChooserBlock(required=False)
     author = CharBlock()
-    link = URLBlock()
+    title = CharBlock()
     journal = CharBlock()
+    link = URLBlock()
 
     class Meta:
         classname = 'paper'
         icon = 'doc-full'
-        template = 'widgets/paper.html'
+        # template = 'widgets/paper.html'
 
     def get_context(self, value):
         context = super().get_context(value)
@@ -139,29 +145,51 @@ class LinkBlock(StructBlock):
     class Meta:
         classname = 'link'
         #TODO: icon = 'image'
-        template = 'widgets/link.html'
+        template = 'widgets/page-teaser-wide.html'
 
     def get_context(self, value):
         context = super().get_context(value)
-        context['title'] = value.get('title')
+        context['text'] = {
+            'arrow_right_link': True,
+            'title': value.get('title'),
+            'description': value.get('text'),
+        }
         image = value.get('picture')
         if image:
             rendition = image.get_rendition('max-1200x1200')
             context['image'] = {'url': rendition.url, 'name': image.title}
-        context['text'] = value.get('text')
         if value.get('link'):
-            context['url'] = value.get('link').url
+            context['href'] = value.get('link')
         return context
 
 
 class FAQBlock(StructBlock):
     question = CharBlock()
-    answer = TextBlock()
+    answer = RichTextBlock()
 
 
-BASE_BLOCKS = [
-    ('rich_text', RichTextBlock()),
-]
+
+class ContactBlock(StructBlock):
+    name = CharBlock()
+    website = URLBlock()
+    email = EmailBlock()
+
+class SectorBlock(StructBlock):
+    name = CharBlock()
+    contacts = ListBlock(ContactBlock)
+
+class ContactsBlock(StructBlock):
+    description = RichTextBlock()
+    sectors = ListBlock(SectorBlock)
+
+
+
+
+
+
+
+
+
 
 CONTENT_BLOCKS = BASE_BLOCKS + [
     ('link', LinkBlock()),

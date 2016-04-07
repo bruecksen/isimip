@@ -8,5 +8,5 @@
             </div>
         {% endfor %}
     </div>
-    {% include 'widgets/read-more-link.html' with align='right' text='See all news' url='/news/' %}
+    {% include 'widgets/read-more-link.html' with align='right' text='See all' url='/blog/'|add:slug %}
 </div>

@@ -1,8 +1,8 @@
-from isi_mip.climatemodels.models import ImpactModel, Water, Region, Sector, Biomes, ReferencePaper, \
-    SocioEconomicInputVariables, InputData
 import pyexcel as pe
-import pyexcel.ext.xlsx
-import crossrefpy
+
+from isi_mip.sciencepaper import crossrefpy
+from isi_mip.climatemodels.models import ImpactModel, Region, Sector, ReferencePaper, \
+    SocioEconomicInputVariables, InputData
 
 
 class XLSImport:
@@ -35,7 +35,7 @@ class XLSImport:
         except crossrefpy.ReferenceException:
             doi = None
             title = zeile[7]
-        general.main_reference_paper = ReferencePaper.objects.get_or_create(name=title, doi=doi)[0]
+        general.main_reference_paper = ReferencePaper.objects.get_or_create(title=title, doi=doi)[0]
         for paper in zeile[8].split('\n\n'):
             try:
                 ref = crossrefpy.query(paper)
@@ -44,7 +44,7 @@ class XLSImport:
             except crossrefpy.ReferenceException:
                 doi = None
                 title = zeile[7]
-            addpaper = ReferencePaper.objects.get_or_create(name=title, doi=doi)[0]
+            addpaper = ReferencePaper.objects.get_or_create(title=title, doi=doi)[0]
             general.other_references.add(addpaper)
 
         general.resolution = zeile[10]

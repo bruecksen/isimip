@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
+from isi_mip.sciencepaper.models import Paper
 
 
 class Region(models.Model):
@@ -16,12 +17,8 @@ class Region(models.Model):
         return self.name
 
 
-class ReferencePaper(models.Model):
-    name = models.CharField(max_length=500)
-    doi = models.CharField(max_length=500, null=True, blank=True, unique=True)
-
-    def __str__(self):
-        return "%s (%s)" % (self.name, self.doi) if self.doi else self.name
+class ReferencePaper(Paper):
+    pass
 
 
 class ClimateDataType(models.Model):

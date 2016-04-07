@@ -11,7 +11,7 @@ env.read_env(ROOT_DIR('.env'))
 # ------------------------------------------------------------------------------
 DJANGO_APPS = (
     'material',
-    'material.admin',
+    # 'material.admin',
     # Default Django apps:
     'django.contrib.admin',
     'django.contrib.auth',
@@ -67,6 +67,7 @@ LOCAL_APPS = (
 
     'isi_mip.invitation',
     'isi_mip.choiceorotherfield',
+    'isi_mip.sciencepaper',
 )
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + CMS_APPS
