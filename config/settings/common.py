@@ -10,6 +10,8 @@ env.read_env(ROOT_DIR('.env'))
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
 DJANGO_APPS = (
+    'material',
+    'material.admin',
     # Default Django apps:
     'django.contrib.admin',
     'django.contrib.auth',
@@ -21,6 +23,12 @@ DJANGO_APPS = (
 
     # Useful template tags:
     # 'django.contrib.humanize',
+)
+THIRD_PARTY_APPS = (
+    'crispy_forms',  # Form layouts
+    # 'allauth',  # registration
+    # 'allauth.account',  # registration
+    # 'allauth.socialaccount',  # registration
 
 )
 CMS_APPS = (
@@ -36,7 +44,6 @@ CMS_APPS = (
     'wagtail.wagtailadmin',
     'wagtail.wagtailcore',
 
-
     'wagtail.contrib.settings',
     # 'wagtail.contrib.wagtailstyleguide',
 
@@ -45,12 +52,6 @@ CMS_APPS = (
     'taggit',
 
     'blog',
-)
-THIRD_PARTY_APPS = (
-    # 'crispy_forms',  # Form layouts
-    # 'allauth',  # registration
-    # 'allauth.account',  # registration
-    # 'allauth.socialaccount',  # registration
 )
 
 # Apps specific for this project go here.

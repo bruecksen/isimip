@@ -1,5 +1,30 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static header footer %}
 
-{% block content_container %}
-    {{ page.title }}
+{% block viewport %}<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />{% endblock %}
+
+
+{% block header %}
+	{% header %}
+{% endblock %}
+
+{% block content %}
+	<div>
+		<div class="content-container">
+			<div class="container" style="background-color: white;">
+				<div class="content-container-border">
+					<div class="content-container-inner">
+                        {{ page.content }}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<br>
+		<br>
+	</div>
+{% endblock %}
+
+{% block footer %}
+{% footer %}
 {% endblock %}

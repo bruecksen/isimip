@@ -164,9 +164,11 @@ class ImpactModel(models.Model):
         null=True, blank=True,
         help_text='Were any settings prescribed by the protocol overruled in order to run the model?'
     )
+    NA_YES_NO = ((None, '---------'), (True, 'Yes'), (False, 'No'))
     spin_up = models.NullBooleanField(
         verbose_name='Did you spin-up your model?',
-        help_text="`No` indicates the simulations were run starting in the first reporting year 1971"
+        help_text="`No` indicates the simulations were run starting in the first reporting year 1971",
+        choices=NA_YES_NO
     )
     spin_up_design = models.TextField(
         null=True, blank=True, verbose_name='Spin-up design',
@@ -468,7 +470,7 @@ class OutputData(models.Model):
         verbose_name_plural = 'Output data'
 
 
-SECTOR_MAPPING ={
+SECTOR_MAPPING = {
     'Agriculture': Agriculture,
     'Energy': Energy,
     'Water (global)': Water,

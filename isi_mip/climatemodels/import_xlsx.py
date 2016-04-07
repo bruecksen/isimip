@@ -45,7 +45,7 @@ class XLSImport:
                 doi = None
                 title = zeile[7]
             addpaper = ReferencePaper.objects.get_or_create(name=title, doi=doi)[0]
-            general.additional_papers.add(addpaper)
+            general.other_references.add(addpaper)
 
         general.resolution = zeile[10]
         general.temporal_resolution_climate = zeile[11]

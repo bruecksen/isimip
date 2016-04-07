@@ -1,9 +1,33 @@
-from blog.models import BlogPage, BlogCategory
+from blog.models import BlogPage, BlogCategory, BlogIndexPage
 from django import forms
+from django.contrib.contenttypes.models import ContentType
+from django.utils.functional import cached_property
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.blocks import FieldBlock
+from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock
 from wagtail.wagtailsnippets.blocks import SnippetChooserBlock
 
+
+def smart_truncate(text: str, min_length: int, max_length: int) -> str:
+    """
+    :param text:
+    :param min_length: Minimal length of result string
+    :param max_length: Maximal length of result string
+    :return: Concattenated String
+    """
+    max_length = len(text) if max_length == 0 else max_length
+    c_index = text.rfind('.', min_length, max_length)
+    if c_index != -1:
+        return text[:c_index+1]
+    else:
+        if len(text) > max_length:
+            return text[:max_length-2]+'..'
+        else:
+            return text
+
+
+class SpecificPageChooserBlock(PageChooserBlock):
+    page_model = BlogIndexPage
+    # TODO: THIS WILL ONLY WORK IF https://github.com/torchbox/wagtail/pull/2448
 
 class IntegerBlock(FieldBlock):
     def __init__(self, required=True, help_text=None, **kwargs):
@@ -11,53 +35,46 @@ class IntegerBlock(FieldBlock):
         super().__init__(**kwargs)
 
 
+
 class BlogBlock(blocks.StructBlock):
-    blog_category = SnippetChooserBlock(target_model=BlogCategory, required=False, help_text='Filter blog by this category')
-    entry_count = IntegerBlock(required=False, help_text='How many blog entries should be displayed?')
+    blog_index = SpecificPageChooserBlock(required=False, help_text='Select blog index page.')
+    entry_count = IntegerBlock(required=True, help_text='How many blog entries should be displayed?')
 
     class Meta:
         classname = 'blog'
         icon = 'image'
-        template = 'widgets/blogblock.html'
+        template = 'widgets/blog_block.html'
 
     def get_context(self, value):
         context = super().get_context(value)
-        blog_category = value.get('blog_category')
+        blog_index = value.get('blog_index')
         entry_count = value.get('entry_count')
-        entries = BlogPage.objects.all().order_by('-date')
-        if blog_category:
-            entries = entries.filter(categories__category=blog_category)
-        if entry_count is not None:
-            entries = entries[:entry_count]
 
-        context['title'] = 'News'
+        entries = blog_index.blogs if blog_index else BlogPage.objects.all().order_by('-date')
+        entries = entries[:entry_count]
+        context['teaser_template'] = 'widgets/page-teaser.html'
+        context['count'] = entry_count
+        context['title'] = blog_index.title if blog_index else 'Blog'
+        context['outter_col'] = int(3 * entry_count)
+        context['inner_col'] = int(12 / entry_count)
+
         context['entries'] = []
         for entry in entries:
             entry_context = {
+                'date': entry.date,
                 'href': entry.url,
                 'text': {
-                    'description': entry.body,
+                    'description': smart_truncate(entry.body,300,350),
                     'title': entry.title,
                     'arrow_right_link': True
                 }
             }
             try:
                 rendition = entry.header_image.get_rendition('max-800x800')
-                entry_context['image'] = {
-                    'url': rendition.url,
-                    'name': entry.header_image.title
-                 }
+                entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
+                entry_context['text']['description'] = smart_truncate(entry.body, 0, 100)
             except:
                 pass
 
             context['entries'] += [entry_context]
-
         return context
-        # context['entries'] = []
-        # for entry in entries:
-        #     # context['entries'].append(entry)
-        #     if entry.header_image:
-        #         rendition = entry.header_image.get_rendition('max-1200x1200')
-        #         entry['image_url'] = rendition.url
-        #         entry['image_name'] = entry.header_image.title
-        #     context['entries'].append(entry)

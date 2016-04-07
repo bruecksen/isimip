@@ -3,6 +3,17 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
+def loremi(count, method, random=False):
+    from django.template.base import Context, Token, Parser, TOKEN_TEXT
+    from django.template.defaulttags import lorem
+    c = Context()
+    lorem_str = "lorem %s %s" % (count, method)
+    if random:
+        lorem_str += " random"
+    t = Token(TOKEN_TEXT, lorem_str)
+    p = Parser(t)
+    return lorem(p, t).render(c)
+
 
 class RichPage:
     def __init__(self, apps, type, ctlabel, ctmodel):
@@ -22,13 +33,8 @@ class RichPage:
         )
 
     def save(self):
-        if not self.parent:
-            self.page.path = '00010001'
-            self.page.depth = 2
-            self.page.url_path='/%s/' % self.page.slug
         self.page.save()
 
-    # @staticmethod
     def add_child(self, child):
         child.page.path = self.page.path + '%04d' % (self.page.numchild + 1)
         child.page.url_path = self.page.url_path + '%s/' % child.page.slug
@@ -43,11 +49,17 @@ class RichPage:
 def  create_structure(apps, schema_editor):
     Page = apps.get_model('wagtailcore.Page')
     Site = apps.get_model('wagtailcore.Site')
+
+    ruhtpage = RichPage(apps,'wagtailcore.Page','wagtailcore','page')
+    ruhtpage.page = Page.objects.get(id=1)
+
+
+
     Page.objects.get(id=2).delete()
     homepage = RichPage(apps,'pages.HomePage','pages','homepage')
     homepage.page("Homepage", "home")
-    homepage.save()
-
+    ruhtpage.add_child(homepage)
+    # homepage.save()
     site = Site.objects.create(hostname='localhost', root_page=homepage.page, is_default_site=True)
 
     HeaderLinks = apps.get_model('core.HeaderLinks')
@@ -95,10 +107,10 @@ def  create_structure(apps, schema_editor):
     homepage.add_child(linklistpage)
     FooterLink.objects.create(footer=fls, target=linklistpage.page)
 
-    contactpage = RichPage(apps, 'pages.ContactPage', 'pages', 'contactpage')
-    contactpage.page('Contact','contact')
-    homepage.add_child(contactpage)
-    FooterLink.objects.create(footer=fls, target=contactpage.page)
+    # contactpage = RichPage(apps, 'pages.ContactPage', 'pages', 'contactpage')
+    # contactpage.page('Contact','contact')
+    # homepage.add_child(contactpage)
+    FooterLink.objects.create(footer=fls, target=outcomespage.page, _name='Contact')
 
     linklistpage = RichPage(apps, 'pages.LinkListPage', 'pages', 'linklistpage')
     linklistpage.page('Supporters','supporters')
@@ -120,6 +132,34 @@ def  create_structure(apps, schema_editor):
     homepage.add_child(linklistpage)
     FooterLink.objects.create(footer=fls, target=linklistpage.page)
 
+
+    ### BLOG
+    blogindexpage = RichPage(apps, 'blog.BlogIndexPage', 'blog', 'blogindexpage')
+    blogindexpage.page('News', 'news')
+    ruhtpage.add_child(blogindexpage)
+
+    from django.utils.text import slugify
+
+    for i in range(5):
+        blogpage = RichPage(apps, 'blog.BlogPage', 'blog', 'blogpage')
+        header = loremi(3,"w",True).title()
+        blogpage.page(header, slugify(header))
+        blogpage.page.body = loremi(5,'b',True)
+        blogindexpage.add_child(blogpage)
+
+    ### Changelog
+    blogindexpage2 = RichPage(apps, 'blog.BlogIndexPage', 'blog', 'blogindexpage')
+    blogindexpage2.page('Changelog', 'changelog')
+    ruhtpage.add_child(blogindexpage2)
+
+    from django.utils.text import slugify
+
+    for i in range(5):
+        blogpage = RichPage(apps, 'blog.BlogPage', 'blog', 'blogpage')
+        header = loremi(3,"w",True).title()
+        blogpage.page(header, slugify(header))
+        blogpage.page.body = loremi(5,'b',True)
+        blogindexpage2.add_child(blogpage)
 
 class Migration(migrations.Migration):
 

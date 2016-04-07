@@ -1,0 +1,12 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+<div class="col-sm-{{ outter_col }}">
+    {% include 'widgets/heading3.html' with text=title %}
+    <div class="row">
+        {% for entry in entries %}
+            <div class="col-sm-{{ inner_col }}">
+                {% include 'widgets/page-teaser.html' with image=entry.image href=entry.href  text=entry.text %}
+            </div>
+        {% endfor %}
+    </div>
+    {% include 'widgets/read-more-link.html' with align='right' text='See all news' url='/news/' %}
+</div>
