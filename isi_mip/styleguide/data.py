@@ -230,11 +230,9 @@ data = {
         'template': 'widgets/page-teaser-text.html',
         'context': {
             'href': 'http://bing.de/',
-            'text': {
-                'title': 'Getting started',
-                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
-                'arrow_right_link': True,
-            },
+            'title': 'Getting started',
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'arrow_right_link': True,
         },
     },
 
@@ -247,11 +245,9 @@ data = {
             'image': {
                 'url': '/static/styleguide/test-images/dog.jpg',
             },
-            'text': {
-                'title': 'Output Data',
-                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
-                'arrow_right_link': True,
-            },
+            'title': 'Output Data',
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'arrow_right_link': True,
         },
     },
 
@@ -260,11 +256,9 @@ data = {
         'template': 'widgets/page-teaser.html',
         'context': {
             'href': 'http://bing.de/',
-            'text': {
-                'title': 'Input Data',
-                'description': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit.',
-                'arrow_right_link': True,
-            },
+            'title': 'Input Data',
+            'description': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit.',
+            'arrow_right_link': True,
         },
     },
 
@@ -277,10 +271,8 @@ data = {
             'image': {
                 'url': '/static/styleguide/test-images/dog.jpg',
             },
-            'text': {
-                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
-                'arrow_right_link': True,
-            },
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'arrow_right_link': True,
         },
     },
 
@@ -293,12 +285,10 @@ data = {
             'image': {
                 'url': '/static/styleguide/test-images/silhouette.jpg',
             },
-                'text': {
-                'title': 'Impact Models',
-                'date': '8/12/2016',
-                'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui.',
-                'arrow_right_link': True,
-            },
+            'title': 'Impact Models',
+            'date': '8/12/2016',
+            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui.',
+            'arrow_right_link': True,
         },
     },
 
@@ -312,16 +302,14 @@ data = {
             'image': {
                 'url': '/static/styleguide/test-images/header3-3by1.jpg',
             },
-                'text': {
-                'title': 'Impact Models',
-                'datebeforetitle': True,
-                'date': '8/12/2016',
-                'divider': True,
-                'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui.',
-                'arrow_right_link': False,
-                'text_right_link': True,
-                'text_right_link_text': 'Learn more',
-            },
+            'title': 'Impact Models',
+            'datebeforetitle': True,
+            'date': '8/12/2016',
+            'divider': True,
+            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui.',
+            'arrow_right_link': False,
+            'text_right_link': True,
+            'text_right_link_text': 'Learn more',
         },
     },
 
@@ -333,17 +321,15 @@ data = {
             'image': {
                 'url': '/static/styleguide/test-images/header4.jpg',
             },
-            'text': {
-                'author': 'Prof. Dr. Motte et al',
-               'title': 'Impact Models in an industrialized semipermeable meta world',
-                'journal': 'Biotech Publishing 7/2016, 2834ff',
-                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
-                'source': {
-                    'description': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/',
-                    'href': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/',
-                },
-                'arrow_right_link': True,
+            'author': 'Prof. Dr. Motte et al',
+           'title': 'Impact Models in an industrialized semipermeable meta world',
+            'journal': 'Biotech Publishing 7/2016, 2834ff',
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'source': {
+                'description': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/',
+                'href': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/',
             },
+            'arrow_right_link': True,
         },
     },
 
@@ -353,11 +339,9 @@ data = {
         'name': 'Page Teaser Flat',
         'template': 'widgets/page-teaser-flat.html',
         'context': {
-                'date': '8/12/2016',
-                'text': {
-                'title': 'Impact Models in an industrialized semipermeable meta world',
-                'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
-            },
+            'date': '8/12/2016',
+            'title': 'Impact Models in an industrialized semipermeable meta world',
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
         },
     },
 
@@ -393,6 +377,7 @@ data = {
         'name': 'Read more link',
         'template': 'widgets/read-more-link.html',
         'context': {
+            'tinyarrow': True,
             'text': 'weiterlesen',
             'url': 'http://x',
         },
@@ -404,6 +389,7 @@ data = {
             'text': 'weiterlesen',
             'url': 'http://x',
             'align': 'right',
+            'tinyarrow': True,
         },
     },
     'readmorelink_rightarrow': {
@@ -416,11 +402,28 @@ data = {
             'align': 'right',
         },
     },
+    'readmorelink_download': {
+        'name': 'Read more link – Download',
+        'template': 'widgets/read-more-link.html',
+        'context': {
+            'large': True,
+            'text': '<i class="fa fa-download"></i> Download',
+            'url': 'http://x',
+            'align': 'right',
+        },
+    },
 
     'horizontal_ruler': {
         'name': 'Horizontal Ruler',
         'template': 'widgets/horizontal-ruler.html',
         'context': {
+        },
+    },
+    'horizontal_ruler_light': {
+        'name': 'Horizontal Ruler Light',
+        'template': 'widgets/horizontal-ruler.html',
+        'context': {
+            'light': True,
         },
     },
 
@@ -430,7 +433,7 @@ data = {
         'context': {
             'links': [
                 { 'fontawesome': 'clock-o', 'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
-                { 'fontawesome': 'clock-o', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
+                { 'fontawesome': 'file-pdf-o', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
                 { 'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
                 { 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
             ],
@@ -461,16 +464,16 @@ data = {
                     },
                     {
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
+                            { 'text': 'princeton <a href="http://google.de">watch</a> wfdei', },
                             { 'text': 'Economic Socio', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.', },
+                            { 'text': 'Sed ut <a href="http://google.de">perspiciatis unde omnis iste natus error sit</a> voluptatem<br>accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.', },
                         ],
                     },
                     {
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Climate', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            { 'text': '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p>', },
                         ],
                     },
                 ],
@@ -491,11 +494,11 @@ data = {
                     { 'text': 'Data set', },
                 ],
             },
+            # read all button at end of table
+            'showalllink': {
+                'buttontext': 'See all <i class="fa fa-chevron-down"></i>',
+            },
             'body': {
-                'rowlimit': {
-                    'rownumber': 3,
-                    'buttontext': 'See all <i class="fa fa-chevron-down"></i>',
-                },
                 'rows': [
                     {
                         'cols': [
@@ -512,6 +515,7 @@ data = {
                         ],
                     },
                     {
+                        'invisible': True,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Climate', },
@@ -519,6 +523,7 @@ data = {
                         ],
                     },
                     {
+                        'invisible': True,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Alimate 2', },
@@ -526,6 +531,7 @@ data = {
                         ],
                     },
                     {
+                        'invisible': True,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Glimac 3', },
@@ -553,14 +559,20 @@ data = {
                     { 'text': 'Data set', },
                 ],
             },
+            'pagination': {
+                'rowsperpage': 3,
+                'numberofpages': 3, # number of pages with current filters
+                'pagenumbers': [
+                    { 'number': 1, 'invisible': False, },
+                    { 'number': 2, 'invisible': False, },
+                    { 'number': 3, 'invisible': False, },
+                ], 
+                'activepage': 2, # set to something between 1 and numberofpages
+            },
             'body': {
-                'rowlimit': {
-                    'rownumber': 3,
-                    'pagination': [1, 2, 3], # rows.length % rownumber
-                },
                 'rows': [
                     {
-                        'pagenumber': 1,
+                        'invisible': True,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Socio Economic', },
@@ -568,7 +580,7 @@ data = {
                         ],
                     },
                     {
-                        'pagenumber': 1,
+                        'invisible': True,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Economic Socio', },
@@ -576,7 +588,7 @@ data = {
                         ],
                     },
                     {
-                        'pagenumber': 1,
+                        'invisible': True,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Climate F', },
@@ -584,7 +596,6 @@ data = {
                         ],
                     },
                     {
-                        'pagenumber': 2,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Alimate 2 E', },
@@ -592,7 +603,6 @@ data = {
                         ],
                     },
                     {
-                        'pagenumber': 2,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Glimac 3 Z', },
@@ -600,7 +610,6 @@ data = {
                         ],
                     },
                     {
-                        'pagenumber': 2,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Alimate 2 W', },
@@ -608,7 +617,7 @@ data = {
                         ],
                     },
                     {
-                        'pagenumber': 3,
+                        'invisible': True,
                         'cols': [
                             { 'text': 'princeton watch wfdei', },
                             { 'text': 'Glimac 3 Q', },
@@ -620,6 +629,219 @@ data = {
         },
     },
 
+
+
+
+
+    'table_selector': {
+        'name': 'Filter for Table',
+        'template': 'widgets/table-selector.html',
+        'context': {
+            'tableid': 'selectortable',
+            'selectors': [
+                {
+                    'colnumber': '2', # column number in table starting with 1
+                    'all_value': 'All regions',
+                    'options': [
+                        { 'value': 'Berlin' },
+                        { 'value': 'Brandenburg' },
+                        { 'value': 'Hamburg' },
+                        { 'value': 'Bremen' },
+                        { 'value': 'Milano' },
+                        { 'value': 'Venezia' },
+                        { 'value': 'Düsseldorf' },
+                    ],
+                },
+                {
+                    'colnumber': '3',
+                    'all_value': 'All countries',
+                    'activeoption': 'Deutschland',
+                    'options': [
+                        { 'value': 'Deutschland' },
+                        { 'value': 'France' },
+                        { 'value': 'Italia' },
+                    ],
+                },
+            ],
+            'searchfield': {
+                'value': '',
+            },
+        },
+    },
+
+
+
+    'table_pagination_filter': {
+        'name': 'Table with pagination and filter',
+        'template': 'widgets/table.html',
+        'context': {
+            'id': 'selectortable',
+            'head': {
+                'cols': [
+                    { 'text': 'Town', },
+                    { 'text': 'Region', },
+                    { 'text': 'Country', },
+                    { 'text': 'Continent', },
+                    { 'text': 'Wind direction', },
+                ],
+            },
+            'filter': '{ "3": "Deutschland" }', # pre defined filter
+            'pagination': {
+                'rowsperpage': 3,
+                'numberofpages': 3, # number of pages with current filters
+                'pagenumbers': [
+                    { 'number': 1, 'invisible': False, },
+                    { 'number': 2, 'invisible': False, },
+                    { 'number': 3, 'invisible': False, },
+                    { 'number': 4, 'invisible': True, },
+                    { 'number': 5, 'invisible': True, },
+                ], 
+                'activepage': 1, # set to something between 1 and numberofpages
+            },
+            'norowvisible': False, # true when no row is visible
+            'body': {
+                'rows': [
+                    {
+                        'invisible': False,
+                        'cols': [
+                            { 'text': 'Berlin', },
+                            { 'text': 'Berlin', },
+                            { 'text': 'Deutschland', },
+                            { 'text': 'Europe', },
+                            { 'text': 'North', },
+                        ],
+                    },
+                    {
+                        'invisible': False,
+                        'cols': [
+                            { 'text': 'München', },
+                            { 'text': 'Bayern', },
+                            { 'text': 'Deutschland', },
+                            { 'text': 'Europe', },
+                            { 'text': 'North West', },
+                        ],
+                    },
+                    {
+                        'invisible': False,
+                        'cols': [
+                            { 'text': 'Hamburg', },
+                            { 'text': 'Hamburg', },
+                            { 'text': 'Deutschland', },
+                            { 'text': 'Europe', },
+                            { 'text': 'West', },
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            { 'text': 'Belzig', },
+                            { 'text': 'Brandenburg', },
+                            { 'text': 'Deutschland', },
+                            { 'text': 'Europe', },
+                            { 'text': 'West', },
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            { 'text': 'Wollin', },
+                            { 'text': 'Brandenburg', },
+                            { 'text': 'Deutschland', },
+                            { 'text': 'Europe', },
+                            { 'text': 'East', },
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            { 'text': 'Frankfurt Oder', },
+                            { 'text': 'Brandenburg', },
+                            { 'text': 'Deutschland', },
+                            { 'text': 'Europe', },
+                            { 'text': 'East', },
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            { 'text': 'Bremen', },
+                            { 'text': 'Bremen', },
+                            { 'text': 'Deutschland', },
+                            { 'text': 'Europe', },
+                            { 'text': 'East', },
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            { 'text': 'Bremerhaven', },
+                            { 'text': 'Bremen', },
+                            { 'text': 'Deutschland', },
+                            { 'text': 'Europe', },
+                            { 'text': 'East', },
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            { 'text': 'Paris', },
+                            { 'text': 'Paris', },
+                            { 'text': 'France', },
+                            { 'text': 'Europe', },
+                            { 'text': 'South West', },
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            { 'text': 'Milano', },
+                            { 'text': 'Milano', },
+                            { 'text': 'Italia', },
+                            { 'text': 'Europe', },
+                            { 'text': 'South', },
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            { 'text': 'Venezia', },
+                            { 'text': 'Milano', },
+                            { 'text': 'Italia', },
+                            { 'text': 'Europe', },
+                            { 'text': 'East', },
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            { 'text': 'Düsseldorf', },
+                            { 'text': 'Nordrhein-Westfalen', },
+                            { 'text': 'Deutschland', },
+                            { 'text': 'Europe', },
+                            { 'text': 'North West', },
+                        ],
+                    },
+                ],
+            },
+        },
+    },
+
+
+
+
+    'expandable': {
+        'name': 'Expandable',
+        'template': 'widgets/expandable.html',
+        'context': {
+            'headline': 'FAQ for researchers',
+            'border': True,
+            'list': [
+                { 'term': 'Sed ut perspiciatis?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                { 'term': 'Sed ut perspiciatis unde omnis iste natus error sit?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', 'opened': True, },
+                { 'term': 'Sed ut perspiciatis unde omnis iste?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', 'opened': True, 'notoggle': True, },
+            ],
+        },
+    },
 
 
     'footer': {

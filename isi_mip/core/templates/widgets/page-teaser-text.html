@@ -1,52 +1,52 @@
 <div class="widget-page-teaser-text">
-{% if text.author %}
-	<p class="widget-page-teaser-text-author"><em>{{ text.author }}</em></p>
+{% if author %}
+	<p class="widget-page-teaser-text-author"><em>{{ author }}</em></p>
 {% endif %}
-{% if text.date and text.datebeforetitle %}
+{% if date and datebeforetitle %}
 	<p class="widget-page-teaser-text-date">
 		<i class="fa fa-clock-o"></i>
-		{{ text.date }}
+		{{ date }}
 	</p>
 {% endif %}
-{% if text.title %}
+{% if title %}
 	<div class="h4">
 		{% if href %}
 			<a href="{{ href }}">
-				{{ text.title }}
+				{{ title }}
 			</a>
 		{% else %}
-			{{ text.title }}
+			{{ title }}
 		{% endif %}
 	</div>
 {% endif %}
-{% if text.date and not text.datebeforetitle %}
+{% if date and not datebeforetitle %}
 	<p class="widget-page-teaser-text-date">
 		<i class="fa fa-clock-o"></i>
-		{{ text.date }}
+		{{ date }}
 	</p>
 {% endif %}
-{% if text.date %}
-	<p class="widget-page-teaser-text-journal"><em>{{ text.journal }}</em></p>
+{% if date %}
+	<p class="widget-page-teaser-text-journal"><em>{{ journal }}</em></p>
 {% endif %}
-{% if text.divider %}
+{% if divider %}
 	<hr>
 {% endif %}
-{% if text.description %}
-	<p class="widget-page-teaser-text-description">{{ text.description|safe }}</p>
+{% if description %}
+	<p class="widget-page-teaser-text-description">{{ description|safe }}</p>
 {% endif %}
-{% if text.source %}
+{% if source %}
 	<p class="widget-page-teaser-text-source">
-		<a href="{{ text.source.href }}">
+		<a href="{{ source.href }}">
 			<i class="fa fa-external-link"></i>
-			{{ text.source.description }}
+			{{ source.description }}
 		</a>
 	</p>
 {% endif %}
-{% if text.arrow_right_link %}
+{% if arrow_right_link %}
 	{% include "widgets/arrow-right-link.html" with href=href %}
 {% endif %}
-{% if text.text_right_link %}
-	<a href="{{ href }}" class="btn btn-default pull-right">{{ text.text_right_link_text }}</a>
+{% if text_right_link %}
+	<a href="{{ href }}" class="btn btn-default pull-right">{{ text_right_link_text }}</a>
 	<div class="clearfix"></div>
 {% endif %}
 </div><!-- widget-page-teaser-text -->

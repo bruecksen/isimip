@@ -1,0 +1,37 @@
+{% extends "styleguide/base.html" %}
+{% load static %}
+
+
+{% block header %}
+	{{ header_output }}
+{% endblock %}
+
+{% block content %}
+	<!-- <div class="backgroundimage" style="background-image: url({% static 'images/mountain-range.jpg' %});"> -->
+
+		<div class="content-container">
+			<div class="container" style="background-color: white;">
+				<!-- <div class="content-container-border"> -->
+					<div class="content-container-inner">
+
+					<br>
+					<br>
+					<br>
+
+						{{ table_selector_output }}
+						{{ table_pagination_filter_output }}
+
+
+					</div>
+				<!-- </div> -->
+			</div>
+		</div>
+
+		<br>
+		<br>
+	<!-- </div> -->
+{% endblock %}
+
+{% block footer %}
+{{ footer_output }}
+{% endblock %}

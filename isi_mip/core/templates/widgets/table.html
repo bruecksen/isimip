@@ -1,19 +1,32 @@
-<div class="widget-table">
+<div class="widget-table"
+	{% if id %} id="{{ id }}"{% endif %}
+	{% if showalllink %} data-showalllink="true"{% endif %}
+	{% if pagination %}
+		data-rowsperpage="{{ pagination.rowsperpage }}"
+		data-activepage="{{ pagination.activepage }}"
+		data-numberofpages="{{ pagination.numberofpages }}"
+	{% endif %}
+	{% if filter %}
+		data-filter='{{ filter|safe }}'
+	{% endif %}
+	{% if searchvalue %}
+		data-filter="{{ searchvalue }}"
+	{% endif %}>
 	<table class="table table-striped">
 		<thead>
-			{% if body.rowlimit and body.rowlimit.rownumber < body.rows|length and body.rowlimit.pagination %}
+			{% if pagination %}
 				<tr class="widget-table-pagination">
 					<td colspan="42" class="text-center"><!-- 42 for da lulz -->
-					<div class="widget-table-pagination-prevbutton pull-left">
+					<div class="widget-table-pagination-prevbutton pull-left{% if pagination.activepage == 1 %} disabled{% endif %}">
 						<i class="fa fa-chevron-left"></i>
 						Previous
 					</div>
-					{% for pagenumber in body.rowlimit.pagination %}
-						<span class="widget-table-pagination-pagelink{% if forloop.counter == 1 %} widget-table-pagination-pagelink-active{% endif %}" data-pagenumber="{{ pagenumber }}">
-							{{ pagenumber }}
-						</span>
+					{% for pagenumber in pagination.pagenumbers %}
+						<a href="#" class="widget-table-pagination-pagelink{% if forloop.counter == pagination.activepage %} widget-table-pagination-pagelink-active{% endif %}"{% if pagenumber.invisible %} style="display:none;"{% endif %} data-pagenumber="{{ pagenumber.number }}">
+							{{ pagenumber.number }}
+						</a>
 					{% endfor %}
-					<div class="widget-table-pagination-nextbutton pull-right">
+					<div class="widget-table-pagination-nextbutton pull-right{% if pagination.activepage == pagination.numberofpages %} disabled{% endif %}">
 						Next
 						<i class="fa fa-chevron-right"></i>
 					</div>
@@ -31,43 +44,45 @@
 		</thead>
 		<tbody>
 			{% for row in body.rows %}
-				<tr{% if body.rowlimit and body.rowlimit.rownumber < forloop.counter %} style="display:none;"{% endif %}{% if row.pagenumber %} data-pagenumber="{{ row.pagenumber}}"{% endif %}>
+				<tr{% if row.invisible %} style="display:none;"{% endif %}>
 					{% for col in row.cols %}
-						<td>{{ col.text }}</td>
+						<td>{{ col.text|safe }}</td>
 					{% endfor %}
 				</tr>
 			{% endfor %}
 		</tbody>
-		{% if body.rowlimit and body.rowlimit.rownumber < body.rows|length and not body.rowlimit.pagination %}
-			<tfoot>
+		<tfoot>
+		{% if showalllink %}
 				<tr class="widget-table-showmore-button">
 					<td colspan="42"><!-- 42 for da lulz -->
-						{{ body.rowlimit.buttontext|safe }}
+						{{ showalllink.buttontext|safe }}
 					</td>
 				</tr>
-			</tfoot>
 		{% endif %}
-		{% if body.rowlimit and body.rowlimit.rownumber < body.rows|length and body.rowlimit.pagination %}
-			<tfoot>
-				<tr class="widget-table-pagination">
-					<td colspan="42" class="text-center"><!-- 42 for da lulz -->
-					<div class="widget-table-pagination-prevbutton pull-left">
-						<i class="fa fa-chevron-left"></i>
-						Previous
-					</div>
-					{% for pagenumber in body.rowlimit.pagination %}
-						<span class="widget-table-pagination-pagelink{% if forloop.counter == 1 %} widget-table-pagination-pagelink-active{% endif %}" data-pagenumber="{{ pagenumber }}">
-							{{ pagenumber }}
-						</span>
-					{% endfor %}
-					<div class="widget-table-pagination-nextbutton pull-right">
-						Next
-						<i class="fa fa-chevron-right"></i>
-					</div>
-					<div class="clearfix"></div>
-					</td>
-				</tr>
-			</tfoot>
+		<tr class="widget-table-noentriesmessage">
+			<td colspan="42" class="text-center"{% if not norowvisible %} style="display:none;"{% endif %}><!-- 42 for da lulz -->
+				No entries with these filters.
+			</td>
+		</tr>
+		{% if pagination %}
+			<tr class="widget-table-pagination">
+				<td colspan="42" class="text-center"><!-- 42 for da lulz -->
+				<div class="widget-table-pagination-prevbutton pull-left{% if pagination.activepage == 1 %} disabled{% endif %}">
+					<i class="fa fa-chevron-left"></i>
+					Previous
+				</div>
+				{% for pagenumber in pagination.pagenumbers %}
+					<a href="#" class="widget-table-pagination-pagelink{% if forloop.counter == pagination.activepage %} widget-table-pagination-pagelink-active{% endif %}"{% if pagenumber.invisible %} style="display:none;"{% endif %} data-pagenumber="{{ pagenumber.number }}">
+						{{ pagenumber.number }}
+					</a>
+				{% endfor %}
+				<div class="widget-table-pagination-nextbutton pull-right{% if pagination.activepage == pagination.numberofpages %} disabled{% endif %}">
+					Next
+					<i class="fa fa-chevron-right"></i>
+				</div>
+				<div class="clearfix"></div>
+				</td>
+			</tr>
 		{% endif %}
 	</table>
 </div><!-- widget-table -->
