@@ -834,7 +834,6 @@ data = {
         'template': 'widgets/expandable.html',
         'context': {
             'headline': 'FAQ for researchers',
-            'border': True,
             'list': [
                 { 'term': 'Sed ut perspiciatis?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
                 { 'term': 'Sed ut perspiciatis unde omnis iste natus error sit?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', 'opened': True, },
@@ -843,6 +842,19 @@ data = {
         },
     },
 
+
+
+    'expandable_light': {
+        'name': 'Expandable no Headline',
+        'template': 'widgets/expandable.html',
+        'context': {
+            'list': [
+                { 'term': 'Sed ut perspiciatis?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                { 'term': 'Sed ut perspiciatis unde omnis iste natus error sit?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', 'opened': True, },
+                { 'term': 'Sed ut perspiciatis unde omnis iste?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', 'opened': True, 'notoggle': True, },
+            ],
+        },
+    },
 
     'footer': {
         'name': 'Footer',
