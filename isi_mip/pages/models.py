@@ -19,7 +19,8 @@ from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, Impact
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.contrib.blocks import BlogBlock
 from isi_mip.pages.blocks import SmallTeaserBlock, PaperBlock, LinkBlock, FAQBlock, BigTeaserBlock, RowBlock, \
-    IsiNumbersBlock, TwitterBlock, Columns1To1Block, ImageBlock, PDFBlock, ContactsBlock, FAQsBlock
+    IsiNumbersBlock, TwitterBlock, Columns1To1Block, ImageBlock, PDFBlock, ContactsBlock, FAQsBlock, Columns1To2Block, \
+    Columns2To1Block
 
 
 class RoutablePageWithDefault(RoutablePage):
@@ -55,7 +56,7 @@ class HomePage(RoutablePageWithDefault):
     content = StreamField([
         ('row', RowBlock([
             ('teaser', SmallTeaserBlock()),
-            ('bigteaser', BigTeaserBlock()),
+            ('bigteaser', BigTeaserBlock(wideimage=True)),
             ('news', BlogBlock()),
             ('numbers', IsiNumbersBlock()),
             ('twitter', TwitterBlock()),
@@ -92,7 +93,6 @@ class HomePage(RoutablePageWithDefault):
             }
         }
         return context
-    #
 
     @route(r'^blog/$')
     @route(r'^blog/(?P<slug>\w+)/$')
@@ -121,9 +121,12 @@ class HomePage(RoutablePageWithDefault):
 class AboutPage(Page):
     content = StreamField([
         ('columns_1_to_1', Columns1To1Block()),
+        ('columns_1_to_2', Columns1To2Block()),
+        ('columns_2_to_1', Columns2To1Block()),
         ('image', ImageBlock()),
         ('pdf', PDFBlock()),
         ('paper', PaperBlock(template='widgets/page-teaser-wide.html')),
+        ('bigteaser', BigTeaserBlock()),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content')

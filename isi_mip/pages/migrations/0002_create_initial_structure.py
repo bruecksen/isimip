@@ -134,32 +134,32 @@ def  create_structure(apps, schema_editor):
 
 
     ### BLOG
-    blogindexpage = RichPage(apps, 'blog.BlogIndexPage', 'blog', 'blogindexpage')
-    blogindexpage.page('News', 'news')
-    ruhtpage.add_child(blogindexpage)
-
     from django.utils.text import slugify
+    for blogtitle in ['News','Input Data Changelog', 'Impact Models Changelog', 'Newsletter', 'Output Data Changelog']:
+        blogindexpage = RichPage(apps, 'blog.BlogIndexPage', 'blog', 'blogindexpage')
+        blogindexpage.page(blogtitle, slugify(blogtitle))
+        ruhtpage.add_child(blogindexpage)
 
-    for i in range(5):
-        blogpage = RichPage(apps, 'blog.BlogPage', 'blog', 'blogpage')
-        header = loremi(3,"w",True).title()
-        blogpage.page(header, slugify(header))
-        blogpage.page.body = loremi(5,'b',True)
-        blogindexpage.add_child(blogpage)
+        for i in range(5):
+            blogpage = RichPage(apps, 'blog.BlogPage', 'blog', 'blogpage')
+            header = loremi(3,"w",True).title()
+            blogpage.page(header, slugify(header))
+            blogpage.page.body = loremi(5,'b',True)
+            blogindexpage.add_child(blogpage)
 
     ### Changelog
-    blogindexpage2 = RichPage(apps, 'blog.BlogIndexPage', 'blog', 'blogindexpage')
-    blogindexpage2.page('Changelog', 'changelog')
-    ruhtpage.add_child(blogindexpage2)
-
-    from django.utils.text import slugify
-
-    for i in range(5):
-        blogpage = RichPage(apps, 'blog.BlogPage', 'blog', 'blogpage')
-        header = loremi(3,"w",True).title()
-        blogpage.page(header, slugify(header))
-        blogpage.page.body = loremi(5,'b',True)
-        blogindexpage2.add_child(blogpage)
+    # blogindexpage2 = RichPage(apps, 'blog.BlogIndexPage', 'blog', 'blogindexpage')
+    # blogindexpage2.page('Changelog', 'changelog')
+    # ruhtpage.add_child(blogindexpage2)
+    #
+    # from django.utils.text import slugify
+    #
+    # for i in range(5):
+    #     blogpage = RichPage(apps, 'blog.BlogPage', 'blog', 'blogpage')
+    #     header = loremi(3,"w",True).title()
+    #     blogpage.page(header, slugify(header))
+    #     blogpage.page.body = loremi(5,'b',True)
+    #     blogindexpage2.add_child(blogpage)
 
 class Migration(migrations.Migration):
 

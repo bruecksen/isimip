@@ -44,12 +44,15 @@ class ImpactModelsBlock(StructBlock):
         i = 0
         for imodel in ims:
             datasets = [str(x) for x in imodel.climate_data_sets.all()]
+            # import ipdb; ipdb.set_trace()
             cpeople = ["%s <a href='mailto:%s'>%s</a>" % (x.name, x.email, x.email) for x in imodel.contactperson_set.all()]
-            values = ["<a href='details/%d/'>%s</a>" % (imodel.id, imodel.name), imodel.sector]
-            values += ["<br/>".join(datasets)] + ["<br/>".join(cpeople)]
+            values = [["<a href='details/%d/'>%s</a>" % (imodel.id, imodel.name)], [imodel.sector]]
+            values += [datasets] + [["<br/>".join(cpeople)]]
+            print([{'texts': [x]} for x in values])
+            # import ipdb; ipdb.set_trace()
             row = {
                 'invisible': i >= value.get('rows_per_page'),
-                'cols': [{'text': x} for x in values]
+                'cols': [{'texts': x} for x in values]
             }
             i += 1
             bodyrows.append(row)
@@ -73,15 +76,20 @@ class InputDataBlock(StructBlock):
             'rowlimit': {'buttontext': 'See all <i class="fa fa-chevron-down"></i>', 'rownumber': 3},
             'rows': []
         }
+        context['showalllink'] = {'buttontext': 'See all <i class="fa fa-chevron-down"></i>'}
 
+        rowlimit = 1
+        i = 0
         for inputdate in InputData.objects.all():
             context['body']['rows'] += [
                 {'cols': [
                     {'text': inputdate.data_set},
                     {'text': inputdate.data_type},
-                    {'text': inputdate.description}]
+                    {'text': inputdate.description}],
+                'invisible': i >= rowlimit
                 }
             ]
+            i += 1
 
         return context
 

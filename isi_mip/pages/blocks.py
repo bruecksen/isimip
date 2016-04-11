@@ -69,9 +69,13 @@ class BigTeaserBlock(StructBlock):
         #TODO: icon = 'image'
         template = 'widgets/bigteaser.html'
 
+    def __init__(self, wideimage=False, local_blocks=None, **kwargs):
+        super().__init__(local_blocks=local_blocks, **kwargs)
+        self.wideimage = wideimage
+
     def get_context(self, value):
         context = super().get_context(value)
-        context['title'] = value.get('title')
+        context['super_title'] = value.get('title')
 
         image = value.get('picture')
         rendition = image.get_rendition('fill-1920x640-c100')
@@ -80,7 +84,8 @@ class BigTeaserBlock(StructBlock):
             context['href'] = value.get('internal_link').url
         else:
             context['href'] = value.get('external_link')
-        context['text'] = {
+
+        context.update({
             'title': value.get('subtitle'),
             'description': value.get('text'),
             'text_right_link': True,
@@ -88,8 +93,9 @@ class BigTeaserBlock(StructBlock):
             'divider': True,
             'date': "%s to %s" % (formats.date_format(value.get('from_date'), "SHORT_DATE_FORMAT"),
                                   formats.date_format(value.get('to_date'), "SHORT_DATE_FORMAT")),
-        }
-        context['wideimage'] = True
+        })
+
+        context['wideimage'] = self.wideimage
         return context
 
 
@@ -128,21 +134,14 @@ class PaperBlock(StructBlock):
     def get_context(self, value):
         context = super().get_context(value)
         context['author'] = value.get('author')
-        context['journal'] = value.get('journal')
+        context['title'] = value.get('title')
+        context['description'] = value.get('journal')
         context['url'] = value.get('link')
         image = value.get('picture')
-        rendition = image.get_rendition('max-1200x1200')
-        context['image'] = {'url': rendition.url, 'name': image.title}
-        # context['image'] = {'url': '/static/styleguide/test-images/header4.jpg'},
-        context['text'] = {
-                  'author': 'Frieler, K., Levermann, A., Elliott, J., Heinke, J., Arneth, A., Bierkens, M.F.P., Ciais, P., Clark, D.B., Deryng, D., Döll, P., Falloon, P., Fekete, B., Folberth, C., Friend, A.D., Gellhorn, C., Gosling, S.N., Haddeland, I., Khabarov, N., Lomas, M., Masaki, Y., Nishina, K., Neumann, K., Oki, T., Pavlick, R., Ruane, A.C., Schmid, E., Schmitz, C., Stacke, T., Stehfest, E., Tang, Q., Wisser, D., Huber, V., Piontek, F., Warszawski, L., Schewe, J., Lotze-Campen, H., Schellnhuber, H.J.',
-                  'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum '
-                                 'Lorem ipsum',
-                  'journal': 'Biotech Publishing 7/2016, 2834ff',
-                  'source': {'description': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/',
-                             'href': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/'},
-                  'title': 'Impact Models in an industrialized semipermeable meta '
-                           'world'}
+        if image:
+            rendition = image.get_rendition('max-1200x1200')
+            context['image'] = {'url': rendition.url, 'name': image.title}
+        context['source'] = {'description': value.get('link'), 'href': value.get('link')}
 
         return context
 
