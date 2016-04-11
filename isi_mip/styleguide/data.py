@@ -31,23 +31,21 @@ data = {
         },
     },
 
-
     'header': {
         'name': 'Header',
         'template': 'widgets/header.html',
         'context': {
             'id': '1',
             'links': [
-                { 'url': 'http://google.de/1', 'text': 'About' },
-                { 'url': 'http://bing.de/2', 'text': 'Getting started' },
-                { 'url': 'http://bing.de/3', 'text': 'Impact Models', 'active': True, },
-                { 'url': 'http://bing.de/4', 'text': 'Output Data' },
-                { 'url': 'http://bing.de/5', 'text': 'Outcomes' },
-                { 'url': 'http://bing.de/6', 'text': 'FAQ' },
+                {'url': 'http://google.de/1', 'text': 'About'},
+                {'url': 'http://bing.de/2', 'text': 'Getting started'},
+                {'url': 'http://bing.de/3', 'text': 'Impact Models', 'active': True,},
+                {'url': 'http://bing.de/4', 'text': 'Output Data'},
+                {'url': 'http://bing.de/5', 'text': 'Outcomes'},
+                {'url': 'http://bing.de/6', 'text': 'FAQ'},
             ],
         },
     },
-
 
     'head_super': {
         'name': 'Super in Head',
@@ -63,20 +61,18 @@ data = {
         },
     },
 
-
     'breadcrumb': {
         'name': 'Breadcrumb',
         'template': 'widgets/breadcrumb.html',
         'context': {
             'links': [
-                { 'url': 'http://google.de', 'text': 'Kontakt' },
-                { 'url': 'http://bing.de', 'text': 'Presse' },
-                { 'url': 'http://bing.de', 'text': 'Zwischenseite' },
-                { 'url': 'http://google.de', 'text': 'Newsletter', 'active': True },
+                {'url': 'http://google.de', 'text': 'Kontakt'},
+                {'url': 'http://bing.de', 'text': 'Presse'},
+                {'url': 'http://bing.de', 'text': 'Zwischenseite'},
+                {'url': 'http://google.de', 'text': 'Newsletter', 'active': True},
             ],
         },
     },
-
 
     'heading1': {
         'name': 'Heading 1',
@@ -128,8 +124,6 @@ data = {
         },
     },
 
-
-
     'columns_1_1': {
         'name': 'Columns 1:1',
         'template': 'widgets/columns-1-1.html',
@@ -174,9 +168,6 @@ data = {
         },
     },
 
-
-
-
     'image': {
         'name': 'Image',
         'template': 'widgets/image.html',
@@ -196,7 +187,6 @@ data = {
         },
     },
 
-
     'arrow_right_link': {
         'name': 'Arrow Right Link',
         'template': 'widgets/arrow-right-link.html',
@@ -204,9 +194,6 @@ data = {
             'href': 'http://bing.de/',
         },
     },
-
-
-
 
     'richtext': {
         'name': 'Richtext',
@@ -224,7 +211,6 @@ data = {
         },
     },
 
-
     'page_teaser_text': {
         'name': 'Page Teaser Text (use only in other page-teaser templates)',
         'template': 'widgets/page-teaser-text.html',
@@ -235,7 +221,6 @@ data = {
             'arrow_right_link': True,
         },
     },
-
 
     'page_teaser': {
         'name': 'Page Teaser',
@@ -262,7 +247,6 @@ data = {
         },
     },
 
-
     'page_teaser_notitle': {
         'name': 'Page Teaser',
         'template': 'widgets/page-teaser.html',
@@ -275,7 +259,6 @@ data = {
             'arrow_right_link': True,
         },
     },
-
 
     'page_teaser_wide': {
         'name': 'Page Teaser Wide',
@@ -291,7 +274,6 @@ data = {
             'arrow_right_link': True,
         },
     },
-
 
     'page_teaser_wide_wideimage': {
         'name': 'Page Teaser Wide with wide image',
@@ -313,7 +295,6 @@ data = {
         },
     },
 
-
     'page_teaser_paper': {
         'name': 'Page Teaser Paper',
         'template': 'widgets/page-teaser.html',
@@ -322,7 +303,7 @@ data = {
                 'url': '/static/styleguide/test-images/header4.jpg',
             },
             'author': 'Prof. Dr. Motte et al',
-           'title': 'Impact Models in an industrialized semipermeable meta world',
+            'title': 'Impact Models in an industrialized semipermeable meta world',
             'journal': 'Biotech Publishing 7/2016, 2834ff',
             'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
             'source': {
@@ -333,8 +314,6 @@ data = {
         },
     },
 
-
-
     'page_teaser_flat': {
         'name': 'Page Teaser Flat',
         'template': 'widgets/page-teaser-flat.html',
@@ -344,8 +323,6 @@ data = {
             'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
         },
     },
-
-
 
     'download_link': {
         'name': 'Download Link',
@@ -359,9 +336,6 @@ data = {
             'fontawesome': 'file-pdf-o',
         },
     },
-
-
-
 
     'indicator': {
         'name': 'Indicator',
@@ -432,15 +406,14 @@ data = {
         'template': 'widgets/link-list.html',
         'context': {
             'links': [
-                { 'fontawesome': 'clock-o', 'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
-                { 'fontawesome': 'file-pdf-o', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
-                { 'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
-                { 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de', },
+                {'fontawesome': 'clock-o', 'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung',
+                 'href': 'http://google.de',},
+                {'fontawesome': 'file-pdf-o', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de',},
+                {'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de',},
+                {'text': 'Die neue Veröffentlichung', 'href': 'http://google.de',},
             ],
         },
     },
-
-
 
     'table': {
         'name': 'Table',
@@ -448,32 +421,35 @@ data = {
         'context': {
             'head': {
                 'cols': [
-                    { 'text': 'Data Set', },
-                    { 'text': 'Data Type', },
-                    { 'text': 'Data set', },
+                    {'text': 'Data Set',},
+                    {'text': 'Data Type',},
+                    {'text': 'Data set',},
                 ],
             },
             'body': {
                 'rows': [
                     {
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Socio Economic', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Socio Economic',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                     {
                         'cols': [
-                            { 'text': 'princeton <a href="http://google.de">watch</a> wfdei', },
-                            { 'text': 'Economic Socio', },
-                            { 'text': 'Sed ut <a href="http://google.de">perspiciatis unde omnis iste natus error sit</a> voluptatem<br>accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.', },
+                            {'text': 'princeton <a href="http://google.de">watch</a> wfdei',},
+                            {'text': 'Economic Socio',},
+                            {
+                                'text': 'Sed ut <a href="http://google.de">perspiciatis unde omnis iste natus error sit</a> voluptatem<br>accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',},
                         ],
                     },
                     {
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Climate', },
-                            { 'text': '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p>', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Climate',},
+                            {
+                                'text': '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p>',},
                         ],
                     },
                 ],
@@ -481,17 +457,15 @@ data = {
         },
     },
 
-
-
     'table_limit': {
         'name': 'Table with row limit',
         'template': 'widgets/table.html',
         'context': {
             'head': {
                 'cols': [
-                    { 'text': 'Data Set', },
-                    { 'text': 'Data Type', },
-                    { 'text': 'Data set', },
+                    {'text': 'Data Set',},
+                    {'text': 'Data Type',},
+                    {'text': 'Data set',},
                 ],
             },
             # read all button at end of table
@@ -502,51 +476,51 @@ data = {
                 'rows': [
                     {
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Socio Economic', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Socio Economic',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                     {
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Economic Socio', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.', },
-                        ],
-                    },
-                    {
-                        'invisible': True,
-                        'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Climate', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Economic Socio',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Alimate 2', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Climate',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Glimac 3', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Alimate 2',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Glimac 3',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                 ],
             },
         },
     },
-
-
-
-
-
 
     'table_pagination': {
         'name': 'Table with pagination',
@@ -554,84 +528,87 @@ data = {
         'context': {
             'head': {
                 'cols': [
-                    { 'text': 'Data Set', },
-                    { 'text': 'Data Type', },
-                    { 'text': 'Data set', },
+                    {'text': 'Data Set',},
+                    {'text': 'Data Type',},
+                    {'text': 'Data set',},
                 ],
             },
             'pagination': {
                 'rowsperpage': 3,
-                'numberofpages': 3, # number of pages with current filters
+                'numberofpages': 3,  # number of pages with current filters
                 'pagenumbers': [
-                    { 'number': 1, 'invisible': False, },
-                    { 'number': 2, 'invisible': False, },
-                    { 'number': 3, 'invisible': False, },
-                ], 
-                'activepage': 2, # set to something between 1 and numberofpages
+                    {'number': 1, 'invisible': False,},
+                    {'number': 2, 'invisible': False,},
+                    {'number': 3, 'invisible': False,},
+                ],
+                'activepage': 2,  # set to something between 1 and numberofpages
             },
             'body': {
                 'rows': [
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Socio Economic', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Socio Economic',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Economic Socio', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Economic Socio',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Climate F', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Climate F',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                     {
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Alimate 2 E', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Alimate 2 E',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                     {
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Glimac 3 Z', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Glimac 3 Z',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                     {
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Alimate 2 W', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Alimate 2 W',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'princeton watch wfdei', },
-                            { 'text': 'Glimac 3 Q', },
-                            { 'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.', },
+                            {'text': 'princeton watch wfdei',},
+                            {'text': 'Glimac 3 Q',},
+                            {
+                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
                         ],
                     },
                 ],
             },
         },
     },
-
-
-
-
 
     'table_selector': {
         'name': 'Filter for Table',
@@ -640,16 +617,16 @@ data = {
             'tableid': 'selectortable',
             'selectors': [
                 {
-                    'colnumber': '2', # column number in table starting with 1
+                    'colnumber': '2',  # column number in table starting with 1
                     'all_value': 'All regions',
                     'options': [
-                        { 'value': 'Berlin' },
-                        { 'value': 'Brandenburg' },
-                        { 'value': 'Hamburg' },
-                        { 'value': 'Bremen' },
-                        { 'value': 'Milano' },
-                        { 'value': 'Venezia' },
-                        { 'value': 'Düsseldorf' },
+                        {'value': 'Berlin'},
+                        {'value': 'Brandenburg'},
+                        {'value': 'Hamburg'},
+                        {'value': 'Bremen'},
+                        {'value': 'Milano'},
+                        {'value': 'Venezia'},
+                        {'value': 'Düsseldorf'},
                     ],
                 },
                 {
@@ -657,9 +634,9 @@ data = {
                     'all_value': 'All countries',
                     'activeoption': 'Deutschland',
                     'options': [
-                        { 'value': 'Deutschland' },
-                        { 'value': 'France' },
-                        { 'value': 'Italia' },
+                        {'value': 'Deutschland'},
+                        {'value': 'France'},
+                        {'value': 'Italia'},
                     ],
                 },
             ],
@@ -669,8 +646,6 @@ data = {
         },
     },
 
-
-
     'table_pagination_filter': {
         'name': 'Table with pagination and filter',
         'template': 'widgets/table.html',
@@ -678,156 +653,153 @@ data = {
             'id': 'selectortable',
             'head': {
                 'cols': [
-                    { 'text': 'Town', },
-                    { 'text': 'Region', },
-                    { 'text': 'Country', },
-                    { 'text': 'Continent', },
-                    { 'text': 'Wind direction', },
+                    {'text': 'Town',},
+                    {'text': 'Region',},
+                    {'text': 'Country',},
+                    {'text': 'Continent',},
+                    {'text': 'Wind direction',},
                 ],
             },
-            'filter': '{ "3": "Deutschland" }', # pre defined filter
+            'filter': '{ "3": "Deutschland" }',  # pre defined filter
             'pagination': {
                 'rowsperpage': 3,
-                'numberofpages': 3, # number of pages with current filters
+                'numberofpages': 3,  # number of pages with current filters
                 'pagenumbers': [
-                    { 'number': 1, 'invisible': False, },
-                    { 'number': 2, 'invisible': False, },
-                    { 'number': 3, 'invisible': False, },
-                    { 'number': 4, 'invisible': True, },
-                    { 'number': 5, 'invisible': True, },
-                ], 
-                'activepage': 1, # set to something between 1 and numberofpages
+                    {'number': 1, 'invisible': False,},
+                    {'number': 2, 'invisible': False,},
+                    {'number': 3, 'invisible': False,},
+                    {'number': 4, 'invisible': True,},
+                    {'number': 5, 'invisible': True,},
+                ],
+                'activepage': 1,  # set to something between 1 and numberofpages
             },
-            'norowvisible': False, # true when no row is visible
+            'norowvisible': False,  # true when no row is visible
             'body': {
                 'rows': [
                     {
                         'invisible': False,
                         'cols': [
-                            { 'text': 'Berlin', },
-                            { 'text': 'Berlin', },
-                            { 'text': 'Deutschland', },
-                            { 'text': 'Europe', },
-                            { 'text': 'North', },
+                            {'text': 'Berlin',},
+                            {'text': 'Berlin',},
+                            {'text': 'Deutschland',},
+                            {'text': 'Europe',},
+                            {'text': 'North',},
                         ],
                     },
                     {
                         'invisible': False,
                         'cols': [
-                            { 'text': 'München', },
-                            { 'text': 'Bayern', },
-                            { 'text': 'Deutschland', },
-                            { 'text': 'Europe', },
-                            { 'text': 'North West', },
+                            {'text': 'München',},
+                            {'text': 'Bayern',},
+                            {'text': 'Deutschland',},
+                            {'text': 'Europe',},
+                            {'text': 'North West',},
                         ],
                     },
                     {
                         'invisible': False,
                         'cols': [
-                            { 'text': 'Hamburg', },
-                            { 'text': 'Hamburg', },
-                            { 'text': 'Deutschland', },
-                            { 'text': 'Europe', },
-                            { 'text': 'West', },
+                            {'text': 'Hamburg',},
+                            {'text': 'Hamburg',},
+                            {'text': 'Deutschland',},
+                            {'text': 'Europe',},
+                            {'text': 'West',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'Belzig', },
-                            { 'text': 'Brandenburg', },
-                            { 'text': 'Deutschland', },
-                            { 'text': 'Europe', },
-                            { 'text': 'West', },
+                            {'text': 'Belzig',},
+                            {'text': 'Brandenburg',},
+                            {'text': 'Deutschland',},
+                            {'text': 'Europe',},
+                            {'text': 'West',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'Wollin', },
-                            { 'text': 'Brandenburg', },
-                            { 'text': 'Deutschland', },
-                            { 'text': 'Europe', },
-                            { 'text': 'East', },
+                            {'text': 'Wollin',},
+                            {'text': 'Brandenburg',},
+                            {'text': 'Deutschland',},
+                            {'text': 'Europe',},
+                            {'text': 'East',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'Frankfurt Oder', },
-                            { 'text': 'Brandenburg', },
-                            { 'text': 'Deutschland', },
-                            { 'text': 'Europe', },
-                            { 'text': 'East', },
+                            {'text': 'Frankfurt Oder',},
+                            {'text': 'Brandenburg',},
+                            {'text': 'Deutschland',},
+                            {'text': 'Europe',},
+                            {'text': 'East',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'Bremen', },
-                            { 'text': 'Bremen', },
-                            { 'text': 'Deutschland', },
-                            { 'text': 'Europe', },
-                            { 'text': 'East', },
+                            {'text': 'Bremen',},
+                            {'text': 'Bremen',},
+                            {'text': 'Deutschland',},
+                            {'text': 'Europe',},
+                            {'text': 'East',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'Bremerhaven', },
-                            { 'text': 'Bremen', },
-                            { 'text': 'Deutschland', },
-                            { 'text': 'Europe', },
-                            { 'text': 'East', },
+                            {'text': 'Bremerhaven',},
+                            {'text': 'Bremen',},
+                            {'text': 'Deutschland',},
+                            {'text': 'Europe',},
+                            {'text': 'East',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'Paris', },
-                            { 'text': 'Paris', },
-                            { 'text': 'France', },
-                            { 'text': 'Europe', },
-                            { 'text': 'South West', },
+                            {'text': 'Paris',},
+                            {'text': 'Paris',},
+                            {'text': 'France',},
+                            {'text': 'Europe',},
+                            {'text': 'South West',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'Milano', },
-                            { 'text': 'Milano', },
-                            { 'text': 'Italia', },
-                            { 'text': 'Europe', },
-                            { 'text': 'South', },
+                            {'text': 'Milano',},
+                            {'text': 'Milano',},
+                            {'text': 'Italia',},
+                            {'text': 'Europe',},
+                            {'text': 'South',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'Venezia', },
-                            { 'text': 'Milano', },
-                            { 'text': 'Italia', },
-                            { 'text': 'Europe', },
-                            { 'text': 'East', },
+                            {'text': 'Venezia',},
+                            {'text': 'Milano',},
+                            {'text': 'Italia',},
+                            {'text': 'Europe',},
+                            {'text': 'East',},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            { 'text': 'Düsseldorf', },
-                            { 'text': 'Nordrhein-Westfalen', },
-                            { 'text': 'Deutschland', },
-                            { 'text': 'Europe', },
-                            { 'text': 'North West', },
+                            {'text': 'Düsseldorf',},
+                            {'text': 'Nordrhein-Westfalen',},
+                            {'text': 'Deutschland',},
+                            {'text': 'Europe',},
+                            {'text': 'North West',},
                         ],
                     },
                 ],
             },
         },
     },
-
-
-
 
     'expandable': {
         'name': 'Expandable',
@@ -835,14 +807,17 @@ data = {
         'context': {
             'headline': 'FAQ for researchers',
             'list': [
-                { 'term': 'Sed ut perspiciatis?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
-                { 'term': 'Sed ut perspiciatis unde omnis iste natus error sit?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', 'opened': True, },
-                { 'term': 'Sed ut perspiciatis unde omnis iste?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', 'opened': True, 'notoggle': True, },
+                {'term': 'Sed ut perspiciatis?',
+                 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',},
+                {'term': 'Sed ut perspiciatis unde omnis iste natus error sit?',
+                 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+                 'opened': True,},
+                {'term': 'Sed ut perspiciatis unde omnis iste?',
+                 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
+                 'opened': True, 'notoggle': True,},
             ],
         },
     },
-
-
 
     'expandable_light': {
         'name': 'Expandable no Headline',
@@ -852,20 +827,23 @@ data = {
                 {
                     'term': 'Regular definition, closed on load',
                     'definitions': [
-                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                        {
+                            'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',},
                     ],
                 },
                 {
                     'term': 'Definitions already opened',
                     'definitions': [
-                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                        {
+                            'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',},
                     ],
                     'opened': True,
                 },
                 {
                     'term': 'Definitions non Togglum sunt',
                     'definitions': [
-                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                        {
+                            'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',},
                     ],
                     'opened': True,
                     'notoggle': True,
@@ -873,9 +851,11 @@ data = {
                 {
                     'term': 'Multiple definitions',
                     'definitions': [
-                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
-                        {'text': 'Perspiciatis unde omnis iste.', },
-                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                        {
+                            'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',},
+                        {'text': 'Perspiciatis unde omnis iste.',},
+                        {
+                            'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',},
                     ],
                     'opened': True,
                     'notoggle': True,
@@ -889,9 +869,9 @@ data = {
         'template': 'widgets/footer.html',
         'context': {
             'links': [
-                { 'url': 'http://google.de', 'text': 'Kontakt' },
-                { 'url': 'http://bing.de', 'text': 'Presse', 'active': True },
-                { 'url': 'http://google.de', 'text': 'Newsletter' },
+                {'url': 'http://google.de', 'text': 'Kontakt'},
+                {'url': 'http://bing.de', 'text': 'Presse', 'active': True},
+                {'url': 'http://google.de', 'text': 'Newsletter'},
             ],
         },
     },
