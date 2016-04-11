@@ -1,19 +1,65 @@
+import math
+
 from wagtail.wagtailcore.blocks import StructBlock
 from wagtail.wagtailcore.blocks.field_block import TextBlock, RichTextBlock
 
 from isi_mip.climatemodels.models import InputData, OutputData, ImpactModel
+from isi_mip.contrib.blocks import IntegerBlock
 
 
 class ImpactModelsBlock(StructBlock):
     description = RichTextBlock()
+    rows_per_page = IntegerBlock(default=20, min_value=1, required=True)
 
     def get_context(self, value):
         context = super().get_context(value)
-        context['general'] = ImpactModel.objects.all()
+
+        ims = ImpactModel.objects.all()
+
+        context['tableid'] = 'selectortable'
+        context['searchfield'] = {'value': ''}
+        sector_options = [{'value': x} for x in ims.values_list('sector', flat=True).distinct()]
+        cdriver_options = [{'value': x} for x in InputData.objects.values_list('data_set', flat=True).distinct()]
+        context['selectors'] = [
+            {'colnumber': '2',  'all_value': 'Sector', 'options': sector_options},
+            {'colnumber': '3', 'all_value': 'Climate Driver', 'options': cdriver_options},
+        ]
+        # tabelle
+        context['id'] = 'selectortable'
+        context['head'] = {
+            'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Climate Driver'}, {'text': 'Contact'}]
+        }
+        # context['filter'] = {"2": "Water (global)"},  # pre defined filter
+
+        numpages = math.ceil(ims.count() / value.get('rows_per_page'))
+        context['pagination'] = {
+            'rowsperpage': (value.get('rows_per_page')),
+            'numberofpages': numpages,  # number of pages with current filters
+            'pagenumbers': [{'number': i + 1, 'invisible': False} for i in range(numpages)],
+            'activepage': 1,  # set to something between 1 and numberofpages
+        }
+        context['norowvisible'] = False  # true when no row is visible
+
+        bodyrows = []
+        i = 0
+        for imodel in ims:
+            datasets = [str(x) for x in imodel.climate_data_sets.all()]
+            cpeople = ["%s <a href='mailto:%s'>%s</a>" % (x.name, x.email, x.email) for x in imodel.contactperson_set.all()]
+            values = ["<a href='details/%d/'>%s</a>" % (imodel.id, imodel.name), imodel.sector]
+            values += ["<br/>".join(datasets)] + ["<br/>".join(cpeople)]
+            row = {
+                'invisible': i >= value.get('rows_per_page'),
+                'cols': [{'text': x} for x in values]
+            }
+            i += 1
+            bodyrows.append(row)
+
+        context['body'] = {'rows': bodyrows}
         return context
 
     class Meta:
         template = 'blocks/impact_models_block.html'
+
 
 class InputDataBlock(StructBlock):
     description = RichTextBlock()

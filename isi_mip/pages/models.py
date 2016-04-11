@@ -7,6 +7,8 @@ from modelcluster.models import ClusterableModel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.wagtailroutablepage.models import route, RoutablePage
 from wagtail.wagtailadmin.edit_handlers import *
+from wagtail.wagtailcore.blocks import ListBlock
+from wagtail.wagtailcore.blocks.field_block import RichTextBlock
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
@@ -17,7 +19,7 @@ from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, Impact
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.contrib.blocks import BlogBlock
 from isi_mip.pages.blocks import SmallTeaserBlock, PaperBlock, LinkBlock, FAQBlock, BigTeaserBlock, RowBlock, \
-    IsiNumbersBlock, TwitterBlock, Columns1To1Block, ImageBlock, PDFBlock, ContactsBlock
+    IsiNumbersBlock, TwitterBlock, Columns1To1Block, ImageBlock, PDFBlock, ContactsBlock, FAQsBlock
 
 
 class RoutablePageWithDefault(RoutablePage):
@@ -52,7 +54,7 @@ class HomePage(RoutablePageWithDefault):
 
     content = StreamField([
         ('row', RowBlock([
-            ('teaser',SmallTeaserBlock()),
+            ('teaser', SmallTeaserBlock()),
             ('bigteaser', BigTeaserBlock()),
             ('news', BlogBlock()),
             ('numbers', IsiNumbersBlock()),
@@ -116,54 +118,18 @@ class HomePage(RoutablePageWithDefault):
     #     return response
 
 
-class AbstractRegisterFormPage(AbstractEmailForm):
-    parent_page_types = [HomePage]
-    subpage_types = []
-
-    # template = 'pages/contact_page.html'
-    landing_page_template = 'pages/contact_page_confirmation.html'
-
-    confirmation_text = models.TextField(default='Your registration was submitted')
-
-    content_panels = AbstractEmailForm.content_panels + [
-        InlinePanel('form_fields', label="Form fields"),
-        FieldPanel('confirmation_text', classname="full"),
-        MultiFieldPanel([
-            FieldPanel('to_address', classname="full"),
-            FieldPanel('from_address', classname="full"),
-            FieldPanel('subject', classname="full"),
-        ], "Email")
-    ]
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        message = {'tags': 'success', 'text': self.confirmation_text}
-        context['confirmation_messages'] = [message]
-        return context
-
-    class Meta:
-        abstract = True
-
-
-class RegisterFormField(AbstractFormField):
-    page = ParentalKey('AboutPage', related_name='form_fields')
-
-
-class AboutPage(AbstractRegisterFormPage):
-    top_content = StreamField([
-        ('columns_1_to_1', Columns1To1Block()),
-        ('image', ImageBlock()),
-        ('pdf', PDFBlock())
-    ])
-    bottom_content = StreamField([
+class AboutPage(Page):
+    content = StreamField([
         ('columns_1_to_1', Columns1To1Block()),
         ('image', ImageBlock()),
         ('pdf', PDFBlock()),
-        ('paper', PaperBlock()),
+        ('paper', PaperBlock(template='widgets/page-teaser-wide.html')),
     ])
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('content')
+    ]
 
-    content_panels = [StreamFieldPanel('top_content')] + AbstractRegisterFormPage.content_panels + \
-                     [StreamFieldPanel('bottom_content')]
+    template = 'pages/default_page.html'
 
 
 class GettingStartedPage(RoutablePageWithDefault):
@@ -178,10 +144,11 @@ class GettingStartedPage(RoutablePageWithDefault):
 
     @route(r'^details/(\d+)/$')
     def details(self, request, id):
-        inda= InputData.objects.get(id=id)
+        inda = InputData.objects.get(id=id)
         template = 'pages/input_data_details_page.html'
         context = {'inda': inda}
         return render(request, template, context)
+
 
 class ImpactModelsPage(RoutablePageWithDefault):
     parent_page_types = [HomePage]
@@ -197,7 +164,26 @@ class ImpactModelsPage(RoutablePageWithDefault):
     def details(self, request, id):
         im = ImpactModel.objects.get(id=id)
         template = 'pages/impact_models_details_page.html'
-        context = {'im': im}
+        im_values = im.values_to_tuples()
+        model_details = []
+        for k, v in im_values:
+            res = {'term': k,
+                   # 'notoggle': True,
+                   'definitions': [{'text': "<i>%s</i>: %s" % x} for x in v]
+                   }
+            model_details += [res]
+        im_sector_values = im.fk_sector.values_to_tuples()
+        for k, v in im_sector_values:
+            res = {'term': k,
+                   'definitions': [{'text': "<i>%s</i>: %s" % x} for x in v]
+                   }
+            model_details += [res]
+        model_details[0]['opened'] = True
+        context = {
+            'headline': im.name,
+            'list': model_details
+        }
+
         return render(request, template, context)
 
     # @route(r'^csv/$')
@@ -234,16 +220,15 @@ class OutcomesPage(Page):
 
 
 class FAQPage(Page):
-    for_modelers = StreamField([
-        ('faq', FAQBlock()),
-    ])
-    for_researchers = StreamField([
-        ('faq', FAQBlock()),
+    content = StreamField([
+        ('columns_1_to_1', Columns1To1Block()),
+        ('faqs', FAQsBlock()),
     ])
     content_panels = Page.content_panels + [
-        StreamFieldPanel('for_modelers'),
-        StreamFieldPanel('for_researchers'),
+        StreamFieldPanel('content'),
     ]
+
+    template = 'pages/default_page.html'
 
 
 # Footer Pages
@@ -262,3 +247,50 @@ class NewsletterPage(Page):
 
 class DashboardPage(Page):
     pass
+
+
+
+class AbstractRegisterFormPage(AbstractEmailForm):
+    parent_page_types = [HomePage]
+    subpage_types = []
+
+    # template = 'pages/contact_page.html'
+    landing_page_template = 'pages/contact_page_confirmation.html'
+
+    confirmation_text = models.TextField(default='Your registration was submitted')
+
+    content_panels = AbstractEmailForm.content_panels + [
+        InlinePanel('form_fields', label="Form fields"),
+        FieldPanel('confirmation_text', classname="full"),
+        MultiFieldPanel([
+            FieldPanel('to_address', classname="full"),
+            FieldPanel('from_address', classname="full"),
+            FieldPanel('subject', classname="full"),
+        ], "Email")
+    ]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        message = {'tags': 'success', 'text': self.confirmation_text}
+        context['confirmation_messages'] = [message]
+        return context
+
+    class Meta:
+        abstract = True
+
+
+class RegisterFormField(AbstractFormField):
+    page = ParentalKey('FormPage', related_name='form_fields')
+
+
+class FormPage(AbstractRegisterFormPage):
+    top_content = StreamField([
+        ('richtext', RichTextBlock())
+    ])
+    bottom_content = StreamField([
+        ('richtext', RichTextBlock())
+    ])
+
+    content_panels = [StreamFieldPanel('top_content')] + AbstractRegisterFormPage.content_panels + \
+                     [StreamFieldPanel('bottom_content')]
+

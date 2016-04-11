@@ -1,6 +1,7 @@
 {% include 'widgets/heading3.html' with text=title %}
 {% for entry in entries %}
-    {% include 'widgets/page-teaser-flat.html' with date=entry.date text=entry.text %}
+    {% include 'widgets/page-teaser-flat.html' with date=entry.date description=entry.text.description title=entry.text.title %}
+    {% include 'widgets/horizontal-ruler.html' with light=True %}
 {% endfor %}
 
 {% include 'widgets/read-more-link.html' with align='right' text='See all' url='/news/' %}

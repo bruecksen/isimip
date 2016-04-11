@@ -18,7 +18,11 @@ class Region(models.Model):
 
 
 class ReferencePaper(Paper):
-    pass
+    def __str__(self):
+        if self.doi:
+            return "%s (<a target='_blank' href='http://dx.doi.org/%s'>%s</a>)" % (self.title, self.doi, self.doi)
+        else:
+            return self.title
 
 
 class ClimateDataType(models.Model):
@@ -56,11 +60,13 @@ class Scenario(models.Model):
     def __str__(self):
         return self.name
 
+
 class SpatialAggregation(models.Model):
     name = models.CharField(max_length=500, unique=True)
 
     def __str__(self):
         return self.name
+
 
 class ContactPerson(models.Model):
     name = models.CharField(max_length=500, null=True, blank=True)
@@ -127,7 +133,7 @@ class ImpactModel(models.Model):
     spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True,
                                            help_text="e.g. regular grid, points, hyrdotopes...")
     resolution = ChoiceOrOtherField(
-        max_length=500, choices=(('0.5°x0.5°', '0.5°x0.5°'),), blank=True, null=True,
+        max_length=500, choices=(('0.5°x0.5°', '0.5°x0.5°'),), blank=True, null=True, verbose_name='Spatial Resolution',
         help_text="The spatial resolution at which the ISIMIP simulations were run, if on a regular grid. Data was provided on a 0.5°x0.5° grid")
     TEMPORAL_RESOLUTION_CLIMATE_CHOICES = (('daily', 'daily'), ('monthly', 'monthly'), ('annual', 'annual'),)
     temporal_resolution_climate = ChoiceOrOtherField(
@@ -210,6 +216,34 @@ class ImpactModel(models.Model):
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
 
+    def _get_verbose_field_name(self, field: str) -> str:
+        return self._meta.get_field_by_name(field)[0].verbose_name.title()
+
+    def values_to_tuples(self) -> list:
+        vname = self._get_verbose_field_name
+        ret = [
+            ('Basic information', [
+                (vname('name'), self.name),
+                (vname('sector'), self.sector),
+                (vname('region'), ' '.join([x.name for x in self.region.all()])),
+                ('Contact Person', ', '.join(["{0.name} ({0.email}) {0.institute}".format(x) for x in self.contactperson_set.all()])),
+                (vname('simulation_round'), ' '.join([x.name for x in self.simulation_round.all()])),
+                (vname('version'), self.version),
+                (vname('main_reference_paper'), self.main_reference_paper),
+                (vname('short_description'), self.short_description),
+            ]),
+            ('Technical Information', [
+                (vname('spatial_aggregation'), self.spatial_aggregation),
+                (vname('resolution'), self.resolution),
+                (vname('temporal_resolution_climate'), self.temporal_resolution_climate),
+                (vname('temporal_resolution_co2'), self.temporal_resolution_co2),
+                (vname('temporal_resolution_land'), self.temporal_resolution_land),
+                (vname('temporal_resolution_soil'), self.temporal_resolution_soil),
+
+            ])
+            ]
+        return ret
+
     def save(self, *args, **kwargs):
         if not self.owner_id:
             self.owner_id = 1
@@ -260,6 +294,12 @@ class Sector(models.Model):
 
     def __str__(self):
         return type(self).__name__
+
+    def _get_verbose_field_name(self, field: str) -> str:
+        return self._meta.get_field_by_name(field)[0].verbose_name.title()
+
+    def values_to_tuples(self) -> list:
+        raise Exception("Not Implemented")
 
     """
     Sektoren:
@@ -373,6 +413,29 @@ class Water(Sector):
     methods_evapotraspiration = models.TextField(null=True, blank=True, verbose_name='Potential evapotraspiration')
     methods_snowmelt = models.TextField(null=True, blank=True, verbose_name='Snow melt')
 
+    def values_to_tuples(self) -> list:
+        vname = self._get_verbose_field_name
+        ret = [
+            ('Water', [
+                (vname('technological_progress'), self.technological_progress),
+                (vname('soil_layers'), self.soil_layers),
+                (vname('water_use'), self.water_use),
+                (vname('water_sectors'), self.water_sectors),
+                (vname('routing'), self.routing),
+                (vname('routing_data'), self.routing_data),
+                (vname('land_use'), self.land_use),
+                (vname('dams_reservoirs'), self.dams_reservoirs),
+                (vname('calibration'), self.calibration),
+                (vname('calibration_years'), self.calibration_years),
+                (vname('calibration_dataset'), self.calibration_dataset),
+                (vname('calibration_catchments'), self.calibration_catchments),
+                (vname('vegetation'), self.vegetation),
+                (vname('vegetation_representation'), self.vegetation_representation),
+                (vname('methods_evapotraspiration'), self.methods_evapotraspiration),
+                (vname('methods_snowmelt'), self.methods_snowmelt),
+            ])
+        ]
+        return ret
 
 class Biomes(Sector):
     # technological_progress = models.TextField(null=True, blank=True)

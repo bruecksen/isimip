@@ -1,35 +1,4 @@
-
 {{ value.description }}
 {% include 'widgets/heading3.html' with text='Overview' %}
+{% include 'widgets/table-selector.html' %}
 {% include "widgets/table.html" %}
-
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
-
-
-    <table class="datatablestable">
-    <thead>
-    <tr><th>Name</th><th>Sector</th><th>Contact person</th></tr>
-    </thead>
-    <tfoot>
-    <tr><th>Name</th><th>Sector</th><th>Contact person</th></tr>
-    </tfoot>
-    <tbody>
-    {% for row in general %}
-        <tr><td>{{ row.name }}</td><td>{{ row.sector }}</td><td>{{ row.contact_person }}</td></tr>
-    {% endfor %}
-    </tbody>
-    </table>
-
-
-    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-    <script>
-    $(document).ready(function() {
-        $('.datatablestable').DataTable({
-            "iDisplayLength": 4,
-            "bLengthChange": false
-        });
-
-    } );
-
-    </script>

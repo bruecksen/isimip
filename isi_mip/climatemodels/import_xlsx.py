@@ -1,4 +1,6 @@
 import pyexcel as pe
+# noinspection PyUnresolvedReferences
+import pyexcel.ext.xlsx
 
 from isi_mip.sciencepaper import crossrefpy
 from isi_mip.climatemodels.models import ImpactModel, Region, Sector, ReferencePaper, \

@@ -133,6 +133,17 @@ class PaperBlock(StructBlock):
         image = value.get('picture')
         rendition = image.get_rendition('max-1200x1200')
         context['image'] = {'url': rendition.url, 'name': image.title}
+        # context['image'] = {'url': '/static/styleguide/test-images/header4.jpg'},
+        context['text'] = {
+                  'author': 'Frieler, K., Levermann, A., Elliott, J., Heinke, J., Arneth, A., Bierkens, M.F.P., Ciais, P., Clark, D.B., Deryng, D., Döll, P., Falloon, P., Fekete, B., Folberth, C., Friend, A.D., Gellhorn, C., Gosling, S.N., Haddeland, I., Khabarov, N., Lomas, M., Masaki, Y., Nishina, K., Neumann, K., Oki, T., Pavlick, R., Ruane, A.C., Schmid, E., Schmitz, C., Stacke, T., Stehfest, E., Tang, Q., Wisser, D., Huber, V., Piontek, F., Warszawski, L., Schewe, J., Lotze-Campen, H., Schellnhuber, H.J.',
+                  'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum '
+                                 'Lorem ipsum',
+                  'journal': 'Biotech Publishing 7/2016, 2834ff',
+                  'source': {'description': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/',
+                             'href': 'http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3178846/'},
+                  'title': 'Impact Models in an industrialized semipermeable meta '
+                           'world'}
+
         return context
 
 
@@ -163,10 +174,29 @@ class LinkBlock(StructBlock):
         return context
 
 
+
 class FAQBlock(StructBlock):
     question = CharBlock()
     answer = RichTextBlock()
 
+
+class FAQsBlock(StructBlock):
+    title = CharBlock()
+    faqs = ListBlock(FAQBlock())
+
+    class Meta:
+        template = 'widgets/expandable.html'
+
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['headline'] = value.get('title')
+        context['list'] = []
+        for faq in value.get('faqs'):
+            res = {'term': faq.get('question'),
+                   'definitions': [{'text': faq.get('answer')}],
+                   'opened': True}
+            context['list'] += [res]
+        return context
 
 
 class ContactBlock(StructBlock):
@@ -183,17 +213,10 @@ class ContactsBlock(StructBlock):
     sectors = ListBlock(SectorBlock)
 
 
-
-
-
-
-
-
-
-
 CONTENT_BLOCKS = BASE_BLOCKS + [
     ('link', LinkBlock()),
     ('embed', EmbedBlock()),
+    ('faqs', FAQsBlock()),
 ]
 
 class ColumnsBlock(StructBlock):

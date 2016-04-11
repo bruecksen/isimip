@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock
+from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock
 from wagtail.wagtailsnippets.blocks import SnippetChooserBlock
 
 
@@ -42,8 +42,8 @@ class SpecificPageChooserBlock(PageChooserBlock):
 
 
 class IntegerBlock(FieldBlock):
-    def __init__(self, required=True, help_text=None, **kwargs):
-        self.field = forms.IntegerField(required=required, help_text=help_text)
+    def __init__(self, required=True, help_text=None, max_value=None, min_value=None, **kwargs):
+        self.field = forms.IntegerField(required=required, help_text=help_text, max_value=max_value, min_value=min_value)
         super().__init__(**kwargs)
 
 class EmailBlock(FieldBlock):
@@ -54,7 +54,9 @@ class EmailBlock(FieldBlock):
 
 class BlogBlock(blocks.StructBlock):
     blog_index = SpecificPageChooserBlock(required=False, help_text='Select blog index page.')
-    entry_count = IntegerBlock(required=True, help_text='How many blog entries should be displayed?')
+    title = CharBlock(required=False, help_text='Per default, the title of the blog index will be used.')
+    entry_count = IntegerBlock(required=True, min_value=1, max_value=5,
+                               help_text='How many blog entries should be displayed?')
 
     class Meta:
         classname = 'blog'
@@ -64,13 +66,14 @@ class BlogBlock(blocks.StructBlock):
     def get_context(self, value):
         context = super().get_context(value)
         blog_index = value.get('blog_index')
+        title = value.get('title') or (blog_index.title if blog_index else 'Blog')
         entry_count = value.get('entry_count')
 
         entries = blog_index.blogs if blog_index else BlogPage.objects.all().order_by('-date')
         entries = entries[:entry_count]
         context['teaser_template'] = 'widgets/page-teaser.html'
         context['count'] = entry_count
-        context['title'] = blog_index.title if blog_index else 'Blog'
+        context['title'] = title
         context['slug'] = blog_index.slug if blog_index else ''
         context['outter_col'] = int(3 * entry_count)
         context['inner_col'] = int(12 / entry_count)
@@ -81,7 +84,7 @@ class BlogBlock(blocks.StructBlock):
                 'date': entry.date,
                 'href': entry.url,
                 'text': {
-                    'description': smart_truncate(entry.body,300,350),
+                    'description': smart_truncate(entry.body, 300, 350),
                     'title': entry.title,
                     'arrow_right_link': True
                 }

@@ -1,68 +1,21 @@
 {% extends 'base.html' %}
-{% load wagtailcore_tags %}
-
-{% block css %}
-    {{ block.super }}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />
-
-{% endblock %}
 
 {% block content %}
-    {{ page.content }}
-    {{ page.description|richtext }}
-    <div>
-
-    <table class="datatablestable">
-    <thead>
-    <tr><th>Name</th><th>Sector</th><th>Contact person</th></tr>
-    </thead>
-    <tfoot>
-    <tr><th>Name</th><th>Sector</th><th>Contact person</th></tr>
-    </tfoot>
-    <tbody>
-    {% for row in general %}
-        <tr><td>{{ row.name }}</td><td>{{ row.sector }}</td><td>{{ row.contact_person }}</td></tr>
-    {% endfor %}
-    </tbody>
-    </table>
-    </div>
-{% endblock %}
-
-{% block javascript %}
-    {{ block.super }}
-    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-    <script>
-    $(document).ready(function() {
-        $('.datatablestable').DataTable({
-            "iDisplayLength": 4,
-            "bLengthChange": false,
-            initComplete: function () {
-                this.api().columns([0,':contains(Sector)']).every(function(){
-                    var column = this;
-                    var header = $(".dataTables_filter");
-                    var select = $('<select><option value=""></option></select>')
-                    .appendTo( $(column.footer()).empty() )
-                    .on( 'change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        column
-                            .search( val ? '^'+val+'$' : '', true, false )
-                            .draw();
-                    } );
-
-                    column.data().unique().sort().each( function ( d, j ) {
-                        select.append( '<option value="'+d+'">'+d+'</option>' )
-                    } );
-
-                });
-            }
-
-
-        });
-
-    } );
-
-    </script>
+    <div class="backgroundimage">
+		<div class="content-container">
+			<div class="container" style="background-color: white;">
+				<div class="content-container-border">
+					<div class="content-container-inner">
+                        {% include 'widgets/heading1.html' with text='Impact Models' %}
+					    <br>
+					    <br>
+					    <br>
+                        {{ page.content }}
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<br>
+	</div>
 {% endblock %}

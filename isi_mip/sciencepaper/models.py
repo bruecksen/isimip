@@ -37,7 +37,7 @@ class Paper(models.Model):
     def to_bibtex(self):
         url = "http://dx.doi.org/" + self.doi
         headers = {"accept": "application/x-bibtex"}
-        r = requests.get(url, headers = headers)
+        r = requests.get(url, headers=headers)
         return r.text
 
     @staticmethod
