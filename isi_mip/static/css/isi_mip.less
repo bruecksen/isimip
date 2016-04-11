@@ -410,15 +410,18 @@ h1, .h1, h2, .h2, h3, .h3 {
 				}
 			}
 
-			.widget-expandable-listitem-definition {
-				padding: 10px 0;
+			.widget-expandable-listitem-definitions {
 				display: none;
+
+				.widget-expandable-listitem-definition {
+					padding: 10px 0;
+					border-top: 1px dashed @color-neutral;
+				}
 			}
 
 			&.widget-expandable-listitem-term-open {
-				.widget-expandable-listitem-definition {
+				.widget-expandable-listitem-definitions {
 					display: block;
-					border-top: 1px dashed @color-neutral;
 				}
 				.widget-expandable-listitem-term-openbutton {
 					display: none;

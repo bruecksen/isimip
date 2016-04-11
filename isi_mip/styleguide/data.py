@@ -849,9 +849,37 @@ data = {
         'template': 'widgets/expandable.html',
         'context': {
             'list': [
-                { 'term': 'Sed ut perspiciatis?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
-                { 'term': 'Sed ut perspiciatis unde omnis iste natus error sit?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', 'opened': True, },
-                { 'term': 'Sed ut perspiciatis unde omnis iste?', 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', 'opened': True, 'notoggle': True, },
+                {
+                    'term': 'Regular definition, closed on load',
+                    'definitions': [
+                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                    ],
+                },
+                {
+                    'term': 'Definitions already opened',
+                    'definitions': [
+                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                    ],
+                    'opened': True,
+                },
+                {
+                    'term': 'Definitions non Togglum sunt',
+                    'definitions': [
+                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                    ],
+                    'opened': True,
+                    'notoggle': True,
+                },
+                {
+                    'term': 'Multiple definitions',
+                    'definitions': [
+                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                        {'text': 'Perspiciatis unde omnis iste.', },
+                        {'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque', },
+                    ],
+                    'opened': True,
+                    'notoggle': True,
+                },
             ],
         },
     },

@@ -22,8 +22,12 @@
 					<div class="clearfix"></div>
 				</div>
 
-				<div class="widget-expandable-listitem-definition">
-					{{ listitem.definition }}
+				<div class="widget-expandable-listitem-definitions">
+					{% for definition in listitem.definitions %}
+						<div class="widget-expandable-listitem-definition">
+							{{ definition.text }}
+						</div>
+					{% endfor %}
 				</div>
 			</div>
 		{% endfor %}
