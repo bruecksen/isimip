@@ -21,7 +21,18 @@ $(function() {
 			table.find('tbody tr').each(function() {
 				// hide rows not matching filter
 				var row = $(this);
-				if (row.find('td:nth-child(' + colnumber + ')').text() != value) {
+				var showcolline = false;
+
+				row.find('td:nth-child(' + colnumber + ')').find('.widget-table-col-line').each(function() {
+					var colline = $(this);
+					var collinetext = colline.text();
+					console.log($.trim(collinetext), $.trim(value));
+					if ( $.trim(collinetext) == $.trim(value) ) {
+						showcolline = true;
+					}
+				});
+
+				if (!showcolline) {
 					row.removeClass('widget-table-show');
 				}
 			});

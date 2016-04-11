@@ -430,26 +430,23 @@ data = {
                 'rows': [
                     {
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Socio Economic',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',], },
+                            {'texts': ['Socio Economic',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                     {
                         'cols': [
-                            {'text': 'princeton <a href="http://google.de">watch</a> wfdei',},
-                            {'text': 'Economic Socio',},
-                            {
-                                'text': 'Sed ut <a href="http://google.de">perspiciatis unde omnis iste natus error sit</a> voluptatem<br>accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',},
+                            {'texts': ['princeton <a href="http://google.de">watch</a> wfdei',],},
+                            {'texts': ['Economic Socio',],},
+                            {'texts': ['Sed ut <a href="http://google.de">perspiciatis unde omnis iste natus error sit</a> voluptatem<br>accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',],},
                         ],
                     },
                     {
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Climate',},
-                            {
-                                'text': '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p><p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p>',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Climate',],},
+                            {'texts': ['<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p>', '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.</p>',],},
                         ],
                     },
                 ],
@@ -476,45 +473,40 @@ data = {
                 'rows': [
                     {
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Socio Economic',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Socio Economic',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                     {
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Economic Socio',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',},
-                        ],
-                    },
-                    {
-                        'invisible': True,
-                        'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Climate',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Economic Socio',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Alimate 2',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Climate',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Glimac 3',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Alimate 2',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Glimac 3',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                 ],
@@ -548,61 +540,54 @@ data = {
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Socio Economic',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Socio Economic',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Economic Socio',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Economic Socio',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem.',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Climate F',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Climate F',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                     {
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Alimate 2 E',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Alimate 2 E',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                     {
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Glimac 3 Z',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Glimac 3 Z',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                     {
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Alimate 2 W',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Alimate 2 W',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'princeton watch wfdei',},
-                            {'text': 'Glimac 3 Q',},
-                            {
-                                'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',},
+                            {'texts': ['princeton watch wfdei',],},
+                            {'texts': ['Glimac 3 Q',],},
+                            {'texts': ['Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam.',],},
                         ],
                     },
                 ],
@@ -679,121 +664,131 @@ data = {
                     {
                         'invisible': False,
                         'cols': [
-                            {'text': 'Berlin',},
-                            {'text': 'Berlin',},
-                            {'text': 'Deutschland',},
-                            {'text': 'Europe',},
-                            {'text': 'North',},
+                            {'texts': ['Berlin',],},
+                            {'texts': ['Berlin',],},
+                            {'texts': ['Deutschland',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['North',],},
                         ],
                     },
                     {
                         'invisible': False,
                         'cols': [
-                            {'text': 'München',},
-                            {'text': 'Bayern',},
-                            {'text': 'Deutschland',},
-                            {'text': 'Europe',},
-                            {'text': 'North West',},
+                            {'texts': ['München',],},
+                            {'texts': ['Bayern',],},
+                            {'texts': ['Deutschland',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['North West',],},
                         ],
                     },
                     {
                         'invisible': False,
                         'cols': [
-                            {'text': 'Hamburg',},
-                            {'text': 'Hamburg',},
-                            {'text': 'Deutschland',},
-                            {'text': 'Europe',},
-                            {'text': 'West',},
+                            {'texts': ['Hamburg',],},
+                            {'texts': ['Hamburg',],},
+                            {'texts': ['Deutschland',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['West',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'Belzig',},
-                            {'text': 'Brandenburg',},
-                            {'text': 'Deutschland',},
-                            {'text': 'Europe',},
-                            {'text': 'West',},
+                            {'texts': ['Belzig',],},
+                            {'texts': ['Brandenburg',],},
+                            {'texts': ['Deutschland',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['West',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'Wollin',},
-                            {'text': 'Brandenburg',},
-                            {'text': 'Deutschland',},
-                            {'text': 'Europe',},
-                            {'text': 'East',},
+                            {'texts': ['Atlantis',],},
+                            {'texts': ['Brandenburg',],},
+                            {'texts': ['Deutschland','Italia',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['West',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'Frankfurt Oder',},
-                            {'text': 'Brandenburg',},
-                            {'text': 'Deutschland',},
-                            {'text': 'Europe',},
-                            {'text': 'East',},
+                            {'texts': ['Wollin',],},
+                            {'texts': ['Brandenburg',],},
+                            {'texts': ['Deutschland',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['East',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'Bremen',},
-                            {'text': 'Bremen',},
-                            {'text': 'Deutschland',},
-                            {'text': 'Europe',},
-                            {'text': 'East',},
+                            {'texts': ['Frankfurt Oder',],},
+                            {'texts': ['Brandenburg',],},
+                            {'texts': ['Deutschland',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['East',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'Bremerhaven',},
-                            {'text': 'Bremen',},
-                            {'text': 'Deutschland',},
-                            {'text': 'Europe',},
-                            {'text': 'East',},
+                            {'texts': ['Bremen',],},
+                            {'texts': ['Bremen',],},
+                            {'texts': ['Deutschland',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['East',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'Paris',},
-                            {'text': 'Paris',},
-                            {'text': 'France',},
-                            {'text': 'Europe',},
-                            {'text': 'South West',},
+                            {'texts': ['Bremerhaven',],},
+                            {'texts': ['Bremen',],},
+                            {'texts': ['Deutschland',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['East',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'Milano',},
-                            {'text': 'Milano',},
-                            {'text': 'Italia',},
-                            {'text': 'Europe',},
-                            {'text': 'South',},
+                            {'texts': ['Paris',],},
+                            {'texts': ['Paris',],},
+                            {'texts': ['France',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['South West',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'Venezia',},
-                            {'text': 'Milano',},
-                            {'text': 'Italia',},
-                            {'text': 'Europe',},
-                            {'text': 'East',},
+                            {'texts': ['Milano',],},
+                            {'texts': ['Milano',],},
+                            {'texts': ['Italia',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['South',],},
                         ],
                     },
                     {
                         'invisible': True,
                         'cols': [
-                            {'text': 'Düsseldorf',},
-                            {'text': 'Nordrhein-Westfalen',},
-                            {'text': 'Deutschland',},
-                            {'text': 'Europe',},
-                            {'text': 'North West',},
+                            {'texts': ['Venezia',],},
+                            {'texts': ['Milano',],},
+                            {'texts': ['Italia',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['East',],},
+                        ],
+                    },
+                    {
+                        'invisible': True,
+                        'cols': [
+                            {'texts': ['Düsseldorf',],},
+                            {'texts': ['Nordrhein-Westfalen',],},
+                            {'texts': ['Deutschland',],},
+                            {'texts': ['Europe',],},
+                            {'texts': ['North West',],},
                         ],
                     },
                 ],
@@ -807,14 +802,21 @@ data = {
         'context': {
             'headline': 'FAQ for researchers',
             'list': [
-                {'term': 'Sed ut perspiciatis?',
-                 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',},
-                {'term': 'Sed ut perspiciatis unde omnis iste natus error sit?',
-                 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
-                 'opened': True,},
-                {'term': 'Sed ut perspiciatis unde omnis iste?',
-                 'definition': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',
-                 'opened': True, 'notoggle': True,},
+                {
+                    'term': 'Regular definition, closed on load',
+                    'definitions': [
+                        {
+                            'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',},
+                    ],
+                },
+                {
+                    'term': 'Definitions already opened',
+                    'definitions': [
+                        {
+                            'text': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque',},
+                    ],
+                    'opened': True,
+                },
             ],
         },
     },

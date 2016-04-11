@@ -46,7 +46,13 @@
 			{% for row in body.rows %}
 				<tr{% if row.invisible %} style="display:none;"{% endif %}>
 					{% for col in row.cols %}
-						<td>{{ col.text|safe }}</td>
+						<td>
+							{% for text in col.texts %}
+								<div class="widget-table-col-line">
+									{{ text|safe }}
+								</div>
+							{% endfor %}
+						</td>
 					{% endfor %}
 				</tr>
 			{% endfor %}
