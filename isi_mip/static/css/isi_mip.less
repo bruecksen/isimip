@@ -1,17 +1,22 @@
-
+// ISI-MIP Styles
 
 @color-white: white;
 @color-black: black;
 @color-neutral: #a4a4a4;
 @color-neutral-dark: #4a4a4a;
-@color-secondary: #f5ab35;
-@color-primary: #0681be;
+@color-primary: #0681be; // blue
+@color-secondary: #f5ab35; // orange
 
+
+@import "../vendor/css/open-sans.less";
 
 body {
+	/* Der Browser lädt automatisch die Schnitte, deren Stil und Gewicht benötigt werden. */
+	font-family: 'Open Sans';
 }
 
 
+// wrapper around whole page with background image
 .backgroundimage {
 	background-position: center;
 	background-size: cover;
@@ -51,35 +56,20 @@ a {
 	height: auto;
 }
 
-.super {
-	background-color: @color-primary;
-	padding: 15px;
-	margin-bottom: 30px;
-	color: @color-white;
-
-	*:first-child {
-		margin-top: 0;
-	}
-	*:last-child {
-		margin-bottom: 0;
-	}
-}
 
 
+// Headlines
 h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 	color: @color-primary;
 }
 h1, .h1, h2, .h2, h3, .h3 {
 	text-transform: uppercase;
 }
-.super {
-	h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
-		color: @color-white;
-	}
-}
 
 
 
+
+// Buttons
 .btn {
 	border-color: @color-black;
 
@@ -96,23 +86,6 @@ h1, .h1, h2, .h2, h3, .h3 {
 		&:hover, &:focus {
 			background-color: @color-white;
 			color: @color-secondary;
-		}
-	}
-}
-.super {
-	.btn {
-		border-color: @color-white;
-		color: @color-white;
-
-		&.btn-default {
-			background-color: @color-primary;
-			-webkit-transition: background-color 0.5s;
-			transition: background-color 0.5s;
-
-			&:hover, &:focus {
-				background-color: @color-white;
-				color: @color-primary;
-			}
 		}
 	}
 }
