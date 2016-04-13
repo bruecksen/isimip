@@ -25,7 +25,7 @@
 		{{ date }}
 	</p>
 {% endif %}
-{% if date %}
+{% if journal %}
 	<p class="widget-page-teaser-text-journal"><em>{{ journal }}</em></p>
 {% endif %}
 {% if divider %}
@@ -43,10 +43,14 @@
 	</p>
 {% endif %}
 {% if arrow_right_link %}
-	{% include "widgets/arrow-right-link.html" with href=href %}
+	<div class="widget-page-teaser-rightlink">
+		{% include "widgets/arrow-right-link.html" with href=href %}
+	</div>
 {% endif %}
 {% if text_right_link %}
-	<a href="{{ href }}" class="btn btn-default pull-right">{{ text_right_link_text }}</a>
-	<div class="clearfix"></div>
+	<div class="widget-page-teaser-rightlink">
+		<a href="{{ href }}" class="btn btn-default pull-right">{{ text_right_link_text }}</a>
+		<div class="clearfix"></div>
+	</div>
 {% endif %}
 </div><!-- widget-page-teaser-text -->

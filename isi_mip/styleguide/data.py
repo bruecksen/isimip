@@ -260,6 +260,53 @@ data = {
         },
     },
 
+
+    'page_teaser_notitle_noimage': {
+        'name': 'Page Teaser',
+        'template': 'widgets/page-teaser.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'arrow_right_link': True,
+        },
+    },
+
+
+    'page_teaser_notitle_extratext': {
+        'name': 'Page Teaser',
+        'template': 'widgets/page-teaser.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'image': {
+                'url': '/static/styleguide/test-images/dog.jpg',
+            },
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum.',
+            'arrow_right_link': True,
+        },
+    },
+
+    'page_teaser_notitle_noimage_norightlink': {
+        'name': 'Page Teaser',
+        'template': 'widgets/page-teaser.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+        },
+    },
+
+
+    'page_teaser_notitle_noimage_textrightlink': {
+        'name': 'Page Teaser',
+        'template': 'widgets/page-teaser.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'text_right_link': True,
+            'text_right_link_text': 'Learn more',
+        },
+    },
+
+
     'page_teaser_wide': {
         'name': 'Page Teaser Wide',
         'template': 'widgets/page-teaser-wide.html',

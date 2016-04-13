@@ -1,28 +1,38 @@
 {% load staticfiles i18n %}
 <div class="widget-footer{% if fixed %} footer-fixed{% endif %}">
 	<div class="widget-footer-navbar">
-		<ul class="nav text-center">
+		<ul class="nav nav-pills">
 			{% for link in links %}
 				<li role="presentation"{% if link.active %} class="active"{% endif %}><a
 						href="{{ link.url }}">{{ link.text }}</a></li>
 			{% endfor %}
 		</ul>
 	</div>
+	<hr>
 	<div class="widget-footer-logos">
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-2">
 					<div class="row">
-						<div class="col-xs-4 col-xs-offset-4 col-sm-10 col-sm-offset-1">
+						<div class="col-xs-4 col-xs-offset-4 col-sm-12 col-sm-offset-0 col-md-10 col-md-offset-1">
 							<img src="{% static 'images/logo-neutral-dark.png' %}" class="image">
 						</div>
 					</div><!-- row -->
+					<br>
+					<br>
 				</div>
-				<div class="col-sm-3 col-sm-offset-4">
-					Konzeption, Gestaltung und Umsetzung: sinnwerkstatt Medienagentur GmbH
+				<div class="col-sm-6 col-sm-offset-1 col-md-4 col-md-offset-2 text-center">
+					Konzeption, Gestaltung und Umsetzung:
+					<a href="https://sinnwerkstatt.com/">
+						sinnwerkstatt Medienagentur GmbH
+					</a>
+					<br>
+					<br>
 				</div>
-				<div class="col-sm-3">
-					Lizenz
+				<div class="col-sm-3 col-md-offset-1 text-center">
+					Lizenzum ipsum
+					<br>
+					<br>
 				</div>
 			</div>
 		</div>
