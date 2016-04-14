@@ -7,11 +7,12 @@
 {% endblock %}
 
 {% block content %}
-	<div class="backgroundimage" style="background-image: url({% static 'images/mountain-range.jpg' %});">
-		{{ head_super_output }}
 
-		<div class="content-container">
-			<div class="container" style="background-color: white;">
+		<div class="background-container" style="background-image: url({% static 'images/mountain-range.jpg' %});">
+
+			{{ head_super_output }}
+
+			<div class="content-container container">
 				<div class="content-container-border">
 					<div class="content-container-inner">
 						<div class="row">
@@ -69,11 +70,12 @@
 
 					</div>
 				</div>
-			</div>
-		</div>
+			</div><!-- content-container -->
+			<br>
+			<br>
 
-		<br>
-		<br>
+		</div><!-- background-container -->
+
 	</div>
 {% endblock %}
 

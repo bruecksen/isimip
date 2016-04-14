@@ -88,7 +88,7 @@ $(function() {
 		});
 
 		// show the pagination links needed
-		table.find('.widget-table-pagination-pagelink').each(function() {
+		table.find('.widget-pagination-pagelink').each(function() {
 			if (($(this).data('pagenumber') > numberofpages) || (numberofpages < 2)) {
 				$(this).hide();
 			} else {
@@ -100,20 +100,20 @@ $(function() {
 		table.find('tbody tr:not(.widget-table-show)').hide();
 		table.find('tbody tr.widget-table-show').show().removeClass('widget-table-show');
 
-		table.find('.widget-table-pagination-pagelink:not([data-pagenumber='+ activepage +'])').removeClass('widget-table-pagination-pagelink-active');
-		table.find('.widget-table-pagination-pagelink[data-pagenumber='+ activepage +']').addClass('widget-table-pagination-pagelink-active');
+		table.find('.widget-pagination-pagelink:not([data-pagenumber='+ activepage +'])').removeClass('widget-pagination-pagelink-active');
+		table.find('.widget-pagination-pagelink[data-pagenumber='+ activepage +']').addClass('widget-pagination-pagelink-active');
 
 		// Update status in prev next buttons:
 		if (activepage == 1) {
-			table.find('.widget-table-pagination-prevbutton').addClass('disabled');
+			table.find('.widget-pagination-prevbutton').addClass('disabled');
 		} else {
-			table.find('.widget-table-pagination-prevbutton').removeClass('disabled');
+			table.find('.widget-pagination-prevbutton').removeClass('disabled');
 		}
 		if (activepage >= numberofpages) {
 			// ( when numberofpages = 0 is activepage still 1 )
-			table.find('.widget-table-pagination-nextbutton').addClass('disabled');
+			table.find('.widget-pagination-nextbutton').addClass('disabled');
 		} else {
-			table.find('.widget-table-pagination-nextbutton').removeClass('disabled');
+			table.find('.widget-pagination-nextbutton').removeClass('disabled');
 		}
 
 		console.log('Table updated. activepage:',activepage,'filter:',filter,'rowsperpage:',rowsperpage,'rowsintable:',rowsintable,'numberofpages:',numberofpages, 'searchvalue:', searchvalue);
@@ -145,19 +145,19 @@ $(function() {
 
 
 		// Click on page navigation
-		table.find('.widget-table-pagination-pagelink').click(function(event) {
+		table.find('.widget-pagination-pagelink').click(function(event) {
 			event.preventDefault();
 			table.data('activepage', $(this).data('pagenumber'));
 			updateTable(table);
 		});
-		table.find('.widget-table-pagination-prevbutton').click(function() {
+		table.find('.widget-pagination-prevbutton').click(function() {
 			var activepage = table.data('activepage');
 			if (activepage > 1) activepage--;
 
 			table.data('activepage', activepage);
 			updateTable(table);
 		});
-		table.find('.widget-table-pagination-nextbutton').click(function() {
+		table.find('.widget-pagination-nextbutton').click(function() {
 			var activepage = table.data('activepage');
 			var numberofpages = table.data('numberofpages');
 			if (activepage < numberofpages) activepage++;

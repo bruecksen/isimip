@@ -1,6 +1,13 @@
 <ol class="breadcrumb widget-breadcrumb">
 	{% for link in links %}
-		<li {% if link.active %} class="active"{% endif %}><a
-				href="{{ link.url }}">{{ link.text }}</a></li>
+		<li>
+			{% if link.href %}
+			<a href="{{ link.href }}">
+				{{ link.text }}
+			</a>
+			{% else %}			
+				{{ link.text }}
+			{% endif %}
+		</li>
 	{% endfor %}
 </ol><!-- widget-breadcrumb -->

@@ -9,146 +9,147 @@
 {% block content %}
 	{{ header_output }}
 
-	<div class="backgroundimage" style="background-image: url({% static 'images/mountain-range.jpg' %});">
+	<div class="background-container" style="background-image: url({% static 'images/mountain-range.jpg' %});">
 		{{ head_super_output }}
 
-		<div class="content-container">
-			<div class="container" style="background-color: white;">
-				<div class="content-container-border">
-					<div class="content-container-inner">
+		<div class="content-container container">
+			<div class="content-container-border">
+				<div class="content-container-inner">
 
 
-						<h1>Styleguide for ISI-MIP</h1>
+					<h1>Styleguide for ISI-MIP</h1>
 
-						{{ header_meta }}
-						{{ head_super_meta }}
+					{{ header_meta }}
+					{{ head_super_meta }}
 
-						{{ messages }}
+					{{ messages }}
 
-						{{ breadcrumb }}
+					{{ breadcrumb }}
 
-						{{ heading1 }}
-						{{ heading2 }}
-						{{ heading3 }}
+					{{ heading1 }}
+					{{ heading2 }}
+					{{ heading3 }}
 
 
-						{{ columns_1_1 }}
-						{{ columns_2_1 }}
-						{{ columns_1_2 }}
-						{{ columns_1_1_1 }}
-						{{ columns_1_1_1_1 }}
+					{{ columns_1_1 }}
+					{{ columns_2_1 }}
+					{{ columns_1_2 }}
+					{{ columns_1_1_1 }}
+					{{ columns_1_1_1_1 }}
 
-						{{ image }}
-						{{ image_link }}
-						{{ arrow_right_link }}
+					{{ image }}
+					{{ image_link }}
+					{{ arrow_right_link }}
 
-						{{ richtext }}
-						{{ embed }}
+					{{ richtext }}
+					{{ embed }}
 
-						<div class="row">
-							<div class="col-sm-4">
-								{{ page_teaser_text_output }}
-							</div>
-							<div class="col-sm-8">
-								{{ page_teaser_text_meta }}
-							</div>
+					<div class="row">
+						<div class="col-sm-4">
+							{{ page_teaser_text_output }}
 						</div>
-
-
-						<div class="row">
-							<div class="col-sm-4">
-								{{ page_teaser_output }}
-							</div>
-							<div class="col-sm-4">
-								{{ page_teaser_noimage_output }}
-							</div>
-							<div class="col-sm-4">
-								{{ page_teaser_meta }}
-								{{ page_teaser_noimage_meta }}
-							</div>
+						<div class="col-sm-8">
+							{{ page_teaser_text_meta }}
 						</div>
+					</div>
 
 
-						<div class="row">
-							<div class="col-sm-3">
-								{{ heading3a_output }}
-								{{ page_teaser_notitle_extratext_output }}
-							</div>
-							<div class="col-sm-3">
-								{{ heading3b_output }}
-								{{ page_teaser_notitle_noimage_output }}
-							</div>
-							<div class="col-sm-3">
-								{{ heading3c_output }}
-								{{ page_teaser_notitle_noimage_norightlink_output }}
-							</div>
-							<div class="col-sm-3">
-								{{ heading3d_output }}
-								{{ page_teaser_notitle_noimage_textrightlink_output }}
-							</div>
+					<div class="row">
+						<div class="col-sm-4">
+							{{ page_teaser_output }}
 						</div>
-
-						{{ page_teaser_wide }}
-						{{ page_teaser_wide_wideimage }}
-
-
-
-						<div class="row">
-							<div class="col-sm-4">
-								{{ page_teaser_paper_output }}
-							</div>
-							<div class="col-sm-8">
-								{{ page_teaser_paper_meta }}
-							</div>
+						<div class="col-sm-4">
+							{{ page_teaser_noimage_output }}
 						</div>
-
-
-
-						<div class="row">
-							<div class="col-sm-4">
-								{{ indicator_output }}
-							</div>
-							<div class="col-sm-8">
-								{{ indicator_meta }}
-							</div>
+						<div class="col-sm-4">
+							{{ page_teaser_meta }}
+							{{ page_teaser_noimage_meta }}
 						</div>
-
-						{{ page_teaser_flat }}
-
-						{{ readmorelink }}
-						{{ readmorelink_right }}
-						{{ readmorelink_rightarrow }}
-						{{ readmorelink_download }}
-
-						{{ horizontal_ruler }}
-						{{ horizontal_ruler_light }}
-
-						{{ download_link }}
-						{{ link_list }}
-
-						{{ table }}
-						{{ table_limit }}
-						{{ table_pagination }}
-
-						{{ table_selector }}
-						{{ table_pagination_filter }}
+					</div>
 
 
-						{{ expandable }}
-						{{ expandable_light }}
+					<div class="row">
+						<div class="col-sm-3">
+							{{ heading3a_output }}
+							{{ page_teaser_notitle_extratext_output }}
+						</div>
+						<div class="col-sm-3">
+							{{ heading3b_output }}
+							{{ page_teaser_notitle_noimage_output }}
+						</div>
+						<div class="col-sm-3">
+							{{ heading3c_output }}
+							{{ page_teaser_notitle_noimage_norightlink_output }}
+						</div>
+						<div class="col-sm-3">
+							{{ heading3d_output }}
+							{{ page_teaser_notitle_noimage_textrightlink_output }}
+						</div>
+					</div>
+
+					{{ page_teaser_wide }}
+					{{ page_teaser_wide_wideimage }}
 
 
-						{{ footer_meta }}
 
-					</div><!-- content-container-inner -->
-				</div><!-- content-container-border -->
-			</div><!-- container -->
-		</div><!-- content-container -->
+					<div class="row">
+						<div class="col-sm-4">
+							{{ page_teaser_paper_output }}
+						</div>
+						<div class="col-sm-8">
+							{{ page_teaser_paper_meta }}
+						</div>
+					</div>
+
+
+
+					<div class="row">
+						<div class="col-sm-4">
+							{{ indicator_output }}
+						</div>
+						<div class="col-sm-8">
+							{{ indicator_meta }}
+						</div>
+					</div>
+
+					{{ page_teaser_flat }}
+
+					{{ readmorelink }}
+					{{ readmorelink_right }}
+					{{ readmorelink_rightarrow }}
+					{{ readmorelink_download }}
+
+					{{ horizontal_ruler }}
+					{{ horizontal_ruler_light }}
+
+					{{ download_link }}
+					{{ download_link_longtext }}
+					{{ link_list }}
+
+					{{ pagination }}
+
+					{{ table }}
+					{{ table_limit }}
+					{{ table_pagination }}
+
+					{{ table_selector }}
+					{{ table_pagination_filter }}
+
+
+					{{ expandable }}
+					{{ expandable_light }}
+
+
+					{{ footer_meta }}
+
+				</div><!-- content-container-inner -->
+			</div><!-- content-container-border -->
+		</div><!-- container content-container -->
 
 		<br>
 		<br>
 
-	</div>
+	</div><!-- background-container -->
 
 	{{ footer_output }}
 

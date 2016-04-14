@@ -12,83 +12,60 @@
 	{% if searchvalue %}
 		data-filter="{{ searchvalue }}"
 	{% endif %}>
-	<table class="table table-striped">
-		<thead>
-			{% if pagination %}
-				<tr class="widget-table-pagination">
-					<td colspan="42" class="text-center"><!-- 42 for da lulz -->
-					<div class="widget-table-pagination-prevbutton pull-left{% if pagination.activepage == 1 %} disabled{% endif %}">
-						<i class="fa fa-chevron-left"></i>
-						Previous
-					</div>
-					{% for pagenumber in pagination.pagenumbers %}
-						<a href="#" class="widget-table-pagination-pagelink{% if forloop.counter == pagination.activepage %} widget-table-pagination-pagelink-active{% endif %}"{% if pagenumber.invisible %} style="display:none;"{% endif %} data-pagenumber="{{ pagenumber.number }}">
-							{{ pagenumber.number }}
-						</a>
-					{% endfor %}
-					<div class="widget-table-pagination-nextbutton pull-right{% if pagination.activepage == pagination.numberofpages %} disabled{% endif %}">
-						Next
-						<i class="fa fa-chevron-right"></i>
-					</div>
-					<div class="clearfix"></div>
-					</td>
-				</tr>
-			{% endif %}
-			{% if head %}
-			<tr>
-				{% for col in head.cols %}
-					<th>{{ col.text }}</th>
-				{% endfor %}
-			</tr>
-			{% endif %}
-		</thead>
-		<tbody>
-			{% for row in body.rows %}
-				<tr{% if row.invisible %} style="display:none;"{% endif %}>
-					{% for col in row.cols %}
-						<td>
-							{% for text in col.texts %}
-								<div class="widget-table-col-line">
-									{{ text|safe }}
-								</div>
-							{% endfor %}
+		<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				{% if pagination %}
+					<tr>
+						<td colspan="42" class="text-center"><!-- 42 for da lulz -->
+							{% include "widgets/pagination.html" %}
 						</td>
+					</tr>
+				{% endif %}
+				{% if head %}
+				<tr class="widget-table-headings">
+					{% for col in head.cols %}
+						<th>{{ col.text }}</th>
 					{% endfor %}
 				</tr>
-			{% endfor %}
-		</tbody>
-		<tfoot>
-		{% if showalllink %}
-				<tr class="widget-table-showmore-button">
-					<td colspan="42"><!-- 42 for da lulz -->
-						{{ showalllink.buttontext|safe }}
+				{% endif %}
+			</thead>
+			<tbody>
+				{% for row in body.rows %}
+					<tr{% if row.invisible %} style="display:none;"{% endif %}>
+						{% for col in row.cols %}
+							<td>
+								{% for text in col.texts %}
+									<div class="widget-table-col-line">
+										{{ text|safe }}
+									</div>
+								{% endfor %}
+							</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</tbody>
+			<tfoot>
+				{% if showalllink %}
+						<tr class="widget-table-showmore-button">
+							<td colspan="42"><!-- 42 for da lulz -->
+								{{ showalllink.buttontext|safe }}
+							</td>
+						</tr>
+				{% endif %}
+				<tr class="widget-table-noentriesmessage">
+					<td colspan="42" class="text-center"{% if not norowvisible %} style="display:none;"{% endif %}><!-- 42 for da lulz -->
+						No entries with these filters.
 					</td>
 				</tr>
-		{% endif %}
-		<tr class="widget-table-noentriesmessage">
-			<td colspan="42" class="text-center"{% if not norowvisible %} style="display:none;"{% endif %}><!-- 42 for da lulz -->
-				No entries with these filters.
-			</td>
-		</tr>
-		{% if pagination %}
-			<tr class="widget-table-pagination">
-				<td colspan="42" class="text-center"><!-- 42 for da lulz -->
-				<div class="widget-table-pagination-prevbutton pull-left{% if pagination.activepage == 1 %} disabled{% endif %}">
-					<i class="fa fa-chevron-left"></i>
-					Previous
-				</div>
-				{% for pagenumber in pagination.pagenumbers %}
-					<a href="#" class="widget-table-pagination-pagelink{% if forloop.counter == pagination.activepage %} widget-table-pagination-pagelink-active{% endif %}"{% if pagenumber.invisible %} style="display:none;"{% endif %} data-pagenumber="{{ pagenumber.number }}">
-						{{ pagenumber.number }}
-					</a>
-				{% endfor %}
-				<div class="widget-table-pagination-nextbutton pull-right{% if pagination.activepage == pagination.numberofpages %} disabled{% endif %}">
-					Next
-					<i class="fa fa-chevron-right"></i>
-				</div>
-				<div class="clearfix"></div>
-				</td>
-			</tr>
-		{% endif %}
-	</table>
+				{% if pagination %}
+					<tr>
+						<td colspan="42" class="text-center"><!-- 42 for da lulz -->
+							{% include "widgets/pagination.html" %}
+						</td>
+					</tr>
+				{% endif %}
+			</tfoot>
+		</table>
+	</div><!-- table-responsive -->
 </div><!-- widget-table -->

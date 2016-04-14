@@ -7,29 +7,20 @@
 {% endblock %}
 
 {% block content %}
-	<!-- <div class="backgroundimage" style="background-image: url({% static 'images/mountain-range.jpg' %});"> -->
 
-		<div class="content-container">
-			<div class="container" style="background-color: white;">
-				<!-- <div class="content-container-border"> -->
-					<div class="content-container-inner">
+	<div class="container">
+		<br><br>
 
-					<br>
-					<br>
-					<br>
-
-						{{ table_selector_output }}
-						{{ table_pagination_filter_output }}
-
-
-					</div>
-				<!-- </div> -->
-			</div>
-		</div>
-
+		{{ breadcrumb_output }}
+		{{ heading2_output }}
 		<br>
-		<br>
-	<!-- </div> -->
+		{{ heading3_output }}
+
+		{{ table_selector_output }}
+		{{ table_pagination_filter_output }}
+
+		<br><br>
+	</div>
 {% endblock %}
 
 {% block footer %}

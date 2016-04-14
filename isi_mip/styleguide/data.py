@@ -66,10 +66,10 @@ data = {
         'template': 'widgets/breadcrumb.html',
         'context': {
             'links': [
-                {'url': 'http://google.de', 'text': 'Kontakt'},
-                {'url': 'http://bing.de', 'text': 'Presse'},
-                {'url': 'http://bing.de', 'text': 'Zwischenseite'},
-                {'url': 'http://google.de', 'text': 'Newsletter', 'active': True},
+                {'href': 'http://google.de', 'text': 'Kontakt'},
+                {'href': 'http://bing.de', 'text': 'Presse'},
+                {'href': 'http://bing.de', 'text': 'Zwischenseite'},
+                {'text': 'Newsletter' },
             ],
         },
     },
@@ -368,6 +368,7 @@ data = {
             'date': '8/12/2016',
             'title': 'Impact Models in an industrialized semipermeable meta world',
             'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'href': 'http://sinnwerkstatt.com/',
         },
     },
 
@@ -380,6 +381,18 @@ data = {
                 'text': 'Download',
             },
             'description': 'Download PDF Mission / Implementation',
+            'fontawesome': 'file-pdf-o',
+        },
+    },
+    'download_link_longtext': {
+        'name': 'Download Link',
+        'template': 'widgets/download-link.html',
+        'context': {
+            'button': {
+                'href': 'https://www.mozilla.org/de/firefox/new/',
+                'text': 'Download this file til you get enough',
+            },
+            'description': 'Download PDF Mission / Implementation the documentation of the life, universum and everything else in between just for the lulz and fun.',
             'fontawesome': 'file-pdf-o',
         },
     },
@@ -459,6 +472,23 @@ data = {
                 {'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de',},
                 {'text': 'Die neue Veröffentlichung', 'href': 'http://google.de',},
             ],
+        },
+    },
+
+    'pagination': {
+        'name': 'Pagination',
+        'template': 'widgets/pagination.html',
+        'context': {
+            'pagination': {
+                'numberofpages': 3,  # number of pages with current filters
+                'pagenumbers': [
+                    {'number': 1, 'invisible': False,},
+                    {'number': 2, 'invisible': False,},
+                    {'number': 3, 'invisible': False,},
+                    {'number': 4, 'invisible': True,},
+                ],
+                'activepage': 2,  # set to something between 1 and numberofpages
+            },
         },
     },
 
