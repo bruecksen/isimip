@@ -221,6 +221,7 @@ class GettingStartedPage(RoutablePageWithDefault):
     content = StreamField([
         ('input_data', InputDataBlock()),
         ('contact', ContactsBlock()),
+        ('news', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),

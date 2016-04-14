@@ -1,0 +1,10 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+    <div class="row">
+        {% for sector in sectors %}
+            <div class="col-sm-3">
+                {% include 'widgets/page-teaser.html' with image=sector.image title=sector.name description=sector.text %}
+            </div>
+        {% endfor %}
+    </div>
+{#    {% include 'widgets/read-more-link.html' with align='right' text='See all' url=slug %}#}

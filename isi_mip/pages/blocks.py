@@ -201,13 +201,38 @@ class ContactBlock(StructBlock):
     website = URLBlock()
     email = EmailBlock()
 
+
 class SectorBlock(StructBlock):
     name = CharBlock()
+    image = ImageBlock()
     contacts = ListBlock(ContactBlock)
 
 class ContactsBlock(StructBlock):
     description = RichTextBlock()
     sectors = ListBlock(SectorBlock)
+    class Meta:
+        template = 'blocks/contacts_block.html'
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['sectors'] = []
+        for sector in value.get('sectors'):
+            sector_dict = {'name': sector.get('name'),
+                           'text': ""
+                           }
+            for contact in sector.get('contacts'):
+                n,w,e = contact.get('name'), contact.get('website'), contact.get('email')
+                sector_dict['text'] += "{n}<br/><a target='_blank' href='{w}'>Homepage</a><br/>" \
+                                              "<a target='_blank' href='mailto:{e}'>{e}</a><br/><br/>".format(n=n,w=w,e=e)
+            try:
+                sector_dict['image'] = {
+                    'url': sector.get('image').get_rendition('max-1200x1200').url,
+                    'name': sector.get('image').title
+                }
+            except:
+                pass
+
+            context['sectors'] += [sector_dict]
+        return context
 
 
 CONTENT_BLOCKS = BASE_BLOCKS + [
