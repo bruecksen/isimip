@@ -9,10 +9,11 @@ def breadcrumb(context, page=None, **kwargs):
     page = page or context.get('page')
     if not page:
         return ''
-    depth = page.get_depth()
-    if depth <= 3:
-        return ''
-    children = page.get_ancestors().live().in_menu().specific()
+    # depth = page.get_depth()
+    # if depth <= 3:
+    #     return ''
+    children = page.get_ancestors().live() #.in_menu().specific()
+    # print(page.get_ancestors().live())
     links = []
     for child in children:
         active = False

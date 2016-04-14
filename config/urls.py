@@ -29,7 +29,6 @@ urlpatterns = [
     # url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
     # url(r'^search/', include(wagtailsearch_urls)),
 
-
     url(r'^styleguide/', include("isi_mip.styleguide.urls", namespace="styleguide")),
 
     url(r'^admin/', include(admin.site.urls)),

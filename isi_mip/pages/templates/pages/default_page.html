@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% load static header footer %}
+{% load static header footer breadcrumb %}
 
-\{% block header %}
+{% block header %}
 	{% header %}
 {% endblock %}
 
@@ -11,6 +11,8 @@
 			<div class="container" style="background-color: white;">
 				<div class="content-container-border">
 					<div class="content-container-inner">
+                        {% breadcrumb %}
+                        {% include 'widgets/heading1.html' with text=page.title %}
                         {{ page.content }}
 					</div>
 				</div>

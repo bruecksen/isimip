@@ -135,13 +135,17 @@ def  create_structure(apps, schema_editor):
 
     ### BLOG
     from django.utils.text import slugify
-    for blogtitle in ['News','Input Data Changelog', 'Impact Models Changelog', 'Newsletter', 'Output Data Changelog']:
-        blogindexpage = RichPage(apps, 'blog.BlogIndexPage', 'blog', 'blogindexpage')
+    for wohinpage, blogtitle in [(homepage,'News'),
+                      (gettingstartedpage, 'Input Data Changelog'),
+                      (gettingstartedpage, 'Newsletter'),
+                      (impactmodelspage, 'Impact Models Changelog' ),
+                      (outputdatapage, 'Output Data Changelog')]:
+        blogindexpage = RichPage(apps, 'pages.BlogIndexPage', 'pages', 'blogindexpage')
         blogindexpage.page(blogtitle, slugify(blogtitle))
-        ruhtpage.add_child(blogindexpage)
+        wohinpage.add_child(blogindexpage)
 
         for i in range(5):
-            blogpage = RichPage(apps, 'blog.BlogPage', 'blog', 'blogpage')
+            blogpage = RichPage(apps, 'pages.BlogPage', 'pages', 'blogpage')
             header = loremi(3,"w",True).title()
             blogpage.page(header, slugify(header))
             blogpage.page.body = loremi(5,'b',True)

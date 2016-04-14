@@ -1,5 +1,5 @@
-from blog.models import BlogIndexPage
-from blog.models import BlogPage
+from blog.models import BlogIndexPage as _BlogIndexPage
+from blog.models import BlogPage as _BlogPage
 from django.shortcuts import render
 from django.template.response import TemplateResponse
 from modelcluster.fields import ParentalKey
@@ -7,7 +7,6 @@ from modelcluster.models import ClusterableModel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.wagtailroutablepage.models import route, RoutablePage
 from wagtail.wagtailadmin.edit_handlers import *
-from wagtail.wagtailcore.blocks import ListBlock
 from wagtail.wagtailcore.blocks.field_block import RichTextBlock
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
@@ -17,10 +16,55 @@ from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
 from isi_mip.climatemodels.models import ImpactModel, InputData
-from isi_mip.contrib.blocks import BlogBlock
-from isi_mip.pages.blocks import SmallTeaserBlock, PaperBlock, LinkBlock, FAQBlock, BigTeaserBlock, RowBlock, \
+from isi_mip.contrib.blocks import BlogBlock, smart_truncate
+from isi_mip.pages.blocks import SmallTeaserBlock, PaperBlock, LinkBlock, BigTeaserBlock, RowBlock, \
     IsiNumbersBlock, TwitterBlock, Columns1To1Block, ImageBlock, PDFBlock, ContactsBlock, FAQsBlock, Columns1To2Block, \
     Columns2To1Block
+
+
+class BlogPage(_BlogPage):
+    parent_page_types = ['pages.BlogIndexPage']
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['blog'] = self
+
+        try:
+            rendition = self.header_image.get_rendition('max-800x800')
+            context['image'] = {'url': rendition.url, 'name': self.header_image.title}
+        except:
+            pass
+
+        return context
+
+
+class BlogIndexPage(_BlogIndexPage):
+    subpage_types = ['pages.BlogPage']
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+
+        entries = self.blogs
+        context['title'] = self.title
+
+        context['entries'] = []
+        for entry in entries:
+            entry_context = {
+                'date': entry.date,
+                'href': entry.slug,
+                'description': smart_truncate(entry.body, 300, 350),
+                'title': entry.title,
+                'arrow_right_link': True
+            }
+            try:
+                rendition = entry.header_image.get_rendition('max-800x800')
+                entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
+                entry_context['description'] = smart_truncate(entry.body, 0, 100)
+            except:
+                pass
+
+            context['entries'] += [entry_context]
+        return context
 
 
 class RoutablePageWithDefault(RoutablePage):
@@ -97,15 +141,51 @@ class HomePage(RoutablePageWithDefault):
     @route(r'^blog/$')
     @route(r'^blog/(?P<slug>\w+)/$')
     def blog(self, request, slug=None):
+        context = {}
         if slug:
-            blogs = BlogIndexPage.objects.get(slug=slug).blogs
+            entries = BlogIndexPage.objects.get(slug=slug).blogs
+            context['title'] = slug.title()
         else:
-            blogs = BlogPage.objects.all().order_by('-date')
+            entries = BlogPage.objects.all().order_by('-date')
+            context['title'] = 'News'
         template = 'pages/blog_list.html'
-        context = {'entries':blogs}
+        context['entries'] = []
+        for entry in entries:
+            entry_context = {
+                'date': entry.date,
+                'href': entry.id,
+                'description': smart_truncate(entry.body, 300, 350),
+                'title': entry.title,
+                'arrow_right_link': True
+            }
+            try:
+                rendition = entry.header_image.get_rendition('max-800x800')
+                entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
+                entry_context['description'] = smart_truncate(entry.body, 0, 100)
+            except:
+                pass
+
+            context['entries'] += [entry_context]
+
         return render(request, template, context)
 
-    # @route(r'^ical/$')
+    @route(r'^blog/(?P<slug>\w*)/(?P<id>\d+)/$')
+    def blog_detail(self, request, id, slug=None):
+        template = 'pages/blog_detail.html'
+        entry = BlogPage.objects.get(id=id)
+        context = {'blog': entry}
+
+        try:
+            rendition = entry.header_image.get_rendition('max-800x800')
+            context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
+        except:
+            pass
+
+        return render(request, template, context)
+
+
+
+        # @route(r'^ical/$')
     # def ical(self, request):
     #     filename = "event.ics"
     #     from datetime import datetime
@@ -136,6 +216,7 @@ class AboutPage(Page):
 
 
 class GettingStartedPage(RoutablePageWithDefault):
+    template = 'pages/default_page.html'
     parent_page_types = [HomePage]
     content = StreamField([
         ('input_data', InputDataBlock()),
@@ -157,7 +238,7 @@ class ImpactModelsPage(RoutablePageWithDefault):
     parent_page_types = [HomePage]
     content = StreamField([
         ('impact_models', ImpactModelsBlock()),
-        ('news', BlogBlock(template='widgets/flat_blog_block.html')),
+        ('news', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
@@ -296,4 +377,3 @@ class FormPage(AbstractRegisterFormPage):
 
     content_panels = [StreamFieldPanel('top_content')] + AbstractRegisterFormPage.content_panels + \
                      [StreamFieldPanel('bottom_content')]
-

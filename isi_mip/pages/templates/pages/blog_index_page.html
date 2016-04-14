@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div>
+        <div class="content-container">
+            <div class="container" style="background-color: white;">
+                <div class="content-container-border">
+                    <div class="content-container-inner">
+                        {% include 'widgets/heading3.html' with text=title %}
+
+                        <div class="row">
+                            {% for entry in entries %}
+                                <div class="col-sm-3">
+                                    {% include "widgets/page-teaser.html" with date=entry.date image=entry.image href=entry.href text=entry.text title=entry.title description=entry.description arrow_right_link=True%}
+                                </div>
+                                {% cycle '' '' '' '<div class="clearfix"></div><div class="widget-horizontal-ruler"><hr></div>' %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+    </div>
+{% endblock %}

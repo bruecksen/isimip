@@ -61,7 +61,7 @@ class BlogBlock(blocks.StructBlock):
     class Meta:
         classname = 'blog'
         icon = 'image'
-        template = 'widgets/blog_block.html'
+        template = 'blocks/blog_block.html'
 
     def get_context(self, value):
         context = super().get_context(value)
@@ -71,7 +71,7 @@ class BlogBlock(blocks.StructBlock):
 
         entries = blog_index.blogs if blog_index else BlogPage.objects.all().order_by('-date')
         entries = entries[:entry_count]
-        context['teaser_template'] = 'widgets/page-teaser.html'
+        # context['teaser_template'] = 'widgets/page-teaser.html'
         context['count'] = entry_count
         context['title'] = title
         context['slug'] = blog_index.slug if blog_index else ''
@@ -83,16 +83,14 @@ class BlogBlock(blocks.StructBlock):
             entry_context = {
                 'date': entry.date,
                 'href': entry.url,
-                'text': {
-                    'description': smart_truncate(entry.body, 300, 350),
-                    'title': entry.title,
-                    'arrow_right_link': True
-                }
+                'description': smart_truncate(entry.body, 300, 350),
+                'title': entry.title,
+                'arrow_right_link': True
             }
             try:
                 rendition = entry.header_image.get_rendition('max-800x800')
                 entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
-                entry_context['text']['description'] = smart_truncate(entry.body, 0, 100)
+                entry_context['description'] = smart_truncate(entry.body, 0, 100)
             except:
                 pass
 

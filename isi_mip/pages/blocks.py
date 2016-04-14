@@ -14,7 +14,7 @@ BASE_BLOCKS = [
 class RowBlock(StreamBlock):
     class Meta:
         icon = 'horizontalrule'
-        template = 'wrapper/row_block.html'
+        template = 'blocks/row_block.html'
 
 
 class ImageBlock(ImageChooserBlock):
@@ -37,7 +37,7 @@ class SmallTeaserBlock(StructBlock):
 
     class Meta:
         #TODO: icon = 'image'
-        template = 'widgets/small_teaser_block.html'
+        template = 'blocks/small_teaser_block.html'
 
 
     def get_context(self, value):
@@ -47,10 +47,8 @@ class SmallTeaserBlock(StructBlock):
         rendition = image.get_rendition('max-800x800')
         context['image'] = {'url': rendition.url, 'name': image.title}
         context['href'] = value.get('link').url
-        context['text'] = {
-            'description': value.get('text'),
-            'arrow_right_link': True
-        }
+        context['description'] = value.get('text')
+        context['arrow_right_link'] = True
         return context
 
 
@@ -67,7 +65,7 @@ class BigTeaserBlock(StructBlock):
 
     class Meta:
         #TODO: icon = 'image'
-        template = 'widgets/bigteaser.html'
+        template = 'blocks/big_teaser_block.html'
 
     def __init__(self, wideimage=False, local_blocks=None, **kwargs):
         super().__init__(local_blocks=local_blocks, **kwargs)
@@ -104,7 +102,7 @@ class IsiNumbersBlock(StructBlock):
     number2 = CharBlock()
     class Meta:
         icon = 'form'
-        template = 'wrapper/isi_numbers_block.html'
+        template = 'blocks/isi_numbers_block.html'
 
 
 class TwitterBlock(StructBlock):
@@ -113,7 +111,7 @@ class TwitterBlock(StructBlock):
     tweet_limit = CharBlock(required=True, max_length=2)
 
     class Meta:
-        template = 'widgets/twitter_block.html'
+        template = 'blocks/twitter_block.html'
 
 ############### ABOUT
 
