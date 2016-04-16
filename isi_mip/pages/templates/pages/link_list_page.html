@@ -1,14 +1,8 @@
-{% extends 'base.html' %}
+{% extends "pages/default_page.html" %}
 
-{% block content_container %}
-    {{ page.title }}
-
-    <div class="content-container">
-        <div class="container">
-            {% block content %}
-                {{ page.links }}
-            {% endblock %}
-        </div><!-- container -->
-        <br><br>
-    </div><!-- content-container -->
+{% block content %}
+    {% for link in page.links %}
+        {{ link }}
+        {% include 'widgets/horizontal-ruler.html' %}
+    {% endfor %}
 {% endblock %}

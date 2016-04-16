@@ -1,37 +1,15 @@
-{% extends "base.html" %}
-{% load static header footer wagtailcore_tags crispy_forms_tags %}
+{% extends "pages/default_page.html" %}
 
-{% block header %}
-	{% header %}
-{% endblock %}
 
 {% block content %}
-	<div>
-		<div class="content-container">
-			<div class="container" style="background-color: white;">
-				<div class="content-container-border">
-					<div class="content-container-inner">
-                            <div class="default-page-content">
-        <h1 class="page-title">{{ page.title }}</h1>
-        {{ page.top_content }}
-        <form action="{% pageurl page %}" method="POST">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <input type="submit" class="btn btn-primary" value="Absenden">
-        </form>
-        <br>
-        {{ page.bottom_content }}
-    </div>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		<br>
-		<br>
-	</div>
-{% endblock %}
-
-{% block footer %}
-{% footer %}
+    <h1 class="page-title">{{ page.title }}</h1>
+    {{ page.top_content }}
+    <form action="{% pageurl page %}" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-primary" value="Absenden">
+    </form>
+    <br>
+    {{ page.bottom_content }}
 {% endblock %}

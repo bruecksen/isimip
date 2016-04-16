@@ -59,7 +59,7 @@ class XLSImport:
             x = SocioEconomicInputVariables.objects.get_or_create(name=vari)[0]
             general.socioeconomic_input_variables.add(x)
         for vari in zeile[17].split(','):
-            x = InputData.objects.get_or_create(data_set=vari)[0]
+            x = InputData.objects.get_or_create(data_set=vari.strip())[0]
             general.climate_data_sets.add(x)
 
         general.soil_dataset = zeile[16]

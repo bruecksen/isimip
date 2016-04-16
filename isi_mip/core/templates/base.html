@@ -9,18 +9,17 @@
     <meta name="author" content="">
 
     <meta property="og:description" content="ISI-MIP"/>
-    <meta property="og:image" content="http://{{ request.get_host }}{% static 'images/isimip-facebook-teaser.jpg' %}"/>
+    <meta property="og:image" content="{% static 'images/og-image.png' %}"/>
     <meta property="og:locale" content="de"/>
     <meta property="og:site_name" content="ISI-MIP"/>
     <meta property="og:title" content="ISI-MIP"/>
     <meta property="og:url" content=""/>
-    <link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon"/>
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/images/apple-touch-icon-114x114-precomposed.png"/>
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon"/>
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'images/apple-touch-icon-114x114-precomposed.png' %}"/>
 
     {% block css %}
         <link rel="stylesheet" href="{% static 'vendor/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'vendor/css/font-awesome.min.css' %}">
-
         <link rel="stylesheet/less" type="text/css" href="{% static 'css/isi_mip.less' %}"/>
         <script src="{% static 'vendor/js/less.min.js' %}"></script>
     {% endblock %}
@@ -31,7 +30,6 @@
 
 {% block header %}
     {% header %}
-{#    {% carousel %}#}
 {% endblock %}
 
 
@@ -42,7 +40,6 @@
         {% endif %}
     </div>
 {% endblock %}
-
 
 {% block content_container %}
     {% block content %}
@@ -63,28 +60,6 @@
     <script src="{% static 'vendor/js/jquery-2.2.1.min.js' %}"></script>
     <script src="{% static 'vendor/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/isi_mip.js' %}"></script>
-{#    {% if not debug %}#}
-{#        <!-- Piwik -->#}
-{#        <script type="text/javascript">#}
-{#            var _paq = _paq || [];#}
-{#            _paq.push(['trackPageView']);#}
-{#            _paq.push(['enableLinkTracking']);#}
-{#            (function () {#}
-{#                var u = "//stats.isi-mip.de/";#}
-{#                _paq.push(['setTrackerUrl', u + 'piwik.php']);#}
-{#                _paq.push(['setSiteId', 1]);#}
-{#                var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];#}
-{#                g.type = 'text/javascript';#}
-{#                g.async = true;#}
-{#                g.defer = true;#}
-{#                g.src = u + 'piwik.js';#}
-{#                s.parentNode.insertBefore(g, s);#}
-{#            })();#}
-{#        </script>#}
-{#        <noscript><p><img src="//stats.isi-mip.de/piwik.php?idsite=1" style="border:0;" alt=""/></p></noscript>#}
-{#        <!-- End Piwik Code -->#}
-{#    {% endif %}#}
 {% endblock %}
-
 </body>
 </html>

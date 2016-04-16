@@ -125,9 +125,8 @@ class PaperBlock(StructBlock):
     link = URLBlock()
 
     class Meta:
-        classname = 'paper'
-        icon = 'doc-full'
-        # template = 'widgets/paper.html'
+        # icon = 'doc-full'
+        template = 'widgets/page-teaser.html'
 
     def get_context(self, value):
         context = super().get_context(value)
@@ -137,11 +136,18 @@ class PaperBlock(StructBlock):
         context['url'] = value.get('link')
         image = value.get('picture')
         if image:
-            rendition = image.get_rendition('max-1200x1200')
+            rendition = image.get_rendition('max-500x500')
             context['image'] = {'url': rendition.url, 'name': image.title}
         context['source'] = {'description': value.get('link'), 'href': value.get('link')}
 
         return context
+
+
+class PapersBlock(StructBlock):
+    title = CharBlock()
+    papers = ListBlock(PaperBlock)
+    class Meta:
+        template = 'blocks/outcomes_block.html'
 
 
 class LinkBlock(StructBlock):
@@ -157,14 +163,13 @@ class LinkBlock(StructBlock):
 
     def get_context(self, value):
         context = super().get_context(value)
-        context['text'] = {
-            'arrow_right_link': True,
-            'title': value.get('title'),
-            'description': value.get('text'),
-        }
+        context['arrow_right_link'] = True
+        context['title'] = value.get('title')
+        context['description'] = value.get('text')
+
         image = value.get('picture')
         if image:
-            rendition = image.get_rendition('max-1200x1200')
+            rendition = image.get_rendition('max-250x250')
             context['image'] = {'url': rendition.url, 'name': image.title}
         if value.get('link'):
             context['href'] = value.get('link')
@@ -204,7 +209,7 @@ class ContactBlock(StructBlock):
 
 class SectorBlock(StructBlock):
     name = CharBlock()
-    image = ImageBlock()
+    image = ImageBlock(required=False)
     contacts = ListBlock(ContactBlock)
 
 class ContactsBlock(StructBlock):

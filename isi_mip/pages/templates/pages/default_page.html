@@ -2,28 +2,25 @@
 {% load static header footer breadcrumb %}
 
 {% block header %}
-	{% header %}
+    {% header %}
 {% endblock %}
 
-{% block content %}
-	<div>
-		<div class="content-container">
-			<div class="container" style="background-color: white;">
-				<div class="content-container-border">
-					<div class="content-container-inner">
-                        {% breadcrumb %}
-                        {% include 'widgets/heading1.html' with text=page.title %}
+{% block content_container %}
+    <div class="background-container">
+        <div class="content-container container">
+            <div class="content-container-border">
+                <div class="content-container-inner">
+                    {% breadcrumb %}
+                    {% include 'widgets/heading1.html' with text=page.title %}
+                    {% block content %}
                         {{ page.content }}
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<br>
-		<br>
-	</div>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block footer %}
-{% footer %}
+    {% footer %}
 {% endblock %}

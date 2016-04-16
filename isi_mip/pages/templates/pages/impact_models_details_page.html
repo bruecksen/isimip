@@ -1,20 +1,6 @@
-{% extends 'base.html' %}
-{% load breadcrumb %}
+{% extends 'pages/default_page.html' %}
 {% block content %}
-    <div class="backgroundimage">
-		<div class="content-container">
-			<div class="container" style="background-color: white;">
-				<div class="content-container-border">
-					<div class="content-container-inner">
-                            {% breadcrumb %}
-                            {% include 'widgets/heading1.html' with text='Impact Model Details' %}
-                            Intro Text unde omnis iste natus error sit voluptatem accusantium totam.<br/>
-                            {% include "widgets/expandable.html" %}
-					</div>
-				</div>
-			</div>
-		</div>
-		<br>
-		<br>
-	</div>
+    {% include 'widgets/heading1.html' with text='Impact Model Details' %}
+    TODO THIS IS STATIC Intro Text unde omnis iste natus error sit voluptatem accusantium totam.<br/>
+    {% include "widgets/expandable.html" %}
 {% endblock %}

@@ -1,0 +1,17 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+    {% include 'widgets/heading3.html' with text=value.title %}
+    <div class="row">
+    {% for paper in value.papers %}
+        <div class="col-sm-3">
+        {{ paper }}
+        </div>
+        {% cycle '' '' '' '<div class="clearfix"></div><div class="widget-horizontal-ruler"><hr></div>' %}
+    {% endfor %}
+{#        {% for paper in papers %}#}
+{#            <div class="col-sm-3">#}
+{#                {% include 'widgets/page-teaser.html' with image=sector.image title=sector.name description=sector.text %}#}
+{#            </div>#}
+{#            {% cycle '' '' '' '<div class="clearfix"></div><div class="widget-horizontal-ruler"><hr></div>' %}#}
+{#        {% endfor %}#}
+    </div>
+{#    {% include 'widgets/read-more-link.html' with align='right' text='See all' url=slug %}#}

@@ -1,25 +1,20 @@
 from blog.models import BlogIndexPage as _BlogIndexPage
 from blog.models import BlogPage as _BlogPage
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.wagtailroutablepage.models import route, RoutablePage
 from wagtail.wagtailadmin.edit_handlers import *
-from wagtail.wagtailcore.blocks.field_block import RichTextBlock
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
-# from wagtailcaptcha.models import WagtailCaptchaEmailForm
-
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
-from isi_mip.pages.blocks import SmallTeaserBlock, PaperBlock, LinkBlock, BigTeaserBlock, RowBlock, \
-    IsiNumbersBlock, TwitterBlock, Columns1To1Block, ImageBlock, PDFBlock, ContactsBlock, FAQsBlock, Columns1To2Block, \
-    Columns2To1Block
+from isi_mip.pages.blocks import *
 
 
 class BlogPage(_BlogPage):
@@ -101,11 +96,11 @@ class HomePage(RoutablePageWithDefault):
         ('row', RowBlock([
             ('teaser', SmallTeaserBlock()),
             ('bigteaser', BigTeaserBlock(wideimage=True)),
-            ('news', BlogBlock()),
+            ('blog', BlogBlock()),
             ('numbers', IsiNumbersBlock()),
             ('twitter', TwitterBlock()),
-            ])
-        )
+        ])
+         )
     ])
 
     content_panels = Page.content_panels + [
@@ -184,20 +179,6 @@ class HomePage(RoutablePageWithDefault):
         return render(request, template, context)
 
 
-
-        # @route(r'^ical/$')
-    # def ical(self, request):
-    #     filename = "event.ics"
-    #     from datetime import datetime
-    #     event = Event()
-    #     event.add('summary', 'Python meeting about calendaring')
-    #     event.add('dtstart', datetime(2005, 4, 4, 10, 0, 0))
-    #     event['location'] = vText('Odense, Denmark')
-    #     response = HttpResponse(event.to_ical(), content_type='text/calendar')
-    #     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-    #     return response
-
-
 class AboutPage(Page):
     content = StreamField([
         ('columns_1_to_1', Columns1To1Block()),
@@ -221,31 +202,59 @@ class GettingStartedPage(RoutablePageWithDefault):
     content = StreamField([
         ('input_data', InputDataBlock()),
         ('contact', ContactsBlock()),
-        ('news', BlogBlock(template='blocks/flat_blog_block.html')),
+        ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
 
-    @route(r'^details/(\d+)/$')
+    @route(r'^details/(?P<id>\w+)/$')
     def details(self, request, id):
-        inda = InputData.objects.get(id=id)
+        data = InputData.objects.get(data_set=id)
         template = 'pages/input_data_details_page.html'
-        context = {'inda': inda}
+        data.caveats = 'CAVEATS' # TODO: doesnt exist yet
+        data.scenario = 'SCENARIO' # TODO: doesnt exist yet
+        data.variables = 'VARS'  # TODO: doesnt exist yet
+
+        # subpage = Page() #self
+        # self.add_child(node=subpage)
+        self.title = 'Input Data Set: %s' % data.data_set
+        # x = Page()
+        # x.title = 'Input Data Set: %s' % data.data_set
+        # self.add_child(instance=x)
+        context = {'page': self,
+                   'description': 'Intro Text unde omnis iste natus error sit voluptatem accusantium totam.', #TODO: THIS IS STATIC
+                   'list': [
+                       {
+                           'notoggle': True,
+                           'opened': True,
+                           # 'term': 'Multiple definitions', # TODO: Tom schau mal hier.
+                           'definitions': [
+                               {'text': 'Data Type: %s' % data.data_type},
+                               {'text': 'Scenario: %s' % data.scenario},
+                               {'text': 'Phase: %s' % data.phase},
+                               {'text': 'Variables: %s' % data.variables},
+                           ]
+                       },
+                       {'notoggle': True, 'opened': True, 'term': 'Description', 'definitions': [{'text': data.description}]},
+                       {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': [{'text': data.caveats}]},
+                   ]
+                   }
         return render(request, template, context)
 
 
 class ImpactModelsPage(RoutablePageWithDefault):
     parent_page_types = [HomePage]
+    template = 'pages/default_page.html'
     content = StreamField([
         ('impact_models', ImpactModelsBlock()),
-        ('news', BlogBlock(template='blocks/flat_blog_block.html')),
+        ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
 
-    @route(r'^details/(\d+)/$')
+    @route(r'^details/(?P<id>\w+)/$')
     def details(self, request, id):
         im = ImpactModel.objects.get(id=id)
         template = 'pages/impact_models_details_page.html'
@@ -271,24 +280,26 @@ class ImpactModelsPage(RoutablePageWithDefault):
 
         return render(request, template, context)
 
-    # @route(r'^csv/$')
-    # def csv(self, request):
-    #     # Create the HttpResponse object with the appropriate CSV header.
-    #     response = HttpResponse(content_type='text/csv')
-    #     response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
-    #
-    #     writer = csv.writer(response)
-    #     writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
-    #     writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
-    #
-    #     return response
+        # @route(r'^csv/$')
+        # def csv(self, request):
+        #     # Create the HttpResponse object with the appropriate CSV header.
+        #     response = HttpResponse(content_type='text/csv')
+        #     response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+        #
+        #     writer = csv.writer(response)
+        #     writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+        #     writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+        #
+        #     return response
 
 
 
 class OutputDataPage(Page):
+    template = 'pages/default_page.html'
     parent_page_types = [HomePage]
     content = StreamField([
         ('output_data', OutputDataBlock()),
+        ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
@@ -296,15 +307,19 @@ class OutputDataPage(Page):
 
 
 class OutcomesPage(Page):
-    papers = StreamField([
-        ('paper', PaperBlock()),
+    template = 'pages/default_page.html'
+
+    content = StreamField([
+        ('papers', PapersBlock()),
     ])
+
     content_panels = Page.content_panels + [
-        StreamFieldPanel('papers'),
+        StreamFieldPanel('content'),
     ]
 
 
 class FAQPage(Page):
+    template = 'pages/default_page.html'
     content = StreamField([
         ('columns_1_to_1', Columns1To1Block()),
         ('faqs', FAQsBlock()),
@@ -312,9 +327,6 @@ class FAQPage(Page):
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
-
-    template = 'pages/default_page.html'
-
 
 # Footer Pages
 class LinkListPage(Page):
@@ -327,7 +339,9 @@ class LinkListPage(Page):
 
 
 class NewsletterPage(Page):
-    pass
+    def serve(self, request, *args, **kwargs):
+        return redirect('/gettingstarted/newsletter/')
+        # return render(request)
 
 
 class DashboardPage(Page):
@@ -378,3 +392,16 @@ class FormPage(AbstractRegisterFormPage):
 
     content_panels = [StreamFieldPanel('top_content')] + AbstractRegisterFormPage.content_panels + \
                      [StreamFieldPanel('bottom_content')]
+
+
+    # @route(r'^ical/$')
+    # def ical(self, request):
+    #     filename = "event.ics"
+    #     from datetime import datetime
+    #     event = Event()
+    #     event.add('summary', 'Python meeting about calendaring')
+    #     event.add('dtstart', datetime(2005, 4, 4, 10, 0, 0))
+    #     event['location'] = vText('Odense, Denmark')
+    #     response = HttpResponse(event.to_ical(), content_type='text/calendar')
+    #     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+    #     return response

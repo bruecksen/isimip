@@ -18,8 +18,8 @@ class ImpactModelsBlock(StructBlock):
 
         context['tableid'] = 'selectortable'
         context['searchfield'] = {'value': ''}
-        sector_options = [{'value': x} for x in ims.values_list('sector', flat=True).distinct()]
-        cdriver_options = [{'value': x} for x in InputData.objects.values_list('data_set', flat=True).distinct()]
+        sector_options = [{'value': x} for x in ims.values_list('sector', flat=True).distinct().order_by('sector')]
+        cdriver_options = [{'value': x} for x in InputData.objects.values_list('data_set', flat=True).distinct().order_by('data_set')]
         context['selectors'] = [
             {'colnumber': '2',  'all_value': 'Sector', 'options': sector_options},
             {'colnumber': '3', 'all_value': 'Climate Driver', 'options': cdriver_options},
@@ -48,8 +48,7 @@ class ImpactModelsBlock(StructBlock):
             cpeople = ["%s <a href='mailto:%s'>%s</a>" % (x.name, x.email, x.email) for x in imodel.contactperson_set.all()]
             values = [["<a href='details/%d/'>%s</a>" % (imodel.id, imodel.name)], [imodel.sector]]
             values += [datasets] + [["<br/>".join(cpeople)]]
-            print([{'texts': [x]} for x in values])
-            # import ipdb; ipdb.set_trace()
+
             row = {
                 'invisible': i >= value.get('rows_per_page'),
                 'cols': [{'texts': x} for x in values]
@@ -66,6 +65,7 @@ class ImpactModelsBlock(StructBlock):
 
 class InputDataBlock(StructBlock):
     description = RichTextBlock()
+    row_limit = IntegerBlock(default=10, min_value=1, max_value=30)
 
     def get_context(self, value):
         context = super().get_context(value)
@@ -78,18 +78,16 @@ class InputDataBlock(StructBlock):
         }
         context['showalllink'] = {'buttontext': 'See all <i class="fa fa-chevron-down"></i>'}
 
-        rowlimit = 1
-        i = 0
-        for inputdate in InputData.objects.all():
+        for i, idata in enumerate(InputData.objects.all()):
+            link = "<a href='details/{ds}'>{ds}</a>".format(ds=idata.data_set)
             context['body']['rows'] += [
                 {'cols': [
-                    {'text': inputdate.data_set},
-                    {'text': inputdate.data_type},
-                    {'text': inputdate.description}],
-                'invisible': i >= rowlimit
+                    {'texts': [link]},
+                    {'texts': [idata.data_type]},
+                    {'texts': [idata.description]}],
+                    'invisible': i >= value.get('row_limit')
                 }
             ]
-            i += 1
 
         return context
 
@@ -111,14 +109,14 @@ class OutputDataBlock(StructBlock):
         }
 
         for outputdate in OutputData.objects.all():
-            drivers = ' '.join([x.data_set for x in outputdate.drivers.all()])
+            drivers = [x.data_set for x in outputdate.drivers.all()]
             context['body']['rows'] += [
                 {'cols': [
-                    {'text': outputdate.sector},
-                    {'text': outputdate.model},
-                    {'text': outputdate.scenario},
-                    {'text': drivers},
-                    {'text': outputdate.date}]
+                    {'texts': [outputdate.sector]},
+                    {'texts': [outputdate.model]},
+                    {'texts': [outputdate.scenario]},
+                    {'texts': drivers},
+                    {'texts': [outputdate.date]}]
                 }
             ]
 

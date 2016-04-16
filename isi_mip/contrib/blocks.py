@@ -55,7 +55,7 @@ class EmailBlock(FieldBlock):
 class BlogBlock(blocks.StructBlock):
     blog_index = SpecificPageChooserBlock(required=False, help_text='Select blog index page.')
     title = CharBlock(required=False, help_text='Per default, the title of the blog index will be used.')
-    entry_count = IntegerBlock(required=True, min_value=1, max_value=5,
+    entry_count = IntegerBlock(required=True, min_value=1, max_value=5, default=4,
                                help_text='How many blog entries should be displayed?')
 
     class Meta:
