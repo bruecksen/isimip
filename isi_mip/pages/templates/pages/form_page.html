@@ -1,15 +1,14 @@
 {% extends "pages/default_page.html" %}
-
+{% load crispy_forms_tags wagtailcore_tags%}
 
 {% block content %}
-
-    <h1 class="page-title">{{ page.title }}</h1>
-    {{ page.top_content }}
-    <form action="{% pageurl page %}" method="POST">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" class="btn btn-primary" value="Absenden">
-    </form>
-    <br>
-    {{ page.bottom_content }}
+    <div class="form-page-bottom-content">{{ page.top_content }}</div>
+    <div class="form-page-form">
+        <form action="{% pageurl page %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class="btn btn-primary" value="Absenden">
+        </form>
+    </div>
+    <div class="form-page-bottom-content">{{ page.bottom_content }}</div>
 {% endblock %}

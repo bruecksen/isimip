@@ -348,24 +348,30 @@ class DashboardPage(Page):
     pass
 
 
+class FormField(AbstractFormField):
+    page = ParentalKey('FormPage', related_name='form_fields')
 
-class AbstractRegisterFormPage(AbstractEmailForm):
-    parent_page_types = [HomePage]
+
+class FormPage(AbstractEmailForm):
     subpage_types = []
 
-    # template = 'pages/contact_page.html'
-    landing_page_template = 'pages/contact_page_confirmation.html'
-
+    top_content = StreamField([('richtext', RichTextBlock())])
     confirmation_text = models.TextField(default='Your registration was submitted')
+    bottom_content = StreamField([('richtext', RichTextBlock())])
+
+    landing_page_template = 'pages/form_page_confirmation.html'
+
 
     content_panels = AbstractEmailForm.content_panels + [
+        StreamFieldPanel('top_content'),
         InlinePanel('form_fields', label="Form fields"),
         FieldPanel('confirmation_text', classname="full"),
         MultiFieldPanel([
             FieldPanel('to_address', classname="full"),
             FieldPanel('from_address', classname="full"),
             FieldPanel('subject', classname="full"),
-        ], "Email")
+        ], "Email"),
+        StreamFieldPanel('bottom_content')
     ]
 
     def get_context(self, request, *args, **kwargs):
@@ -373,26 +379,6 @@ class AbstractRegisterFormPage(AbstractEmailForm):
         message = {'tags': 'success', 'text': self.confirmation_text}
         context['confirmation_messages'] = [message]
         return context
-
-    class Meta:
-        abstract = True
-
-
-class RegisterFormField(AbstractFormField):
-    page = ParentalKey('FormPage', related_name='form_fields')
-
-
-class FormPage(AbstractRegisterFormPage):
-    top_content = StreamField([
-        ('richtext', RichTextBlock())
-    ])
-    bottom_content = StreamField([
-        ('richtext', RichTextBlock())
-    ])
-
-    content_panels = [StreamFieldPanel('top_content')] + AbstractRegisterFormPage.content_panels + \
-                     [StreamFieldPanel('bottom_content')]
-
 
     # @route(r'^ical/$')
     # def ical(self, request):
