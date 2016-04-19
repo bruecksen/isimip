@@ -1,5 +1,6 @@
 from blog.models import BlogIndexPage as _BlogIndexPage
 from blog.models import BlogPage as _BlogPage
+from django.core import urlresolvers
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from modelcluster.fields import ParentalKey
@@ -12,6 +13,7 @@ from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
+from isi_mip.climatemodels.forms import ImpactModelForm
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
@@ -210,7 +212,7 @@ class GettingStartedPage(RoutablePageWithDefault):
 
     @route(r'^details/(?P<id>\w+)/$')
     def details(self, request, id):
-        data = InputData.objects.get(data_set=id)
+        data = InputData.objects.get(name=id)
         template = 'pages/input_data_details_page.html'
         data.caveats = 'CAVEATS' # TODO: doesnt exist yet
         data.scenario = 'SCENARIO' # TODO: doesnt exist yet
@@ -218,9 +220,9 @@ class GettingStartedPage(RoutablePageWithDefault):
 
         # subpage = Page() #self
         # self.add_child(node=subpage)
-        self.title = 'Input Data Set: %s' % data.data_set
+        self.title = 'Input Data Set: %s' % data
         # x = Page()
-        # x.title = 'Input Data Set: %s' % data.data_set
+        # x.title = 'Input Data Set: %s' % data
         # self.add_child(instance=x)
         context = {'page': self,
                    'description': 'Intro Text unde omnis iste natus error sit voluptatem accusantium totam.', #TODO: THIS IS STATIC
@@ -258,27 +260,43 @@ class ImpactModelsPage(RoutablePageWithDefault):
     def details(self, request, id):
         im = ImpactModel.objects.get(id=id)
         template = 'pages/impact_models_details_page.html'
-        im_values = im.values_to_tuples()
+        im_values = im.values_to_tuples() + im.fk_sector.values_to_tuples()
         model_details = []
         for k, v in im_values:
-            res = {'term': k,
-                   # 'notoggle': True,
-                   'definitions': [{'text': "<i>%s</i>: %s" % x} for x in v]
-                   }
-            model_details += [res]
-        im_sector_values = im.fk_sector.values_to_tuples()
-        for k, v in im_sector_values:
-            res = {'term': k,
-                   'definitions': [{'text': "<i>%s</i>: %s" % x} for x in v]
-                   }
-            model_details += [res]
+            if any((y for x,y in v)):
+                res = {'term': k,
+                       # 'notoggle': True,
+                       'definitions': ({'text': "<i>%s</i>: %s" % (x,y)} for x,y in v if y)
+                       }
+                model_details.append(res)
         model_details[0]['opened'] = True
         context = {
             'headline': im.name,
-            'list': model_details
+            'list': model_details,
         }
-
+        if request.user == im.owner:
+            context['editlink'] = '<a href="{}">edit</a>'.format(
+                self.url +  self.reverse_subpage('edit', args=(im.id,)))
+        if request.user.is_superuser:
+            context['editlink'] += ' | <a href="{}">admin edit</a>'.format(
+                urlresolvers.reverse('admin:climatemodels_impactmodel_change', args=(im.id,)))
         return render(request, template, context)
+
+    @route(r'edit/(?P<id>[0-9]*)/$')
+    def edit(self, request, id=None):
+        if id:
+            gen = ImpactModel.objects.get(id=id)
+        else:
+            gen = ImpactModel()
+        # if request.method == 'POST':
+
+        # else:
+        #     context = {'form': ImpactModelForm()}
+        context = {'form': ImpactModelForm(instance=gen)}
+        template = 'climatemodels/edit.html'
+        return render(request, template, context)
+
+
 
         # @route(r'^csv/$')
         # def csv(self, request):

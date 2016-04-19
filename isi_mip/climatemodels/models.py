@@ -1,9 +1,5 @@
-from django.apps import apps
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
@@ -79,13 +75,16 @@ class ContactPerson(models.Model):
 
 
 class InputData(models.Model):
-    data_set = models.CharField(max_length=500, unique=True)
+    name = models.CharField(max_length=500, unique=True)
     data_type = models.ForeignKey(ClimateDataType, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    scenario = models.CharField(max_length=500, null=True, blank=True)
+    variables = models.ManyToManyField(ClimateVariable, blank=True)
     phase = models.ForeignKey(InputPhase, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    caveats = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.data_set
+        return self.name
 
     class Meta:
         verbose_name_plural = 'Input data'
@@ -202,6 +201,18 @@ class ImpactModel(models.Model):
 
     owner = models.ForeignKey(User)
 
+    def save(self, *args, **kwargs):
+        if not self.owner_id:
+            self.owner_id = 1
+        # if self.sector:
+        #     if ImpactModel.objects.get(id=self.pk).sector != self.sector:
+        #         import ipdb; ipdb.set_trace()
+        super().save(*args, **kwargs)
+        SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self)
+
+    class Meta:
+        unique_together = ('name', 'sector')
+        # verbose_name_plural = 'Impact Models'
 
     CACHE_KEY = "climatemodels/impact_model/sector/%d"
 
@@ -239,30 +250,35 @@ class ImpactModel(models.Model):
                 (vname('temporal_resolution_co2'), self.temporal_resolution_co2),
                 (vname('temporal_resolution_land'), self.temporal_resolution_land),
                 (vname('temporal_resolution_soil'), self.temporal_resolution_soil),
-
+            ]),
+            ('Input Data', [
+                (vname('climate_data_sets'), ' '.join([x.name for x in self.climate_data_sets.all()])),
+                (vname('climate_variables'), ' '.join([x.name for x in self.climate_variables.all()])),
+                (vname('socioeconomic_input_variables'), ' '.join([x.name for x in self.socioeconomic_input_variables.all()])),
+                (vname('soil_dataset'), self.soil_dataset),
+                (vname('additional_input_data_sets'), self.additional_input_data_sets),
+            ]),
+            ('Other', [
+                (vname('exceptions_to_protocol'), self.exceptions_to_protocol),
+                (vname('spin_up'), 'Yes' if self.spin_up else 'No'),
+                (vname('spin_up_design'), self.spin_up_design if self.spin_up else ''),
+                (vname('natural_vegetation_partition'), self.natural_vegetation_partition),
+                (vname('natural_vegetation_dynamics'), self.natural_vegetation_dynamics),
+                (vname('natural_vegetation_cover_dataset'), self.natural_vegetation_cover_dataset),
+                (vname('management'), self.management),
+                (vname('extreme_events'), self.extreme_events),
+                (vname('anything_else'), self.anything_else),
+                (vname('comments'), self.comments),
             ])
-            ]
+        ]
         return ret
-
-    def save(self, *args, **kwargs):
-        if not self.owner_id:
-            self.owner_id = 1
-        # if self.sector:
-        #     if ImpactModel.objects.get(id=self.pk).sector != self.sector:
-        #         import ipdb; ipdb.set_trace()
-        super(ImpactModel, self).save(*args, **kwargs) # Call the "real" save() method.
-        SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self)
-
-    class Meta:
-        unique_together = ('name', 'sector')
-        # verbose_name_plural = 'Impact Models'
 
 
 class Sector(models.Model):
     impact_model = models.OneToOneField(ImpactModel)
 
-    subsectors = ['agriculture', 'energy', 'water', 'biomes', 'marineecosystems',
-                  'biodiversity', 'health', 'coastalinfrastructure', 'permafrost']
+    # subsectors = ['agriculture', 'energy', 'water', 'biomes', 'forests', 'marineecosystems',
+    #               'biodiversity', 'health', 'coastalinfrastructure', 'permafrost']
 
     @staticmethod
     def get(name):
@@ -272,22 +288,30 @@ class Sector(models.Model):
         if "energy" in name:
             return Energy
         if "water" in name:
-            return Water
+            if "regional" in name:
+                return WaterRegional
+            return WaterGlobal
         if "biomes" in name:
             return Biomes
         if "forests" in name:
-            return Biomes
+            return Forests
         if "marine" in name:
-            return MarineEcosystems
+            if "regional" in name:
+                return MarineEcosystemsRegional
+            return MarineEcosystemsGlobal
         if "biodiversity" in name:
             return Biodiversity
         if "health" in name:
             return Health
-        if "coastal" in name:
+        if "coastal" in name or "infrastructure" in name:
             return CoastalInfrastructure
         if "permafrost" in name:
             return Permafrost
-        raise Exception("Couldn't match sector type")
+        if "equilibrium":
+            return ComputableGeneralEquilibriumModelling
+        if "agro-economic" in name:
+            return AgroEconomicModelling
+        raise Exception("Couldn't match sector type:", name)
 
     class Meta:
         abstract = True
@@ -299,7 +323,8 @@ class Sector(models.Model):
         return self._meta.get_field_by_name(field)[0].verbose_name.title()
 
     def values_to_tuples(self) -> list:
-        raise Exception("Not Implemented")
+        return []
+
 
     """
     Sektoren:
@@ -354,6 +379,49 @@ class Agriculture(Sector):
     temporal_scale_of_calibration_validation = models.TextField(null=True, blank=True, verbose_name='Temporal scale of calibration/validation')
     criteria_for_evaluation = models.TextField(null=True, blank=True, verbose_name='Criteria for evaluation (validation)')
 
+    def values_to_tuples(self) -> list:
+        vname = self._get_verbose_field_name
+        ret = [
+            ('Key input and Management', [
+                (vname('crops'), self.crops),
+                (vname('land_coverage'), self.land_coverage),
+                (vname('planting_date_decision'), self.planting_date_decision),
+                (vname('planting_density'), self.planting_density),
+                (vname('crop_cultivars'), self.crop_cultivars),
+                (vname('fertilizer_application'), self.fertilizer_application),
+                (vname('irrigation'), self.irrigation),
+                (vname('crop_residue'), self.crop_residue),
+                (vname('initial_soil_water'), self.initial_soil_water),
+                (vname('initial_soil_nitrate_and_ammonia'), self.initial_soil_nitrate_and_ammonia),
+                (vname('initial_soil_C_and_OM'), self.initial_soil_C_and_OM),
+                (vname('initial_crop_residue'), self.initial_crop_residue)
+            ]),
+            ('Key model processes', [
+                (vname('lead_area_development'), self.lead_area_development),
+                (vname('light_interception'), self.light_interception),
+                (vname('light_utilization'), self.light_utilization),
+                (vname('yield_formation'), self.yield_formation),
+                (vname('crop_phenology'), self.crop_phenology),
+                (vname('root_distribution_over_depth'), self.root_distribution_over_depth),
+                (vname('stresses_involved'), self.stresses_involved),
+                (vname('type_of_water_stress'), self.type_of_water_stress),
+                (vname('type_of_heat_stress'), self.type_of_heat_stress),
+                (vname('water_dynamics'), self.water_dynamics),
+                (vname('evapo_transpiration'), self.evapo_transpiration),
+                (vname('soil_CN_modeling'), self.soil_CN_modeling),
+                (vname('co2_effects'), self.co2_effects),
+            ]),
+            ('Methods for model calibration and validation', [
+                (vname('parameters_number_and_description'), self.parameters_number_and_description),
+                (vname('calibrated_values'), self.calibrated_values),
+                (vname('output_variable_and_dataset'), self.output_variable_and_dataset),
+                (vname('spatial_scale_of_calibration_validation'), self.spatial_scale_of_calibration_validation),
+                (vname('temporal_scale_of_calibration_validation'), self.temporal_scale_of_calibration_validation),
+                (vname('criteria_for_evaluation'), self.criteria_for_evaluation)
+            ])
+        ]
+        return ret
+
 
 class Energy(Sector):
     # Model & method characteristics
@@ -381,6 +449,44 @@ class Energy(Sector):
     maximum_potential_assumption = models.TextField(null=True, blank=True, verbose_name='Maximum potential assumption')
     bioenergy_supply_costs = models.TextField(null=True, blank=True, verbose_name='Bioenergy supply costs')
     socioeconomic_input = models.TextField(null=True, blank=True, verbose_name='Socio-economic input')
+
+    def values_to_tuples(self) -> list:
+        vname = self._get_verbose_field_name
+        ret = [
+            ('Model & method characteristics', [
+                (vname('model_type'), self.model_type),
+                (vname('temporal_extent'), self.temporal_extent),
+                (vname('temporal_resolution'), self.temporal_resolution),
+                (vname('data_format_for_input'), self.data_format_for_input),
+            ]),
+            ('Impact Types', [
+
+                (vname('impact_types_energy_demand'), self.impact_types_energy_demand),
+                (vname('impact_types_temperature_effects_on_thermal_power'), self.impact_types_temperature_effects_on_thermal_power),
+                (vname('impact_types_weather_effects_on_renewables'), self.impact_types_weather_effects_on_renewables),
+                (vname('impact_types_water_scarcity_impacts'), self.impact_types_water_scarcity_impacts),
+                (vname('impact_types_other'), self.impact_types_other),
+            ]),
+            ('Output', [
+                (vname('output_energy_demand'), self.output_energy_demand),
+                (vname('output_energy_supply'), self.output_energy_supply),
+                (vname('output_water_scarcity'), self.output_water_scarcity),
+                (vname('output_economics'), self.output_economics),
+                (vname('output_other'), self.output_other),
+            ]),
+            ('Further Information', [
+                (vname('variables_not_directly_from_GCMs'), self.variables_not_directly_from_GCMs),
+                (vname('response_function_of_energy_demand_to_HDD_CDD'), self.response_function_of_energy_demand_to_HDD_CDD),
+                (vname('factor_definition_and_calculation'), self.factor_definition_and_calculation),
+                (vname('biomass_types'), self.biomass_types),
+                (vname('maximum_potential_assumption'), self.maximum_potential_assumption),
+                (vname('bioenergy_supply_costs'), self.bioenergy_supply_costs),
+                (vname('socioeconomic_input'), self.socioeconomic_input),
+            ])
+        ]
+        return ret
+
+
 
 
 class Water(Sector):
@@ -416,7 +522,7 @@ class Water(Sector):
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
         ret = [
-            ('Water', [
+            (self._meta.verbose_name, [
                 (vname('technological_progress'), self.technological_progress),
                 (vname('soil_layers'), self.soil_layers),
                 (vname('water_use'), self.water_use),
@@ -437,7 +543,19 @@ class Water(Sector):
         ]
         return ret
 
-class Biomes(Sector):
+    class Meta:
+        abstract = True
+class WaterGlobal(Water):
+    class Meta:
+        verbose_name='Water (global)'
+        verbose_name_plural = 'Water (global)'
+class WaterRegional(Water):
+    class Meta:
+        verbose_name = 'Water (regional)'
+        verbose_name_plural = 'Water (regional)'
+
+
+class BiomesForests(Sector):
     # technological_progress = models.TextField(null=True, blank=True)
     output = models.TextField(
         null=True, blank=True, verbose_name='Output format',
@@ -496,6 +614,68 @@ class Biomes(Sector):
     )
     pfts_comments = models.TextField(null=True, blank=True, verbose_name='Comments')
 
+    def values_to_tuples(self) -> list:
+        vname = self._get_verbose_field_name
+        ret = [
+            ('Model output specifications', [
+                (vname('output'), self.output),
+                (vname('output_per_pft'), self.output_per_pft),
+                (vname('considerations'), self.considerations),
+                ]),
+            ('Key model processes', [
+                (vname('dynamic_vegetation'), self.dynamic_vegetation),
+                (vname('nitrogen_limitation'), self.nitrogen_limitation),
+                (vname('co2_effects'), self.co2_effects),
+                (vname('light_interception'), self.light_interception),
+                (vname('light_utilization'), self.light_utilization),
+                (vname('phenology'), self.phenology),
+                (vname('water_stress'), self.water_stress),
+                (vname('heat_stress'), self.heat_stress),
+                (vname('evapotranspiration_approach'), self.evapotranspiration_approach),
+                (vname('rooting_depth_differences'), self.rooting_depth_differences),
+                (vname('root_distribution'), self.root_distribution),
+                (vname('permafrost'), self.permafrost),
+                (vname('closed_energy_balance'), self.closed_energy_balance),
+                (vname('soil_moisture_surface_temperature_coupling'), self.soil_moisture_surface_temperature_coupling),
+                (vname('latent_heat'), self.latent_heat),
+                (vname('sensible_heat'), self.sensible_heat),
+            ]),
+            ('Causes of mortality in vegetation models', [
+                (vname('mortality_age'), self.mortality_age),
+                (vname('mortality_fire'), self.mortality_fire),
+                (vname('mortality_drought'), self.mortality_drought),
+                (vname('mortality_insects'), self.mortality_insects),
+                (vname('mortality_storm'), self.mortality_storm),
+                (vname('mortality_stochastic_random_disturbance'), self.mortality_stochastic_random_disturbance),
+                (vname('mortality_other'), self.mortality_other),
+                (vname('mortality_remarks'), self.mortality_remarks),
+            ]),
+            ('NBP components', [
+                (vname('nbp_fire'), self.nbp_fire),
+                (vname('nbp_landuse_change'), self.nbp_landuse_change),
+                (vname('nbp_harvest'), self.nbp_harvest),
+                (vname('nbp_other'), self.nbp_other),
+                (vname('nbp_comments'), self.nbp_comments),
+            ]),
+            ('Plant Functional Types (PFTs)', [
+                (vname('list_of_pfts'), self.list_of_pfts),
+                (vname('pfts_comments'), self.pfts_comments),
+            ])
+        ]
+
+        return ret
+
+    class Meta:
+        abstract = True
+class Biomes(BiomesForests):
+    class Meta:
+        verbose_name_plural = 'Biomes'
+        verbose_name = 'Biomes'
+class Forests(BiomesForests):
+    class Meta:
+        verbose_name_plural = 'Forests'
+        verbose_name = 'Forests'
+
 
 class MarineEcosystems(Sector):
     defining_features = models.TextField(null=True, blank=True, verbose_name='Defining features')
@@ -509,11 +689,44 @@ class MarineEcosystems(Sector):
     fishbase_used_for_mass_length_conversion = models.TextField(
         null=True, blank=True, verbose_name='Is FishBase used for mass-length conversion?')
 
+    def values_to_tuples(self) -> list:
+        vname = self._get_verbose_field_name
+        ret = [
+            (self._meta.verbose_name, [
+                (vname('defining_features'), self.defining_features),
+                (vname('spatial_scale'), self.spatial_scale),
+                (vname('spatial_resolution'), self.spatial_resolution),
+                (vname('temporal_scale'), self.temporal_scale),
+                (vname('temporal_resolution'), self.temporal_resolution),
+                (vname('taxonomic_scope'), self.taxonomic_scope),
+                (vname('vertical_resolution'), self.vertical_resolution),
+                (vname('spatial_dispersal_included'), self.spatial_dispersal_included),
+                (vname('fishbase_used_for_mass_length_conversion'), self.fishbase_used_for_mass_length_conversion),
+            ])
+        ]
+        return ret
+
+    class Meta:
+        abstract = True
+class MarineEcosystemsGlobal(MarineEcosystems):
+    class Meta:
+        verbose_name = 'Marine Ecosystems and Fisheries (global)'
+        verbose_name_plural = 'Marine Ecosystems and Fisheries (global)'
+class MarineEcosystemsRegional(MarineEcosystems):
+    class Meta:
+        verbose_name = 'Marine Ecosystems and Fisheries (regional)'
+        verbose_name_plural = 'Marine Ecosystems and Fisheries (regional)'
+
 
 class Biodiversity(Sector): pass
 class Health(Sector): pass
 class CoastalInfrastructure(Sector): pass
 class Permafrost(Sector): pass
+class ComputableGeneralEquilibriumModelling(Sector): pass
+class AgroEconomicModelling(Sector):
+    class Meta:
+        verbose_name = 'Agro-Economic Modelling'
+        verbose_name_plural = 'Agro-Economic Modelling'
 
 
 class OutputData(models.Model):
@@ -533,14 +746,16 @@ class OutputData(models.Model):
 SECTOR_MAPPING = {
     'Agriculture': Agriculture,
     'Energy': Energy,
-    'Water (global)': Water,
-    'Water (regional)': Water,
+    'Water (global)': WaterGlobal,
+    'Water (regional)': WaterRegional,
     'Biomes': Biomes,
-    'Forests': Biomes,
-    'Marine Ecosystems and Fisheries (global)': MarineEcosystems,
-    'Marine Ecosystems and Fisheries (regional)': MarineEcosystems,
+    'Forests': Forests,
+    'Marine Ecosystems and Fisheries (global)': MarineEcosystemsGlobal,
+    'Marine Ecosystems and Fisheries (regional)': MarineEcosystemsRegional,
     'Biodiversity': Biodiversity,
     'Health': Health,
     'Coastal Infrastructure': CoastalInfrastructure,
-    'Permafrost': Permafrost
+    'Permafrost': Permafrost,
+    'Computable General Equilibrium Modelling': ComputableGeneralEquilibriumModelling,
+    'Agro-Economic Modelling': AgroEconomicModelling,
 }

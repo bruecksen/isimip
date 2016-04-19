@@ -6,11 +6,12 @@ from .models import *
 
 
 class HideAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
-        return {}
+    # def get_model_perms(self, request):
+    #     """
+    #     Return empty perms dict thus hiding the model from admin index.
+    #     """
+    #     return {}
+    pass
 
 
 class HideSectorAdmin(HideAdmin):
@@ -30,16 +31,10 @@ class ImpactModelAdmin(admin.ModelAdmin):
             link = urlresolvers.reverse(adminurl, args=[obj.fk_sector.id])
             return '<a href="%s">%s</a>' % (link, obj.fk_sector)
         except:
-            return
+            return '<span style="color:#666;">will be shown, once the model is saved.</span>'
 
     sector_link.allow_tags = True
     sector_link.short_description = 'Sector link'
-    #
-    # def trenner(self, obj):
-    #     return '<hl />'
-    #
-    # trenner.allow_tags = True
-    # trenner.short_description = 'trennerli'
     readonly_fields = ('sector_link',)
 
     inlines = [ContactPersonAdmin]
@@ -101,9 +96,12 @@ admin.site.register(OutputData)
 
 admin.site.register(Agriculture, AgricultureAdmin)
 admin.site.register(Energy, HideSectorAdmin)
-admin.site.register(Water, HideSectorAdmin)
+admin.site.register(WaterGlobal, HideSectorAdmin)
+admin.site.register(WaterRegional, HideSectorAdmin)
 admin.site.register(Biomes, HideSectorAdmin)
-admin.site.register(MarineEcosystems, HideSectorAdmin)
+admin.site.register(Forests, HideSectorAdmin)
+admin.site.register(MarineEcosystemsGlobal, HideSectorAdmin)
+admin.site.register(MarineEcosystemsRegional, HideSectorAdmin)
 admin.site.register(Biodiversity, HideSectorAdmin)
 admin.site.register(Health, HideSectorAdmin)
 admin.site.register(CoastalInfrastructure, HideSectorAdmin)

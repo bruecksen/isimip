@@ -1,6 +1,26 @@
-<html>
+{% extends "pages/default_page.html" %}
+{% load crispy_forms_tags %}
 
-    <body>
-        {{ form }}
-    </body>
-</html>
+{#{% load material_form %}#}
+{##}
+{##}
+{#{% block css %}#}
+{#    {{ block.super }}#}
+{#    {% include 'material/includes/material_css.html' %}#}
+{#{% endblock %}#}
+{##}
+{#{% block javascript %}#}
+{#    {{ block.super }}#}
+{#    {% include 'material/includes/material_js.html' %}#}
+{#{% endblock %}#}
+
+
+{% block content %}
+{#    <form method="POST">#}
+{#    {% csrf_token %}#}
+{#    {% form form=form %}{% endform %}#}
+{#    <button type="submit" name="_submit" class="btn">Submit</button>#}
+{#</form>#}
+{% crispy form %}
+{#    {{ form }}#}
+{% endblock %}

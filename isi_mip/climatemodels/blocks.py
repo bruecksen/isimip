@@ -19,7 +19,7 @@ class ImpactModelsBlock(StructBlock):
         context['tableid'] = 'selectortable'
         context['searchfield'] = {'value': ''}
         sector_options = [{'value': x} for x in ims.values_list('sector', flat=True).distinct().order_by('sector')]
-        cdriver_options = [{'value': x} for x in InputData.objects.values_list('data_set', flat=True).distinct().order_by('data_set')]
+        cdriver_options = [{'value': x} for x in InputData.objects.values_list('name', flat=True).distinct().order_by('name')]
         context['selectors'] = [
             {'colnumber': '2',  'all_value': 'Sector', 'options': sector_options},
             {'colnumber': '3', 'all_value': 'Climate Driver', 'options': cdriver_options},
@@ -48,7 +48,6 @@ class ImpactModelsBlock(StructBlock):
             cpeople = ["%s <a href='mailto:%s'>%s</a>" % (x.name, x.email, x.email) for x in imodel.contactperson_set.all()]
             values = [["<a href='details/%d/'>%s</a>" % (imodel.id, imodel.name)], [imodel.sector]]
             values += [datasets] + [["<br/>".join(cpeople)]]
-
             row = {
                 'invisible': i >= value.get('rows_per_page'),
                 'cols': [{'texts': x} for x in values]
@@ -79,7 +78,7 @@ class InputDataBlock(StructBlock):
         context['showalllink'] = {'buttontext': 'See all <i class="fa fa-chevron-down"></i>'}
 
         for i, idata in enumerate(InputData.objects.all()):
-            link = "<a href='details/{ds}'>{ds}</a>".format(ds=idata.data_set)
+            link = "<a href='details/{ds}'>{ds}</a>".format(ds=idata)
             context['body']['rows'] += [
                 {'cols': [
                     {'texts': [link]},
@@ -109,7 +108,7 @@ class OutputDataBlock(StructBlock):
         }
 
         for outputdate in OutputData.objects.all():
-            drivers = [x.data_set for x in outputdate.drivers.all()]
+            drivers = [x.name for x in outputdate.drivers.all()]
             context['body']['rows'] += [
                 {'cols': [
                     {'texts': [outputdate.sector]},

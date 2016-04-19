@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.urlresolvers import reverse
+from django.forms.models import inlineformset_factory
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import UpdateView
 
 from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm
-from isi_mip.climatemodels.models import ImpactModel
+from isi_mip.climatemodels.models import ImpactModel, SpatialAggregation, ContactPerson
 
 
 class Assign(SuccessMessageMixin, UpdateView):
@@ -29,13 +30,3 @@ class Assign(SuccessMessageMixin, UpdateView):
     # form = (initial=data)
     # context = {'form':form}
     # return render(request, template, context)
-
-
-def edit(request, id=None):
-    if id:
-        gen = ImpactModel.objects.get(id=id)
-        context = {'form': ImpactModelForm(instance=gen)}
-    else:
-        context = {'form': ImpactModelForm()}
-    template = 'climatemodels/edit.html'
-    return render(request, template, context)
