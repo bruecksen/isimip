@@ -30,10 +30,13 @@ class ClimateDataType(models.Model):
 
 class ClimateVariable(models.Model):
     name = models.CharField(max_length=500)
-    abbrevation = models.CharField(max_length=500, null=True, blank=True)
+    abbreviation = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
-        return "%s (%s)" % (self.name, self.abbrevation)
+        return '{0.name} ({0.abbreviation})'.format(self)
+
+    def as_span(self):
+        return '<span title="{0.name}">{0.abbreviation}</span>'.format(self)
 
 
 class InputPhase(models.Model):
@@ -77,7 +80,7 @@ class ContactPerson(models.Model):
 class InputData(models.Model):
     name = models.CharField(max_length=500, unique=True)
     data_type = models.ForeignKey(ClimateDataType, null=True, blank=True)
-    scenario = models.CharField(max_length=500, null=True, blank=True)
+    scenario = models.ForeignKey(Scenario, null=True, blank=True)
     variables = models.ManyToManyField(ClimateVariable, blank=True)
     phase = models.ForeignKey(InputPhase, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
@@ -111,6 +114,8 @@ class ImpactModel(models.Model):
         ('Health', 'Health'),
         ('Coastal Infrastructure', 'Coastal Infrastructure'),
         ('Permafrost', 'Permafrost'),
+        ('Computable General Equilibrium Modelling', 'Computable General Equilibrium Modelling'),
+        ('Agro-Economic Modelling', 'Agro-Economic Modelling'),
     )
     sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
     region = models.ManyToManyField(Region, help_text="For which regions does the model produce results?")
@@ -232,7 +237,7 @@ class ImpactModel(models.Model):
 
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
-        ret = [
+        return [
             ('Basic information', [
                 (vname('name'), self.name),
                 (vname('sector'), self.sector),
@@ -271,7 +276,6 @@ class ImpactModel(models.Model):
                 (vname('comments'), self.comments),
             ])
         ]
-        return ret
 
 
 class Sector(models.Model):
@@ -381,7 +385,7 @@ class Agriculture(Sector):
 
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
-        ret = [
+        return [
             ('Key input and Management', [
                 (vname('crops'), self.crops),
                 (vname('land_coverage'), self.land_coverage),
@@ -420,7 +424,6 @@ class Agriculture(Sector):
                 (vname('criteria_for_evaluation'), self.criteria_for_evaluation)
             ])
         ]
-        return ret
 
 
 class Energy(Sector):
@@ -452,7 +455,7 @@ class Energy(Sector):
 
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
-        ret = [
+        return [
             ('Model & method characteristics', [
                 (vname('model_type'), self.model_type),
                 (vname('temporal_extent'), self.temporal_extent),
@@ -484,7 +487,6 @@ class Energy(Sector):
                 (vname('socioeconomic_input'), self.socioeconomic_input),
             ])
         ]
-        return ret
 
 
 
@@ -521,7 +523,7 @@ class Water(Sector):
 
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
-        ret = [
+        return [
             (self._meta.verbose_name, [
                 (vname('technological_progress'), self.technological_progress),
                 (vname('soil_layers'), self.soil_layers),
@@ -541,7 +543,6 @@ class Water(Sector):
                 (vname('methods_snowmelt'), self.methods_snowmelt),
             ])
         ]
-        return ret
 
     class Meta:
         abstract = True
@@ -616,7 +617,7 @@ class BiomesForests(Sector):
 
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
-        ret = [
+        return [
             ('Model output specifications', [
                 (vname('output'), self.output),
                 (vname('output_per_pft'), self.output_per_pft),
@@ -663,8 +664,6 @@ class BiomesForests(Sector):
             ])
         ]
 
-        return ret
-
     class Meta:
         abstract = True
 class Biomes(BiomesForests):
@@ -691,7 +690,7 @@ class MarineEcosystems(Sector):
 
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
-        ret = [
+        return [
             (self._meta.verbose_name, [
                 (vname('defining_features'), self.defining_features),
                 (vname('spatial_scale'), self.spatial_scale),
@@ -704,7 +703,6 @@ class MarineEcosystems(Sector):
                 (vname('fishbase_used_for_mass_length_conversion'), self.fishbase_used_for_mass_length_conversion),
             ])
         ]
-        return ret
 
     class Meta:
         abstract = True
@@ -720,9 +718,15 @@ class MarineEcosystemsRegional(MarineEcosystems):
 
 class Biodiversity(Sector): pass
 class Health(Sector): pass
-class CoastalInfrastructure(Sector): pass
+class CoastalInfrastructure(Sector):
+    class Meta:
+        verbose_name = 'Coastal Infrastructure'
+        verbose_name_plural = 'Coastal Infrastructure'
 class Permafrost(Sector): pass
-class ComputableGeneralEquilibriumModelling(Sector): pass
+class ComputableGeneralEquilibriumModelling(Sector):
+    class Meta:
+        verbose_name = 'Computable General Equilibrium Modelling'
+        verbose_name_plural = 'Computable General Equilibrium Modelling'
 class AgroEconomicModelling(Sector):
     class Meta:
         verbose_name = 'Agro-Economic Modelling'
@@ -732,12 +736,13 @@ class AgroEconomicModelling(Sector):
 class OutputData(models.Model):
     sector = models.CharField(max_length=500, choices=ImpactModel.SECTOR_CHOICES)
     model = models.ForeignKey(ImpactModel)
-    scenario = models.ForeignKey(Scenario)
+    scenarios = models.ManyToManyField(Scenario)
     drivers = models.ManyToManyField(InputData)
     date = models.DateField()
 
     def __str__(self):
-        return "%s : %s : %s" % (self.sector, self.model.name, self.scenario.name)
+        return "%s : %s" % (self.sector, self.model.name)
+        # return "%s : %s : %s" % (self.sector, self.model.name, self.scenario.name)
 
     class Meta:
         verbose_name_plural = 'Output data'

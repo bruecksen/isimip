@@ -17,6 +17,15 @@ class RowBlock(StreamBlock):
         template = 'blocks/row_block.html'
 
 
+class Heading3Block(CharBlock):
+    class Meta:
+        template = 'widgets/heading3.html'
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['text'] = value
+        return context
+
+
 class ImageBlock(ImageChooserBlock):
     class Meta:
         icon = 'image'
@@ -97,9 +106,14 @@ class BigTeaserBlock(StructBlock):
         return context
 
 
+class _IsiNumberBlock(StructBlock):
+    number = CharBlock()
+    title = CharBlock()
+    text = CharBlock()
+
 class IsiNumbersBlock(StructBlock):
-    number1 = CharBlock()
-    number2 = CharBlock()
+    number1 = _IsiNumberBlock()
+    number2 = _IsiNumberBlock()
     class Meta:
         icon = 'form'
         template = 'blocks/isi_numbers_block.html'
@@ -112,9 +126,6 @@ class TwitterBlock(StructBlock):
 
     class Meta:
         template = 'blocks/twitter_block.html'
-
-############### ABOUT
-
 
 
 class PaperBlock(StructBlock):
@@ -145,6 +156,7 @@ class PaperBlock(StructBlock):
 
 class PapersBlock(StructBlock):
     title = CharBlock()
+    description = RichTextBlock(required=False)
     papers = ListBlock(PaperBlock)
     class Meta:
         template = 'blocks/outcomes_block.html'

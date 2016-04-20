@@ -1,3 +1,7 @@
 {% include 'widgets/heading3.html' with text=title %}
-{{ value.description }}
+<div class="pull-right">
+	{% include "widgets/table-selector.html" %}
+</div>
+<div>{{ value.description }}</div>
+<div class="clearfix"></div>
 {% include "widgets/table.html" %}

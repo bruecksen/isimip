@@ -1,5 +1,5 @@
 {% extends 'pages/default_page.html' %}
 {% block content %}
-    {{ description }}<br/><br/>
+    {{ description | safe }}<br/><br/>
     {% include "widgets/expandable.html" %}
 {% endblock %}

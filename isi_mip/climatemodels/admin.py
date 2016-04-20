@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.core import urlresolvers
@@ -23,16 +24,30 @@ class ContactPersonAdmin(admin.TabularInline):
     model = ContactPerson
     extra = 1
 
+# class ImpactModelFormAdmin(forms.ModelForm):
+#     sektor = forms.ChoiceField(choices=ImpactModel.SECTOR_CHOICES)
+#     class Meta:
+#         model = ImpactModel
+#         fields = '__all__'
+#     def save(self, commit=True):
+#         sektor = self.cleaned_data.get('sektor', None)
+#         return super().save(commit=commit)
 
 class ImpactModelAdmin(admin.ModelAdmin):
+    # form = ImpactModelFormAdmin
+    # def get_form(self, request, obj=None, **kwargs):
+    #     form = super().get_form(request, obj=obj, **kwargs)
+    #     form.base_fields['sektor'].initial = obj.fk_sector._meta.verbose_name # "Computable General Equilibrium Modelling"
+    #     # print('form', form.base_fields['sektor'].initial)
+    #     return form
+
     def sector_link(self, obj):
         try:
             adminurl = "admin:%s_change" % obj.fk_sector._meta.db_table
             link = urlresolvers.reverse(adminurl, args=[obj.fk_sector.id])
-            return '<a href="%s">%s</a>' % (link, obj.fk_sector)
+            return '<a href="%s">%s</a>' % (link, obj.fk_sector._meta.verbose_name)
         except:
             return '<span style="color:#666;">will be shown, once the model is saved.</span>'
-
     sector_link.allow_tags = True
     sector_link.short_description = 'Sector link'
     readonly_fields = ('sector_link',)
@@ -106,6 +121,8 @@ admin.site.register(Biodiversity, HideSectorAdmin)
 admin.site.register(Health, HideSectorAdmin)
 admin.site.register(CoastalInfrastructure, HideSectorAdmin)
 admin.site.register(Permafrost, HideSectorAdmin)
+admin.site.register(ComputableGeneralEquilibriumModelling, HideSectorAdmin)
+admin.site.register(AgroEconomicModelling, HideSectorAdmin)
 
 admin.site.register(ClimateDataType, HideAdmin)
 admin.site.register(ClimateVariable, HideAdmin)

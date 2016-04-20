@@ -1,6 +1,8 @@
 from blog.models import BlogIndexPage as _BlogIndexPage
 from blog.models import BlogPage as _BlogPage
+from django.contrib import messages
 from django.core import urlresolvers
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from modelcluster.fields import ParentalKey
@@ -37,6 +39,8 @@ class BlogPage(_BlogPage):
 
 class BlogIndexPage(_BlogIndexPage):
     subpage_types = ['pages.BlogPage']
+    description = RichTextField(null=True, blank=True)
+    flat = models.BooleanField(default=False, help_text='Whether or not the index page should display items as a flat list or as blocks.')
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -59,10 +63,19 @@ class BlogIndexPage(_BlogIndexPage):
                 entry_context['description'] = smart_truncate(entry.body, 0, 100)
             except:
                 pass
-
             context['entries'] += [entry_context]
         return context
 
+    def serve(self, request, *args, **kwargs):
+        if self.flat:
+        # if 'flat' in request.GET and request.GET['flat'] == 'True':
+            self.template = 'pages/blog_index_flat_page.html'
+        return super(BlogIndexPage, self).serve(request, *args, **kwargs)
+
+    content_panels = _BlogIndexPage.content_panels + [
+        RichTextFieldPanel('description'),
+        FieldPanel('flat'),
+    ]
 
 class RoutablePageWithDefault(RoutablePage):
     @route(r'^$')
@@ -128,7 +141,7 @@ class HomePage(RoutablePageWithDefault):
             'title': self.teaser_title,
             'text': self.teaser_text,
             'button': {
-                'url': link,
+                'href': link,
                 'text': 'Read more',
                 'fontawesome': 'facebook',
             }
@@ -210,35 +223,39 @@ class GettingStartedPage(RoutablePageWithDefault):
         StreamFieldPanel('content'),
     ]
 
-    @route(r'^details/(?P<id>\w+)/$')
+    @route(r'^details/(?P<id>\d+)/$')
     def details(self, request, id):
-        data = InputData.objects.get(name=id)
+        data = InputData.objects.get(id=id)
         template = 'pages/input_data_details_page.html'
-        data.caveats = 'CAVEATS' # TODO: doesnt exist yet
-        data.scenario = 'SCENARIO' # TODO: doesnt exist yet
-        data.variables = 'VARS'  # TODO: doesnt exist yet
 
         # subpage = Page() #self
         # self.add_child(node=subpage)
         self.title = 'Input Data Set: %s' % data
+
         # x = Page()
         # x.title = 'Input Data Set: %s' % data
         # self.add_child(instance=x)
+        description = '<b>TODO</b> Intro Text unde omnis iste natus error sit voluptatem accusantium totam.' # TODO: THIS IS STATIC
+        if request.user.is_superuser:
+            description += ' | <a href="{}">admin edit</a>'.format(
+                urlresolvers.reverse('admin:climatemodels_inputdata_change', args=(data.id,)))
+
         context = {'page': self,
-                   'description': 'Intro Text unde omnis iste natus error sit voluptatem accusantium totam.', #TODO: THIS IS STATIC
+                   'description': description,
                    'list': [
                        {
                            'notoggle': True,
                            'opened': True,
-                           # 'term': 'Multiple definitions', # TODO: Tom schau mal hier.
+                           # 'term': data.name, # TODO: Tom schau mal hier.
                            'definitions': [
                                {'text': 'Data Type: %s' % data.data_type},
                                {'text': 'Scenario: %s' % data.scenario},
                                {'text': 'Phase: %s' % data.phase},
-                               {'text': 'Variables: %s' % data.variables},
+                               {'text': 'Variables: %s' % ', '.join((x.as_span() for x in data.variables.all()))},
                            ]
                        },
-                       {'notoggle': True, 'opened': True, 'term': 'Description', 'definitions': [{'text': data.description}]},
+                       {'notoggle': True, 'opened': True, 'term': 'Description',
+                        'definitions': [{'text': data.description}]},
                        {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': [{'text': data.caveats}]},
                    ]
                    }
@@ -256,7 +273,7 @@ class ImpactModelsPage(RoutablePageWithDefault):
         StreamFieldPanel('content'),
     ]
 
-    @route(r'^details/(?P<id>\w+)/$')
+    @route(r'^details/(?P<id>\d+)/$')
     def details(self, request, id):
         im = ImpactModel.objects.get(id=id)
         template = 'pages/impact_models_details_page.html'
@@ -284,15 +301,21 @@ class ImpactModelsPage(RoutablePageWithDefault):
 
     @route(r'edit/(?P<id>[0-9]*)/$')
     def edit(self, request, id=None):
+        context = {}
         if id:
             gen = ImpactModel.objects.get(id=id)
         else:
             gen = ImpactModel()
-        # if request.method == 'POST':
 
-        # else:
-        #     context = {'form': ImpactModelForm()}
-        context = {'form': ImpactModelForm(instance=gen)}
+        if request.method == 'POST':
+            context['form'] = ImpactModelForm(request.POST, instance=gen)
+            if context['form'].is_valid():
+                messages.success(request, "Changes have been saved.")
+            else:
+                messages.warning(request,context['form'].errors)
+        else:
+            context['form'] = ImpactModelForm(instance=gen)
+
         template = 'climatemodels/edit.html'
         return render(request, template, context)
 
@@ -339,8 +362,10 @@ class OutcomesPage(Page):
 class FAQPage(Page):
     template = 'pages/default_page.html'
     content = StreamField([
+        ('richtext', RichTextBlock()),
         ('columns_1_to_1', Columns1To1Block()),
         ('faqs', FAQsBlock()),
+        # ('heading3', Heading3Block()),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),

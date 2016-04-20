@@ -1,0 +1,9 @@
+{% extends "pages/default_page.html" %}
+
+{% block content %}
+	<div>{{ page.description | safe }}</div>
+	{% for entry in entries %}
+		{% if not forloop.first %}{% include "widgets/horizontal-ruler.html" with light=True %}{% endif %}
+		{% include "widgets/page-teaser-flat.html" with date=entry.date image=entry.image href=entry.href text=entry.text title=entry.title description=entry.description %}
+	{% endfor %}
+{% endblock %}

@@ -1,5 +1,6 @@
 {% load wagtailcore_tags wagtailimages_tags %}
     {% include 'widgets/heading3.html' with text=value.title %}
+	{{ value.description|safe }}
     <div class="row">
     {% for paper in value.papers %}
         <div class="col-sm-3">

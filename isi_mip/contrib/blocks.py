@@ -1,10 +1,9 @@
-from blog.models import BlogPage, BlogCategory, BlogIndexPage
+from blog.models import BlogPage, BlogIndexPage
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock
-from wagtail.wagtailsnippets.blocks import SnippetChooserBlock
 
 
 def smart_truncate(text: str, min_length: int, max_length: int) -> str:

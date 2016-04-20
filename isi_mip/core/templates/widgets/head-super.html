@@ -9,6 +9,6 @@
 				{{ text|safe}}
 			</div>
 		{% endif %}
-		{% if button %}{% include "widgets/button.html" with url=button.url text=button.text fontawesome=button.fontawesome %}{% endif %}
+		{% if button %}{% include "widgets/button.html" with href=button.href text=button.text fontawesome=button.fontawesome %}{% endif %}
 	</div>
 </div><!-- widget-head-super -->

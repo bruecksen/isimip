@@ -15,11 +15,11 @@ def breadcrumb(context, page=None, **kwargs):
     children = page.get_ancestors().live() #.in_menu().specific()
     # print(page.get_ancestors().live())
     links = []
-    for child in children:
+    for child in children[1:]:
         active = False
         links.append({
             'text': child.title,
-            'url': child.url,
+            'href': child.url,
             'active': active,
         })
     context = {
@@ -27,8 +27,8 @@ def breadcrumb(context, page=None, **kwargs):
     }
     links.append({
         'text': page.title,
-        'url': page.url,
-        'active': True,
+        # 'href': page.url,
+        # 'active': True,
     })
     context.update(kwargs)
     template = 'widgets/breadcrumb.html'

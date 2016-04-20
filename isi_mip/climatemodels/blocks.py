@@ -72,13 +72,13 @@ class InputDataBlock(StructBlock):
 
         context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Data Type'}, {'text': 'Description'}]}
         context['body'] = {
-            'rowlimit': {'buttontext': 'See all <i class="fa fa-chevron-down"></i>', 'rownumber': 3},
+            'rowlimit': {'buttontext': 'See all <i class="fa fa-chevron-down"></i>', 'rownumber': value.get('row_limit')},
             'rows': []
         }
-        context['showalllink'] = {'buttontext': 'See all <i class="fa fa-chevron-down"></i>'}
 
-        for i, idata in enumerate(InputData.objects.all()):
-            link = "<a href='details/{ds}'>{ds}</a>".format(ds=idata)
+        inputdata = InputData.objects.all()
+        for i, idata in enumerate(inputdata):
+            link = "<a href='details/{0.id}'>{0.name}</a>".format(idata)
             context['body']['rows'] += [
                 {'cols': [
                     {'texts': [link]},
@@ -88,6 +88,8 @@ class InputDataBlock(StructBlock):
                 }
             ]
 
+        if value.get('row_limit') < inputdata.count():
+            context['showalllink'] = {'buttontext': 'See all <i class="fa fa-chevron-down"></i>'}
         return context
 
     class Meta:
@@ -107,18 +109,19 @@ class OutputDataBlock(StructBlock):
             'rows': []
         }
 
-        for outputdate in OutputData.objects.all():
-            drivers = [x.name for x in outputdate.drivers.all()]
+        for outputdata in OutputData.objects.all():
+            drivers = [x.name for x in outputdata.drivers.all()]
+            scenarios = ', '.join(x.name for x in outputdata.scenarios.all())
             context['body']['rows'] += [
                 {'cols': [
-                    {'texts': [outputdate.sector]},
-                    {'texts': [outputdate.model]},
-                    {'texts': [outputdate.scenario]},
+                    {'texts': [outputdata.sector]},
+                    {'texts': [outputdata.model]},
+                    {'texts': [scenarios]},
                     {'texts': drivers},
-                    {'texts': [outputdate.date]}]
+                    {'texts': [outputdata.date]}]
                 }
             ]
-
+        context['searchfield'] = {'value':''}
         return context
 
     class Meta:
