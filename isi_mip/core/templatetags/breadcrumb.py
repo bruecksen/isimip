@@ -5,16 +5,14 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def breadcrumb(context, page=None, **kwargs):
+def breadcrumb(context, page=None, subpage=None, **kwargs):
     page = page or context.get('page')
+    subpage = subpage or context.get('subpage')
     if not page:
         return ''
-    # depth = page.get_depth()
-    # if depth <= 3:
-    #     return ''
-    children = page.get_ancestors().live() #.in_menu().specific()
-    # print(page.get_ancestors().live())
     links = []
+
+    children = page.get_ancestors().live()
     for child in children[1:]:
         active = False
         links.append({
@@ -25,11 +23,21 @@ def breadcrumb(context, page=None, **kwargs):
     context = {
         'links': links,
     }
-    links.append({
-        'text': page.title,
-        # 'href': page.url,
-        # 'active': True,
-    })
+
+    if not subpage:
+        links.append({
+            'text': page.title,
+        })
+
+    else:
+        links.append({
+            'text': page.title,
+            'href': page.url,
+            'active': True,
+        })
+        links.append({
+            'text': subpage.title,
+        })
     context.update(kwargs)
     template = 'widgets/breadcrumb.html'
     return render_to_string(template, context=context)

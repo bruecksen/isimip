@@ -229,19 +229,13 @@ class GettingStartedPage(RoutablePageWithDefault):
         data = InputData.objects.get(id=id)
         template = 'pages/input_data_details_page.html'
 
-        # subpage = Page() #self
-        # self.add_child(node=subpage)
-        self.title = 'Input Data Set: %s' % data
-
-        # x = Page()
-        # x.title = 'Input Data Set: %s' % data
-        # self.add_child(instance=x)
         description = '<b>TODO</b> Intro Text unde omnis iste natus error sit voluptatem accusantium totam.' # TODO: THIS IS STATIC
         if request.user.is_superuser:
             description += ' | <a href="{}">admin edit</a>'.format(
                 urlresolvers.reverse('admin:climatemodels_inputdata_change', args=(data.id,)))
 
         context = {'page': self,
+                   'subpage': Page(title='Input Data Set: %s' % data),
                    'description': description,
                    'list': [
                        {
@@ -283,12 +277,16 @@ class ImpactModelsPage(RoutablePageWithDefault):
         for k, v in im_values:
             if any((y for x,y in v)):
                 res = {'term': k,
-                       # 'notoggle': True,
                        'definitions': ({'text': "<i>%s</i>: %s" % (x,y)} for x,y in v if y)
                        }
                 model_details.append(res)
         model_details[0]['opened'] = True
+
+        description = '<b>TODO</b> Intro Text unde omnis iste natus error sit voluptatem accusantium totam.' # TODO: THIS IS STATIC
         context = {
+            'page': self,
+            'subpage': Page(title='Impact Model: %s' % im.name),
+            'description': description,
             'headline': im.name,
             'list': model_details,
         }

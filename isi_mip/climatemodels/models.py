@@ -239,7 +239,7 @@ class ImpactModel(models.Model):
         vname = self._get_verbose_field_name
         return [
             ('Basic information', [
-                (vname('name'), self.name),
+                # (vname('name'), self.name),
                 (vname('sector'), self.sector),
                 (vname('region'), ' '.join([x.name for x in self.region.all()])),
                 ('Contact Person', ', '.join(["{0.name} ({0.email}) {0.institute}".format(x) for x in self.contactperson_set.all()])),
