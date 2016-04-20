@@ -1,11 +1,11 @@
 # Local development dependencies go here
 -r base.txt
 
-ipdb==0.8.3
+ipdb
 
-Fabric==1.10.2
-fabric-virtualenv==0.2.1
+#Fabric==1.10.2 # klappt eh nicht mit python3
+#fabric-virtualenv==0.2.1  # klappt eh nicht mit python3
 
-django-debug-toolbar==1.4
-django-extensions==1.6.1
+django-debug-toolbar
+django-extensions
 

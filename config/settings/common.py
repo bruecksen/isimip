@@ -10,8 +10,6 @@ env.read_env(ROOT_DIR('.env'))
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
 DJANGO_APPS = (
-    'material',
-    # 'material.admin',
     # Default Django apps:
     'django.contrib.admin',
     'django.contrib.auth',
@@ -25,7 +23,7 @@ DJANGO_APPS = (
     # 'django.contrib.humanize',
 )
 THIRD_PARTY_APPS = (
-    'crispy_forms',  # Form layouts
+    # 'crispy_forms',  # Form layouts
     # 'allauth',  # registration
     # 'allauth.account',  # registration
     # 'allauth.socialaccount',  # registration

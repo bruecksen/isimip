@@ -2,6 +2,7 @@ from blog.models import BlogIndexPage as _BlogIndexPage
 from blog.models import BlogPage as _BlogPage
 from django.contrib import messages
 from django.core import urlresolvers
+from django.db import models
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse

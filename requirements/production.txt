@@ -2,5 +2,5 @@
 #	production that isn't in development.
 -r base.txt
 
-raven==5.11.0
+raven==5.13.0
 gunicorn==19.4.5
