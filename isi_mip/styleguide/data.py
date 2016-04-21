@@ -943,6 +943,78 @@ data = {
         },
     },
 
+
+
+
+    'textinput': {
+        'name': 'Textinput',
+        'template': 'widgets/textinput.html',
+        'context': {
+            'id': 'textinput',
+            'label': 'Name',
+            'value': 'Schon ausgefüllt',
+            'placeholder': 'Liesschen Müller',
+        },
+    },
+
+    'textarea': {
+        'name': 'Textarea',
+        'template': 'widgets/textarea.html',
+        'context': {
+            'id': 'textarea',
+            'label': 'Dein Leben',
+            'value': 'Schon\nausgefüllt',
+            'placeholder': 'Am Anfang war das Lieschen',
+        },
+    },
+
+    'nullboolean': {
+        'name': 'Nullboolean',
+        'template': 'widgets/nullboolean.html',
+        'context': {
+            'id': 'nullboolean',
+            'label': 'Hollywood hat alle Apollo-Missionen auf dem Mond gedreht',
+            'value': 'yes',
+        },
+    },
+
+    'multiselect': {
+        'name': 'Multiselect',
+        'template': 'widgets/multiselect.html',
+        'context': {
+            'id': 'multiselect',
+            'label': 'Wie alt sind deine Witze?',
+            'allowcustom': True,
+            'options': [
+                {'value':'alt', 'label':'Alt', 'checked':True},
+                {'value':'neu', 'label':'Neu', 'checked':False},
+                {'value':'von gestern', 'label':'Von gestern', 'checked':False},
+                {'value':'neu 2016', 'label':'neu 2016', 'checked':False},
+            ],
+        },
+    },
+
+
+    'singleselect': {
+        'name': 'Singleselect',
+        'template': 'widgets/multiselect.html',
+        'context': {
+            'id': 'singleselect',
+            'label': 'Von wann ist dein Longboard?',
+            'singleselect': True,
+            'allowcustom': True,
+            'options': [
+                {'value':'alt', 'label':'Alt', 'checked':False},
+                {'value':'neu', 'label':'Neu', 'checked':False},
+                {'value':'von gestern', 'label':'Von gestern', 'checked':False},
+                {'value':'neu 2016', 'label':'neu 2016', 'checked':True},
+            ],
+        },
+    },
+
+
+
+
     'footer': {
         'name': 'Footer',
         'template': 'widgets/footer.html',

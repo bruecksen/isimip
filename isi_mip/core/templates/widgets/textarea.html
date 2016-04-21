@@ -1,0 +1,6 @@
+<div class="widget-textarea form-group">
+{% if label %}
+<label for="{{ id }}">{{ label }}</label>
+{% endif %}
+<textarea class="form-control" id="{{ id }}" name="{{ id }}" {% if rows %}rows="{{ rows }}"{% else %}rows="5"{% endif %}{% if placeholder %} placeholder="{{ placeholder }}"{% endif %} autocomplete="off">{{ value }}</textarea>
+</div><!-- widget-textarea -->

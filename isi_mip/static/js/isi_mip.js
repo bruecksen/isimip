@@ -215,3 +215,32 @@ $(function() {
 		$(this).closest('.widget-expandable-listitem').toggleClass('widget-expandable-listitem-term-open');
 	});
 });
+
+
+
+$(function() {
+	$('.widget-singleselect, .widget-multiselect').each(function() {
+		var selectfield = $(this);
+
+		selectfield.find('.widget-select-customvalue').keypress(function (event) {
+			var key = event.which;
+			if(key == 13) { // the enter key code
+				var value = $(this).val();
+				var optionselement = selectfield.find('.widget-options');
+				var html = optionselement.find('label:last')[0].outerHTML;
+				console.log(html);
+				optionselement.append(html);
+				optionselement.find('label:last')
+					.prop('checked', true)
+					.prop('value', value)
+					.find('span').text(value);
+
+				// reset input
+				$(this).val('');
+				// Do not submit form
+				event.preventDefault();
+				return false;
+			}
+		}); 
+	});
+});

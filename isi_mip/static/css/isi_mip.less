@@ -1023,3 +1023,67 @@ h4, .h4 {
 	}
 }
 
+
+
+.widget-nullboolean, .widget-multiselect {
+	margin-bottom: 10px;
+
+	.widget-options {
+		display: inline-block;
+
+		label.radio-inline, label.checkbox-inline {
+			margin: 0;
+			padding: 0;
+
+			input {
+				display:none;
+
+				+ span {
+					border: 1px solid @color-secondary;
+					display:inline-block;
+					margin: 0;
+					padding: 4px 12px;
+					background-color: @color-white;
+					color: @color-secondary;
+
+					&:hover, &:focus, &:active {
+						color: @color-secondary-strong;
+						border-color: @color-secondary-strong;
+					}
+				}
+				&:checked + span {
+					background-image: none;
+					background-color: @color-secondary;
+					color: @color-white;
+
+					&:hover, &:focus, &:active {
+						background-color: @color-secondary-strong;
+						border-color: @color-secondary-strong;
+					}
+				}
+			}
+
+			+ label.radio-inline, + label.checkbox-inline {
+				span {
+					border-left-width: 0;
+				}
+			}
+		}
+
+		&.widget-options-separated {
+			label.radio-inline, label.checkbox-inline {
+				+ label.radio-inline, + label.checkbox-inline {
+					margin-left: 10px;
+
+					span {
+						border-left-width: 1px;
+					}
+				}
+			}
+		}
+	}
+
+	.widget-select-custom {
+		margin-top: 15px;
+	}
+}

@@ -1,0 +1,6 @@
+<div class="widget-textinput form-group">
+{% if label %}
+<label for="{{ id }}">{{ label }}</label>
+{% endif %}
+<input type="text" class="form-control" id="{{ id }}" name="{{ id }}" value="{{ value }}" autocomplete="off"{% if placeholder %} placeholder="{{ placeholder }}"{% endif %}>
+</div><!-- widget-textinput -->
