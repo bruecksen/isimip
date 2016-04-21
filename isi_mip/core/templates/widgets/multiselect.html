@@ -12,7 +12,7 @@
 
 {% if allowcustom %}
 <div class="widget-select-custom">
-	<input class="widget-select-customvalue form-control" autocomplete="off" placeholder="add custom value">
+	<input class="widget-select-customvalue form-control form-control-small{% if singleselect %} widget-select-customvalue-singleselect{% endif %}" autocomplete="off" placeholder="add custom value">
 </div>
 {% endif %}
 </div><!-- widget-multiselect -->

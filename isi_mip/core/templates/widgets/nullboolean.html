@@ -6,10 +6,15 @@
 <div class="widget-options">
 <label class="radio-inline">
 	<input type="radio" name="{{ id }}" value="unknown"{% if value != "yes" and value != "no" %} checked="checked"{% endif %} autocomplete="off">
-	<span>unknown</span></label><!--
+	<span>unknown</span>
+</label><!--
 --><label class="radio-inline">
-	<input type="radio" name="{{ id }}" value="yes"{% if value == "yes" %} checked="checked"{% endif %} autocomplete="off"><span>yes</span></label><!--
+	<input type="radio" name="{{ id }}" value="yes"{% if value == "yes" %} checked="checked"{% endif %} autocomplete="off">
+	<span>yes</span>
+</label><!--
 --><label class="radio-inline">
-	<input type="radio" name="{{ id }}" value="no"{% if value == "no" %} checked="checked"{% endif %} autocomplete="off"><span>no</span></label>
+	<input type="radio" name="{{ id }}" value="no"{% if value == "no" %} checked="checked"{% endif %} autocomplete="off">
+	<span>no</span>
+</label>
 </div>
 </div><!-- widget-nullboolean -->

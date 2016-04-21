@@ -61,6 +61,66 @@ a {
 }
 
 
+.form-control {
+	border-radius: 4px;
+	border-width: 1px;
+	border-color: @color-neutral;
+
+	height: 50px;
+	font-size: 16px;
+	font-weight: 600;
+
+	-webkit-transition: border-color 0.5s, background-color 0.5s;
+	transition: border-color 0.5s, background-color 0.5s;
+
+
+	&:focus, &:hover {
+		border-color: @color-neutral-dark;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+
+	&.form-control-small {
+		height: 33px;
+		font-size: 13px;
+		font-weight: normal;
+	}
+}
+select.form-control {
+	max-width: 300px;
+	display: inline-block;
+	height: 50px;
+	font-size: 16px;
+	font-weight: 600;
+	border-color: @color-neutral;
+	background-color: @color-neutral;
+	color: @color-white;
+
+	&:focus, &:hover {
+		border-color: @color-neutral-dark;
+		background-color: @color-neutral-dark;
+	}
+
+
+	// Disable arrow down
+	appearance:none;
+	-moz-appearance:none; /* Firefox */
+	-webkit-appearance:none; /* Safari and Chrome */
+
+	@media(min-width:768px) {
+		margin-right: 15px;
+	}
+
+	option {
+		background-color: @color-white;
+		color: @color-black;
+		font-weight: 400;
+	}
+
+}
+
+
+
 
 .super {
 	// Störer-Block with blue background for use inside .container
@@ -89,7 +149,7 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 	color: @color-primary;
 	margin-top: 0; // Undo this in richtext fields
 }
-h1, .h1, h3, .h3 {
+h3, .h3 {
 	text-transform: uppercase;
 }
 h2, .h2 {
@@ -616,6 +676,9 @@ h4, .h4 {
 	.h4 {
 		margin-top: 0;
 	}
+	.widget-arrow-right-link {
+		margin-top: -3px;
+	}
 }
 
 
@@ -881,40 +944,12 @@ h4, .h4 {
 
 .widget-table-selector {
 	select {
-		max-width: 300px;
-		display: inline-block;
-		margin-bottom: 15px;
-		height: 50px;
-		font-size: 16px;
-		font-weight: 600;
-
-		background-color: @color-neutral;
-		color: @color-white;
-
-		// Disable arrow down
-		appearance:none;
-		-moz-appearance:none; /* Firefox */
-		-webkit-appearance:none; /* Safari and Chrome */
-
-		@media(min-width:768px) {
-			margin-right: 15px;
-		}
-
-
-		option {
-			background-color: @color-white;
-			color: @color-black;
-			font-weight: 400;
-		}
-
+		margin-bottom: 15px;		
 	}
 	.widget-table-selector-search {
 		max-width: 300px;
 		display: inline-block;
 		margin-bottom: 15px;
-		height: 50px;
-		font-size: 16px;
-		font-weight: 600;
 	}
 }
 
@@ -969,11 +1004,18 @@ h4, .h4 {
 
 				.widget-expandable-listitem-definition {
 					padding: 15px 0;
-					border-top: 1px dashed @color-neutral;
+
+					+ .widget-expandable-listitem-definition {
+						border-top: 1px dashed @color-neutral;
+					}
 				}
 			}
 
 			&.widget-expandable-listitem-term-open {
+				.widget-expandable-listitem-term + .widget-expandable-listitem-definitions {
+					border-top: 1px dashed @color-neutral;
+				}
+
 				.widget-expandable-listitem-definitions {
 					display: block;
 				}
@@ -1000,10 +1042,10 @@ h4, .h4 {
 	.widget-indicator-number {
 		padding: 4px 0 4px 7px;
 		line-height: 1em;
-		border: 1px dashed @color-secondary;
+		border: 1px dashed @color-primary;
 		font-size: 48px;
 		font-weight: 900;
-		color: @color-secondary;
+		color: @color-primary;
 		margin-bottom: 5px;
 	}
 

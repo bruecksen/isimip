@@ -371,6 +371,15 @@ data = {
             'href': 'http://sinnwerkstatt.com/',
         },
     },
+    'page_teaser_flat_nodescription': {
+        'name': 'Page Teaser Flat no Description',
+        'template': 'widgets/page-teaser-flat.html',
+        'context': {
+            'date': '8/12/2016',
+            'title': 'Impact Models in an industrialized semipermeable meta world',
+            'href': 'http://sinnwerkstatt.com/',
+        },
+    },
 
     'download_link': {
         'name': 'Download Link',
@@ -894,6 +903,20 @@ data = {
                     ],
                     'opened': True,
                 },
+                {
+                    'definitions': [
+                        {'text': 'This definition has no term.',},
+                        {'text': 'This is the second definition with no term.',},
+                    ],
+                    'opened': True,
+                    'notoggle': True,
+                },
+                {
+                    'term': 'Term without definition',
+                    'opened': True,
+                    'definitions': [
+                    ],
+                },
             ],
         },
     },
@@ -954,6 +977,17 @@ data = {
             'label': 'Name',
             'value': 'Schon ausgefüllt',
             'placeholder': 'Liesschen Müller',
+        },
+    },
+    'textinput_email': {
+        'name': 'Textinput Email',
+        'template': 'widgets/textinput.html',
+        'context': {
+            'id': 'textinput',
+            'label': 'E-Mail',
+            'type': 'email',
+            'value': '',
+            'placeholder': 'tester@sinnwerkstatt.com',
         },
     },
 

@@ -227,12 +227,22 @@ $(function() {
 			if(key == 13) { // the enter key code
 				var value = $(this).val();
 				var optionselement = selectfield.find('.widget-options');
+
+				// remove options that were manually entered before if this is a radio
+				var singleselect = $(this).hasClass('widget-select-customvalue-singleselect');
+				if (singleselect) {
+					optionselement.find('.widget-select-newcustomvalue').remove();
+				}
+
+				// clone last option with new value
 				var html = optionselement.find('label:last')[0].outerHTML;
-				console.log(html);
 				optionselement.append(html);
 				optionselement.find('label:last')
+					.addClass('widget-select-newcustomvalue')
+					.find('input')
 					.prop('checked', true)
 					.prop('value', value)
+					.parent()
 					.find('span').text(value);
 
 				// reset input
