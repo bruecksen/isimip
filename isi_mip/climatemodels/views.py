@@ -6,7 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core import urlresolvers
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
 from wagtail.wagtailcore.models import Page
 
@@ -70,25 +70,20 @@ def impact_model_download(page, request):
     return response
 
 def impact_model_edit(page, request, id):
-    context = {
-        'page': page,
-    }
-    if id:
-        impactmodel = ImpactModel.objects.get(id=id)
-        context['subpage'] = Page(title='Impact Model: %s' % impactmodel.name)
-    else:
-        impactmodel = ImpactModel()
-        context['subpage'] = Page(title='New Impact Model')
+    impactmodel = ImpactModel.objects.get(id=id)
+    context = {'page': page, 'subpage': Page(title='Impact Model: %s' % impactmodel.name)}
 
     if request.method == 'POST':
-        context['form'] = ImpactModelForm(request.POST, instance=impactmodel)
-        if context['form'].is_valid():
-            messages.success(request, "Changes have been saved.")
+        form = ImpactModelForm(request.POST, instance=impactmodel)
+        form.do_the_thing()
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Changes to your model have been saved successfully.")
         else:
-            messages.warning(request, context['form'].errors)
+            messages.warning(request, form.errors)
     else:
-        context['form'] = ImpactModelForm(instance=impactmodel)
-
+        form = ImpactModelForm(instance=impactmodel)
+    context['form'] = form
     template = 'climatemodels/edit.html'
     return render(request, template, context)
 

@@ -1,9 +1,6 @@
 from blog.models import BlogIndexPage as _BlogIndexPage
 from blog.models import BlogPage as _BlogPage
-from django.contrib import messages
-from django.core import urlresolvers
 from django.db import models
-from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.template.response import TemplateResponse
 from modelcluster.fields import ParentalKey
@@ -16,7 +13,6 @@ from wagtail.wagtailcore.models import Page, Orderable
 from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
-from isi_mip.climatemodels.forms import ImpactModelForm
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.climatemodels.views import impact_model_details, impact_model_edit, input_data_details, \
     impact_model_download
@@ -258,6 +254,7 @@ class ImpactModelsPage(RoutablePageWithDefault):
 
     @route(r'edit/(?P<id>[0-9]*)/$')
     def edit(self, request, id=None):
+        # return ImpactModelEdit.as_view()
         return impact_model_edit(self, request, id)
 
     @route(r'download/$')
