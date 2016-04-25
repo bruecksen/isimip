@@ -21,7 +21,7 @@ def footer(context, **kwargs):
             active = True
         else:
             active = False
-        links.append({'url': target.url, 'text': name, 'active': active})
+        links.append({'url': target.url + (link.anchor or ''), 'text': name, 'active': active})
 
     context['links'] = links
     context.update(kwargs)

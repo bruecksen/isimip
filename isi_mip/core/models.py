@@ -39,11 +39,14 @@ class FooterLinks(ClusterableModel, BaseSetting):
 class FooterLink(Orderable, models.Model):
     footer = ParentalKey(FooterLinks, related_name='footer_links')
     target = models.ForeignKey('wagtailcore.Page')
+    anchor = models.CharField(max_length=500, null=True, blank=True, help_text='A specific anchor to scroll to.')
     _name = models.CharField(max_length=255, null=True, blank=True, verbose_name='Alt. name',
                              help_text='If left empty, the target\'s title will be used.')
     name = property(lambda self: self._name or self.target.title)
 
     panels = [
         PageChooserPanel('target'),
+        FieldPanel('anchor'),
         FieldPanel('_name'),
+
     ]
