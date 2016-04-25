@@ -36,7 +36,7 @@ class ClimateVariable(models.Model):
         return '{0.name} ({0.abbreviation})'.format(self)
 
     def as_span(self):
-        return '<span title="{0.name}">{0.abbreviation}</span>'.format(self)
+        return '<abbr title="{0.name}">{0.abbreviation}</abbr>'.format(self)
 
 
 class InputPhase(models.Model):
@@ -85,6 +85,7 @@ class InputData(models.Model):
     phase = models.ForeignKey(InputPhase, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     caveats = models.TextField(null=True, blank=True)
+    download_instructions = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name

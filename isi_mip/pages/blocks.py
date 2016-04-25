@@ -7,23 +7,11 @@ from wagtail.wagtailimages.blocks import ImageChooserBlock
 
 from isi_mip.contrib.blocks import EmailBlock
 
-BASE_BLOCKS = [
-    ('rich_text', RichTextBlock()),
-]
 
 class RowBlock(StreamBlock):
     class Meta:
         icon = 'horizontalrule'
         template = 'blocks/row_block.html'
-
-
-class Heading3Block(CharBlock):
-    class Meta:
-        template = 'widgets/heading3.html'
-    def get_context(self, value):
-        context = super().get_context(value)
-        context['text'] = value
-        return context
 
 
 class ImageBlock(ImageChooserBlock):
@@ -36,6 +24,13 @@ class ImageBlock(ImageChooserBlock):
         context['url'] = value.get_rendition('max-1200x1200').url
         context['name'] = value.title
         return context
+
+
+BASE_BLOCKS = [
+    ('rich_text', RichTextBlock()),
+    ('embed', EmbedBlock()),
+    ('image', ImageBlock()),
+]
 
 
 class SmallTeaserBlock(StructBlock):
@@ -85,7 +80,7 @@ class BigTeaserBlock(StructBlock):
         context['super_title'] = value.get('title')
 
         image = value.get('picture')
-        rendition = image.get_rendition('fill-1920x640-c100')
+        rendition = image.get_rendition('max-800x800')
         context['image'] = {'url': rendition.url, 'name': image.title}
         if value.get('internal_link'):
             context['href'] = value.get('internal_link').url
@@ -218,7 +213,6 @@ class ContactBlock(StructBlock):
     website = URLBlock()
     email = EmailBlock()
 
-
 class SectorBlock(StructBlock):
     name = CharBlock()
     image = ImageBlock(required=False)
@@ -251,16 +245,45 @@ class ContactsBlock(StructBlock):
             context['sectors'] += [sector_dict]
         return context
 
+class PDFBlock(StructBlock):
+    file = DocumentChooserBlock()
+    description = CharBlock()
 
-CONTENT_BLOCKS = BASE_BLOCKS + [
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['button'] = {
+            'text': 'Download',
+            'href': value.get('file').url
+        }
+        context['description'] = value.get('description')
+        context['fontawesome'] = 'file-pdf-o'
+        return context
+
+    class Meta:
+        image = ''
+        template = 'widgets/download-link.html'
+
+
+#     def render_basic(self, value):
+#         ret = super().render_basic(value)
+#         if ret:
+#             ret = 'PDF' + ret
+#         return ret
+
+
+
+_COLUMNS_BLOCKS = BASE_BLOCKS + [
+    ('small_teaser', SmallTeaserBlock()),
+    ('big_teaser', BigTeaserBlock()),
+    ('isinumbers', IsiNumbersBlock()),
     ('link', LinkBlock()),
-    ('embed', EmbedBlock()),
     ('faqs', FAQsBlock()),
+    ('pdf', PDFBlock()),
 ]
 
 class ColumnsBlock(StructBlock):
-    left_column = StreamBlock(CONTENT_BLOCKS)
-    right_column = StreamBlock(CONTENT_BLOCKS, form_classname='pull-right')
+    left_column = StreamBlock(_COLUMNS_BLOCKS)
+    right_column = StreamBlock(_COLUMNS_BLOCKS) #, form_classname='pull-right')
 
     def get_context(self, value):
         context = super().get_context(value)
@@ -288,28 +311,44 @@ class Columns2To1Block(ColumnsBlock):
         label = 'Columns 2:1'
         template = 'widgets/columns-2-1.html'
 
+class Columns1To1To1Block(ColumnsBlock):
+    center_column = StreamBlock(_COLUMNS_BLOCKS)
 
-class PDFBlock(StructBlock):
-    file = DocumentChooserBlock()
-    description = CharBlock()
+    class Meta:
+        label = 'Columns 1:1:1'
+        template = 'widgets/columns-1-1-1.html'
 
     def get_context(self, value):
         context = super().get_context(value)
-        context['button'] = {
-            'text': 'Download',
-            'href': value.get('file').url
-        }
-        context['description'] = value.get('description')
-        context['fontawesome'] = 'file-pdf-o'
+        context['center_column'] = value.get('center_column')
         return context
 
+
+class Columns1To1To1To1Block(StructBlock):
+    first_column = StreamBlock(_COLUMNS_BLOCKS)
+    second_column = StreamBlock(_COLUMNS_BLOCKS)
+    third_column = StreamBlock(_COLUMNS_BLOCKS)
+    fourth_column = StreamBlock(_COLUMNS_BLOCKS)
+
     class Meta:
-        image = ''
-        template = 'widgets/download-link.html'
+        icon = 'fa fa-columns'
+        label = 'Columns 1:1:1:1'
+        template = 'widgets/columns-1-1-1-1.html'
 
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['first_column'] = value.get('first_column')
+        context['second_column'] = value.get('second_column')
+        context['third_column'] = value.get('third_column')
+        context['fourth_column'] = value.get('fourth_column')
+        return context
 
-#     def render_basic(self, value):
-#         ret = super().render_basic(value)
-#         if ret:
-#             ret = 'PDF' + ret
-#         return ret
+COLUMNS_BLOCKS = [
+    ('columns_1_to_1', Columns1To1Block()),
+    ('columns_1_to_2', Columns1To2Block()),
+    ('columns_2_to_1', Columns2To1Block()),
+    ('columns_1_to_1_to_1', Columns1To1To1Block()),
+    ('columns_1_to_1_to_1_to_1', Columns1To1To1To1Block()),
+
+]
+

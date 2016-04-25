@@ -106,7 +106,7 @@ class OutputDataBlock(StructBlock):
         context['head'] = {'cols': [{'text': 'Sector'}, {'text': 'Model'}, {'text': 'Scenario'},
                                     {'text': 'Climate Driver'}, {'text': 'Date'}]}
         context['body'] = {
-            'rows': []
+            'rows': [],
         }
 
         for outputdata in OutputData.objects.all():
@@ -121,7 +121,9 @@ class OutputDataBlock(StructBlock):
                     {'texts': [outputdata.date]}]
                 }
             ]
-        context['searchfield'] = {'value':''}
+        context['id'] = 'selectorable'
+        context['tableid'] = 'selectorable'
+        context['searchfield'] = {'value': ''}
         return context
 
     class Meta:

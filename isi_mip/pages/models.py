@@ -18,6 +18,8 @@ from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
 from isi_mip.climatemodels.forms import ImpactModelForm
 from isi_mip.climatemodels.models import ImpactModel, InputData
+from isi_mip.climatemodels.views import impact_model_details, impact_model_edit, input_data_details, \
+    impact_model_download
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
 
@@ -28,13 +30,11 @@ class BlogPage(_BlogPage):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context['blog'] = self
-
         try:
             rendition = self.header_image.get_rendition('max-800x800')
             context['image'] = {'url': rendition.url, 'name': self.header_image.title}
         except:
             pass
-
         return context
 
 
@@ -51,17 +51,18 @@ class BlogIndexPage(_BlogIndexPage):
 
         context['entries'] = []
         for entry in entries:
+            body = '' if entry.body.strip() == '<p><br/></p>' else entry.body
             entry_context = {
                 'date': entry.date,
                 'href': entry.slug,
-                'description': smart_truncate(entry.body, 300, 350),
+                'description': smart_truncate(body, 300, 350),
                 'title': entry.title,
                 'arrow_right_link': True
             }
             try:
                 rendition = entry.header_image.get_rendition('max-800x800')
                 entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
-                entry_context['description'] = smart_truncate(entry.body, 0, 100)
+                entry_context['description'] = smart_truncate(body, 0, 100)
             except:
                 pass
             context['entries'] += [entry_context]
@@ -89,6 +90,15 @@ class RoutablePageWithDefault(RoutablePage):
 
     class Meta:
         abstract = True
+
+
+class GenericPage(Page):
+    template = 'pages/default_page.html'
+
+    content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('content'),
+    ]
 
 
 class HomePage(RoutablePageWithDefault):
@@ -196,6 +206,8 @@ class HomePage(RoutablePageWithDefault):
 
 
 class AboutPage(Page):
+    template = 'pages/default_page.html'
+
     content = StreamField([
         ('columns_1_to_1', Columns1To1Block()),
         ('columns_1_to_2', Columns1To2Block()),
@@ -209,12 +221,11 @@ class AboutPage(Page):
         StreamFieldPanel('content')
     ]
 
-    template = 'pages/default_page.html'
-
 
 class GettingStartedPage(RoutablePageWithDefault):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
+
     content = StreamField([
         ('input_data', InputDataBlock()),
         ('contact', ContactsBlock()),
@@ -226,40 +237,13 @@ class GettingStartedPage(RoutablePageWithDefault):
 
     @route(r'^details/(?P<id>\d+)/$')
     def details(self, request, id):
-        data = InputData.objects.get(id=id)
-        template = 'pages/input_data_details_page.html'
-
-        description = '<b>TODO</b> Intro Text unde omnis iste natus error sit voluptatem accusantium totam.' # TODO: THIS IS STATIC
-        if request.user.is_superuser:
-            description += ' | <a href="{}">admin edit</a>'.format(
-                urlresolvers.reverse('admin:climatemodels_inputdata_change', args=(data.id,)))
-
-        context = {'page': self,
-                   'subpage': Page(title='Input Data Set: %s' % data),
-                   'description': description,
-                   'list': [
-                       {
-                           'notoggle': True,
-                           'opened': True,
-                           # 'term': data.name, # TODO: Tom schau mal hier.
-                           'definitions': [
-                               {'text': 'Data Type: %s' % data.data_type},
-                               {'text': 'Scenario: %s' % data.scenario},
-                               {'text': 'Phase: %s' % data.phase},
-                               {'text': 'Variables: %s' % ', '.join((x.as_span() for x in data.variables.all()))},
-                           ]
-                       },
-                       {'notoggle': True, 'opened': True, 'term': 'Description',
-                        'definitions': [{'text': data.description}]},
-                       {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': [{'text': data.caveats}]},
-                   ]
-                   }
-        return render(request, template, context)
+        return input_data_details(self, request, id)
 
 
 class ImpactModelsPage(RoutablePageWithDefault):
-    parent_page_types = [HomePage]
     template = 'pages/default_page.html'
+    parent_page_types = [HomePage]
+
     content = StreamField([
         ('impact_models', ImpactModelsBlock()),
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
@@ -270,55 +254,15 @@ class ImpactModelsPage(RoutablePageWithDefault):
 
     @route(r'^details/(?P<id>\d+)/$')
     def details(self, request, id):
-        im = ImpactModel.objects.get(id=id)
-        template = 'pages/impact_models_details_page.html'
-        im_values = im.values_to_tuples() + im.fk_sector.values_to_tuples()
-        model_details = []
-        for k, v in im_values:
-            if any((y for x,y in v)):
-                res = {'term': k,
-                       'definitions': ({'text': "<i>%s</i>: %s" % (x,y)} for x,y in v if y)
-                       }
-                model_details.append(res)
-        model_details[0]['opened'] = True
-
-        description = '<b>TODO</b> Intro Text unde omnis iste natus error sit voluptatem accusantium totam.' # TODO: THIS IS STATIC
-        context = {
-            'page': self,
-            'subpage': Page(title='Impact Model: %s' % im.name),
-            'description': description,
-            'headline': im.name,
-            'list': model_details,
-        }
-        if request.user == im.owner:
-            context['editlink'] = '<a href="{}">edit</a>'.format(
-                self.url +  self.reverse_subpage('edit', args=(im.id,)))
-        if request.user.is_superuser:
-            context['editlink'] += ' | <a href="{}">admin edit</a>'.format(
-                urlresolvers.reverse('admin:climatemodels_impactmodel_change', args=(im.id,)))
-        return render(request, template, context)
+        return impact_model_details(self, request, id)
 
     @route(r'edit/(?P<id>[0-9]*)/$')
     def edit(self, request, id=None):
-        context = {}
-        if id:
-            gen = ImpactModel.objects.get(id=id)
-        else:
-            gen = ImpactModel()
+        return impact_model_edit(self, request, id)
 
-        if request.method == 'POST':
-            context['form'] = ImpactModelForm(request.POST, instance=gen)
-            if context['form'].is_valid():
-                messages.success(request, "Changes have been saved.")
-            else:
-                messages.warning(request,context['form'].errors)
-        else:
-            context['form'] = ImpactModelForm(instance=gen)
-
-        template = 'climatemodels/edit.html'
-        return render(request, template, context)
-
-
+    @route(r'download/$')
+    def download(self, request):
+        return impact_model_download(self, request)
 
         # @route(r'^csv/$')
         # def csv(self, request):
@@ -333,10 +277,10 @@ class ImpactModelsPage(RoutablePageWithDefault):
         #     return response
 
 
-
 class OutputDataPage(Page):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
+
     content = StreamField([
         ('output_data', OutputDataBlock()),
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
@@ -352,7 +296,6 @@ class OutcomesPage(Page):
     content = StreamField([
         ('papers', PapersBlock()),
     ])
-
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
@@ -360,17 +303,17 @@ class OutcomesPage(Page):
 
 class FAQPage(Page):
     template = 'pages/default_page.html'
+
     content = StreamField([
         ('richtext', RichTextBlock()),
         ('columns_1_to_1', Columns1To1Block()),
         ('faqs', FAQsBlock()),
-        # ('heading3', Heading3Block()),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
 
-# Footer Pages
+
 class LinkListPage(Page):
     links = StreamField([
         ('link', LinkBlock()),
@@ -395,14 +338,12 @@ class FormField(AbstractFormField):
 
 
 class FormPage(AbstractEmailForm):
+    landing_page_template = 'pages/form_page_confirmation.html'
     subpage_types = []
 
     top_content = StreamField([('richtext', RichTextBlock())])
     confirmation_text = models.TextField(default='Your registration was submitted')
     bottom_content = StreamField([('richtext', RichTextBlock())])
-
-    landing_page_template = 'pages/form_page_confirmation.html'
-
 
     content_panels = AbstractEmailForm.content_panels + [
         StreamFieldPanel('top_content'),

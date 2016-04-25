@@ -1,12 +1,23 @@
-{% extends "pages/default_page.html" %}
-
-{% block content %}
-<form method="POST">
-    {% csrf_token %}
-		<table>
-			{{ form.as_table }}
-		</table>
-    <button type="submit" name="_submit" class="btn-primary">Continue</button>
-</form>
-
+{% extends 'pages/default_page.html' %}
+{% load breadcrumb %}
+{% block content_container %}
+	<div class="background-container">
+		<div class="content-container container">
+			<div class="content-container-border">
+				<div class="content-container-inner">
+					{% breadcrumb %}
+					{% include 'widgets/heading1.html' with text=subpage.title %}
+					{% block content %}
+						<form method="POST">
+							{% csrf_token %}
+							<table>
+								{{ form.as_table }}
+							</table>
+							<button type="submit" name="_submit" class="btn-primary">Continue</button>
+						</form>
+					{% endblock %}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
