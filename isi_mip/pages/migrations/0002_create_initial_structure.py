@@ -96,7 +96,7 @@ def  create_structure(apps, schema_editor):
     HeaderLink.objects.create(header=hls, target=gettingstartedpage.page)
 
     aboutpage = RichPage(apps, 'pages.AboutPage', 'pages', 'aboutpage')
-    aboutpage.page('About ISI-MIP', 'about')
+    aboutpage.page('About ISIMIP', 'about')
     homepage.add_child(aboutpage)
     HeaderLink.objects.create(header=hls, target=aboutpage.page)
 
