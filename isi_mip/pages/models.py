@@ -15,7 +15,7 @@ from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.climatemodels.views import impact_model_details, impact_model_edit, input_data_details, \
-    impact_model_download
+    impact_model_download, impact_model_sector_edit
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
 
@@ -256,6 +256,10 @@ class ImpactModelsPage(RoutablePageWithDefault):
     def edit(self, request, id=None):
         # return ImpactModelEdit.as_view()
         return impact_model_edit(self, request, id)
+
+    @route(r'edit/sector/(?P<id>[0-9]*)/$')
+    def edit_sector(self, request, id=None):
+        return impact_model_sector_edit(self, request, id)
 
     @route(r'download/$')
     def download(self, request):

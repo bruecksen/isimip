@@ -12,12 +12,22 @@ class TomiTextInput(TextInput):
 
     def render(self, name, value, attrs=None):
         template = 'widgets/textarea.html' if self.textarea else 'widgets/textinput.html'
-
-        context = {'id': name,
-                   # 'placeholder': name,
-                   'value': value}
+        context = {
+            'id': name,
+            # 'placeholder': name,
+            'value': value or '',
+            'readonly': 'readonly' in self.build_attrs() and self.build_attrs()['readonly']
+        }
         if self.emailfield:
             context['type'] = 'email'
+        return render_to_string(template, context)
+
+class NullBooleanSelect(Select):
+    def render(self, name, value, attrs=None, choices=()):
+        template = 'widgets/nullboolean.html'
+        context = {'id': name,
+                   # 'label': 'Hollywood hat alle Apollo-Missionen auf dem Mond gedreht',
+                   'value': value}
         return render_to_string(template, context)
 
 

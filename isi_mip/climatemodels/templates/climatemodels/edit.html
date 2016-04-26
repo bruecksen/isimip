@@ -1,5 +1,5 @@
 {% extends 'pages/default_page.html' %}
-{% load breadcrumb crispy_forms_tags %}
+{% load breadcrumb formuchtel %}
 {% block content_container %}
 	<div class="background-container">
 		<div class="content-container container">
@@ -9,23 +9,68 @@
 					{% include 'widgets/heading2.html' with text=subpage.title %}
 					{% block content %}
 						<form method="POST">
-							{% crispy form  %}
-							{{ cform.management_form }}
-							{% for field in cform %}
+							{% nussform form as nf %}
+							{% csrf_token %}
+							<fieldset>
+								<legend>Basic Information</legend>
+								{{ nf.name }}
+								{{ nf.sector }}
+								{{ nf.region }}
+								{{ nf.simulation_round }}
+								{{ nf.version }}
+								{{ nf.short_description }}
+							</fieldset>
+							<fieldset>
+								<legend>Technical Information</legend>
+								{{ nf.spatial_aggregation}}
+								{{ nf.spatial_resolution}}
+								{{ nf.temporal_resolution_climate}}
+								{{ nf.temporal_resolution_co2}}
+								{{ nf.temporal_resolution_land}}
+								{{ nf.temporal_resolution_soil}}
+							</fieldset>
+							<fieldset>
+								<legend>Input Data</legend>
+								{{ nf.climate_data_sets}}
+								{{ nf.climate_variables}}
+								{{ nf.socioeconomic_input_variables}}
+								{{ nf.soil_dataset}}
+								{{ nf.additional_input_data_sets}}
+							</fieldset>
+							<fieldset>
+								<legend>Other</legend>
+								{{ nf.exceptions_to_protocol}}
+								{{ nf.spin_up}}
+								{{ nf.spin_up_design}}
+								{{ nf.natural_vegetation_partition}}
+								{{ nf.natural_vegetation_dynamics}}
+								{{ nf.natural_vegetation_cover_dataset}}
+								{{ nf.management}}
+								{{ nf.extreme_events}}
+								{{ nf.anything_else}}
+								{{ nf.comments}}
+							</fieldset>
+							<fieldset>
+								<legend>TODO</legend>
+								{{ nf.references }}
+								{{ cform.management_form }}
+								{% for field in cform %}
 
-								<ul>
-									<li>
-										{# Include the hidden fields in the form #}
-										{% if forloop.first %}
-											{% for hidden in form.hidden_fields %}
-												{{ hidden }}
-											{% endfor %}
-										{% endif %}
-										{{ field.errors.as_ul }}
-										{{ field }}
-									</li>
-								</ul>
-							{% endfor %}
+									<ul>
+										<li>
+											{# Include the hidden fields in the form #}
+											{% if forloop.first %}
+												{% for hidden in form.hidden_fields %}
+													{{ hidden }}
+												{% endfor %}
+											{% endif %}
+											{{ field.errors.as_ul }}
+											{{ field }}
+										</li>
+									</ul>
+								{% endfor %}
+							</fieldset>
+
 							<div class="form-actions">
 								<input type="submit" name="submit" value="Continue" class="btn btn-primary" id="submit-save">
 							</div>

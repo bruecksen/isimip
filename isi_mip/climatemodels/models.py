@@ -175,7 +175,7 @@ class ImpactModel(models.Model):
     NA_YES_NO = ((None, '---------'), (True, 'Yes'), (False, 'No'))
     spin_up = models.NullBooleanField(
         verbose_name='Did you spin-up your model?',
-        help_text="`No` indicates the simulations were run starting in the first reporting year 1971",
+        help_text="'No' indicates the simulations were run starting in the first reporting year 1971",
         choices=NA_YES_NO
     )
     spin_up_design = models.TextField(
@@ -223,12 +223,14 @@ class ImpactModel(models.Model):
     CACHE_KEY = "climatemodels/impact_model/sector/%d"
 
     @property
-    def fk_sector(self):
+    def fk_sector_name(self):
         sector = SECTOR_MAPPING[self.sector]
         sectorname = sector._meta.label_lower.rsplit('.')[-1]
-        return getattr(self, sectorname)
-        # TODO: check if the upper doesnt hit the database like the lower does.
-        # return sector.objects.get(impact_model=self)
+        return sectorname
+
+    @property
+    def fk_sector(self):
+        return getattr(self, self.fk_sector_name)
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
@@ -251,7 +253,7 @@ class ImpactModel(models.Model):
             ]),
             ('Technical Information', [
                 (vname('spatial_aggregation'), self.spatial_aggregation),
-                (vname('resolution'), self.spatial_resolution),
+                (vname('spatial_resolution'), self.spatial_resolution),
                 (vname('temporal_resolution_climate'), self.temporal_resolution_climate),
                 (vname('temporal_resolution_co2'), self.temporal_resolution_co2),
                 (vname('temporal_resolution_land'), self.temporal_resolution_land),
@@ -428,24 +430,24 @@ class Agriculture(Sector):
 
 
 class Energy(Sector):
-    # Model & method characteristics
+    # Model & Method Characteristics
     model_type = models.TextField(null=True, blank=True, verbose_name='Model type')
     temporal_extent = models.TextField(null=True, blank=True, verbose_name='Temporal extent')
     temporal_resolution = models.TextField(null=True, blank=True, verbose_name='Temporal resolution')
     data_format_for_input = models.TextField(null=True, blank=True, verbose_name='Data format for input')
-    #_Impact_Types
+    # Impact Types
     impact_types_energy_demand = models.TextField(null=True, blank=True, verbose_name='Energy demand (heating & cooling)')
     impact_types_temperature_effects_on_thermal_power = models.TextField(null=True, blank=True, verbose_name='Temperature effects on thermal power')
     impact_types_weather_effects_on_renewables = models.TextField(null=True, blank=True, verbose_name='Weather effects on renewables')
     impact_types_water_scarcity_impacts = models.TextField(null=True, blank=True, verbose_name='Water scarcity impacts')
     impact_types_other = models.TextField(null=True, blank=True, verbose_name='Other (agriculture, infrastructure, adaptation)')
-    #Output
+    # Output
     output_energy_demand = models.TextField(null=True, blank=True, verbose_name='Energy demand (heating & cooling)')
     output_energy_supply = models.TextField(null=True, blank=True, verbose_name='Energy supply')
     output_water_scarcity = models.TextField(null=True, blank=True, verbose_name='Water scarcity')
     output_economics = models.TextField(null=True, blank=True, verbose_name='Economics')
     output_other = models.TextField(null=True, blank=True, verbose_name='Other (agriculture, infrastructure, adaptation)')
-    #_Further_information
+    # Further Information
     variables_not_directly_from_GCMs = models.TextField(null=True, blank=True, verbose_name='Variables not directly from GCMs')
     response_function_of_energy_demand_to_HDD_CDD = models.TextField(null=True, blank=True, verbose_name='Response function of energy demand to HDD/CDD')
     factor_definition_and_calculation = models.TextField(null=True, blank=True, verbose_name='Definition and calculation of variable potential and load factor')

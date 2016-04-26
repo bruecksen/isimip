@@ -5,12 +5,12 @@ from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core import urlresolvers
 from django.core.urlresolvers import reverse
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
 from wagtail.wagtailcore.models import Page
 
-from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, ContactPersonFormset
+from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, ContactPersonFormset, get_sector_form
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 
@@ -81,6 +81,9 @@ def impact_model_edit(page, request, id):
             form.save()
             contactform.save()
             messages.success(request, "Changes to your model have been saved successfully.")
+            target_url = page.url + page.reverse_subpage('edit_sector', args=(impactmodel.id,))
+            return HttpResponseRedirect(target_url)
+            #return impact_model_sector_edit(page, request, id)
         else:
             messages.warning(request, form.errors)
     else:
@@ -89,6 +92,25 @@ def impact_model_edit(page, request, id):
     context['form'] = form
     context['cform'] = contactform
     template = 'climatemodels/edit.html'
+    return render(request, template, context)
+
+def impact_model_sector_edit(page, request, id):
+    impactmodel = ImpactModel.objects.get(id=id)
+
+    context = {'page': page, 'subpage': Page(title='Impact Model: %s' % impactmodel.name)}
+    formular = get_sector_form(impactmodel.fk_sector_name)
+    if request.method == 'POST':
+        form = formular(request.POST, instance=impactmodel.fk_sector)
+        form.do_the_thing()
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Changes to your model have been saved successfully.")
+        else:
+            messages.warning(request, form.errors)
+    else:
+        form = formular(instance=impactmodel.fk_sector)
+    context['form'] = form
+    template = 'climatemodels/edit_{}.html'.format(impactmodel.fk_sector_name)
     return render(request, template, context)
 
 

@@ -1,0 +1,66 @@
+{% extends 'pages/default_page.html' %}
+{% load breadcrumb formuchtel %}
+{% block content_container %}
+	<div class="background-container">
+		<div class="content-container container">
+			<div class="content-container-border">
+				<div class="content-container-inner">
+					{% breadcrumb %}
+					{% include 'widgets/heading2.html' with text=subpage.title %}
+					{% block content %}
+						<form method="POST">
+							{% nussform form as nf %}
+							{% csrf_token %}
+							{% include 'widgets/heading3.html' with text='Key Input and Management' %}
+							<fieldset>
+								<legend>Provide a yes/no answer and a short description of how the process is included</legend>
+								{{ nf.crops }}
+								{{ nf.land_coverage }}
+								{{ nf.planting_date_decision }}
+								{{ nf.planting_density }}
+								{{ nf.crop_cultivars }}
+								{{ nf.fertilizer_application }}
+								{{ nf.irrigation }}
+								{{ nf.crop_residue }}
+								{{ nf.initial_soil_water }}
+								{{ nf.initial_soil_nitrate_and_ammonia }}
+								{{ nf.initial_soil_C_and_OM }}
+								{{ nf.initial_crop_residue }}
+							</fieldset>
+							{% include 'widgets/heading3.html' with text='Key model processes' %}
+							<fieldset>
+								<legend>Please specify methods for model calibration and validation</legend>
+								{{ nf.lead_area_development }}
+								{{ nf.light_interception }}
+								{{ nf.light_utilization }}
+								{{ nf.yield_formation }}
+								{{ nf.crop_phenology }}
+								{{ nf.root_distribution_over_depth }}
+								{{ nf.stresses_involved }}
+								{{ nf.type_of_water_stress }}
+								{{ nf.type_of_heat_stress }}
+								{{ nf.water_dynamics }}
+								{{ nf.evapo_transpiration }}
+								{{ nf.soil_CN_modeling }}
+								{{ nf.co2_effects }}
+							</fieldset>
+							{% include 'widgets/heading3.html' with text='Methods for model calibration and validation' %}
+							<fieldset>
+								<legend>Please specify methods for model calibration and validation</legend>
+								{{ nf.parameters_number_and_description }}
+								{{ nf.calibrated_values }}
+								{{ nf.output_variable_and_dataset }}
+								{{ nf.spatial_scale_of_calibration_validation }}
+								{{ nf.temporal_scale_of_calibration_validation }}
+								{{ nf.criteria_for_evaluation }}
+							</fieldset>
+							<div class="form-actions">
+								<input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-save">
+							</div>
+						</form>
+					{% endblock %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
