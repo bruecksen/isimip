@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
 from wagtail.wagtailcore.models import Page
 
-from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm
+from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, ContactPersonFormset
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 
@@ -75,15 +75,19 @@ def impact_model_edit(page, request, id):
 
     if request.method == 'POST':
         form = ImpactModelForm(request.POST, instance=impactmodel)
+        contactform = ContactPersonFormset(request.POST, instance=impactmodel)
         form.do_the_thing()
         if form.is_valid():
             form.save()
+            contactform.save()
             messages.success(request, "Changes to your model have been saved successfully.")
         else:
             messages.warning(request, form.errors)
     else:
         form = ImpactModelForm(instance=impactmodel)
+        contactform = ContactPersonFormset(instance=impactmodel)
     context['form'] = form
+    context['cform'] = contactform
     template = 'climatemodels/edit.html'
     return render(request, template, context)
 

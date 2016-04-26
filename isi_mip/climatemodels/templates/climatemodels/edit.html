@@ -1,5 +1,5 @@
 {% extends 'pages/default_page.html' %}
-{% load breadcrumb %}
+{% load breadcrumb crispy_forms_tags %}
 {% block content_container %}
 	<div class="background-container">
 		<div class="content-container container">
@@ -9,11 +9,26 @@
 					{% include 'widgets/heading1.html' with text=subpage.title %}
 					{% block content %}
 						<form method="POST">
-							{% csrf_token %}
-							<table>
-								{{ form.as_table }}
-							</table>
-							<button type="submit" name="_submit" class="btn-primary">Continue</button>
+							{% crispy form  %}
+							{{ cform.management_form }}
+							{% for field in cform %}
+
+								<ul>
+									<li>
+										{# Include the hidden fields in the form #}
+										{% if forloop.first %}
+											{% for hidden in form.hidden_fields %}
+												{{ hidden }}
+											{% endfor %}
+										{% endif %}
+										{{ field.errors.as_ul }}
+										{{ field }}
+									</li>
+								</ul>
+							{% endfor %}
+							<div class="form-actions">
+								<input type="submit" name="submit" value="Continue" class="btn btn-primary" id="submit-save">
+							</div>
 						</form>
 					{% endblock %}
 				</div>

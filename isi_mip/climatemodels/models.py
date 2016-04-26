@@ -137,7 +137,7 @@ class ImpactModel(models.Model):
     # technical information
     spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True,
                                            help_text="e.g. regular grid, points, hyrdotopes...")
-    resolution = ChoiceOrOtherField(
+    spatial_resolution = ChoiceOrOtherField(
         max_length=500, choices=(('0.5°x0.5°', '0.5°x0.5°'),), blank=True, null=True, verbose_name='Spatial Resolution',
         help_text="The spatial resolution at which the ISIMIP simulations were run, if on a regular grid. Data was provided on a 0.5°x0.5° grid")
     TEMPORAL_RESOLUTION_CLIMATE_CHOICES = (('daily', 'daily'), ('monthly', 'monthly'), ('annual', 'annual'),)
@@ -251,7 +251,7 @@ class ImpactModel(models.Model):
             ]),
             ('Technical Information', [
                 (vname('spatial_aggregation'), self.spatial_aggregation),
-                (vname('resolution'), self.resolution),
+                (vname('resolution'), self.spatial_resolution),
                 (vname('temporal_resolution_climate'), self.temporal_resolution_climate),
                 (vname('temporal_resolution_co2'), self.temporal_resolution_co2),
                 (vname('temporal_resolution_land'), self.temporal_resolution_land),

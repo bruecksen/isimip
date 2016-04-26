@@ -56,13 +56,14 @@ class ImpactModelAdmin(admin.ModelAdmin):
 
     fieldsets = [
         ('Basic Information', {
-            'fields': ['name', 'sector', 'sector_link', 'region', 'version',
+            'fields': ['name', 'sector', 'sector_link', 'region', 'simulation_round',
+                       'version',
                        'main_reference_paper', 'other_references', 'short_description']}
          ),
         ('Technical Information', {
             'fields': [
                 # resolution
-                'resolution', 'temporal_resolution_climate', 'temporal_resolution_co2',
+                'spatial_aggregation', 'spatial_resolution', 'temporal_resolution_climate', 'temporal_resolution_co2',
                 'temporal_resolution_land', 'temporal_resolution_soil',
                 # input data
                 'climate_data_sets', 'climate_variables',
@@ -133,3 +134,4 @@ admin.site.register(Scenario, HideAdmin)
 admin.site.register(SocioEconomicInputVariables, HideAdmin)
 admin.site.register(ContactPerson, HideAdmin)
 admin.site.register(SimulationRound, HideAdmin)
+admin.site.register(SpatialAggregation, HideAdmin)
