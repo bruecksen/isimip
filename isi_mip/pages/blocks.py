@@ -5,8 +5,8 @@ from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
-from isi_mip.contrib.blocks import EmailBlock
-#from isi_mip.contrib.tools import Twitte
+from isi_mip.contrib.blocks import EmailBlock, IntegerBlock
+from isi_mip.twitter.twitter import Twitte
 
 
 class RowBlock(StreamBlock):
@@ -115,20 +115,21 @@ class IsiNumbersBlock(StructBlock):
         template = 'blocks/isi_numbers_block.html'
 
 
-# class TwitterBlock(StructBlock):
-#     username = CharBlock(required=True)
-#     #help_text='You will find username and widget_id @ https://twitter.com/settings/widgets/')
-#     # widget_id = CharBlock(required=True)
-#     # tweet_limit = CharBlock(required=True, max_length=2)
-#
-#     def get_context(self, value):
-#         context = super().get_context(value)
-#         twitte = Twitte()
-#         context['timeline'] = twitte.get_timeline(value.get('username'))
-#         return context
-#
-#     class Meta:
-#         template = 'blocks/twitter_block.html'
+class TwitterBlock(StructBlock):
+    username = CharBlock(required=True)
+    count = IntegerBlock(default=20)
+    #help_text='You will find username and widget_id @ https://twitter.com/settings/widgets/')
+    # widget_id = CharBlock(required=True)
+    # tweet_limit = CharBlock(required=True, max_length=2)
+
+    def get_context(self, value):
+        context = super().get_context(value)
+        twitte = Twitte(count=(value.get('count')))
+        context['timeline'] = twitte.get_timeline(value.get('username'))
+        return context
+
+    class Meta:
+        template = 'blocks/twitter_block.html'
 
 
 class PaperBlock(StructBlock):

@@ -14,6 +14,7 @@ from wagtail.wagtailsearch import urls as wagtailsearch_urls
 
 from isi_mip.climatemodels import urls as climatemodels_urls
 from isi_mip.invitation import urls as invitations_urls
+from isi_mip.twitter.views import twitte
 
 
 def superuser_required(view):

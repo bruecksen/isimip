@@ -60,3 +60,10 @@ INSTALLED_APPS += ('django_extensions', )
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Your local stuff: Below this line define 3rd party library settings
+
+TWITTER_TIMELINE = {
+    'consumer_key': 'pJQIabsSQR6gL5Q6pYGpeJkjB',
+    'consumer_secret': 'LqHVuYe4stTj7gJgHT5N0ZqkeVwucZozgT3QtUJSnCrvK0ICOo',
+    'access_token': '1286059596-6xr6gcEsVW6fsXfNuhJKABoKtymq5dVeZhCH6r0',
+    'access_token_secret': 'Ew042yOVCYR6nWM0zMCQwLt7wjKO8JGcTqS2kWBsrJYaW'
+}

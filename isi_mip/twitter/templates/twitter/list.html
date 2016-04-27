@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="twitter-timeline">
-	{% for status in timeline %}
+	{% for status in stati %}
 		<div class="twitter-timeline-update">
 			<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-useravatar">
 				<img src="{{ status.profile_image_url_https }}"/>
@@ -54,6 +54,11 @@
 			{% endif %}
 		</div>
 	{% endfor %}
+
+	<div class="container">
+		<h1>Twitter timeline</h1>
+		<div id="timeline"></div>
+	</div>
 </div>
 </body>
 </html>

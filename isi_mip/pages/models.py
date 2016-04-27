@@ -120,7 +120,7 @@ class HomePage(RoutablePageWithDefault):
             ('bigteaser', BigTeaserBlock(wideimage=True)),
             ('blog', BlogBlock()),
             ('numbers', IsiNumbersBlock()),
-            # ('twitter', TwitterBlock()),
+            ('twitter', TwitterBlock()),
         ])
          )
     ])
