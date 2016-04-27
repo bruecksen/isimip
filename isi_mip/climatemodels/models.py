@@ -104,19 +104,19 @@ class ImpactModel(models.Model):
     name = models.CharField(max_length=500)
     SECTOR_CHOICES = (
         ('Agriculture', 'Agriculture'),
-        ('Energy', 'Energy'),
-        ('Water (global)', 'Water (global)'),
-        ('Water (regional)', 'Water (regional)'),
+        ('Agro-Economic Modelling', 'Agro-Economic Modelling'),
+        ('Biodiversity', 'Biodiversity'),
         ('Biomes', 'Biomes'),
+        ('Coastal Infrastructure', 'Coastal Infrastructure'),
+        ('Computable General Equilibrium Modelling', 'Computable General Equilibrium Modelling'),
+        ('Energy', 'Energy'),
         ('Forests', 'Forests'),
+        ('Health', 'Health'),
         ('Marine Ecosystems and Fisheries (global)', 'Marine Ecosystems and Fisheries (global)'),
         ('Marine Ecosystems and Fisheries (regional)', 'Marine Ecosystems and Fisheries (regional)'),
-        ('Biodiversity', 'Biodiversity'),
-        ('Health', 'Health'),
-        ('Coastal Infrastructure', 'Coastal Infrastructure'),
         ('Permafrost', 'Permafrost'),
-        ('Computable General Equilibrium Modelling', 'Computable General Equilibrium Modelling'),
-        ('Agro-Economic Modelling', 'Agro-Economic Modelling'),
+        ('Water (global)', 'Water (global)'),
+        ('Water (regional)', 'Water (regional)'),
     )
     sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
     region = models.ManyToManyField(Region, help_text="For which regions does the model produce results?")
@@ -284,11 +284,8 @@ class ImpactModel(models.Model):
 class Sector(models.Model):
     impact_model = models.OneToOneField(ImpactModel)
 
-    # subsectors = ['agriculture', 'energy', 'water', 'biomes', 'forests', 'marineecosystems',
-    #               'biodiversity', 'health', 'coastalinfrastructure', 'permafrost']
-
     @staticmethod
-    def get(name):
+    def get(name: str):
         name = name.lower().strip()
         if "agriculture" in name:
             return Agriculture
@@ -429,136 +426,6 @@ class Agriculture(Sector):
         ]
 
 
-class Energy(Sector):
-    # Model & Method Characteristics
-    model_type = models.TextField(null=True, blank=True, verbose_name='Model type')
-    temporal_extent = models.TextField(null=True, blank=True, verbose_name='Temporal extent')
-    temporal_resolution = models.TextField(null=True, blank=True, verbose_name='Temporal resolution')
-    data_format_for_input = models.TextField(null=True, blank=True, verbose_name='Data format for input')
-    # Impact Types
-    impact_types_energy_demand = models.TextField(null=True, blank=True, verbose_name='Energy demand (heating & cooling)')
-    impact_types_temperature_effects_on_thermal_power = models.TextField(null=True, blank=True, verbose_name='Temperature effects on thermal power')
-    impact_types_weather_effects_on_renewables = models.TextField(null=True, blank=True, verbose_name='Weather effects on renewables')
-    impact_types_water_scarcity_impacts = models.TextField(null=True, blank=True, verbose_name='Water scarcity impacts')
-    impact_types_other = models.TextField(null=True, blank=True, verbose_name='Other (agriculture, infrastructure, adaptation)')
-    # Output
-    output_energy_demand = models.TextField(null=True, blank=True, verbose_name='Energy demand (heating & cooling)')
-    output_energy_supply = models.TextField(null=True, blank=True, verbose_name='Energy supply')
-    output_water_scarcity = models.TextField(null=True, blank=True, verbose_name='Water scarcity')
-    output_economics = models.TextField(null=True, blank=True, verbose_name='Economics')
-    output_other = models.TextField(null=True, blank=True, verbose_name='Other (agriculture, infrastructure, adaptation)')
-    # Further Information
-    variables_not_directly_from_GCMs = models.TextField(null=True, blank=True, verbose_name='Variables not directly from GCMs')
-    response_function_of_energy_demand_to_HDD_CDD = models.TextField(null=True, blank=True, verbose_name='Response function of energy demand to HDD/CDD')
-    factor_definition_and_calculation = models.TextField(null=True, blank=True, verbose_name='Definition and calculation of variable potential and load factor')
-    biomass_types = models.TextField(null=True, blank=True, verbose_name='Biomass types')
-    maximum_potential_assumption = models.TextField(null=True, blank=True, verbose_name='Maximum potential assumption')
-    bioenergy_supply_costs = models.TextField(null=True, blank=True, verbose_name='Bioenergy supply costs')
-    socioeconomic_input = models.TextField(null=True, blank=True, verbose_name='Socio-economic input')
-
-    def values_to_tuples(self) -> list:
-        vname = self._get_verbose_field_name
-        return [
-            ('Model & method characteristics', [
-                (vname('model_type'), self.model_type),
-                (vname('temporal_extent'), self.temporal_extent),
-                (vname('temporal_resolution'), self.temporal_resolution),
-                (vname('data_format_for_input'), self.data_format_for_input),
-            ]),
-            ('Impact Types', [
-
-                (vname('impact_types_energy_demand'), self.impact_types_energy_demand),
-                (vname('impact_types_temperature_effects_on_thermal_power'), self.impact_types_temperature_effects_on_thermal_power),
-                (vname('impact_types_weather_effects_on_renewables'), self.impact_types_weather_effects_on_renewables),
-                (vname('impact_types_water_scarcity_impacts'), self.impact_types_water_scarcity_impacts),
-                (vname('impact_types_other'), self.impact_types_other),
-            ]),
-            ('Output', [
-                (vname('output_energy_demand'), self.output_energy_demand),
-                (vname('output_energy_supply'), self.output_energy_supply),
-                (vname('output_water_scarcity'), self.output_water_scarcity),
-                (vname('output_economics'), self.output_economics),
-                (vname('output_other'), self.output_other),
-            ]),
-            ('Further Information', [
-                (vname('variables_not_directly_from_GCMs'), self.variables_not_directly_from_GCMs),
-                (vname('response_function_of_energy_demand_to_HDD_CDD'), self.response_function_of_energy_demand_to_HDD_CDD),
-                (vname('factor_definition_and_calculation'), self.factor_definition_and_calculation),
-                (vname('biomass_types'), self.biomass_types),
-                (vname('maximum_potential_assumption'), self.maximum_potential_assumption),
-                (vname('bioenergy_supply_costs'), self.bioenergy_supply_costs),
-                (vname('socioeconomic_input'), self.socioeconomic_input),
-            ])
-        ]
-
-
-
-
-class Water(Sector):
-    technological_progress = models.TextField(
-        null=True, blank=True,
-        help_text='Does the model account for GDP changes and technological progress? If so, how are these integrated into the runs?'
-    )
-    soil_layers = models.TextField(null=True, blank=True,
-                                   help_text='How many soil layers are used? Which qualities do they have?')
-    water_use = models.TextField(null=True, blank=True, verbose_name='Water-use types',
-                                 help_text='Which types of water use are included?')
-    water_sectors = models.TextField(
-        null=True, blank=True, verbose_name='Water-use sectors',
-        help_text='For the global-water-model varsoc and pressoc runs, which water sectors were included? E.g. irrigation, domestic, manufacturing, electricity, livestock.')
-    routing = models.TextField(null=True, blank=True, verbose_name='Runoff routing', help_text='How is runoff routed?')
-    routing_data = models.TextField(null=True, blank=True, help_text='Which routing data are used?')
-    land_use = models.TextField(null=True, blank=True, verbose_name='Land-use change effects',
-                                help_text='Which land-use change effects are included?')
-    dams_reservoirs = models.TextField(null=True, blank=True, verbose_name='Dams & Reservoirs',
-                                       help_text='Describe how are dams and reservoirs are implemented')
-
-    calibration = models.BooleanField(verbose_name='Was the model calibrated?', default=False)
-    calibration_years = models.TextField(null=True, blank=True, verbose_name='Which years were used for calibration?')
-    calibration_dataset = models.TextField(null=True, blank=True, verbose_name='Which dataset was used for calibration?',
-                                           help_text='E.g. WFD, GSWP3')
-    calibration_catchments = models.TextField(null=True, blank=True,
-                                              verbose_name='How many catchments were callibrated?')
-    vegetation = models.BooleanField(verbose_name='Is CO2 fertilisation accounted for?', default=False)
-    vegetation_representation = models.TextField(null=True, blank=True, verbose_name='How is vegetation represented?')
-    methods_evapotraspiration = models.TextField(null=True, blank=True, verbose_name='Potential evapotraspiration')
-    methods_snowmelt = models.TextField(null=True, blank=True, verbose_name='Snow melt')
-
-    def values_to_tuples(self) -> list:
-        vname = self._get_verbose_field_name
-        return [
-            (self._meta.verbose_name, [
-                (vname('technological_progress'), self.technological_progress),
-                (vname('soil_layers'), self.soil_layers),
-                (vname('water_use'), self.water_use),
-                (vname('water_sectors'), self.water_sectors),
-                (vname('routing'), self.routing),
-                (vname('routing_data'), self.routing_data),
-                (vname('land_use'), self.land_use),
-                (vname('dams_reservoirs'), self.dams_reservoirs),
-                (vname('calibration'), self.calibration),
-                (vname('calibration_years'), self.calibration_years),
-                (vname('calibration_dataset'), self.calibration_dataset),
-                (vname('calibration_catchments'), self.calibration_catchments),
-                (vname('vegetation'), self.vegetation),
-                (vname('vegetation_representation'), self.vegetation_representation),
-                (vname('methods_evapotraspiration'), self.methods_evapotraspiration),
-                (vname('methods_snowmelt'), self.methods_snowmelt),
-            ])
-        ]
-
-    class Meta:
-        abstract = True
-class WaterGlobal(Water):
-    class Meta:
-        verbose_name='Water (global)'
-        verbose_name_plural = 'Water (global)'
-class WaterRegional(Water):
-    class Meta:
-        verbose_name = 'Water (regional)'
-        verbose_name_plural = 'Water (regional)'
-
-
 class BiomesForests(Sector):
     # technological_progress = models.TextField(null=True, blank=True)
     output = models.TextField(
@@ -679,6 +546,69 @@ class Forests(BiomesForests):
         verbose_name = 'Forests'
 
 
+class Energy(Sector):
+    # Model & Method Characteristics
+    model_type = models.TextField(null=True, blank=True, verbose_name='Model type')
+    temporal_extent = models.TextField(null=True, blank=True, verbose_name='Temporal extent')
+    temporal_resolution = models.TextField(null=True, blank=True, verbose_name='Temporal resolution')
+    data_format_for_input = models.TextField(null=True, blank=True, verbose_name='Data format for input')
+    # Impact Types
+    impact_types_energy_demand = models.TextField(null=True, blank=True, verbose_name='Energy demand (heating & cooling)')
+    impact_types_temperature_effects_on_thermal_power = models.TextField(null=True, blank=True, verbose_name='Temperature effects on thermal power')
+    impact_types_weather_effects_on_renewables = models.TextField(null=True, blank=True, verbose_name='Weather effects on renewables')
+    impact_types_water_scarcity_impacts = models.TextField(null=True, blank=True, verbose_name='Water scarcity impacts')
+    impact_types_other = models.TextField(null=True, blank=True, verbose_name='Other (agriculture, infrastructure, adaptation)')
+    # Output
+    output_energy_demand = models.TextField(null=True, blank=True, verbose_name='Energy demand (heating & cooling)')
+    output_energy_supply = models.TextField(null=True, blank=True, verbose_name='Energy supply')
+    output_water_scarcity = models.TextField(null=True, blank=True, verbose_name='Water scarcity')
+    output_economics = models.TextField(null=True, blank=True, verbose_name='Economics')
+    output_other = models.TextField(null=True, blank=True, verbose_name='Other (agriculture, infrastructure, adaptation)')
+    # Further Information
+    variables_not_directly_from_GCMs = models.TextField(null=True, blank=True, verbose_name='Variables not directly from GCMs')
+    response_function_of_energy_demand_to_HDD_CDD = models.TextField(null=True, blank=True, verbose_name='Response function of energy demand to HDD/CDD')
+    factor_definition_and_calculation = models.TextField(null=True, blank=True, verbose_name='Definition and calculation of variable potential and load factor')
+    biomass_types = models.TextField(null=True, blank=True, verbose_name='Biomass types')
+    maximum_potential_assumption = models.TextField(null=True, blank=True, verbose_name='Maximum potential assumption')
+    bioenergy_supply_costs = models.TextField(null=True, blank=True, verbose_name='Bioenergy supply costs')
+    socioeconomic_input = models.TextField(null=True, blank=True, verbose_name='Socio-economic input')
+
+    def values_to_tuples(self) -> list:
+        vname = self._get_verbose_field_name
+        return [
+            ('Model & method characteristics', [
+                (vname('model_type'), self.model_type),
+                (vname('temporal_extent'), self.temporal_extent),
+                (vname('temporal_resolution'), self.temporal_resolution),
+                (vname('data_format_for_input'), self.data_format_for_input),
+            ]),
+            ('Impact Types', [
+
+                (vname('impact_types_energy_demand'), self.impact_types_energy_demand),
+                (vname('impact_types_temperature_effects_on_thermal_power'), self.impact_types_temperature_effects_on_thermal_power),
+                (vname('impact_types_weather_effects_on_renewables'), self.impact_types_weather_effects_on_renewables),
+                (vname('impact_types_water_scarcity_impacts'), self.impact_types_water_scarcity_impacts),
+                (vname('impact_types_other'), self.impact_types_other),
+            ]),
+            ('Output', [
+                (vname('output_energy_demand'), self.output_energy_demand),
+                (vname('output_energy_supply'), self.output_energy_supply),
+                (vname('output_water_scarcity'), self.output_water_scarcity),
+                (vname('output_economics'), self.output_economics),
+                (vname('output_other'), self.output_other),
+            ]),
+            ('Further Information', [
+                (vname('variables_not_directly_from_GCMs'), self.variables_not_directly_from_GCMs),
+                (vname('response_function_of_energy_demand_to_HDD_CDD'), self.response_function_of_energy_demand_to_HDD_CDD),
+                (vname('factor_definition_and_calculation'), self.factor_definition_and_calculation),
+                (vname('biomass_types'), self.biomass_types),
+                (vname('maximum_potential_assumption'), self.maximum_potential_assumption),
+                (vname('bioenergy_supply_costs'), self.bioenergy_supply_costs),
+                (vname('socioeconomic_input'), self.socioeconomic_input),
+            ])
+        ]
+
+
 class MarineEcosystems(Sector):
     defining_features = models.TextField(null=True, blank=True, verbose_name='Defining features')
     spatial_scale = models.TextField(null=True, blank=True, verbose_name='Spatial scale')
@@ -717,6 +647,73 @@ class MarineEcosystemsRegional(MarineEcosystems):
     class Meta:
         verbose_name = 'Marine Ecosystems and Fisheries (regional)'
         verbose_name_plural = 'Marine Ecosystems and Fisheries (regional)'
+
+
+class Water(Sector):
+    technological_progress = models.TextField(
+        null=True, blank=True,
+        help_text='Does the model account for GDP changes and technological progress? If so, how are these integrated into the runs?'
+    )
+    soil_layers = models.TextField(null=True, blank=True,
+                                   help_text='How many soil layers are used? Which qualities do they have?')
+    water_use = models.TextField(null=True, blank=True, verbose_name='Water-use types',
+                                 help_text='Which types of water use are included?')
+    water_sectors = models.TextField(
+        null=True, blank=True, verbose_name='Water-use sectors',
+        help_text='For the global-water-model varsoc and pressoc runs, which water sectors were included? E.g. irrigation, domestic, manufacturing, electricity, livestock.')
+    routing = models.TextField(null=True, blank=True, verbose_name='Runoff routing', help_text='How is runoff routed?')
+    routing_data = models.TextField(null=True, blank=True, help_text='Which routing data are used?')
+    land_use = models.TextField(null=True, blank=True, verbose_name='Land-use change effects',
+                                help_text='Which land-use change effects are included?')
+    dams_reservoirs = models.TextField(null=True, blank=True, verbose_name='Dams & Reservoirs',
+                                       help_text='Describe how are dams and reservoirs are implemented')
+
+    calibration = models.BooleanField(verbose_name='Was the model calibrated?', default=False)
+    calibration_years = models.TextField(null=True, blank=True, verbose_name='Which years were used for calibration?')
+    calibration_dataset = models.TextField(null=True, blank=True, verbose_name='Which dataset was used for calibration?',
+                                           help_text='E.g. WFD, GSWP3')
+    calibration_catchments = models.TextField(null=True, blank=True,
+                                              verbose_name='How many catchments were callibrated?')
+    vegetation = models.BooleanField(verbose_name='Is CO2 fertilisation accounted for?', default=False)
+    vegetation_representation = models.TextField(null=True, blank=True, verbose_name='How is vegetation represented?')
+    methods_evapotraspiration = models.TextField(null=True, blank=True, verbose_name='Potential evapotraspiration')
+    methods_snowmelt = models.TextField(null=True, blank=True, verbose_name='Snow melt')
+
+    def values_to_tuples(self) -> list:
+        vname = self._get_verbose_field_name
+        return [
+            (self._meta.verbose_name, [
+                (vname('technological_progress'), self.technological_progress),
+                (vname('soil_layers'), self.soil_layers),
+                (vname('water_use'), self.water_use),
+                (vname('water_sectors'), self.water_sectors),
+                (vname('routing'), self.routing),
+                (vname('routing_data'), self.routing_data),
+                (vname('land_use'), self.land_use),
+                (vname('dams_reservoirs'), self.dams_reservoirs),
+                (vname('calibration'), self.calibration),
+                (vname('calibration_years'), self.calibration_years),
+                (vname('calibration_dataset'), self.calibration_dataset),
+                (vname('calibration_catchments'), self.calibration_catchments),
+                (vname('vegetation'), self.vegetation),
+                (vname('vegetation_representation'), self.vegetation_representation),
+                (vname('methods_evapotraspiration'), self.methods_evapotraspiration),
+                (vname('methods_snowmelt'), self.methods_snowmelt),
+            ])
+        ]
+
+    class Meta:
+        abstract = True
+class WaterGlobal(Water):
+    class Meta:
+        verbose_name='Water (global)'
+        verbose_name_plural = 'Water (global)'
+class WaterRegional(Water):
+    class Meta:
+        verbose_name = 'Water (regional)'
+        verbose_name_plural = 'Water (regional)'
+
+
 
 
 class Biodiversity(Sector): pass

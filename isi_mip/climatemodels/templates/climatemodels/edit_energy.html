@@ -1,58 +1,39 @@
-{% extends 'pages/default_page.html' %}
-{% load breadcrumb formuchtel %}
-{% block content_container %}
-	<div class="background-container">
-		<div class="content-container container">
-			<div class="content-container-border">
-				<div class="content-container-inner">
-					{% breadcrumb %}
-					{% include 'widgets/heading2.html' with text=subpage.title %}
-					{% block content %}
-						<form method="POST">
-							{% nussform form as nf %}
-							{% csrf_token %}
+{% extends 'climatemodels/edit.html' %}
+{% load template_form %}
 
-							<fieldset>
-								<legend>Model & Method Characteristics</legend>
-								{{ nf.model_type }}
-								{{ nf.temporal_extent }}
-								{{ nf.temporal_resolution }}
-								{{ nf.data_format_for_input }}
-							</fieldset>
-							<fieldset>
-								<legend>Impact Types</legend>
-								{{ nf.impact_types_energy_demand }}
-								{{ nf.impact_types_temperature_effects_on_thermal_power }}
-								{{ nf.impact_types_weather_effects_on_renewables }}
-								{{ nf.impact_types_water_scarcity_impacts }}
-								{{ nf.impact_types_other }}
-							</fieldset>
-							<fieldset>
-								<legend>Output</legend>
-								{{ nf.output_energy_demand }}
-								{{ nf.output_energy_supply }}
-								{{ nf.output_water_scarcity }}
-								{{ nf.output_economics }}
-								{{ nf.output_other }}
-							</fieldset>
-							<fieldset>
-								<legend>Further Information</legend>
-								{{ nf.variables_not_directly_from_GCMs }}
-								{{ nf.response_function_of_energy_demand_to_HDD_CDD }}
-								{{ nf.factor_definition_and_calculation }}
-								{{ nf.biomass_types }}
-								{{ nf.maximum_potential_assumption }}
-								{{ nf.bioenergy_supply_costs }}
-								{{ nf.socioeconomic_input }}
-							</fieldset>
-
-							<div class="form-actions">
-								<input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-save">
-							</div>
-						</form>
-					{% endblock %}
-				</div>
-			</div>
-		</div>
-	</div>
+{% block form_content %}
+	{% template_form form as nf %}
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Model & Method Characteristics' %}
+		{{ nf.model_type }}
+		{{ nf.temporal_extent }}
+		{{ nf.temporal_resolution }}
+		{{ nf.data_format_for_input }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Impact Types' %}
+		{{ nf.impact_types_energy_demand }}
+		{{ nf.impact_types_temperature_effects_on_thermal_power }}
+		{{ nf.impact_types_weather_effects_on_renewables }}
+		{{ nf.impact_types_water_scarcity_impacts }}
+		{{ nf.impact_types_other }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Output' %}
+		{{ nf.output_energy_demand }}
+		{{ nf.output_energy_supply }}
+		{{ nf.output_water_scarcity }}
+		{{ nf.output_economics }}
+		{{ nf.output_other }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Further Information' %}
+		{{ nf.variables_not_directly_from_GCMs }}
+		{{ nf.response_function_of_energy_demand_to_HDD_CDD }}
+		{{ nf.factor_definition_and_calculation }}
+		{{ nf.biomass_types }}
+		{{ nf.maximum_potential_assumption }}
+		{{ nf.bioenergy_supply_costs }}
+		{{ nf.socioeconomic_input }}
+	</fieldset>
 {% endblock %}

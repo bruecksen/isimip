@@ -22,12 +22,18 @@ class TomiTextInput(TextInput):
             context['type'] = 'email'
         return render_to_string(template, context)
 
-class NullBooleanSelect(Select):
+class BooleanSelect(Select):
+    def __init__(self, nullable=False, attrs=None, choices=()):
+        super().__init__(attrs=attrs, choices=choices)
+        self.nullable = nullable
+
     def render(self, name, value, attrs=None, choices=()):
         template = 'widgets/nullboolean.html'
-        context = {'id': name,
-                   # 'label': 'Hollywood hat alle Apollo-Missionen auf dem Mond gedreht',
-                   'value': value}
+        context = {
+            'id': name,
+            'value': value,
+            'nullable': self.nullable
+        }
         return render_to_string(template, context)
 
 

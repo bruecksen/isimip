@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core import urlresolvers
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
@@ -76,14 +77,12 @@ def impact_model_edit(page, request, id):
     if request.method == 'POST':
         form = ImpactModelForm(request.POST, instance=impactmodel)
         contactform = ContactPersonFormset(request.POST, instance=impactmodel)
-        form.do_the_thing()
         if form.is_valid():
             form.save()
             contactform.save()
             messages.success(request, "Changes to your model have been saved successfully.")
             target_url = page.url + page.reverse_subpage('edit_sector', args=(impactmodel.id,))
             return HttpResponseRedirect(target_url)
-            #return impact_model_sector_edit(page, request, id)
         else:
             messages.warning(request, form.errors)
     else:
@@ -91,17 +90,21 @@ def impact_model_edit(page, request, id):
         contactform = ContactPersonFormset(instance=impactmodel)
     context['form'] = form
     context['cform'] = contactform
-    template = 'climatemodels/edit.html'
+    template = 'climatemodels/edit_impact_model.html'
     return render(request, template, context)
 
 def impact_model_sector_edit(page, request, id):
     impactmodel = ImpactModel.objects.get(id=id)
-
     context = {'page': page, 'subpage': Page(title='Impact Model: %s' % impactmodel.name)}
     formular = get_sector_form(impactmodel.fk_sector_name)
+
+    # No further changes, because the Sector has none.
+    if formular == None:
+        target_url = page.url + page.reverse_subpage('details', args=(impactmodel.id,))
+        return HttpResponseRedirect(target_url)
+
     if request.method == 'POST':
         form = formular(request.POST, instance=impactmodel.fk_sector)
-        form.do_the_thing()
         if form.is_valid():
             form.save()
             messages.success(request, "Changes to your model have been saved successfully.")
@@ -110,7 +113,7 @@ def impact_model_sector_edit(page, request, id):
     else:
         form = formular(instance=impactmodel.fk_sector)
     context['form'] = form
-    template = 'climatemodels/edit_{}.html'.format(impactmodel.fk_sector_name)
+    template = 'climatemodels/{}'.format(formular.template)
     return render(request, template, context)
 
 

@@ -4,10 +4,11 @@
 {% endif %}
 
 <div class="widget-options">
+{% if nullable %}
 <label class="radio-inline">
 	<input type="radio" name="{{ id }}" value {% if value == None %} checked="checked"{% endif %} autocomplete="off">
 	<span>unknown</span>
-</label><!--
+</label>{% endif %}<!--
 --><label class="radio-inline">
 	<input type="radio" name="{{ id }}" value="True"{% if value == True %} checked="checked"{% endif %} autocomplete="off">
 	<span>yes</span>
