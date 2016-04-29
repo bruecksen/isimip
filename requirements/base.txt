@@ -2,8 +2,10 @@ psycopg2==2.6.1
 
 pyexcel==0.2.0
 pyexcel-xlsx==0.1.0
-requests==2.9.1
+xlsxwriter==0.8.6
 
+requests==2.9.1
+tweepy==3.5.0
 
 Django==1.9.5
 django-environ==0.4.0

@@ -87,12 +87,13 @@ class BigTeaserBlock(StructBlock):
             context['href'] = value.get('internal_link').url
         else:
             context['href'] = value.get('external_link')
+        if context['href']:
+            context['text_right_link'] = True
+            context['text_right_link_text'] = 'Learn more'
 
         context.update({
             'title': value.get('subtitle'),
             'description': value.get('text'),
-            'text_right_link': True,
-            'text_right_link_text': 'Learn more',
             'divider': True,
             'date': "%s to %s" % (formats.date_format(value.get('from_date'), "SHORT_DATE_FORMAT"),
                                   formats.date_format(value.get('to_date'), "SHORT_DATE_FORMAT")),
