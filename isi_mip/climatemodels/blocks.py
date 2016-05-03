@@ -20,9 +20,10 @@ class ImpactModelsBlock(StructBlock):
         context['tableid'] = 'selectortable'
         context['searchfield'] = {'value': ''}
         sector_options = [{'value': x} for x in ims.values_list('sector', flat=True).distinct().order_by('sector')]
-        cdriver_options = [{'value': x} for x in InputData.objects.values_list('name', flat=True).distinct().order_by('name')]
+        cdriver_options = [{'value': x} for x in
+                           InputData.objects.values_list('name', flat=True).distinct().order_by('name')]
         context['selectors'] = [
-            {'colnumber': '2',  'all_value': 'All Sectors', 'options': sector_options},
+            {'colnumber': '2', 'all_value': 'All Sectors', 'options': sector_options},
             {'colnumber': '3', 'all_value': 'All Climate Drivers', 'options': cdriver_options},
         ]
 
@@ -45,7 +46,8 @@ class ImpactModelsBlock(StructBlock):
         for imodel in ims:
             datasets = [str(x) for x in imodel.climate_data_sets.all()]
             # import ipdb; ipdb.set_trace()
-            cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in imodel.contactperson_set.all()]
+            cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
+                       imodel.contactperson_set.all()]
             values = [["<a href='details/{0.id}/'>{0.name}</a>".format(imodel)], [imodel.sector]]
             values += [datasets] + [["<br/>".join(cpeople)]]
             row = {
@@ -59,6 +61,7 @@ class ImpactModelsBlock(StructBlock):
         return context
 
     class Meta:
+        icon = 'fa fa-database'
         template = 'blocks/impact_models_block.html'
 
 
@@ -72,7 +75,8 @@ class InputDataBlock(StructBlock):
 
         context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Data Type'}, {'text': 'Description'}]}
         context['body'] = {
-            'rowlimit': {'buttontext': 'See all <i class="fa fa-chevron-down"></i>', 'rownumber': value.get('row_limit')},
+            'rowlimit': {'buttontext': 'See all <i class="fa fa-chevron-down"></i>',
+                         'rownumber': value.get('row_limit')},
             'rows': []
         }
 
@@ -93,6 +97,7 @@ class InputDataBlock(StructBlock):
         return context
 
     class Meta:
+        icon = 'fa fa-database'
         template = 'blocks/input_data_block.html'
 
 
@@ -127,4 +132,5 @@ class OutputDataBlock(StructBlock):
         return context
 
     class Meta:
+        icon = 'fa fa-database'
         template = 'blocks/output_data_block.html'

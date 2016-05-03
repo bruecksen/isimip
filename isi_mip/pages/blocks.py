@@ -29,7 +29,7 @@ class ImageBlock(ImageChooserBlock):
 
 
 BASE_BLOCKS = [
-    ('rich_text', RichTextBlock()),
+    ('rich_text', RichTextBlock(icon='pilcrow')),
     ('embed', EmbedBlock()),
     ('image', ImageBlock()),
 ]
@@ -42,7 +42,7 @@ class SmallTeaserBlock(StructBlock):
     link = PageChooserBlock(required=True)
 
     class Meta:
-        #TODO: icon = 'image'
+        icon = 'fa fa-list-alt'
         template = 'blocks/small_teaser_block.html'
 
 
@@ -70,7 +70,7 @@ class BigTeaserBlock(StructBlock):
     to_date = DateBlock(required=False)
 
     class Meta:
-        #TODO: icon = 'image'
+        icon = 'fa fa-list-alt'
         template = 'blocks/big_teaser_block.html'
 
     def __init__(self, wideimage=False, local_blocks=None, **kwargs):
@@ -131,6 +131,7 @@ class TwitterBlock(StructBlock):
         return context
 
     class Meta:
+        icon = 'fa fa-twitter'
         template = 'blocks/twitter_block.html'
 
 
@@ -142,7 +143,7 @@ class PaperBlock(StructBlock):
     link = URLBlock()
 
     class Meta:
-        # icon = 'doc-full'
+        icon = 'fa fa-file-text'
         template = 'widgets/page-teaser.html'
 
     def get_context(self, value):
@@ -165,6 +166,7 @@ class PapersBlock(StructBlock):
     description = RichTextBlock(required=False)
     papers = ListBlock(PaperBlock)
     class Meta:
+        icon = 'fa fa-file-text'
         template = 'blocks/outcomes_block.html'
 
 
@@ -176,7 +178,7 @@ class LinkBlock(StructBlock):
 
     class Meta:
         classname = 'link'
-        #TODO: icon = 'image'
+        icon = 'fa fa-external-link'
         template = 'widgets/page-teaser-wide.html'
 
     def get_context(self, value):
@@ -205,6 +207,7 @@ class FAQsBlock(StructBlock):
     faqs = ListBlock(FAQBlock())
 
     class Meta:
+        icon = 'fa fa-medkit'
         template = 'widgets/expandable.html'
 
     def get_context(self, value):
@@ -233,6 +236,7 @@ class ContactsBlock(StructBlock):
     description = RichTextBlock()
     sectors = ListBlock(SectorBlock)
     class Meta:
+        icon = 'fa fa-male'
         template = 'blocks/contacts_block.html'
     def get_context(self, value):
         context = super().get_context(value)
@@ -271,7 +275,7 @@ class PDFBlock(StructBlock):
         return context
 
     class Meta:
-        image = ''
+        icon = 'fa fa-file-pdf-o'
         template = 'widgets/download-link.html'
 
 
@@ -290,6 +294,7 @@ class ProtocolBlock(StructBlock):
     description = TextBlock()
 
     class Meta:
+        icon = 'fa fa-newspaper-o'
         template = 'blocks/protocol_block.html'
 
     def get_context(self, value):
