@@ -20,7 +20,7 @@ class ReferenceException(Exception):
 
 
 def query(string):
-    if not string.strip():
+    if not string.strip().replace("-",""):
         raise ReferenceException("No search term")
     response = requests.get(url.format(rows=5, query=string))
     res = response.json()
