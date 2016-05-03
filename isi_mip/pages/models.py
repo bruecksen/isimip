@@ -204,11 +204,7 @@ class HomePage(RoutablePageWithDefault):
 class AboutPage(Page):
     template = 'pages/default_page.html'
 
-    content = StreamField([
-        ('columns_1_to_1', Columns1To1Block()),
-        ('columns_1_to_2', Columns1To2Block()),
-        ('columns_2_to_1', Columns2To1Block()),
-        ('image', ImageBlock()),
+    content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS + [
         ('pdf', PDFBlock()),
         ('paper', PaperBlock(template='widgets/page-teaser-wide.html')),
         ('bigteaser', BigTeaserBlock()),
@@ -308,9 +304,8 @@ class FAQPage(Page):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
-    content = StreamField([
+    content = StreamField(COLUMNS_BLOCKS + [
         ('richtext', RichTextBlock()),
-        ('columns_1_to_1', Columns1To1Block()),
         ('faqs', FAQsBlock()),
     ])
     content_panels = Page.content_panels + [

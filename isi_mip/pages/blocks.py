@@ -155,7 +155,7 @@ class PaperBlock(StructBlock):
         if image:
             rendition = image.get_rendition('max-500x500')
             context['image'] = {'url': rendition.url, 'name': image.title}
-        context['source'] = {'description': value.get('link'), 'href': value.get('link')}
+        context['source'] = {'description': 'Link to paper', 'href': value.get('link')}
 
         return context
 

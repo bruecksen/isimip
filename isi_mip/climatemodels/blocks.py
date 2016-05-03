@@ -45,7 +45,7 @@ class ImpactModelsBlock(StructBlock):
         for imodel in ims:
             datasets = [str(x) for x in imodel.climate_data_sets.all()]
             # import ipdb; ipdb.set_trace()
-            cpeople = ["{0.name} <a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in imodel.contactperson_set.all()]
+            cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in imodel.contactperson_set.all()]
             values = [["<a href='details/{0.id}/'>{0.name}</a>".format(imodel)], [imodel.sector]]
             values += [datasets] + [["<br/>".join(cpeople)]]
             row = {
