@@ -14,7 +14,7 @@ class ImpactModelsBlock(StructBlock):
     def get_context(self, value):
         context = super().get_context(value)
 
-        ims = ImpactModel.objects.all()
+        ims = ImpactModel.objects.order_by('name')
 
         # Filter und Suchfelder
         context['tableid'] = 'selectortable'

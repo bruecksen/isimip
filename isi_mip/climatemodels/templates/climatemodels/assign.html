@@ -2,8 +2,8 @@
 {% load i18n admin_urls admin_static admin_modify %}
 
 {% block extrahead %}{{ block.super }}
-<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
-{{ media }}
+	<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+	{{ media }}
 {% endblock %}
 
 {% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
@@ -13,24 +13,28 @@
 {% block bodyclass %}{{ block.super }} app-invitation model-invitation change-form{% endblock %}
 
 {% if not is_popup %}
-{% block breadcrumbs %}
-<div class="breadcrumbs">
-<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
-&rsaquo; <a href="{% url 'admin:app_list' app_label='auth' %}">Authentication and Authorization</a>
-&rsaquo; Register User
-</div>
-{% endblock %}
+	{% block breadcrumbs %}
+		<div class="breadcrumbs">
+			<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+			&rsaquo; <a href="{% url 'admin:app_list' app_label='auth' %}">Authentication and Authorization</a>
+			&rsaquo; Register User
+		</div>
+	{% endblock %}
 {% endif %}
 
 {% block content_title %}
-<h1>Invite user</h1>
+	<h1>Assign or create Impact Model</h1>
 {% endblock %}
 
 {% block content %}<div id="content-main">
-<form action="{{ form_url }}" method="post" id="registration_form" novalidate>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save">
-</form>
+	<form action="{{ form_url }}" method="post" id="registration_form" novalidate>
+		{% csrf_token %}
+		<p>{{ form.owner.label }}: {{ form.owner }}</p>
+		<p>{{ form.model.label }}: {{ form.model }}</p>
+		OR:
+		<p>{{ form.name.label }}: {{ form.name }}</p>
+		<p>{{ form.sector.label }}: {{ form.sector }}</p>
+		<input type="submit" value="Save">
+	</form>
 </div>
 {% endblock %}

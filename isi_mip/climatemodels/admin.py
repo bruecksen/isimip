@@ -59,7 +59,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
                 'exceptions_to_protocol', 'spin_up', 'spin_up_design',
                 'natural_vegetation_partition', 'natural_vegetation_dynamics', 'natural_vegetation_cover_dataset',
                 'management', 'extreme_events',
-                'anything_else', 'comments'
+                'anything_else', 'comments', 'owner'
             ],
         }),
     ]

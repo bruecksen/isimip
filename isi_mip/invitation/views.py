@@ -28,7 +28,8 @@ class InvitationView(FormView):
         super(InvitationView, self).__init__(**kwargs)
 
     def get_success_url(self):
-        return reverse('climatemodels:assign', kwargs={'username': self.invite.user.username})+'?next='+reverse('admin:app_list', kwargs={'app_label': 'auth_user_changelist'})
+        return reverse('climatemodels:assign', kwargs={'username': self.invite.user.username})+'?next='+\
+               reverse('admin:auth_user_changelist')
 
     def form_valid(self, form):
         user = User.objects.create(
@@ -69,8 +70,8 @@ class RegistrationView(UpdateView):
     form_class = RegistrationForm
     model = User
 
-    success_url = '/admin/'
-    error_url = '/django-admin/'
+    success_url = '/dashboard/'
+    error_url = '/'
 
     def dispatch(self, request, *args, **kwargs):
         pk, token = kwargs['pk'], kwargs['token']

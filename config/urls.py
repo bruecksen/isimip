@@ -14,6 +14,7 @@ from wagtail.wagtailsearch import urls as wagtailsearch_urls
 
 from isi_mip.climatemodels import urls as climatemodels_urls
 from isi_mip.invitation import urls as invitations_urls
+from isi_mip.invitation.views import InvitationView, RegistrationView
 from isi_mip.twitter.views import twitte
 
 
@@ -41,9 +42,8 @@ urlpatterns = [
 
     url(r'^blog/', include('blog.urls', namespace="blog")),
 
-    # url(r'^accounts/invite/$', superuser_required(InvitationView.as_view()), name='account_invite'),
-    # url(r'^accounts/register/(?P<pk>\d+)/(?P<token>[0-9a-f]{40})/$', RegistrationView.as_view(), name='account_register'),
-    # url(r'^accounts/', include('allauth.urls')),
+    url(r'^accounts/invite/$', superuser_required(InvitationView.as_view()), name='account_invite'),
+    url(r'^accounts/register/(?P<pk>\d+)/(?P<token>[0-9a-f]{40})/$', RegistrationView.as_view(), name='account_register'),
 
     url(r'', include(wagtail_urls)),
 

@@ -15,23 +15,31 @@ from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, C
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 
+def impact_model_assign(request, username=None):
+    user = User.objects.get(username=username)
+    impactmodel = ImpactModel(owner=user)
 
-class Assign(SuccessMessageMixin, UpdateView):
-    template_name = 'climatemodels/assign.html'
-    form_class = ImpactModelStartForm
-    model = ImpactModel
-    success_message = 'The model has been successfully created and assigned'
-
-    def get_success_url(self):
-        if 'next' in self.request.GET:
-            return self.request.GET['next']
-        return reverse('admin:auth_user_list')
-
-    def get_object(self, queryset=None):
-        if 'username' in self.kwargs:
-            user = User.objects.get(username=self.kwargs['username'])
-            return ImpactModel(owner=user)
-        return None
+    if request.method == 'POST':
+        form = ImpactModelStartForm(request.POST, instance=impactmodel)
+        if form.is_valid():
+            imodel = form.cleaned_data['model']
+            if imodel:
+                imodel.owner = form.cleaned_data['owner']
+                imodel.save()
+                messages.success(request, "The new owner has been assigned successfully")
+            else:
+                del(form.cleaned_data['model'])
+                ImpactModel.objects.create(**form.cleaned_data)
+                messages.success(request, "The model has been successfully created and assigned")
+            if 'next' in request.GET:
+                return HttpResponseRedirect(request.GET['next'])
+            return HttpResponseRedirect(reverse('admin:auth_user_list'))
+        else:
+            messages.warning(request, form.errors)
+    else:
+        form = ImpactModelStartForm(instance=impactmodel)
+    template = 'climatemodels/assign.html'
+    return render(request, template, {'form': form})
 
 
 def impact_model_details(page, request, id):

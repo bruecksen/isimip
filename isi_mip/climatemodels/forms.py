@@ -9,10 +9,13 @@ ContactPersonFormset = inlineformset_factory(ImpactModel, ContactPerson, extra=1
 
 
 class ImpactModelStartForm(forms.ModelForm):
+    owner = forms.ModelChoiceField(queryset=User.objects, label='Model owner')
+    model = forms.ModelChoiceField(queryset=ImpactModel.objects.order_by('name'), required=False)
+    name = forms.CharField(label='New Impact Model', required=False)
+    sector = forms.ChoiceField(choices=ImpactModel.SECTOR_CHOICES, required=False)
     class Meta:
         model = ImpactModel
-        fields = ('name', 'sector', 'owner')
-
+        fields = ('owner', 'model', 'name', 'sector')
 
 class MyModelSingleChoiceField(forms.ModelChoiceField):
     def __init__(self, queryset, allowcustom=False, fieldname='name',
@@ -29,7 +32,7 @@ class MyModelSingleChoiceField(forms.ModelChoiceField):
     def add_new_choices(self, value):
         key = self.to_field_name or 'pk'
         try:
-            self.queryset.filter(**{key: value})
+            self.queryset.get(**{key: value})
             new_value = value
         except (ValueError, TypeError):
             new_v = self.queryset.get_or_create(**{self.fieldname: value})[0]
@@ -54,7 +57,7 @@ class MyModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         new_values = []
         for pk in value:
             try:
-                self.queryset.filter(**{key: pk})
+                self.queryset.get(**{key: pk})
                 new_values += [pk]
             except (ValueError, TypeError):
                 new_v = self.queryset.get_or_create(**{self.fieldname: pk})[0]
@@ -69,7 +72,7 @@ class MyModelMultipleChoiceField(forms.ModelMultipleChoiceField):
 
 class ImpactModelForm(forms.ModelForm):
     references = forms.CharField(max_length=400, label='References', required=False)
-    region = MyModelMultipleChoiceField(allowcustom=True, queryset=Region.objects)
+    region = MyModelMultipleChoiceField(allowcustom=True, queryset=Region.objects, required=True)
     simulation_round = MyModelMultipleChoiceField(allowcustom=True, queryset=SimulationRound.objects)
     spatial_aggregation = MyModelSingleChoiceField(allowcustom=True, queryset=SpatialAggregation.objects)
     # 'main_reference_paper'
@@ -114,6 +117,7 @@ class ImpactModelForm(forms.ModelForm):
         instance = getattr(self, 'instance', None)
         if instance and instance.pk:
             self.fields['name'].widget.attrs['readonly'] = True
+            # self.fields['sector'].widget.attrs['readonly'] = True
 
 
 #### SECTOREN
