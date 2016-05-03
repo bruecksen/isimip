@@ -75,6 +75,7 @@ class BlogIndexPage(_BlogIndexPage):
         FieldPanel('flat'),
     ]
 
+
 class RoutablePageWithDefault(RoutablePage):
     @route(r'^$')
     def base(self, request):
@@ -218,7 +219,7 @@ class GettingStartedPage(RoutablePageWithDefault):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
-    content = StreamField(COLUMNS_BLOCKS + [
+    content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS + [
         ('protocol', ProtocolBlock()),
         ('input_data', InputDataBlock()),
         ('contact', ContactsBlock()),
@@ -238,7 +239,7 @@ class ImpactModelsPage(RoutablePageWithDefault):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
-    content = StreamField([
+    content = StreamField(BASE_BLOCKS + [
         ('impact_models', ImpactModelsBlock()),
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
@@ -280,7 +281,7 @@ class OutputDataPage(Page):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
-    content = StreamField([
+    content = StreamField(BASE_BLOCKS + [
         ('output_data', OutputDataBlock()),
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
@@ -292,7 +293,7 @@ class OutputDataPage(Page):
 class OutcomesPage(Page):
     template = 'pages/default_page.html'
 
-    content = StreamField([
+    content = StreamField(BASE_BLOCKS + [
         ('papers', PapersBlock()),
     ])
     content_panels = Page.content_panels + [
@@ -304,8 +305,7 @@ class FAQPage(Page):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
-    content = StreamField(COLUMNS_BLOCKS + [
-        ('richtext', RichTextBlock()),
+    content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS + [
         ('faqs', FAQsBlock()),
     ])
     content_panels = Page.content_panels + [
