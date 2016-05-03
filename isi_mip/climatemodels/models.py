@@ -205,7 +205,7 @@ class ImpactModel(models.Model):
     )
     comments = models.TextField(null=True, blank=True, verbose_name='Additional comments')
 
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
     def save(self, *args, **kwargs):
         if not self.owner_id:
