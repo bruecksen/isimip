@@ -222,10 +222,12 @@ class GettingStartedPage(RoutablePageWithDefault):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
-    content = StreamField([
+    content = StreamField(COLUMNS_BLOCKS + [
+        ('protocol', ProtocolBlock()),
         ('input_data', InputDataBlock()),
         ('contact', ContactsBlock()),
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
+
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
@@ -304,6 +306,7 @@ class OutcomesPage(Page):
 
 class FAQPage(Page):
     template = 'pages/default_page.html'
+    parent_page_types = [HomePage]
 
     content = StreamField([
         ('richtext', RichTextBlock()),

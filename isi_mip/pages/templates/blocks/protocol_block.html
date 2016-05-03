@@ -1,0 +1,19 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+{% include 'widgets/heading3.html' with text=value.title %}
+
+
+<div class="row widget-columns-2-1">
+	<div class="col-sm-8 col">
+		{% include "widgets/link-list.html" %}
+	</div>
+	<div class="col-sm-4 col">
+		<h4>Protocol</h4>
+		{% image value.image width-250 %}<br/>
+		<b>Protocol version</b><br/>
+		{{ value.version }}
+	</div>
+</div><!-- widget-columns-2-1 -->
+<div>
+	{{ value.description|linebreaks }}
+</div>
+{% include 'widgets/horizontal-ruler.html' %}

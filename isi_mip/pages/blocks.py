@@ -16,6 +16,7 @@ class RowBlock(StreamBlock):
 
 
 class ImageBlock(ImageChooserBlock):
+
     class Meta:
         icon = 'image'
         template = 'widgets/image.html'
@@ -242,7 +243,7 @@ class ContactsBlock(StructBlock):
                            }
             for contact in sector.get('contacts'):
                 n,w,e = contact.get('name'), contact.get('website'), contact.get('email')
-                sector_dict['text'] += "{n}<br/><a target='_blank' href='{w}'>Homepage</a><br/>" \
+                sector_dict['text'] += "<a target='_blank' href='{w}'>{n}</a><br/>" \
                                               "<a target='_blank' href='mailto:{e}'>{e}</a><br/><br/>".format(n=n,w=w,e=e)
             try:
                 sector_dict['image'] = {
@@ -279,6 +280,28 @@ class PDFBlock(StructBlock):
 #         if ret:
 #             ret = 'PDF' + ret
 #         return ret
+
+
+class ProtocolBlock(StructBlock):
+    title = CharBlock()
+    pdfs = ListBlock(PDFBlock())
+    image = ImageBlock()
+    version = CharBlock()
+    description = TextBlock()
+
+    class Meta:
+        template = 'blocks/protocol_block.html'
+
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['links'] = []
+        for pdf in value.get('pdfs'):
+            context['links'] += [{
+                'fontawesome': 'file-pdf-o',
+                'href': pdf.get('file').url,
+                'text': pdf.get('description')
+            }]
+        return context
 
 
 

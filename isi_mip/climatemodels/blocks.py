@@ -16,21 +16,21 @@ class ImpactModelsBlock(StructBlock):
 
         ims = ImpactModel.objects.all()
 
+        # Filter und Suchfelder
         context['tableid'] = 'selectortable'
         context['searchfield'] = {'value': ''}
         sector_options = [{'value': x} for x in ims.values_list('sector', flat=True).distinct().order_by('sector')]
         cdriver_options = [{'value': x} for x in InputData.objects.values_list('name', flat=True).distinct().order_by('name')]
         context['selectors'] = [
-            {'colnumber': '2',  'all_value': 'Sector', 'options': sector_options},
-            {'colnumber': '3', 'all_value': 'Climate Driver', 'options': cdriver_options},
+            {'colnumber': '2',  'all_value': 'All Sectors', 'options': sector_options},
+            {'colnumber': '3', 'all_value': 'All Climate Drivers', 'options': cdriver_options},
         ]
-        # tabelle
+
+        # Tabelle
         context['id'] = 'selectortable'
         context['head'] = {
             'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Climate Driver'}, {'text': 'Contact'}]
         }
-        # context['filter'] = {"2": "Water (global)"},  # pre defined filter
-
         numpages = math.ceil(ims.count() / value.get('rows_per_page'))
         context['pagination'] = {
             'rowsperpage': (value.get('rows_per_page')),
@@ -45,8 +45,8 @@ class ImpactModelsBlock(StructBlock):
         for imodel in ims:
             datasets = [str(x) for x in imodel.climate_data_sets.all()]
             # import ipdb; ipdb.set_trace()
-            cpeople = ["%s <a href='mailto:%s'>%s</a>" % (x.name, x.email, x.email) for x in imodel.contactperson_set.all()]
-            values = [["<a href='details/%d/'>%s</a>" % (imodel.id, imodel.name)], [imodel.sector]]
+            cpeople = ["{0.name} <a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in imodel.contactperson_set.all()]
+            values = [["<a href='details/{0.id}/'>{0.name}</a>".format(imodel)], [imodel.sector]]
             values += [datasets] + [["<br/>".join(cpeople)]]
             row = {
                 'invisible': i >= value.get('rows_per_page'),
