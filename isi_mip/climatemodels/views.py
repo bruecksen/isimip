@@ -57,6 +57,8 @@ def impact_model_details(page, request, id):
     if request.user == im.owner:
         context['editlink'] = '<a href="{}">edit</a>'.format(
             page.url + page.reverse_subpage('edit', args=(im.id,)))
+    else:
+        context['editlink'] = ''
     if request.user.is_superuser:
         context['editlink'] += ' | <a href="{}">admin edit</a>'.format(
             urlresolvers.reverse('admin:climatemodels_impactmodel_change', args=(im.id,)))
