@@ -6,6 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core import urlresolvers
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
@@ -75,9 +76,20 @@ def impact_model_details(page, request, id):
     return render(request, template, context)
 
 def impact_model_download(page, request):
+    filters = {x:y for x,y in request.GET.items() if y != 'tableselectordefaultall' and y != ''}
+    imodels = ImpactModel.objects.all()
+    if 'sector' in filters:
+        imodels = imodels.filter(sector=filters['sector'])
+    if 'driver' in filters:
+        imodels = imodels.filter(climate_data_sets__name=filters['driver'])
+    if 'q' in filters:
+        q = filters['q']
+        query = Q(name__icontains=q)|Q(sector__icontains=q)|Q(climate_data_sets__name__icontains=q) \
+                    | Q(contactperson__name__icontains=q) | Q(contactperson__email__icontains=q)
+        imodels = imodels.filter(query)
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="ImpactModels {:%Y-%m-%d}.xlsx"'.format(datetime.now())
-    ImpactModelToXLSX(response, qs=ImpactModel.objects.all())
+    ImpactModelToXLSX(response, imodels)
     return response
 
 def impact_model_edit(page, request, id):

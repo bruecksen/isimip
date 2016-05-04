@@ -24,8 +24,8 @@ class ImpactModelsBlock(StructBlock):
         cdriver_options = [{'value': x} for x in
                            InputData.objects.values_list('name', flat=True).distinct().order_by('name')]
         context['selectors'] = [
-            {'colnumber': '2', 'all_value': 'All Sectors', 'options': sector_options},
-            {'colnumber': '3', 'all_value': 'All Climate Drivers', 'options': cdriver_options},
+            {'colnumber': '2', 'all_value': 'All Sectors', 'options': sector_options, 'name': 'sector'},
+            {'colnumber': '3', 'all_value': 'All Climate Drivers', 'options': cdriver_options, 'name': 'driver'},
         ]
 
         # Tabelle
