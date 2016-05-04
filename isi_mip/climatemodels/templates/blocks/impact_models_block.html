@@ -1,5 +1,7 @@
 {{ value.description }}
-{% include 'widgets/heading3.html' with text='Overview' %}
-{% include 'widgets/table-selector.html' %}
-{% include "widgets/read-more-link.html"  with align='right' text='<i class="fa fa-download"></i> Download model properties as .xlsx' url='download/' %} <!-- TODO: Make it non-static -->
+{% include 'widgets/heading3.html' with text='Overview' only %}
+<form method="get" action="download/">
+	{% include 'widgets/table-selector.html' %}
+	<input type="submit" value="Download model properties as .xlsx">
+</form>
 {% include "widgets/table.html" %}
