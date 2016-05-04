@@ -1,10 +1,11 @@
 {% load wagtailcore_tags wagtailimages_tags %}
-    {% include 'widgets/heading3.html' with text='Contact' id='contact' %}
-    <div class="row">
-        {% for sector in sectors %}
-            <div class="col-sm-3">
-                {% include 'widgets/page-teaser.html' with image=sector.image title=sector.name description=sector.text %}
-            </div>
-            {% cycle '' '' '' '<div class="clearfix"></div><div class="widget-horizontal-ruler"><hr></div>' %}
-        {% endfor %}
-    </div>
+{% include 'widgets/heading3.html' with text='Contact' id='contact' %}
+{{ value.description|safe }}
+<div class="row">
+	{% for sector in sectors %}
+		<div class="col-sm-3">
+			{% include 'widgets/page-teaser.html' with image=sector.image title=sector.name description=sector.text %}
+		</div>
+		{% cycle '' '' '' '<div class="clearfix"></div><div class="widget-horizontal-ruler"><hr></div>' %}
+	{% endfor %}
+</div>
