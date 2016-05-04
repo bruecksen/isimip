@@ -107,10 +107,7 @@ def  create_structure(apps, schema_editor):
     homepage.add_child(linklistpage)
     FooterLink.objects.create(footer=fls, target=linklistpage.page)
 
-    # contactpage = RichPage(apps, 'pages.ContactPage', 'pages', 'contactpage')
-    # contactpage.page('Contact','contact')
-    # homepage.add_child(contactpage)
-    FooterLink.objects.create(footer=fls, target=outcomespage.page, _name='Contact')
+    FooterLink.objects.create(footer=fls, target=gettingstartedpage.page, _name='Contact', anchor='#contact')
 
     linklistpage = RichPage(apps, 'pages.LinkListPage', 'pages', 'linklistpage')
     linklistpage.page('Supporters','supporters')
@@ -118,52 +115,35 @@ def  create_structure(apps, schema_editor):
     FooterLink.objects.create(footer=fls, target=linklistpage.page)
 
     dashboardpage = RichPage(apps, 'pages.DashboardPage', 'pages', 'dashboardpage')
-    dashboardpage.page('Login/Dashboard','dashboard')
+    dashboardpage.page('Dashboard','dashboard')
     homepage.add_child(dashboardpage)
     FooterLink.objects.create(footer=fls, target=dashboardpage.page)
-
-    newsletterpage = RichPage(apps, 'pages.NewsletterPage', 'pages', 'newsletterpage')
-    newsletterpage.page('Newsletter','newsletter')
-    homepage.add_child(newsletterpage)
-    FooterLink.objects.create(footer=fls, target=newsletterpage.page)
-
-    linklistpage = RichPage(apps, 'pages.LinkListPage', 'pages', 'linklistpage')
-    linklistpage.page('Links','links')
-    homepage.add_child(linklistpage)
-    FooterLink.objects.create(footer=fls, target=linklistpage.page)
-
 
     ### BLOG
     from django.utils.text import slugify
     for wohinpage, blogtitle in [(homepage,'News'),
-                      (gettingstartedpage, 'Input Data Changelog'),
-                      (gettingstartedpage, 'Newsletter'),
-                      (impactmodelspage, 'Impact Models Changelog' ),
-                      (outputdatapage, 'Output Data Changelog')]:
+                                 (gettingstartedpage, 'Input Data Changelog'),
+                                 (gettingstartedpage, 'Newsletter'),
+                                 (impactmodelspage, 'Impact Models Changelog' ),
+                                 (outputdatapage, 'Output Data Changelog')]:
         blogindexpage = RichPage(apps, 'pages.BlogIndexPage', 'pages', 'blogindexpage')
         blogindexpage.page(blogtitle, slugify(blogtitle))
         wohinpage.add_child(blogindexpage)
+        if wohinpage == gettingstartedpage and blogtitle == 'Newsletter':
+            FooterLink.objects.create(footer=fls, target=blogindexpage.page, _name='Newsletter' )
 
-        for i in range(5):
+        for i in range(1):
             blogpage = RichPage(apps, 'pages.BlogPage', 'pages', 'blogpage')
             header = loremi(3,"w",True).title()
             blogpage.page(header, slugify(header))
             blogpage.page.body = loremi(5,'b',True)
             blogindexpage.add_child(blogpage)
 
-    ### Changelog
-    # blogindexpage2 = RichPage(apps, 'blog.BlogIndexPage', 'blog', 'blogindexpage')
-    # blogindexpage2.page('Changelog', 'changelog')
-    # ruhtpage.add_child(blogindexpage2)
-    #
-    # from django.utils.text import slugify
-    #
-    # for i in range(5):
-    #     blogpage = RichPage(apps, 'blog.BlogPage', 'blog', 'blogpage')
-    #     header = loremi(3,"w",True).title()
-    #     blogpage.page(header, slugify(header))
-    #     blogpage.page.body = loremi(5,'b',True)
-    #     blogindexpage2.add_child(blogpage)
+    linklistpage = RichPage(apps, 'pages.LinkListPage', 'pages', 'linklistpage')
+    linklistpage.page('Links','links')
+    homepage.add_child(linklistpage)
+    FooterLink.objects.create(footer=fls, target=linklistpage.page)
+
 
 class Migration(migrations.Migration):
 

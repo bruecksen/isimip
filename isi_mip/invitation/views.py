@@ -48,7 +48,7 @@ class InvitationView(FormView):
 
     def send_email(self):
         user = User.objects.get(username=self.invite.user)
-        register_link = reverse('account_register', kwargs={'pk':user.id,'token':self.invite.token} )
+        register_link = reverse('accounts:register', kwargs={'pk':user.id,'token':self.invite.token} )
 
         context = {
             'url': self.request.build_absolute_uri(register_link),

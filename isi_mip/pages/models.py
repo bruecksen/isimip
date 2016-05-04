@@ -1,7 +1,10 @@
 from blog.models import BlogIndexPage as _BlogIndexPage
 from blog.models import BlogPage as _BlogPage
+from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.db import models
-from django.shortcuts import render, redirect
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import render
 from django.template.response import TemplateResponse
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
@@ -264,18 +267,6 @@ class ImpactModelsPage(RoutablePageWithDefault):
     def download(self, request):
         return impact_model_download(self, request)
 
-        # @route(r'^csv/$')
-        # def csv(self, request):
-        #     # Create the HttpResponse object with the appropriate CSV header.
-        #     response = HttpResponse(content_type='text/csv')
-        #     response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
-        #
-        #     writer = csv.writer(response)
-        #     writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
-        #     writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
-        #
-        #     return response
-
 
 class OutputDataPage(Page):
     template = 'pages/default_page.html'
@@ -322,14 +313,22 @@ class LinkListPage(Page):
     ]
 
 
-class NewsletterPage(Page):
-    def serve(self, request, *args, **kwargs):
-        return redirect('/gettingstarted/newsletter/')
-        # return render(request)
-
-
 class DashboardPage(Page):
-    pass
+    def serve(self, request, *args, **kwargs):
+        request.is_preview = getattr(request, 'is_preview', False)
+        context = self.get_context(request, *args, **kwargs)
+        template = self.get_template(request, *args, **kwargs)
+
+        if request.user.is_authenticated():
+            ims = ImpactModel.objects.filter(owner=request.user)
+            context['ims'] = ims
+        else:
+            messages.info(request,'This is a restricted area. To proceed you need to log in.')
+            return HttpResponseRedirect(reverse('login'))
+        # response = super(DashboardPage, self).serve(request, *args, **kwargs)
+        # return response
+
+        return TemplateResponse(request, template, context)
 
 
 class FormField(AbstractFormField):
