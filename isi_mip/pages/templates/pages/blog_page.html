@@ -1,10 +1,11 @@
 {% extends "pages/default_page.html" %}
+{% load wagtailcore_tags %}
 {% block content %}
     Posted by {{ blog.author }} on {{ blog.date }}<br/>
     <br/>
     <div class="row widget-columns-2-1">
         <div class="col-sm-8 col">
-            {{ blog.body|safe }}
+            {{ blog.body|richtext }}
         </div>
         <div class="col-sm-4 col">
             {% include 'widgets/image.html' with url=image.url name=image.name%}
