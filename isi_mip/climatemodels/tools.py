@@ -6,7 +6,7 @@ from isi_mip.climatemodels.models import ImpactModel
 
 class ImpactModelToXLSX:
     def __init__(self, res, qs):
-        self.workbook = xlsxwriter.Workbook(res)
+        self.workbook = xlsxwriter.Workbook(res, {'in_memory': True})
         self.qs = qs
         self.xlsxdings()
 
@@ -21,6 +21,7 @@ class ImpactModelToXLSX:
         for i, impactmodel in enumerate(self.qs):
             data = impactmodel
             for j,f in enumerate(fields):
-                general.write(i+1, j, str(getattr(data,f)))
+                inhalt = getattr(data,f) or ''
+                general.write(i+1, j, str(inhalt))
 
         self.workbook.close()
