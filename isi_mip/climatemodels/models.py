@@ -52,6 +52,8 @@ class SocioEconomicInputVariables(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Socio-economic input variable'
 
 class Scenario(models.Model):
     name = models.CharField(max_length=500, unique=True)
