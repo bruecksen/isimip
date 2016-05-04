@@ -1,5 +1,6 @@
 import math
 
+from django.utils.html import urlize
 from wagtail.wagtailcore.blocks import StructBlock
 from wagtail.wagtailcore.blocks.field_block import TextBlock, RichTextBlock
 
@@ -87,7 +88,7 @@ class InputDataBlock(StructBlock):
                 {'cols': [
                     {'texts': [link]},
                     {'texts': [idata.data_type]},
-                    {'texts': [idata.description]}],
+                    {'texts': [urlize(idata.description)]}],
                     'invisible': i >= value.get('row_limit')
                 }
             ]
