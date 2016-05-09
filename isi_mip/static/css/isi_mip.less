@@ -161,6 +161,21 @@ h3, .h3 {
 	font-weight: 300;
 	margin-bottom: 15px;
 	font-size: 24px;
+  &:hover > .headerlink {
+	opacity: 100;
+  }
+  .headerlink {
+	color: @color-primary;
+	text-decoration: none;
+	opacity: 0;
+	transition: opacity 200ms ease-in-out;
+	-moz-transition: opacity 200ms ease-in-out;
+	-o-transition: opacity 200ms ease-in-out;
+	-webkit-transition: opacity 200ms ease-in-out;
+	&:hover {
+	  opacity: 100;
+	}
+  }
 }
 h4, .h4 {
 	font-weight: 600;
@@ -514,7 +529,7 @@ h4, .h4 {
 					font-size: 16px;
 
 					&:focus, &:hover {
-						color: @color-secondary-strong;						
+						color: @color-secondary-strong;
 					}
 
 				}
@@ -944,7 +959,7 @@ h4, .h4 {
 
 .widget-table-selector {
 	select {
-		margin-bottom: 15px;		
+		margin-bottom: 15px;
 	}
 	.widget-table-selector-search {
 		max-width: 300px;

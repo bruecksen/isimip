@@ -1,4 +1,5 @@
 from django.utils import formats
+from django.utils.text import slugify
 from wagtail.wagtailcore.blocks import CharBlock, StructBlock, TextBlock, StreamBlock, PageChooserBlock, RichTextBlock, \
     URLBlock, DateBlock, ListBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
@@ -15,8 +16,26 @@ class RowBlock(StreamBlock):
         template = 'blocks/row_block.html'
 
 
-class ImageBlock(ImageChooserBlock):
+class HeadingBlock(CharBlock):
+    class Meta:
+        classname = 'full title'
+        icon = 'title'
+        template = 'widgets/heading3.html'
 
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['text'] = value
+        context['slug'] = slugify(value, allow_unicode=True)
+        return context
+
+
+class HRBlock(StreamBlock):
+    class Meta:
+        icon = 'horizontalrule'
+        template = 'widgets/horizontal-ruler.html'
+
+
+class ImageBlock(ImageChooserBlock):
     class Meta:
         icon = 'image'
         template = 'widgets/image.html'
@@ -29,7 +48,9 @@ class ImageBlock(ImageChooserBlock):
 
 
 BASE_BLOCKS = [
+    ('heading', HeadingBlock()),
     ('rich_text', RichTextBlock(icon='pilcrow')),
+    ('horizontal_ruler', HRBlock()),
     ('embed', EmbedBlock()),
     ('image', ImageBlock()),
 ]
@@ -44,7 +65,6 @@ class SmallTeaserBlock(StructBlock):
     class Meta:
         icon = 'fa fa-list-alt'
         template = 'blocks/small_teaser_block.html'
-
 
     def get_context(self, value):
         context = super().get_context(value)
@@ -109,9 +129,11 @@ class _IsiNumberBlock(StructBlock):
     title = CharBlock()
     text = CharBlock()
 
+
 class IsiNumbersBlock(StructBlock):
     number1 = _IsiNumberBlock()
     number2 = _IsiNumberBlock()
+
     class Meta:
         icon = 'form'
         template = 'blocks/isi_numbers_block.html'
@@ -120,7 +142,8 @@ class IsiNumbersBlock(StructBlock):
 class TwitterBlock(StructBlock):
     username = CharBlock(required=True)
     count = IntegerBlock(default=20)
-    #help_text='You will find username and widget_id @ https://twitter.com/settings/widgets/')
+
+    # help_text='You will find username and widget_id @ https://twitter.com/settings/widgets/')
     # widget_id = CharBlock(required=True)
     # tweet_limit = CharBlock(required=True, max_length=2)
 
@@ -162,10 +185,9 @@ class PaperBlock(StructBlock):
 
 
 class PapersBlock(StructBlock):
-    title = CharBlock()
-    description = RichTextBlock(required=False)
     see_all_offset = IntegerBlock(default=8, help_text='Show "See all" after x entries.')
     papers = ListBlock(PaperBlock)
+
     class Meta:
         icon = 'fa fa-file-text'
         template = 'blocks/outcomes_block.html'
@@ -195,7 +217,6 @@ class LinkBlock(StructBlock):
         if value.get('link'):
             context['href'] = value.get('link')
         return context
-
 
 
 class FAQBlock(StructBlock):
@@ -228,17 +249,20 @@ class ContactBlock(StructBlock):
     website = URLBlock()
     email = EmailBlock()
 
+
 class SectorBlock(StructBlock):
     name = CharBlock()
     image = ImageBlock(required=False)
     contacts = ListBlock(ContactBlock)
 
+
 class ContactsBlock(StructBlock):
-    description = RichTextBlock()
     sectors = ListBlock(SectorBlock)
+
     class Meta:
         icon = 'fa fa-male'
         template = 'blocks/contacts_block.html'
+
     def get_context(self, value):
         context = super().get_context(value)
         context['sectors'] = []
@@ -247,9 +271,9 @@ class ContactsBlock(StructBlock):
                            'text': ""
                            }
             for contact in sector.get('contacts'):
-                n,w,e = contact.get('name'), contact.get('website'), contact.get('email')
+                n, w, e = contact.get('name'), contact.get('website'), contact.get('email')
                 sector_dict['text'] += "<a target='_blank' href='{w}'>{n}</a><br/>" \
-                                              "<a target='_blank' href='mailto:{e}'>{e}</a><br/><br/>".format(n=n,w=w,e=e)
+                                       "<a target='_blank' href='mailto:{e}'>{e}</a><br/><br/>".format(n=n, w=w, e=e)
             try:
                 sector_dict['image'] = {
                     'url': sector.get('image').get_rendition('max-1200x1200').url,
@@ -260,6 +284,7 @@ class ContactsBlock(StructBlock):
 
             context['sectors'] += [sector_dict]
         return context
+
 
 class PDFBlock(StructBlock):
     file = DocumentChooserBlock()
@@ -280,7 +305,7 @@ class PDFBlock(StructBlock):
         template = 'widgets/download-link.html'
 
 
-#     def render_basic(self, value):
+# def render_basic(self, value):
 #         ret = super().render_basic(value)
 #         if ret:
 #             ret = 'PDF' + ret
@@ -288,11 +313,9 @@ class PDFBlock(StructBlock):
 
 
 class ProtocolBlock(StructBlock):
-    title = CharBlock()
     pdfs = ListBlock(PDFBlock())
     image = ImageBlock()
     version = CharBlock()
-    description = TextBlock()
 
     class Meta:
         icon = 'fa fa-newspaper-o'
@@ -310,7 +333,6 @@ class ProtocolBlock(StructBlock):
         return context
 
 
-
 _COLUMNS_BLOCKS = BASE_BLOCKS + [
     ('small_teaser', SmallTeaserBlock()),
     ('big_teaser', BigTeaserBlock()),
@@ -320,9 +342,10 @@ _COLUMNS_BLOCKS = BASE_BLOCKS + [
     ('pdf', PDFBlock()),
 ]
 
+
 class ColumnsBlock(StructBlock):
     left_column = StreamBlock(_COLUMNS_BLOCKS)
-    right_column = StreamBlock(_COLUMNS_BLOCKS) #, form_classname='pull-right')
+    right_column = StreamBlock(_COLUMNS_BLOCKS)  # , form_classname='pull-right')
 
     def get_context(self, value):
         context = super().get_context(value)
@@ -335,20 +358,24 @@ class ColumnsBlock(StructBlock):
         label = 'Columns 1-1'
         template = None
 
+
 class Columns1To1Block(ColumnsBlock):
     class Meta:
         label = 'Columns 1:1'
         template = 'widgets/columns-1-1.html'
+
 
 class Columns1To2Block(ColumnsBlock):
     class Meta:
         label = 'Columns 1:2'
         template = 'widgets/columns-1-2.html'
 
+
 class Columns2To1Block(ColumnsBlock):
     class Meta:
         label = 'Columns 2:1'
         template = 'widgets/columns-2-1.html'
+
 
 class Columns1To1To1Block(ColumnsBlock):
     center_column = StreamBlock(_COLUMNS_BLOCKS)
@@ -382,6 +409,7 @@ class Columns1To1To1To1Block(StructBlock):
         context['fourth_column'] = value.get('fourth_column')
         return context
 
+
 COLUMNS_BLOCKS = [
     ('columns_1_to_1', Columns1To1Block()),
     ('columns_1_to_2', Columns1To2Block()),
@@ -390,4 +418,3 @@ COLUMNS_BLOCKS = [
     ('columns_1_to_1_to_1_to_1', Columns1To1To1To1Block()),
 
 ]
-

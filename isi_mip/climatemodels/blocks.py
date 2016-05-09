@@ -67,12 +67,10 @@ class ImpactModelsBlock(StructBlock):
 
 
 class InputDataBlock(StructBlock):
-    description = RichTextBlock()
     row_limit = IntegerBlock(default=10, min_value=1, max_value=30)
 
     def get_context(self, value):
         context = super().get_context(value)
-        context['title'] = 'Input Data'
 
         context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Data Type'}, {'text': 'Description'}]}
         context['body'] = {
@@ -99,8 +97,8 @@ class InputDataBlock(StructBlock):
 
     class Meta:
         icon = 'fa fa-database'
-        template = 'blocks/input_data_block.html'
-
+        # template = 'blocks/input_data_block.html'
+        template = 'widgets/table.html'
 
 class OutputDataBlock(StructBlock):
     description = RichTextBlock()

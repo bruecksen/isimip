@@ -1,1 +1,3 @@
-<h3{% if id %} id="{{ id }}"{% endif %} class="widget-heading3">{{ text }}</h3>
+<h3{% if slug %} id="{{ slug }}"{% endif %} class="widget-heading3">{{ text }}
+	{% if slug %}<a class="headerlink" href="#{{ slug }}" title="Permalink to this headline">¶</a>{% endif %}
+</h3>
