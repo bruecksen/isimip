@@ -251,6 +251,18 @@ $(function() {
 				event.preventDefault();
 				return false;
 			}
-		}); 
+		});
 	});
 });
+
+$(function() {
+	$('.seeallblock').each(function() {
+		var seeallblock = $(this);
+		seeallblock.find('.widget-readmorelink').click(function (event) {
+			event.preventDefault();
+			seeallblock.find('.row .col-sm-3').show();
+			$(this).remove();
+		});
+	});
+});
+

@@ -164,6 +164,7 @@ class PaperBlock(StructBlock):
 class PapersBlock(StructBlock):
     title = CharBlock()
     description = RichTextBlock(required=False)
+    see_all_offset = IntegerBlock(default=8, help_text='Show "See all" after x entries.')
     papers = ListBlock(PaperBlock)
     class Meta:
         icon = 'fa fa-file-text'
