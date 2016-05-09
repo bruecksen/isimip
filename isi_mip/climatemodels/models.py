@@ -127,7 +127,7 @@ class ImpactModel(models.Model):
         SimulationRound, blank=True,
         help_text="For which ISIMIP simulation round are these model details relevant?"
     )
-    version = models.CharField(max_length=500, null=True, blank=True, verbose_name='Model Version')
+    version = models.CharField(max_length=500, null=True, blank=True, verbose_name='Model version')
     main_reference_paper = models.ForeignKey(
         ReferencePaper, null=True, blank=True, related_name='main_ref',
         help_text="The single paper that should be cited when referring to simulation output from this model")

@@ -8,6 +8,23 @@
 		{{ nf.name }}
 		{{ nf.sector }}
 		{{ nf.region }}
+		{{ cform.management_form }}
+		<div id="div_id_cperson0" class="form-group">
+			<label class="control-label requiredField">
+				Contact person<span class="asteriskField">*</span>
+			</label>
+			<div class="controls">
+				{{ cform.0 }}
+			</div>
+		</div>
+		<div id="div_id_cperson0" class="form-group">
+			<label class="control-label requiredField">
+				Optional second contact person
+			</label>
+			<div class="controls">
+				{{ cform.1 }}
+			</div>
+		</div>
 		{{ nf.simulation_round }}
 		{{ nf.version }}
 		{{ nf.short_description }}
@@ -45,22 +62,6 @@
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='TODO' %}
 		{{ nf.references }}
-		{{ cform.management_form }}
-		{% for field in cform %}
-
-			<ul>
-				<li>
-					{# Include the hidden fields in the form #}
-					{% if forloop.first %}
-						{% for hidden in form.hidden_fields %}
-							{{ hidden }}
-						{% endfor %}
-					{% endif %}
-					{{ field.errors.as_ul }}
-					{{ field }}
-				</li>
-			</ul>
-		{% endfor %}
 	</fieldset>
 
 {% endblock %}

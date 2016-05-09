@@ -5,7 +5,9 @@ from django.forms import ModelChoiceField, inlineformset_factory
 from isi_mip.climatemodels.models import *
 from isi_mip.climatemodels.widgets import MultiSelect, TomiTextInput, BooleanSelect
 
-ContactPersonFormset = inlineformset_factory(ImpactModel, ContactPerson, extra=1, max_num=2, fields='__all__')
+ContactPersonFormset = inlineformset_factory(ImpactModel, ContactPerson,
+                                             extra=1, max_num=2, min_num=1, fields='__all__',
+                                             can_delete=False)
 
 
 class ImpactModelStartForm(forms.ModelForm):

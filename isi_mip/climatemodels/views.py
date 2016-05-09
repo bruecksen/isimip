@@ -99,14 +99,16 @@ def impact_model_edit(page, request, id):
     if request.method == 'POST':
         form = ImpactModelForm(request.POST, instance=impactmodel)
         contactform = ContactPersonFormset(request.POST, instance=impactmodel)
-        if form.is_valid():
+        if form.is_valid() and contactform.is_valid():
             form.save()
             contactform.save()
             messages.success(request, "Changes to your model have been saved successfully.")
             target_url = page.url + page.reverse_subpage('edit_sector', args=(impactmodel.id,))
             return HttpResponseRedirect(target_url)
         else:
+            messages.error(request, 'Your form has errors.')
             messages.warning(request, form.errors)
+            messages.warning(request, contactform.errors)
     else:
         form = ImpactModelForm(instance=impactmodel)
         contactform = ContactPersonFormset(instance=impactmodel)
