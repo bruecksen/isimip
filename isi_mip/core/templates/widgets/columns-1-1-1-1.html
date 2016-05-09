@@ -1,15 +1,14 @@
-{% load wagtailcore_tags %}
 <div class="row widget-columns-1-1-1-1">
 	<div class="col-sm-3 col">
-		{{ first_column|richtext }}
+		{{ first_column|safe }}
 	</div>
 	<div class="col-sm-3 col">
-		{{ second_column|richtext }}
+		{{ second_column|safe }}
 	</div>
 	<div class="col-sm-3 col">
-		{{ third_column|richtext }}
+		{{ third_column|safe }}
 	</div>
 	<div class="col-sm-3 col">
-		{{ fourth_column|richtext }}
+		{{ fourth_column|safe }}
 	</div>
 </div><!-- widget-columns-1-1-1-1 -->
