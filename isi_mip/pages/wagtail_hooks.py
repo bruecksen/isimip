@@ -41,7 +41,7 @@ class LogOutLinkItem:
 
 
 @hooks.register('construct_wagtail_userbar')
-def add_puppy_link_item(request, items):
+def add_wagtail_icon_items(request, items):
     items.append(DjangoAdminLinkItem())
     items.append(LogOutLinkItem())
 
@@ -79,10 +79,10 @@ class ImpactModelsPanel(object):
 
 
 @hooks.register('construct_homepage_panels')
-def add_another_welcome_panel(request, panels):
+def add_impact_models_panel(request, panels):
     return panels.append(ImpactModelsPanel())
 
-class Dings:
+class DjangoAdminMenuItem:
     order = 90000
     def render_html(self, request):
         output = '''<li class="menu-item">
@@ -91,5 +91,5 @@ class Dings:
         return output
 
 @hooks.register('construct_main_menu')
-def hide_explorer_menu_item_from_frank(request, menu_items):
-    menu_items.append(Dings())
+def main_menu_django_admin_item(request, menu_items):
+    menu_items.append(DjangoAdminMenuItem())

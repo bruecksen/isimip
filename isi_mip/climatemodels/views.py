@@ -145,10 +145,9 @@ def impact_model_sector_edit(page, request, id):
 def input_data_details(page, request, id):
     data = InputData.objects.get(id=id)
     template = 'pages/input_data_details_page.html'
-
-    description = 'Intro Text unde omnis iste natus error sit voluptatem accusantium totam.'  # TODO: THIS IS STATIC
+    description = page.input_data_description or ''
     if request.user.is_superuser:
-        description += ' | <a href="{}">admin edit</a>'.format(
+        description += ' <a href="{}">admin edit</a>'.format(
             urlresolvers.reverse('admin:climatemodels_inputdata_change', args=(data.id,)))
 
     context = {'page': page,

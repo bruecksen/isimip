@@ -43,6 +43,9 @@ class ClimateVariable(models.Model):
             return '<abbr title="{0.name}">{0.abbreviation}</abbr>'.format(self)
         return self.name
 
+    class Meta:
+        ordering = ('name',)
+
 
 class InputPhase(models.Model):
     name = models.CharField(max_length=500, unique=True)

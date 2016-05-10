@@ -42,6 +42,13 @@ class BlogIndexPage(_BlogIndexPage):
     description = RichTextField(null=True, blank=True)
     flat = models.BooleanField(default=False, help_text='Whether or not the index page should display items as a flat list or as blocks.')
 
+    content_panels = _BlogIndexPage.content_panels + [
+        RichTextFieldPanel('description'),
+    ]
+    settings_panels = Page.settings_panels + [
+        FieldPanel('flat'),
+    ]
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
@@ -73,11 +80,6 @@ class BlogIndexPage(_BlogIndexPage):
             self.template = 'pages/blog_index_flat_page.html'
         return super(BlogIndexPage, self).serve(request, *args, **kwargs)
 
-    content_panels = _BlogIndexPage.content_panels + [
-        RichTextFieldPanel('description'),
-        FieldPanel('flat'),
-    ]
-
 
 class RoutablePageWithDefault(RoutablePage):
     @route(r'^$')
@@ -94,7 +96,6 @@ class RoutablePageWithDefault(RoutablePage):
 
 class GenericPage(Page):
     template = 'pages/default_page.html'
-
     content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
@@ -229,9 +230,22 @@ class GettingStartedPage(RoutablePageWithDefault):
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
 
     ])
+    input_data_description = RichTextField(null=True, blank=True, verbose_name='Input Data Details Description')
+
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
+    details_content_panels = [
+        RichTextFieldPanel('input_data_description'),
+    ]
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(details_content_panels, heading='Input Data Details'),
+        ObjectList(Page.promote_panels, heading='Promote'),
+        ObjectList(Page.settings_panels, heading='Settings', classname="settings"),
+    ])
+
+
 
     @route(r'^details/(?P<id>\d+)/$')
     def details(self, request, id):
@@ -339,12 +353,15 @@ class FormPage(AbstractEmailForm):
     landing_page_template = 'pages/form_page_confirmation.html'
     subpage_types = []
 
-    top_content = StreamField([('richtext', RichTextBlock())])
+    top_content = StreamField(BASE_BLOCKS)
     confirmation_text = models.TextField(default='Your registration was submitted')
-    bottom_content = StreamField([('richtext', RichTextBlock())])
+    bottom_content = StreamField(BASE_BLOCKS)
 
     content_panels = AbstractEmailForm.content_panels + [
         StreamFieldPanel('top_content'),
+        StreamFieldPanel('bottom_content')
+    ]
+    form_content_panels = [
         InlinePanel('form_fields', label="Form fields"),
         FieldPanel('confirmation_text', classname="full"),
         MultiFieldPanel([
@@ -352,8 +369,15 @@ class FormPage(AbstractEmailForm):
             FieldPanel('from_address', classname="full"),
             FieldPanel('subject', classname="full"),
         ], "Email"),
-        StreamFieldPanel('bottom_content')
     ]
+
+    edit_handler = TabbedInterface([
+        ObjectList(content_panels, heading='Content'),
+        ObjectList(form_content_panels, heading='Form Builder'),
+        ObjectList(Page.promote_panels, heading='Promote'),
+        ObjectList(Page.settings_panels, heading='Settings', classname="settings"),
+    ])
+
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
