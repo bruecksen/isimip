@@ -313,7 +313,8 @@ class PDFBlock(StructBlock):
 
 
 class ProtocolBlock(StructBlock):
-    pdfs = ListBlock(PDFBlock())
+    complete_pdf = DocumentChooserBlock(label='Complete PDF')
+    pdfs = ListBlock(PDFBlock(), label='Chapter PDFs')
     image = ImageBlock()
     version = CharBlock()
 

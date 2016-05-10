@@ -67,7 +67,7 @@ class ImpactModelsBlock(StructBlock):
 
 
 class InputDataBlock(StructBlock):
-    row_limit = IntegerBlock(default=10, min_value=1, max_value=30)
+    row_limit = IntegerBlock(default=10, min_value=1, max_value=30, label='Input Data Row Limit')
 
     def get_context(self, value):
         context = super().get_context(value)

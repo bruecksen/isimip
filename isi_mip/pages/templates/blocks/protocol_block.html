@@ -8,6 +8,6 @@
 		{% image value.image width-250 %}<br/>
 		<b>Protocol version</b><br/>
 		{{ value.version }}
-		{% include 'widgets/button.html' %}
+		{% include 'widgets/button.html' with href=value.complete_pdf.url primary=True text='Download' %}
 	</div>
 </div><!-- widget-columns-2-1 -->
