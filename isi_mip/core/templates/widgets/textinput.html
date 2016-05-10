@@ -1,6 +1,9 @@
-<div class="widget-textinput form-group">
+<div class="widget-textinput form-group{% if error %} has-error{% endif %}">
 {% if label %}
-<label for="{{ id }}">{{ label }}</label>
+<label for="{{ id }}" class="control-label">{{ label }}</label>
 {% endif %}
 <input type="{% if type %}{{ type }}{% else %}text{% endif %}" class="form-control" id="{{ id }}" name="{{ id }}" value="{{ value }}" autocomplete="off"{% if placeholder %} placeholder="{{ placeholder }}"{% endif %}{% if required %} required="required"{% endif %}>
+{% if help %}
+	<p class="help-block">{{ help }}</p>
+{% endif %}
 </div><!-- widget-textinput -->

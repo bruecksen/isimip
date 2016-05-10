@@ -221,36 +221,68 @@ $(function() {
 $(function() {
 	$('.widget-singleselect, .widget-multiselect').each(function() {
 		var selectfield = $(this);
+		var containerChecked = selectfield.find('.widget-options-checked');
+		var containerNotChecked = selectfield.find('.widget-options-notchecked');
+
+		function sortItems() {
+			console.log("sorting...");
+			// Put selected to top and unselected to bottom container
+			// Eventually sort items alphabetically
+
+			containerChecked.find('label').each(function() {
+				// move unchecked items down
+				if (!$(this).find('input').prop('checked')) {
+					var item = $(this).detach();
+					item.appendTo( containerNotChecked );
+				}
+			});
+
+			containerNotChecked.find('label').each(function() {
+				// move checked items up
+				if ($(this).find('input').prop('checked')) {
+					var item = $(this).detach();
+					item.appendTo( containerChecked );
+				}
+			});
+		}
+
+		selectfield.on('change', 'input', function() {
+			sortItems();
+		});
 
 		selectfield.find('.widget-select-customvalue').keypress(function (event) {
 			var key = event.which;
 			if(key == 13) { // the enter key code
 				var value = $(this).val();
-				var optionselement = selectfield.find('.widget-options');
 
 				// remove options that were manually entered before if this is a radio
 				var singleselect = $(this).hasClass('widget-select-customvalue-singleselect');
 				if (singleselect) {
-					optionselement.find('.widget-select-newcustomvalue').remove();
+					selectfield.find('.widget-select-newcustomvalue').remove();
 				}
 
-				// clone last option with new value
-				var html = optionselement.find('label:last')[0].outerHTML;
-				optionselement.append(html);
-				optionselement.find('label:last')
+				// TODO: Make sure item is no duplicate
+
+				// clone item template
+				var newitem = $(selectfield.find('.widget-options-template').html());
+				newitem
 					.addClass('widget-select-newcustomvalue')
 					.find('input')
 					.prop('checked', true)
 					.prop('value', value)
 					.parent()
 					.find('span').text(value);
+				containerChecked.append(newitem);
+
+				sortItems();
 
 				// reset input
 				$(this).val('');
+
 				// Do not submit form
 				event.preventDefault();
 				return false;
 			}
-		}); 
+		});
 	});
 });
