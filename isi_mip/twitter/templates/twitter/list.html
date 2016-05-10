@@ -1,0 +1,64 @@
+{% load static %}
+<!doctype html>
+<html lang="de-DE">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel='stylesheet' href='{% static 'twitter/main.css' %}' type='text/css' />
+	<script type='text/javascript' src='{% static 'vendor/js/jquery-2.2.1.min.js' %}'></script>
+</head>
+<body>
+<div class="twitter-timeline">
+	{% for status in stati %}
+		<div class="twitter-timeline-update">
+			<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-useravatar">
+				<img src="{{ status.profile_image_url_https }}"/>
+			</a>
+
+			<div class="twitter-timeline-meta">
+				<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-username">
+					{{ status.name }}
+				</a>
+				·
+				<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-screenname">
+					@{{ status.screen_name }}
+				</a>
+				·
+				<a target="_blank" href="https://twitter.com/{{status.screen_name}}/status/{{status.id_str}}" class="twitter-timeline-time">
+					{{status.created_at}}
+				</a>
+			</div>
+			<div class="twitter-timeline-text">
+				{{status.text|safe }}
+			</div>
+			{% if status.extended_entities %}
+			<div class="twitter-timeline-media">
+				<div class="twitter-timeline-imagecontainer">
+					<img src="{{status.extended_entities.media_url_https}}">
+				</div>
+			</div>
+			{% endif %}
+			{% if status.quoted_status %}
+			<div class="twitter-timeline-quote">
+				{{status.quoted_status.text|safe}}
+				{% if status.quoted_status.media_url_https %}
+				<div class="twitter-timeline-quote-media">
+					<div class="twitter-timeline-imagecontainer">
+						<img src="{{quoted_status.media_url_https}}">
+					</div>
+				</div>
+				{% endif %}
+			</div>
+			{% endif %}
+		</div>
+	{% endfor %}
+
+	<div class="container">
+		<h1>Twitter timeline</h1>
+		<div id="timeline"></div>
+	</div>
+</div>
+</body>
+</html>

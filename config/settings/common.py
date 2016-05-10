@@ -7,10 +7,7 @@ env = environ.Env()
 env.read_env(ROOT_DIR('.env'))
 
 
-# APP CONFIGURATION
-# ------------------------------------------------------------------------------
 DJANGO_APPS = (
-    # Default Django apps:
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -18,17 +15,8 @@ DJANGO_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Useful template tags:
-    # 'django.contrib.humanize',
 )
-THIRD_PARTY_APPS = (
-    # 'crispy_forms',  # Form layouts
-    # 'allauth',  # registration
-    # 'allauth.account',  # registration
-    # 'allauth.socialaccount',  # registration
 
-)
 CMS_APPS = (
     'wagtail.wagtailforms',
     'wagtail.wagtailredirects',
@@ -41,7 +29,6 @@ CMS_APPS = (
     'wagtail.wagtailsearch',
     'wagtail.wagtailadmin',
     'wagtail.wagtailcore',
-
     'wagtail.contrib.settings',
     # 'wagtail.contrib.wagtailstyleguide',
 
@@ -51,7 +38,6 @@ CMS_APPS = (
 
     'blog',
 )
-
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'isi_mip',
@@ -66,21 +52,20 @@ LOCAL_APPS = (
     'isi_mip.invitation',
     'isi_mip.choiceorotherfield',
     'isi_mip.sciencepaper',
+
+    'isi_mip.twitter'
 )
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS + CMS_APPS
-# MIDDLEWARE CONFIGURATION
-# ------------------------------------------------------------------------------
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + CMS_APPS
+
 MIDDLEWARE_CLASSES = (
-    # Make sure djangosecure.middleware.SecurityMiddleware is listed first
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # 'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     # Wagtail
     'wagtail.wagtailcore.middleware.SiteMiddleware',
     'wagtail.wagtailredirects.middleware.RedirectMiddleware',
@@ -112,7 +97,7 @@ EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.s
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ("""Sinnwerkstatt Admin""", 'webmaster@sinnwerkstatt.com'),
+    ("Sinnwerkstatt Admin", 'webmaster@sinnwerkstatt.com'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
@@ -188,76 +173,33 @@ TEMPLATES = [
     },
 ]
 
-# See: http://django-crispy-forms.readthedocs.org/en/latest/install.html#template-packs
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
 # STATIC FILE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = ROOT_DIR('static-collected')
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = '/static/'
-
-# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = (
     str(APPS_DIR.path('static')),
 )
-
-# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 )
 
-# MEDIA CONFIGURATION
-# ------------------------------------------------------------------------------
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 MEDIA_ROOT = str(APPS_DIR('media'))
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = '/media/'
 
-# URL Configuration
-# ------------------------------------------------------------------------------
 ROOT_URLCONF = 'config.urls'
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# AUTHENTICATION CONFIGURATION
-# ------------------------------------------------------------------------------
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    # 'allauth.account.auth_backends.AuthenticationBackend',
-)
-
-# Some really nice defaults
-# ACCOUNT_AUTHENTICATION_METHOD = 'username'
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-# ACCOUNT_ADAPTER = 'mswissenschaft.users.adapter.AccountAdapter'
-# SOCIALACCOUNT_ADAPTER = 'mswissenschaft.users.adapter.SocialAccountAdapter'
-# ACCOUNT_ALLOW_REGISTRATION = True
-
-# Custom user app defaults
-# Select the correct user model
-# AUTH_USER_MODEL = 'users.User'
-# LOGIN_REDIRECT_URL = 'users:redirect'
-# LOGIN_URL = 'account_login'
-
-# SLUGLIFIER
-# AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
-
-# Location of root django.contrib.admin URL, use {% url 'admin:index' %}
 ADMIN_URL = env('DJANGO_ADMIN_URL', default='admin')
 
-# Your common stuff: Below this line define 3rd party library settings
-
-# WAGTAIL CONFIGURATION
-# ------------------------------------------------------------------------------
-WAGTAIL_SITE_NAME = 'ISI MIP'
-WAGTAIL_ENABLE_UPDATE_CHECK = False
+LOGIN_URL='/auth/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
 
 INVITATION_VALID_DAYS = 7
+
+WAGTAIL_SITE_NAME = 'ISIMIP'
+# WAGTAIL_ENABLE_UPDATE_CHECK = False

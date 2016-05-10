@@ -1,12 +1,59 @@
-{{ timeline }}
+{% load static %}
+<!doctype html>
+<html lang="de-DE">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<link rel='stylesheet' href='{% static 'twitter/main.css' %}' type='text/css' />
+	<script type='text/javascript' src='{% static 'vendor/js/jquery-2.2.1.min.js' %}'></script>
+</head>
+<body>
+<div class="twitter-timeline">
+	{% for status in timeline %}
+		<div class="twitter-timeline-update">
+			<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-useravatar">
+				<img src="{{ status.profile_image_url_https }}"/>
+			</a>
 
-{#<a class="twitter-timeline"#}
-{#  data-widget-id="{{value.widget_id}}"#}
-{#  data-tweet-limit="{{ value.tweet_limit }}"#}
-{#  href="https://twitter.com/{{ value.username }}"#}
-{#  data-screen-name="{{ value.username }}">#}
-{#Tweets by @{{ value.username }}#}
-{#</a>#}
-{#<a class="twitter-timeline" href="https://twitter.com/ISIMIPImpacts" data-widget-id="715222550729662464">Tweets by @ISIMIPImpacts</a>#}
-{#<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>#}
+			<div class="twitter-timeline-meta">
+				<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-username">
+					{{ status.name }}
+				</a>
+				·
+				<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-screenname">
+					@{{ status.screen_name }}
+				</a>
+				·
+				<a target="_blank" href="https://twitter.com/{{status.screen_name}}/status/{{status.id_str}}" class="twitter-timeline-time">
+					{{status.created_at}}
+				</a>
+			</div>
+			<div class="twitter-timeline-text">
+				{{status.text|safe }}
+			</div>
+			{% if status.extended_entities %}
+			<div class="twitter-timeline-media">
+				<div class="twitter-timeline-imagecontainer">
+					<img src="{{status.extended_entities.media_url_https}}">
+				</div>
+			</div>
+			{% endif %}
+			{% if status.quoted_status %}
+			<div class="twitter-timeline-quote">
+				{{status.quoted_status.text|safe}}
+				{% if status.quoted_status.media_url_https %}
+				<div class="twitter-timeline-quote-media">
+					<div class="twitter-timeline-imagecontainer">
+						<img src="{{quoted_status.media_url_https}}">
+					</div>
+				</div>
+				{% endif %}
+			</div>
+			{% endif %}
+		</div>
+	{% endfor %}
+</div>
+</body>
+</html>

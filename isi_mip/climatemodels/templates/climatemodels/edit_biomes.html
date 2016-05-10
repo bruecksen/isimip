@@ -1,0 +1,59 @@
+{% extends 'climatemodels/edit.html' %}
+{% load template_form %}
+
+{% block form_content %}
+	{% template_form form as nf %}
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Model output specifications' %}
+		{{ nf.output }}
+		{{ nf.output_per_pft }}
+		{{ nf.considerations }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Key model processes' %}
+		<p>Please provide yes/no and a short description how the process is included</p>
+		{{ nf.dynamic_vegetation }}
+		{{ nf.nitrogen_limitation }}
+		{{ nf.co2_effects }}
+		{{ nf.light_interception }}
+		{{ nf.light_utilization }}
+		{{ nf.phenology }}
+		{{ nf.water_stress }}
+		{{ nf.heat_stress }}
+		{{ nf.evapotranspiration_approach }}
+		{{ nf.rooting_depth_differences }}
+		{{ nf.root_distribution }}
+		{{ nf.permafrost }}
+		{{ nf.closed_energy_balance }}
+		{{ nf.soil_moisture_surface_temperature_coupling }}
+		{{ nf.latent_heat }}
+		{{ nf.sensible_heat }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Causes of mortality in vegetation models' %}
+		<p>Describe briefly how the process is described in this model and in which way it is climate dependent.</p>
+		{{ nf.mortality_age }}
+		{{ nf.mortality_fire }}
+		{{ nf.mortality_drought }}
+		{{ nf.mortality_insects }}
+		{{ nf.mortality_storm }}
+		{{ nf.mortality_stochastic_random_disturbance }}
+		{{ nf.mortality_other }}
+		{{ nf.mortality_remarks }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='NBP components' %}
+		<p>Indicate whether the model includes the processes, and how the model accounts for the fluxes, i.e. what is the fate of the biomass? E.g. directly to atmsphere or let it go to other pool</p>
+		{{ nf.nbp_fire }}
+		{{ nf.nbp_landuse_change }}
+		{{ nf.nbp_harvest }}
+		{{ nf.nbp_other }}
+		{{ nf.nbp_comments }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Plant Functional Types (PFTs)' %}
+		<p></p>
+		{{ nf.list_of_pfts }}
+		{{ nf.pfts_comments }}
+	</fieldset>
+{% endblock %}

@@ -16,12 +16,13 @@ class XLSImport:
     def run(self):
         sheet1 = self.book['General']
         sheet_array = sheet1.to_array()
-        zeilen = [6, 7, 21, 24, 35, 36, 49, 59, 72, 77,
-                  95, 102, 107, 115, 124, 128, 134, 136, 137]
-        for zeile in zeilen:
-            self.run_general(sheet_array[zeile-1])
-        # for zeile in sheet_array:
-        #     self.run_general(zeile)
+        # zeilen = [6, 7, 21, 24, 35, 36, 49, 59, 72, 77,
+        #           95, 102, 107, 115, 124, 128, 134, 136, 137]
+        # for zeile in zeilen:
+        #     self.run_general(sheet_array[zeile-1])
+        # for zeile in sheet_array[4:]:
+        for zeile in sheet_array[4:137]:
+            self.run_general(zeile)
 
     def run_general(self, zeile):
         print(zeile[2]+": ",end='')
@@ -58,6 +59,8 @@ class XLSImport:
             except crossrefpy.ReferenceException:
                 doi = None
                 title = paper
+            except:
+                continue
             addpaper = ReferencePaper.objects.get_or_create(doi=doi, defaults={'title':title})[0]
             general.other_references.add(addpaper)
 
@@ -80,7 +83,7 @@ class XLSImport:
         general.additional_input_data_sets = zeile[21]
 
         general.exceptions_to_protocol = zeile[22]
-        if 'spin' in zeile[23].lower().strip() or 'yes' in zeile[23].lower().strip():
+        if 'spin' in str(zeile[23]).lower().strip() or 'yes' in str(zeile[23]).lower().strip():
             general.spin_up = True
         else:
             general.spin_up = False

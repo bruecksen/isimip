@@ -1,13 +1,13 @@
 <div class="widget-table-selector" data-tableid="{{ tableid }}">
 	{% for selector in selectors %}
-		<select data-colnumber="{{ selector.colnumber }}" class="form-control" autocomplete="off">
+		<select data-colnumber="{{ selector.colnumber }}" class="form-control" autocomplete="off" name="{{ selector.name }}">
 			<option value="tableselectordefaultall"{% if not activeoption %} selected="true"{% endif %}>{{ selector.all_value }}</option>
 			{% for option in selector.options %}
-				<option{% if option.value = selector.activeoption %} selected="true"{% endif %}>{{ option.value }}</option>
+				<option{% if option.value == selector.activeoption %} selected="true"{% endif %}>{{ option.value }}</option>
 			{% endfor %}
 		</select>
 	{% endfor %}
 	{% if searchfield %}
-		<input class="widget-table-selector-search form-control" type="search" value="{{ searchfield.value }}" placeholder="search" autocomplete="off">
+		<input class="widget-table-selector-search form-control" type="search" value="{{ searchfield.value }}" name="q" placeholder="search" autocomplete="off">
 	{% endif %}
 </div><!-- widget-table-selector -->

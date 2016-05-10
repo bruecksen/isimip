@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #sudo drop db
-sudo psql -c 'drop database "isi-mip"'
-sudo psql -c 'create database "isi-mip"'
-sudo psql -c 'grant all on database "isi-mip" to nutz'
+psql -c 'drop database "isi-mip"'
+psql -c 'create database "isi-mip"'
+psql -c 'grant all on database "isi-mip" to nutz'
 
 python manage.py migrate || exit 1
 

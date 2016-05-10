@@ -1,0 +1,49 @@
+{% extends 'climatemodels/edit.html' %}
+{% load template_form %}
+
+{% block form_content %}
+	{% template_form form as nf %}
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Key Input and Management' %}
+		<p>Provide a yes/no answer and a short description of how the process is included</p>
+		{{ nf.crops }}
+		{{ nf.land_coverage }}
+		{{ nf.planting_date_decision }}
+		{{ nf.planting_density }}
+		{{ nf.crop_cultivars }}
+		{{ nf.fertilizer_application }}
+		{{ nf.irrigation }}
+		{{ nf.crop_residue }}
+		{{ nf.initial_soil_water }}
+		{{ nf.initial_soil_nitrate_and_ammonia }}
+		{{ nf.initial_soil_C_and_OM }}
+		{{ nf.initial_crop_residue }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Key model processes' %}
+		<p>Please specify methods for model calibration and validation</p>
+		{{ nf.lead_area_development }}
+		{{ nf.light_interception }}
+		{{ nf.light_utilization }}
+		{{ nf.yield_formation }}
+		{{ nf.crop_phenology }}
+		{{ nf.root_distribution_over_depth }}
+		{{ nf.stresses_involved }}
+		{{ nf.type_of_water_stress }}
+		{{ nf.type_of_heat_stress }}
+		{{ nf.water_dynamics }}
+		{{ nf.evapo_transpiration }}
+		{{ nf.soil_CN_modeling }}
+		{{ nf.co2_effects }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Methods for model calibration and validation' %}
+		<p>Please specify methods for model calibration and validation</p>
+		{{ nf.parameters_number_and_description }}
+		{{ nf.calibrated_values }}
+		{{ nf.output_variable_and_dataset }}
+		{{ nf.spatial_scale_of_calibration_validation }}
+		{{ nf.temporal_scale_of_calibration_validation }}
+		{{ nf.criteria_for_evaluation }}
+	</fieldset>
+{% endblock %}

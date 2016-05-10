@@ -128,7 +128,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='impactmodel',
             name='spin_up',
-            field=models.NullBooleanField(help_text='`No` indicates the simulations were run starting in the first reporting year 1971', verbose_name='Did you spin-up your model?'),
+            field=models.NullBooleanField(help_text="'No' indicates the simulations were run starting in the first reporting year 1971', verbose_name='Did you spin-up your model?"),
         ),
         migrations.AlterField(
             model_name='impactmodel',

@@ -1,0 +1,14 @@
+{% extends "pages/default_page.html" %}
+
+{% block content %}
+
+	Your Impact Models:
+	<ul>
+		{% for im in ims %}
+			<li><a href="/impactmodels/details/{{ im.id }}/">{{ im }}</a></li>
+		{% endfor %}
+	</ul>
+
+	
+	<a href="{% url 'logout' %}">Logout</a>
+{% endblock %}
