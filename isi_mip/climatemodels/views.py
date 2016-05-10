@@ -9,6 +9,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.utils.html import urlize
 from django.views.generic import UpdateView
 from wagtail.wagtailcore.models import Page
 
@@ -55,7 +56,7 @@ def impact_model_details(page, request, id):
             model_details.append(res)
     model_details[0]['opened'] = True
 
-    description = '<b>TODO</b> Intro Text unde omnis iste natus error sit voluptatem accusantium totam.'  # TODO: THIS IS STATIC
+    description = urlize(im.short_description) #or ''
     context = {
         'page': page,
         'subpage': Page(title='Impact Model: %s' % im.name),
@@ -145,7 +146,7 @@ def input_data_details(page, request, id):
     data = InputData.objects.get(id=id)
     template = 'pages/input_data_details_page.html'
 
-    description = '<b>TODO</b> Intro Text unde omnis iste natus error sit voluptatem accusantium totam.'  # TODO: THIS IS STATIC
+    description = 'Intro Text unde omnis iste natus error sit voluptatem accusantium totam.'  # TODO: THIS IS STATIC
     if request.user.is_superuser:
         description += ' | <a href="{}">admin edit</a>'.format(
             urlresolvers.reverse('admin:climatemodels_inputdata_change', args=(data.id,)))

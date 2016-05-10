@@ -25,8 +25,8 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
 
 
 class SpecificPageChooserBlock(PageChooserBlock):
+    # THIS WILL ONLY WORK IF https://github.com/torchbox/wagtail/pull/2448
     page_model = BlogIndexPage
-    # TODO: THIS WILL ONLY WORK IF https://github.com/torchbox/wagtail/pull/2448
     # TODO: For now, the following will do:
 
     @cached_property
