@@ -4,12 +4,11 @@
 		{% include "widgets/link-list.html" %}
 	</div>
 	<div class="col-sm-4 col">
-		<h4>Protocol</h4>
 		{% image value.image width-250 %}<br/>
 		<b>Protocol version</b><br/>
 		{{ value.version }}
 		{% if value.complete_pdf %}
-		{% include 'widgets/button.html' with href=value.complete_pdf.url primary=True text='Download' %}
+		{% include 'widgets/button.html' with href=value.complete_pdf.url primary=True text='Download complete protocol' %}
 		{% endif %}
 	</div>
 </div><!-- widget-columns-2-1 -->
