@@ -272,8 +272,8 @@ class ContactsBlock(StructBlock):
                            }
             for contact in sector.get('contacts'):
                 n, w, e = contact.get('name'), contact.get('website'), contact.get('email')
-                sector_dict['text'] += "<a target='_blank' href='{w}'>{n}</a><br/>" \
-                                       "<a target='_blank' href='mailto:{e}'>{e}</a><br/><br/>".format(n=n, w=w, e=e)
+                sector_dict['text'] += "{n} <a target='_blank' href='{w}'><i class='fa fa-external-link' aria-hidden='true'></i></a> " \
+                                       "<a target='_blank' href='mailto:{e}'><i class='fa fa-envelope' aria-hidden='true'></i></a><br/><br/>".format(n=n, w=w, e=e)
             try:
                 sector_dict['image'] = {
                     'url': sector.get('image').get_rendition('max-1200x1200').url,
