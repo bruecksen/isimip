@@ -979,11 +979,30 @@ data = {
             'placeholder': 'Liesschen Müller',
         },
     },
+    'textinput_helptext': {
+        'name': 'Textinput',
+        'template': 'widgets/textinput.html',
+        'context': {
+            'id': 'textinput2',
+            'label': 'Name',
+            'help': 'Bitte gib hier ein, dass du einen Namen hast, und vielleicht deinen Namen.',
+        },
+    },
+    'textinput_error': {
+        'name': 'Textinput',
+        'template': 'widgets/textinput.html',
+        'context': {
+            'id': 'textinput3',
+            'label': 'Name',
+            'help': 'Bitte gib hier ein, dass du einen Namen hast, und vielleicht deinen Namen.',
+            'error': True,
+        },
+    },
     'textinput_email': {
         'name': 'Textinput Email',
         'template': 'widgets/textinput.html',
         'context': {
-            'id': 'textinput',
+            'id': 'textinput4',
             'label': 'E-Mail',
             'type': 'email',
             'value': '',
@@ -1001,6 +1020,16 @@ data = {
             'placeholder': 'Am Anfang war das Lieschen',
         },
     },
+    'textarea_error': {
+        'name': 'Textarea',
+        'template': 'widgets/textarea.html',
+        'context': {
+            'id': 'textarea2',
+            'label': 'Dein Leben',
+            'error': True,
+            'help': 'In dieses Feld passt dein ganzes Leben.'
+        },
+    },
 
     'nullboolean': {
         'name': 'Nullboolean',
@@ -1009,6 +1038,17 @@ data = {
             'id': 'nullboolean',
             'label': 'Hollywood hat alle Apollo-Missionen auf dem Mond gedreht',
             'value': 'yes',
+        },
+    },
+    'nullboolean_error': {
+        'name': 'Nullboolean',
+        'template': 'widgets/nullboolean.html',
+        'context': {
+            'id': 'nullboolean2',
+            'label': 'Hollywood hat alle Apollo-Missionen auf dem Mond gedreht',
+            'value': 'yes',
+            'error': True,
+            'help': 'Ja nö oder egal?'
         },
     },
 
@@ -1043,6 +1083,24 @@ data = {
                 {'value':'von gestern', 'label':'Von gestern', 'checked':False},
                 {'value':'neu 2016', 'label':'neu 2016', 'checked':True},
             ],
+        },
+    },
+    'singleselect_error': {
+        'name': 'Singleselect',
+        'template': 'widgets/multiselect.html',
+        'context': {
+            'id': 'singleselect2',
+            'label': 'Von wann ist dein Longboard?',
+            'singleselect': True,
+            'allowcustom': True,
+            'options': [
+                {'value':'alt', 'label':'Alt', 'checked':False},
+                {'value':'neu', 'label':'Neu', 'checked':False},
+                {'value':'von gestern', 'label':'Von gestern', 'checked':False},
+                {'value':'neu 2016', 'label':'neu 2016', 'checked':True},
+            ],
+            'error': True,
+            'help': 'Hier klickste was rein.'
         },
     },
 

@@ -1,18 +1,37 @@
-<div class="widget-multiselect">
+<div class="widget-multiselect form-group{% if error %} has-error{% endif %}">
 {% if label %}
-<label>{{ label }}</label>
+<label class="control-label">{{ label }}</label>
 {% endif %}
 
-<div class="widget-options widget-options-separated">
-{% for option in options %}<label class="checkbox-inline">
-		<input type="{% if singleselect %}radio{% else %}checkbox{% endif %}" value="{{ option.value }}"{% if option.checked %} checked="checked"{% endif %} name="{{ id }}" autocomplete="off">
+<div class="widget-options widget-options-checked">
+{% for option in options %}{% if option.checked %}<label class="checkbox-inline">
+		<input type="{% if singleselect %}radio{% else %}checkbox{% endif %}" value="{{ option.value }}" checked="checked" name="{{ id }}" autocomplete="off">
 		<span>{{ option.label }}</span>
-	</label>{% endfor %}
+	</label>{% endif %}{% endfor %}
 </div>
+
+<div class="widget-options widget-options-notchecked">
+{% for option in options %}{% if not option.checked %}<label class="checkbox-inline">
+		<input type="{% if singleselect %}radio{% else %}checkbox{% endif %}" value="{{ option.value }}" name="{{ id }}" autocomplete="off">
+		<span>{{ option.label }}</span>
+	</label>{% endif %}{% endfor %}
+</div>
+
+<div class="widget-options widget-options-template">
+<label class="checkbox-inline">
+		<input type="{% if singleselect %}radio{% else %}checkbox{% endif %}" value="" name="{{ id }}" autocomplete="off">
+		<span>{{ option.label }}</span>
+	</label>
+</div>
+
 
 {% if allowcustom %}
 <div class="widget-select-custom">
 	<input class="widget-select-customvalue form-control form-control-small{% if singleselect %} widget-select-customvalue-singleselect{% endif %}" autocomplete="off" placeholder="add custom value">
 </div>
+{% endif %}
+
+{% if help %}
+	<p class="help-block">{{ help }}</p>
 {% endif %}
 </div><!-- widget-multiselect -->
