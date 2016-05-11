@@ -225,7 +225,6 @@ $(function() {
 		var containerNotChecked = selectfield.find('.widget-options-notchecked');
 
 		function sortItems() {
-			console.log("sorting...");
 			// Put selected to top and unselected to bottom container
 			// Eventually sort items alphabetically
 

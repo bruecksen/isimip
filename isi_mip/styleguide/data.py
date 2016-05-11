@@ -95,6 +95,14 @@ data = {
             'text': 'Die Fotografie von Geistern',
         },
     },
+    'heading3_slug': {
+        'name': 'Heading 3 with Slug',
+        'template': 'widgets/heading3.html',
+        'context': {
+            'text': 'Die Fotografie von Geistern',
+            'slug': 'Heading No Three',
+        },
+    },
     'heading3a': {
         'name': 'Heading 3',
         'template': 'widgets/heading3.html',
@@ -980,7 +988,7 @@ data = {
         },
     },
     'textinput_helptext': {
-        'name': 'Textinput',
+        'name': 'Textinput with Helptext',
         'template': 'widgets/textinput.html',
         'context': {
             'id': 'textinput2',
@@ -989,7 +997,7 @@ data = {
         },
     },
     'textinput_error': {
-        'name': 'Textinput',
+        'name': 'Textinput with Error',
         'template': 'widgets/textinput.html',
         'context': {
             'id': 'textinput3',
@@ -998,11 +1006,21 @@ data = {
             'error': True,
         },
     },
+    'textinput_readonly': {
+        'name': 'Textinput Read Only',
+        'template': 'widgets/textinput.html',
+        'context': {
+            'id': 'textinput4',
+            'label': 'Name',
+            'help': 'Bitte gib hier ein, dass du einen Namen hast, und vielleicht deinen Namen.',
+            'readonly': True,
+        },
+    },
     'textinput_email': {
         'name': 'Textinput Email',
         'template': 'widgets/textinput.html',
         'context': {
-            'id': 'textinput4',
+            'id': 'textinput5',
             'label': 'E-Mail',
             'type': 'email',
             'value': '',
@@ -1037,18 +1055,29 @@ data = {
         'context': {
             'id': 'nullboolean',
             'label': 'Hollywood hat alle Apollo-Missionen auf dem Mond gedreht',
-            'value': 'yes',
+            'value': True,
+            'nullable': True,
         },
     },
     'nullboolean_error': {
-        'name': 'Nullboolean',
+        'name': 'Nullboolean with Error',
         'template': 'widgets/nullboolean.html',
         'context': {
             'id': 'nullboolean2',
             'label': 'Hollywood hat alle Apollo-Missionen auf dem Mond gedreht',
-            'value': 'yes',
+            'value': False,
             'error': True,
-            'help': 'Ja nö oder egal?'
+            'help': 'Ja nö oder egal?',
+            'nullable': True,
+        },
+    },
+    'nullboolean_nonull': {
+        'name': 'Nullboolean not Nullable',
+        'template': 'widgets/nullboolean.html',
+        'context': {
+            'id': 'nullboolean3',
+            'label': 'Hollywood hat alle Apollo-Missionen auf dem Mond gedreht',
+            'value': False,
         },
     },
 

@@ -163,21 +163,23 @@ h3, .h3 {
 	font-weight: 300;
 	margin-bottom: 15px;
 	font-size: 24px;
-  &:hover > .headerlink {
-	opacity: 100;
-  }
-  .headerlink {
-	color: @color-primary;
-	text-decoration: none;
-	opacity: 0;
-	transition: opacity 200ms ease-in-out;
-	-moz-transition: opacity 200ms ease-in-out;
-	-o-transition: opacity 200ms ease-in-out;
-	-webkit-transition: opacity 200ms ease-in-out;
-	&:hover {
-	  opacity: 100;
+
+	.headerlink {
+		color: @color-primary;
+		text-decoration: none;
+		opacity: 0;
+		transition: opacity 200ms ease-in-out;
+		-moz-transition: opacity 200ms ease-in-out;
+		-o-transition: opacity 200ms ease-in-out;
+		-webkit-transition: opacity 200ms ease-in-out;
+
+		&:hover {
+			opacity: 1;
+		}
 	}
-  }
+	&:hover > .headerlink {
+		opacity: 1;
+	}
 }
 h4, .h4 {
 	font-weight: 600;
@@ -1121,32 +1123,64 @@ h4, .h4 {
 				}
 			}
 
+		}
+
+	}
+
+}
+.widget-nullboolean {
+	.widget-options {
+
+		label.radio-inline, label.checkbox-inline {
 			+ label.radio-inline, + label.checkbox-inline {
 				span {
 					border-left-width: 0;
 				}
 			}
 		}
+	}
+}
 
-		&.widget-options-separated {
-			label.radio-inline, label.checkbox-inline {
+
+.widget-multiselect {
+	.widget-options {
+
+		label.radio-inline, label.checkbox-inline {
+
+			+ label.radio-inline, + label.checkbox-inline {
 				margin-left: 10px;
 
-				+ label.radio-inline, + label.checkbox-inline {
-
-					span {
-						border-left-width: 1px;
-					}
+				span {
+					//border-left-width: 1px;
 				}
 			}
 		}
 
 		&.widget-options-notchecked {
+			margin-top: 10px;
 			display: block;
+
+			label.radio-inline, label.checkbox-inline {
+				span {
+					border-color: @color-neutral;
+					color: @color-neutral;
+				}
+			}
+		}
+
+
+		&.widget-options-template {
+			display: none;
 		}
 	}
 
+
 	.widget-select-custom {
+		// Input for new tags
 		margin-top: 15px;
 	}
+
+
 }
+
+
