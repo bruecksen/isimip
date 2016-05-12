@@ -12,6 +12,15 @@
 
 @import "../vendor/css/open-sans.less";
 
+@font-face {
+	font-family: 'OpenSansEmoji';
+	src: url('../vendor/fonts/opensansemoji/OpenSansEmoji.eot');
+	src: url('../vendor/fonts/opensansemoji/OpenSansEmoji.woff') format('woff'), url('../vendor/fonts/opensansemoji/OpenSansEmoji.ttf') format('truetype'), url('../vendor/fonts/opensansemoji/OpenSansEmoji.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
 body {
 	/* Der Browser lädt automatisch die Schnitte, deren Stil und Gewicht benötigt werden. */
 	font-family: 'Open Sans';
@@ -1188,8 +1197,78 @@ h4, .h4 {
 		// Input for new tags
 		margin-top: 15px;
 	}
+}
 
 
+.widget-twitter-timeline {
+	font-family: "OpenSansEmoji", serif;
+	line-height: 1.3em;
+
+
+	.twitter-timeline-update {
+		border-bottom: 1px solid #aaa;
+		padding: 15px;
+		margin-bottom: 15px;
+
+		.twitter-timeline-useravatar {
+			float: left;
+			width: 48px;
+			height: 48px;
+			display: block;
+		}
+
+
+		.twitter-timeline-meta {
+			margin-left: 63px;
+			margin-bottom: 5px;
+			color: #777;
+		}
+
+		.twitter-timeline-username {
+			color: black;
+		}
+
+
+		.twitter-timeline-screenname {
+			color: inherit;
+			font-size: 90%;
+		}
+
+		.twitter-timeline-time {
+			color: inherit;
+			font-size: 90%;
+		}
+
+		.twitter-timeline-text {
+			margin-left: 63px;
+			font-size: 110%;
+			margin-bottom: 10px;
+			word-wrap: break-word;
+		}
+
+
+		.twitter-timeline-media {
+			margin-left: 63px;
+		}
+
+		.twitter-timeline-imagecontainer {
+			max-width: 400px;
+			margin: 0 auto;
+		}
+
+		.twitter-timeline-imagecontainer img {
+			display: block;
+			max-width: 100%;
+			max-height: 400px;
+		}
+
+		.twitter-timeline-quote {
+			margin-left: 63px;
+			border: 1px solid #777;
+			padding: 15px;
+			word-wrap: break-word;
+		}
+	}
 }
 
 
