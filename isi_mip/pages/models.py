@@ -160,50 +160,50 @@ class HomePage(RoutablePageWithDefault):
         }
         return context
 
-    @route(r'^blog/$')
-    @route(r'^blog/(?P<slug>\w+)/$')
-    def blog(self, request, slug=None):
-        context = {}
-        if slug:
-            entries = BlogIndexPage.objects.get(slug=slug).blogs
-            context['title'] = slug.title()
-        else:
-            entries = BlogPage.objects.all().order_by('-date')
-            context['title'] = 'News'
-        template = 'pages/blog_list.html'
-        context['entries'] = []
-        for entry in entries:
-            entry_context = {
-                'date': entry.date,
-                'href': entry.id,
-                'description': smart_truncate(entry.body, 300, 350),
-                'title': entry.title,
-                'arrow_right_link': True
-            }
-            try:
-                rendition = entry.header_image.get_rendition('max-800x800')
-                entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
-                entry_context['description'] = smart_truncate(entry.body, 0, 100)
-            except:
-                pass
-
-            context['entries'] += [entry_context]
-
-        return render(request, template, context)
-
-    @route(r'^blog/(?P<slug>\w*)/(?P<id>\d+)/$')
-    def blog_detail(self, request, id, slug=None):
-        template = 'pages/blog_detail.html'
-        entry = BlogPage.objects.get(id=id)
-        context = {'blog': entry}
-
-        try:
-            rendition = entry.header_image.get_rendition('max-800x800')
-            context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
-        except:
-            pass
-
-        return render(request, template, context)
+    # @route(r'^blog/$')
+    # @route(r'^blog/(?P<slug>\w+)/$')
+    # def blog(self, request, slug=None):
+    #     context = {}
+    #     if slug:
+    #         entries = BlogIndexPage.objects.get(slug=slug).blogs
+    #         context['title'] = slug.title()
+    #     else:
+    #         entries = BlogPage.objects.all().order_by('-date')
+    #         context['title'] = 'News'
+    #     template = 'pages/blog_list.html'
+    #     context['entries'] = []
+    #     for entry in entries:
+    #         entry_context = {
+    #             'date': entry.date,
+    #             'href': entry.id,
+    #             'description': smart_truncate(entry.body, 300, 350),
+    #             'title': entry.title,
+    #             'arrow_right_link': True
+    #         }
+    #         try:
+    #             rendition = entry.header_image.get_rendition('max-800x800')
+    #             entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
+    #             entry_context['description'] = smart_truncate(entry.body, 0, 100)
+    #         except:
+    #             pass
+    #
+    #         context['entries'] += [entry_context]
+    #
+    #     return render(request, template, context)
+    #
+    # @route(r'^blog/(?P<slug>\w*)/(?P<id>\d+)/$')
+    # def blog_detail(self, request, id, slug=None):
+    #     template = 'pages/blog_detail.html'
+    #     entry = BlogPage.objects.get(id=id)
+    #     context = {'blog': entry}
+    #
+    #     try:
+    #         rendition = entry.header_image.get_rendition('max-800x800')
+    #         context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
+    #     except:
+    #         pass
+    #
+    #     return render(request, template, context)
 
 
 class AboutPage(Page):
