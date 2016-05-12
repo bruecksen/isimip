@@ -829,6 +829,8 @@ h4, .h4 {
 	margin-bottom: 30px;
 
 	> ul {
+		padding-left: 0;
+
 		> li {
 			display: block;
 			padding: 20px 0;
@@ -929,6 +931,9 @@ h4, .h4 {
 		background-color: @color-white;
 
 		td {
+			// Bootstrap stops wrapping table cells on XS. Undo this.
+			white-space: normal !important;
+
 			*:first-child {
 				margin-top: 0;
 			}
