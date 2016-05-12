@@ -119,6 +119,7 @@ class TwitterBlock(StructBlock):
         context = super().get_context(value)
         twitte = Twitte(count=(value.get('count')))
         context['timeline'] = twitte.get_timeline(value.get('username'))
+        context['username'] = value.get('username') #context['timeline'][0]['screen_name']
         return context
 
     class Meta:
