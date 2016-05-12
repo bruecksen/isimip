@@ -1,0 +1,56 @@
+<div class="widget-twitter-timeline">
+<div class="row">
+	<div class="col-sm-5 text-center">
+	<p><i class="fa fa-twitter fa-3x"></i></p>
+	<h3>Follow us on Twitter</h3>
+	<p>Follow us on Twitter and we will keep you posted of every update and news about ISI-MIP.</p>
+	<p><a href="https://twitter.com/isimipimpacts" target="_blank" class="btn btn-default">@ISIMIPImpacts</a></p>
+	</div>
+	<div class="col-sm-7">
+
+			{% for status in timeline %}
+				<div class="twitter-timeline-update">
+					<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-useravatar">
+						<img src="{{ status.profile_image_url_https }}"/>
+					</a>
+
+					<div class="twitter-timeline-meta">
+						<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-username">
+							{{ status.name }}
+						</a>
+						·
+						<a href="https://twitter.com/{{ status.screen_name }}" target="_blank" class="twitter-timeline-screenname">
+							@{{ status.screen_name }}
+						</a>
+						·
+						<a target="_blank" href="https://twitter.com/{{status.screen_name}}/status/{{status.id_str}}" class="twitter-timeline-time">
+							{{status.created_at}}
+						</a>
+					</div>
+					<div class="twitter-timeline-text">
+						{{status.text|safe }}
+					</div>
+					{% if status.extended_entities %}
+					<div class="twitter-timeline-media">
+						<div class="twitter-timeline-imagecontainer">
+							<img src="{{status.extended_entities.media_url_https}}">
+						</div>
+					</div>
+					{% endif %}
+					{% if status.quoted_status %}
+					<div class="twitter-timeline-quote">
+						{{status.quoted_status.text|safe}}
+						{% if status.quoted_status.media_url_https %}
+						<div class="twitter-timeline-quote-media">
+							<div class="twitter-timeline-imagecontainer">
+								<img src="{{quoted_status.media_url_https}}">
+							</div>
+						</div>
+						{% endif %}
+					</div>
+					{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+	</div><!-- row -->
+</div><!-- widget-twitter-timeline -->
