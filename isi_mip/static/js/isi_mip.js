@@ -116,6 +116,36 @@ $(function() {
 			table.find('.widget-pagination-nextbutton').removeClass('disabled');
 		}
 
+
+		// Update links to download CSV or PDF with current filter
+		$('a[data-tableid]').each(function() {
+			var exportlinkparam_filter = JSON.stringify(filter);
+			// Strip { }
+			exportlinkparam_filter = exportlinkparam_filter.substring(1, exportlinkparam_filter.length-1);
+			exportlinkparam_filter = encodeURIComponent(exportlinkparam_filter);
+
+			var exportlinkparam_searchvalue = encodeURIComponent( searchvalue );
+
+			// Generate Parameter for Download URL
+			var exportlinkparam = "";
+			if (exportlinkparam_filter && exportlinkparam_searchvalue) {
+				exportlinkparam = '?filter=' + exportlinkparam_filter + '&searchvalue=' + exportlinkparam_searchvalue;
+			} else if (exportlinkparam_filter) {
+				exportlinkparam = '?filter=' + exportlinkparam_filter;
+			} else if (exportlinkparam_searchvalue) {
+				exportlinkparam = '?searchvalue=' + exportlinkparam_searchvalue;
+			}
+
+			var baseurl = $(this).attr('href');
+			// Strip parameter
+			if (baseurl.indexOf('?') > 0) {
+				baseurl = baseurl.substring(0, baseurl.indexOf('?'));
+			}
+
+			$(this).attr('href', baseurl + exportlinkparam);
+		});
+
+
 		console.log('Table updated. activepage:',activepage,'filter:',filter,'rowsperpage:',rowsperpage,'rowsintable:',rowsintable,'numberofpages:',numberofpages, 'searchvalue:', searchvalue);
 
 		// Update URL

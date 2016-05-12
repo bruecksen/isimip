@@ -389,6 +389,26 @@ data = {
         },
     },
 
+
+    'button': {
+        'name': 'Button',
+        'template': 'widgets/button.html',
+        'context': {
+            'href': 'https://www.mozilla.org/de/firefox/new/',
+            'text': 'Download',
+        },
+    },
+    'button_primary': {
+        'name': 'Button Primary',
+        'template': 'widgets/button.html',
+        'context': {
+            'href': 'https://www.mozilla.org/de/firefox/new/',
+            'text': 'Download',
+            'primary': True,
+        },
+    },
+
+
     'download_link': {
         'name': 'Download Link',
         'template': 'widgets/download-link.html',
@@ -887,6 +907,17 @@ data = {
                     },
                 ],
             },
+        },
+    },
+
+
+    'button_tableexport': {
+        'name': 'Button for Table Export',
+        'template': 'widgets/button.html',
+        'context': {
+            'href': '//export/table/?filter=%223%22%3A%22Deutschland%22',
+            'text': 'Download Current Table',
+            'tableid': 'selectortable',
         },
     },
 
