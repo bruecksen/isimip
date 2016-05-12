@@ -6,6 +6,7 @@
 @color-neutral-dark: #4a4a4a;
 @color-primary: #0681be; // blue
 @color-primary-light: #eef6ee; // light blue
+@color-primary-dark: #065E8A; // dark blue
 @color-secondary: #faba53; // was: f5ab35; // orange
 @color-secondary-strong: #fa9a00; // Hover color
 
@@ -31,11 +32,11 @@ body {
 
 
 a {
-	color: @color-secondary;
+	color: @color-primary;
 	font-weight: 600;
 
 	&:hover, &:focus {
-		color: @color-secondary-strong;
+		color: @color-primary-dark;
 	}
 }
 
@@ -160,7 +161,7 @@ select.form-control {
 
 // Headlines
 h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
-	color: @color-primary;
+	color: @color-black;
 	margin-top: 0; // Undo this in richtext fields
 }
 h3, .h3 {
@@ -545,18 +546,18 @@ h4, .h4 {
 					font-size: 16px;
 
 					&:focus, &:hover {
-						color: @color-secondary-strong;
+						color: @color-primary;
 					}
 
 				}
 
 				&.active {
 					a {
-						color: @color-secondary;
+						color: @color-primary-light;
 
 						&:focus, &:hover {
 							background-color: transparent;
-							color: @color-secondary-strong;
+							color: @color-primary;
 						}
 					}
 				}
@@ -782,7 +783,7 @@ h4, .h4 {
 	margin-bottom: 30px;
 
 	.widget-download-link-icon {
-		color: @color-primary;
+		color: @color-secondary;
 		margin-right: 15px;
 		margin-top: 10px;
 		font-size: 36px;
@@ -1079,10 +1080,10 @@ h4, .h4 {
 	.widget-indicator-number {
 		padding: 4px 0 4px 7px;
 		line-height: 1em;
-		border: 1px dashed @color-primary;
+		border: 1px dashed @color-secondary;
 		font-size: 48px;
 		font-weight: 900;
-		color: @color-primary;
+		color: @color-secondary;
 		margin-bottom: 5px;
 	}
 
