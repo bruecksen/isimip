@@ -2,8 +2,10 @@ from blog.models import BlogPage, BlogIndexPage
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property
+from django.utils.text import slugify
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock
+from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, RichTextBlock as _RichTextBlock
+from wagtail.wagtailimages.blocks import ImageChooserBlock
 
 
 def smart_truncate(text: str, min_length: int, max_length: int) -> str:
@@ -94,4 +96,46 @@ class BlogBlock(blocks.StructBlock):
                 pass
 
             context['entries'] += [entry_context]
+        return context
+
+
+class HeadingBlock(CharBlock):
+    class Meta:
+        classname = 'full title'
+        icon = 'title'
+        template = 'widgets/heading3.html'
+
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['text'] = value
+        context['slug'] = slugify(value, allow_unicode=True)
+        return context
+
+
+class HRBlock(StreamBlock):
+    class Meta:
+        icon = 'horizontalrule'
+        template = 'widgets/horizontal-ruler.html'
+
+
+class ImageBlock(ImageChooserBlock):
+    class Meta:
+        icon = 'image'
+        template = 'widgets/image.html'
+
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['url'] = value.get_rendition('max-1200x1200').url
+        context['name'] = value.title
+        return context
+
+
+class RichTextBlock(_RichTextBlock):
+    class Meta:
+        icon = 'pilcrow'
+        template = 'widgets/richtext-content.html'
+
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['content'] = value
         return context

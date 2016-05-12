@@ -2,10 +2,10 @@ import math
 
 from django.utils.html import urlize
 from wagtail.wagtailcore.blocks import StructBlock
-from wagtail.wagtailcore.blocks.field_block import TextBlock, RichTextBlock
+from wagtail.wagtailcore.blocks.field_block import TextBlock
 
 from isi_mip.climatemodels.models import InputData, OutputData, ImpactModel
-from isi_mip.contrib.blocks import IntegerBlock
+from isi_mip.contrib.blocks import IntegerBlock, RichTextBlock
 
 
 class ImpactModelsBlock(StructBlock):

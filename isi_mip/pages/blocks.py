@@ -1,12 +1,11 @@
 from django.utils import formats
-from django.utils.text import slugify
-from wagtail.wagtailcore.blocks import CharBlock, StructBlock, TextBlock, StreamBlock, PageChooserBlock, RichTextBlock, \
+from wagtail.wagtailcore.blocks import CharBlock, StructBlock, TextBlock, StreamBlock, PageChooserBlock, \
     URLBlock, DateBlock, ListBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
-from isi_mip.contrib.blocks import EmailBlock, IntegerBlock
+from isi_mip.contrib.blocks import EmailBlock, IntegerBlock, HeadingBlock, HRBlock, ImageBlock, RichTextBlock
 from isi_mip.twitter.twitter import Twitte
 
 
@@ -16,40 +15,9 @@ class RowBlock(StreamBlock):
         template = 'blocks/row_block.html'
 
 
-class HeadingBlock(CharBlock):
-    class Meta:
-        classname = 'full title'
-        icon = 'title'
-        template = 'widgets/heading3.html'
-
-    def get_context(self, value):
-        context = super().get_context(value)
-        context['text'] = value
-        context['slug'] = slugify(value, allow_unicode=True)
-        return context
-
-
-class HRBlock(StreamBlock):
-    class Meta:
-        icon = 'horizontalrule'
-        template = 'widgets/horizontal-ruler.html'
-
-
-class ImageBlock(ImageChooserBlock):
-    class Meta:
-        icon = 'image'
-        template = 'widgets/image.html'
-
-    def get_context(self, value):
-        context = super().get_context(value)
-        context['url'] = value.get_rendition('max-1200x1200').url
-        context['name'] = value.title
-        return context
-
-
 BASE_BLOCKS = [
     ('heading', HeadingBlock()),
-    ('rich_text', RichTextBlock(icon='pilcrow')),
+    ('rich_text', RichTextBlock()),
     ('horizontal_ruler', HRBlock()),
     ('embed', EmbedBlock()),
     ('image', ImageBlock()),
