@@ -123,7 +123,7 @@ class TwitterBlock(StructBlock):
 
     class Meta:
         icon = 'fa fa-twitter'
-        template = 'blocks/twitter_block.html'
+        template = 'widgets/twitter.html'
 
 
 class PaperBlock(StructBlock):
