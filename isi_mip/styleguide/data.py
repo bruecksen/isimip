@@ -284,11 +284,11 @@ data = {
         'name': 'Page Teaser',
         'template': 'widgets/page-teaser.html',
         'context': {
-            'href': 'http://bing.de/',
             'image': {
                 'url': '/static/styleguide/test-images/dog.jpg',
             },
-            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum.',
+            'title': 'Agriculture Sector',
+            'description': '<p><strong>Martha Musterfrau</strong><br><a href="https://sinnwerkstatt.com/team/">sinnwerkstatt.com/team/</a><br><a href="mailto:yolo@example.com">yolo@example.com</a></p><hr><p><strong>Martha Musterfrau</strong><br><a href="https://sinnwerkstatt.com/team/">sinnwerkstatt.com/team/alle/mitarbeiter/und/innen</a><br><a href="mailto:yolo-extra-lange-adresse@example.com">yoloextralangeadresse@example.com</a></p>',
             'arrow_right_link': True,
         },
     },
