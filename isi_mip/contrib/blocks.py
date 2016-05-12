@@ -2,6 +2,7 @@ from blog.models import BlogPage, BlogIndexPage
 from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property
+from django.utils.html import strip_tags
 from django.utils.text import slugify
 from wagtail.wagtailcore import blocks
 from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, RichTextBlock as _RichTextBlock
@@ -15,6 +16,7 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
     :param max_length: Maximal length of result string
     :return: Concattenated String
     """
+    text = strip_tags(text)
     max_length = len(text) if max_length == 0 else max_length
     c_index = text.rfind('.', min_length, max_length)
     if c_index != -1:
