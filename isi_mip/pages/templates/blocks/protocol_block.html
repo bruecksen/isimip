@@ -5,10 +5,10 @@
 	</div>
 	<div class="col-sm-4 col">
 		{% image value.image width-250 %}<br/>
-		<b>Protocol version</b><br/>
+		<b>Complete Protocol</b><br/>
 		{{ value.version }}
 		{% if value.complete_pdf %}
-		{% include 'widgets/button.html' with href=value.complete_pdf.url primary=True text='Download complete protocol' %}
+		{% include 'widgets/button.html' with href=value.complete_pdf.url primary=True text='Download' %}
 		{% endif %}
 	</div>
 </div><!-- widget-columns-2-1 -->
