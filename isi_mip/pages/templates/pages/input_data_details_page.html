@@ -1,18 +1,12 @@
 {% extends 'pages/default_page.html' %}
 {% load breadcrumb %}
 {% block content_container %}
-    <div class="background-container">
-        <div class="content-container container">
-            <div class="content-container-border">
-                <div class="content-container-inner">
-                    {% breadcrumb %}
-                    {% include 'widgets/heading2.html' with text=subpage.title %}
-	                {% block content %}
-		                {{ description | safe }}<br/><br/>
-		                {% include "widgets/expandable.html" %}
-                    {% endblock %}
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		{% breadcrumb %}
+		{% include 'widgets/heading2.html' with text=subpage.title %}
+		{% block content %}
+			{{ description | safe }}<br/><br/>
+			{% include "widgets/expandable.html" %}
+		{% endblock %}
+	</div>
 {% endblock %}
