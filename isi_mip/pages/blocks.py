@@ -6,7 +6,7 @@ from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
 from isi_mip.contrib.blocks import EmailBlock, IntegerBlock, HeadingBlock, HRBlock, ImageBlock, RichTextBlock
-from isi_mip.twitter.twitter import Twitte
+from isi_mip.twitter import TwitterTimeline
 
 
 class RowBlock(StreamBlock):
@@ -117,7 +117,7 @@ class TwitterBlock(StructBlock):
 
     def get_context(self, value):
         context = super().get_context(value)
-        twitte = Twitte(count=(value.get('count')))
+        twitte = TwitterTimeline(count=(value.get('count')))
         context['timeline'] = twitte.get_timeline(value.get('username'))
         context['username'] = value.get('username') #context['timeline'][0]['screen_name']
         return context
