@@ -718,6 +718,7 @@ data = {
                 {
                     'colnumber': '2',  # column number in table starting with 1
                     'all_value': 'All regions',
+                    'name': 'region',
                     'options': [
                         {'value': 'Berlin'},
                         {'value': 'Brandenburg'},
@@ -731,6 +732,7 @@ data = {
                 {
                     'colnumber': '3',
                     'all_value': 'All countries',
+                    'name': 'country',
                     'activeoption': 'Deutschland',
                     'options': [
                         {'value': 'Deutschland'},

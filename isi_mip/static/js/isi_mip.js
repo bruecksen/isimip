@@ -119,21 +119,20 @@ $(function() {
 
 		// Update links to download CSV or PDF with current filter
 		$('a[data-tableid]').each(function() {
-			var exportlinkparam_filter = JSON.stringify(filter);
-			// Strip { }
-			exportlinkparam_filter = exportlinkparam_filter.substring(1, exportlinkparam_filter.length-1);
-			exportlinkparam_filter = encodeURIComponent(exportlinkparam_filter);
+			var filternames = table.data('filternames');
 
-			var exportlinkparam_searchvalue = encodeURIComponent( searchvalue );
+			var param = "";
+			$.each(filter, function(colnumber, value) {
+				param += "&" + encodeURIComponent([filternames[colnumber]]) + "=" + encodeURIComponent(value);
+			});
 
-			// Generate Parameter for Download URL
-			var exportlinkparam = "";
-			if (exportlinkparam_filter && exportlinkparam_searchvalue) {
-				exportlinkparam = '?filter=' + exportlinkparam_filter + '&searchvalue=' + exportlinkparam_searchvalue;
-			} else if (exportlinkparam_filter) {
-				exportlinkparam = '?filter=' + exportlinkparam_filter;
-			} else if (exportlinkparam_searchvalue) {
-				exportlinkparam = '?searchvalue=' + exportlinkparam_searchvalue;
+			if (searchvalue) {
+				param += "&searchvalue=" + encodeURIComponent( searchvalue )
+			}
+
+			if (param) {
+				// replace first & with ?
+				param = param.replace('&','?');
 			}
 
 			var baseurl = $(this).attr('href');
@@ -142,7 +141,7 @@ $(function() {
 				baseurl = baseurl.substring(0, baseurl.indexOf('?'));
 			}
 
-			$(this).attr('href', baseurl + exportlinkparam);
+			$(this).attr('href', baseurl + param);
 		});
 
 
@@ -204,11 +203,12 @@ $(function() {
 	$('.widget-table-selector').each(function() {
 		var table = $('#' + $(this).data('tableid'));
 		var filter = table.data('filter');
-
+		var filternames = {}; // name attributes of filters
 
 		$(this).find('select').each(function() {
 			var selector = $(this);
 			var colnumber = selector.data('colnumber');
+			filternames[colnumber] = selector.attr('name');
 
 			selector.change(function() {
 				// Show first page after filter change
@@ -228,6 +228,9 @@ $(function() {
 				updateTable(table);
 			});
 		});
+
+		table.data('filternames', filternames);
+
 		$(this).find('.widget-table-selector-search').on('keyup change paste input', function() {
 			// Show first page after filter change
 			table.data('activepage', 1);
