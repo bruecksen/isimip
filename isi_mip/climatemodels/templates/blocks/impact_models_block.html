@@ -1,5 +1,3 @@
-<form method="get" action="download/">
-	{% include 'widgets/table-selector.html' %}
-	<input type="submit" value="Download model properties as .xlsx">
-</form>
+{% include 'widgets/table-selector.html' %}
+{% include 'widgets/read-more-link.html' with align='right' text='Download model properties as .xlsx' url='download/' %}
 {% include "widgets/table.html" %}

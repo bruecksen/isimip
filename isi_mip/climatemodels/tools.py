@@ -2,7 +2,14 @@ import xlsxwriter
 
 from isi_mip.climatemodels.models import ImpactModel, Sector
 
-
+EMPTY_SECTORS = [
+    'Agro-Economic Modelling',
+    'Biodiversity',
+    'Coastal Infrastructure',
+    'Computable General Equilibrium Modelling',
+    'Health',
+    'Permafrost',
+]
 # https://xlsxwriter.readthedocs.org/en/latest/
 
 class ImpactModelToXLSX:
@@ -32,6 +39,8 @@ class ImpactModelToXLSX:
                     general.write(i+1, j, str(inhalt))
 
             for sector_name in sorted(sectors):
+                if sector_name in EMPTY_SECTORS:
+                    continue
                 xsector = Sector.get(sector_name)
                 entries = xsector.objects.filter(impact_model__in=self.qs).order_by('impact_model__name')
                 if not entries:

@@ -77,14 +77,13 @@ def impact_model_details(page, request, id):
     return render(request, template, context)
 
 def impact_model_download(page, request):
-    filters = {x:y for x,y in request.GET.items() if y != 'tableselectordefaultall' and y != ''}
     imodels = ImpactModel.objects.all()
-    if 'sector' in filters:
-        imodels = imodels.filter(sector=filters['sector'])
-    if 'driver' in filters:
-        imodels = imodels.filter(climate_data_sets__name=filters['driver'])
-    if 'q' in filters:
-        q = filters['q']
+    if 'sector' in request.GET:
+        imodels = imodels.filter(sector=request.GET['sector'])
+    if 'driver' in request.GET:
+        imodels = imodels.filter(climate_data_sets__name=request.GET['driver'])
+    if 'q' in request.GET:
+        q = request.GET['q']
         query = Q(name__icontains=q)|Q(sector__icontains=q)|Q(climate_data_sets__name__icontains=q) \
                     | Q(contactperson__name__icontains=q) | Q(contactperson__email__icontains=q)
         imodels = imodels.filter(query)
