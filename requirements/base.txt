@@ -10,7 +10,6 @@ tweepy==3.5.0
 Django==1.9.6
 django-environ==0.4.0
 django_compressor==2.0
-# django-annoying==0.9.0
 
-wagtail==1.4.3
+wagtail==1.4.4
 wagtail-blog==1.6.6
