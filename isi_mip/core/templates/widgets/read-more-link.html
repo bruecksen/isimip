@@ -1,5 +1,5 @@
 <div class="widget-readmorelink{% if align == "right" %} text-right{% endif %}{% if large %} widget-readmorelink-large{% endif %}">
-	<a href="{{ url }}"{% if external %} target="_blank" {% endif %}>
+	<a href="{{ url }}"{% if external %} target="_blank"{% endif %}{% if tableid %} data-tableid="{{ tableid }}"{% endif %}>
 		{{ text|safe }}
 		{% if arrow %}
 			<i class="fa fa-arrow-circle-right fa-2x"></i>
