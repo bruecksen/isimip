@@ -10,9 +10,10 @@ EMPTY_SECTORS = [
     'Health',
     'Permafrost',
 ]
-# https://xlsxwriter.readthedocs.org/en/latest/
+
 
 class ImpactModelToXLSX:
+    # https://xlsxwriter.readthedocs.org/en/latest/
     def __init__(self, res, qs):
         self.workbook = xlsxwriter.Workbook(res, {'in_memory': True})
         self.qs = qs.order_by('name')
@@ -29,14 +30,14 @@ class ImpactModelToXLSX:
             general = self.workbook.add_worksheet('General Information')
             general.set_column('A:A', 20)
             bold = self.workbook.add_format({'bold': True})
-            fields = [field.name for field in ImpactModel._meta.fields[1:] if field.name is not 'owner' ]
-            general.write_row(0,0, data=[x.title() for x in fields], cell_format=bold)
+            fields = [field.name for field in ImpactModel._meta.fields[1:] if field.name is not 'owner']
+            general.write_row(0, 0, data=[x.title() for x in fields], cell_format=bold)
 
             for i, impactmodel in enumerate(self.qs):
                 data = impactmodel
-                for j,f in enumerate(fields):
-                    inhalt = getattr(data,f) or ''
-                    general.write(i+1, j, str(inhalt))
+                for j, f in enumerate(fields):
+                    inhalt = getattr(data, f) or ''
+                    general.write(i + 1, j, str(inhalt))
 
             for sector_name in sorted(sectors):
                 if sector_name in EMPTY_SECTORS:

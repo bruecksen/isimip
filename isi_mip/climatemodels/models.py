@@ -12,6 +12,9 @@ class Region(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ('name', )
+
 
 class ReferencePaper(Paper):
     def __str__(self):
@@ -26,6 +29,9 @@ class ClimateDataType(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ('name',)
 
 
 class ClimateVariable(models.Model):
@@ -53,6 +59,9 @@ class InputPhase(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ('name',)
+
 
 class SocioEconomicInputVariables(models.Model):
     name = models.CharField(max_length=500, unique=True)
@@ -62,6 +71,8 @@ class SocioEconomicInputVariables(models.Model):
 
     class Meta:
         verbose_name = 'Socio-economic input variable'
+        ordering = ('name', )
+
 
 class Scenario(models.Model):
     name = models.CharField(max_length=500, unique=True)
@@ -69,12 +80,18 @@ class Scenario(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ('name',)
+
 
 class SpatialAggregation(models.Model):
     name = models.CharField(max_length=500, unique=True)
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ('name',)
 
 
 class ContactPerson(models.Model):
@@ -85,6 +102,9 @@ class ContactPerson(models.Model):
 
     def __str__(self):
         return "%s (%s) - %s" % (self.name, self.institute, self.email)
+
+    class Meta:
+        ordering = ('name',)
 
 
 class InputData(models.Model):
@@ -102,12 +122,17 @@ class InputData(models.Model):
 
     class Meta:
         verbose_name_plural = 'Input data'
+        ordering = ('name',)
 
 
 class SimulationRound(models.Model):
     name = models.CharField(max_length=500, unique=True)
+
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ('name',)
 
 
 class ImpactModel(models.Model):
@@ -217,6 +242,11 @@ class ImpactModel(models.Model):
 
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
+    class Meta:
+        unique_together = ('name', 'sector')
+        ordering = ('name', )
+        # verbose_name_plural = 'Impact Models'
+
     def save(self, *args, **kwargs):
         if not self.owner_id:
             self.owner_id = 1
@@ -226,11 +256,8 @@ class ImpactModel(models.Model):
         super().save(*args, **kwargs)
         SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self)
 
-    class Meta:
-        unique_together = ('name', 'sector')
-        # verbose_name_plural = 'Impact Models'
-
-    CACHE_KEY = "climatemodels/impact_model/sector/%d"
+    def __str__(self):
+        return "%s (%s)" % (self.name, self.sector)
 
     @property
     def fk_sector_name(self):
@@ -241,9 +268,6 @@ class ImpactModel(models.Model):
     @property
     def fk_sector(self):
         return getattr(self, self.fk_sector_name)
-
-    def __str__(self):
-        return "%s (%s)" % (self.name, self.sector)
 
     def _get_verbose_field_name(self, field: str) -> str:
         return self._meta.get_field_by_name(field)[0].verbose_name.title()
@@ -340,23 +364,6 @@ class Sector(models.Model):
 
     def values_to_tuples(self) -> list:
         return []
-
-
-    """
-    Sektoren:
-        Agriculture                                     | Agriculture
-        Energy                                          | Energy
-        Water (global)                                  | Water
-        Water (regional)                                | Water
-        Biomes                                          | Biomes
-        Forests                                         | Biomes
-        Marine Ecosystems and Fisheries (global)        | MarineEcosystems
-        Marine Ecosystems and Fisheries (regional)      | MarineEcosystems
-        Biodiversity                                    | - General -
-        Health                                          | - General -
-        Coastal Infrastructure                          | - General -
-        Permafrost                                      | - General -
-    """
 
 
 class Agriculture(Sector):
@@ -726,8 +733,6 @@ class WaterRegional(Water):
         verbose_name_plural = 'Water (regional)'
 
 
-
-
 class Biodiversity(Sector): pass
 class Health(Sector): pass
 class CoastalInfrastructure(Sector):
@@ -737,12 +742,10 @@ class CoastalInfrastructure(Sector):
 class Permafrost(Sector): pass
 class ComputableGeneralEquilibriumModelling(Sector):
     class Meta:
-        verbose_name = 'Computable General Equilibrium Modelling'
-        verbose_name_plural = 'Computable General Equilibrium Modelling'
+        verbose_name = verbose_name_plural = 'Computable General Equilibrium Modelling'
 class AgroEconomicModelling(Sector):
     class Meta:
-        verbose_name = 'Agro-Economic Modelling'
-        verbose_name_plural = 'Agro-Economic Modelling'
+        verbose_name = verbose_name_plural = 'Agro-Economic Modelling'
 
 
 class OutputData(models.Model):
@@ -754,10 +757,10 @@ class OutputData(models.Model):
 
     def __str__(self):
         return "%s : %s" % (self.sector, self.model.name)
-        # return "%s : %s : %s" % (self.sector, self.model.name, self.scenario.name)
 
     class Meta:
-        verbose_name_plural = 'Output data'
+        verbose_name = verbose_name_plural = 'Output data'
+        ordering = ('name', )
 
 
 SECTOR_MAPPING = {

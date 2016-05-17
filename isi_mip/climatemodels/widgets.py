@@ -4,25 +4,8 @@ from django.forms.widgets import Select, TextInput, EmailInput
 from django.template.loader import render_to_string
 from django.utils.datastructures import MultiValueDict
 
-class TomiTextInput(TextInput):
-    def __init__(self, textarea=False, emailfield=False):
-        super().__init__()
-        self.textarea = textarea
-        self.emailfield = emailfield
 
-    def render(self, name, value, attrs=None):
-        template = 'widgets/textarea.html' if self.textarea else 'widgets/textinput.html'
-        context = {
-            'id': name,
-            # 'placeholder': name,
-            'value': value or '',
-            'readonly': 'readonly' in self.build_attrs() and self.build_attrs()['readonly']
-        }
-        if self.emailfield:
-            context['type'] = 'email'
-        return render_to_string(template, context)
-
-class BooleanSelect(Select):
+class MyBooleanSelect(Select):
     def __init__(self, nullable=False, attrs=None, choices=()):
         super().__init__(attrs=attrs, choices=choices)
         self.nullable = nullable
@@ -37,7 +20,7 @@ class BooleanSelect(Select):
         return render_to_string(template, context)
 
 
-class MultiSelect(Select):
+class MyMultiSelect(Select):
     # allow_multiple_selected = True
 
     def __init__(self, allowcustom=False, multiselect=False, attrs=None):
@@ -56,12 +39,12 @@ class MultiSelect(Select):
                    'options': []
                    }
 
-        for k,v in chain(self.choices, choices):
+        for k, v in chain(self.choices, choices):
             if isinstance(value, list):
-                checked =  str(k) in [str(x) for x in value]
+                checked = str(k) in [str(x) for x in value]
             else:
                 checked = k == value
-            if v=='---------' and not k:
+            if v == '---------' and not k:
                 continue
             context['options'] += [{'checked': checked, 'label': v, 'value': k}]
 
@@ -73,3 +56,22 @@ class MultiSelect(Select):
         if self.multiselect and isinstance(data, MultiValueDict):
             return data.getlist(name)
         return data.get(name)
+
+
+class MyTextInput(TextInput):
+    def __init__(self, textarea=False, emailfield=False):
+        super().__init__()
+        self.textarea = textarea
+        self.emailfield = emailfield
+
+    def render(self, name, value, attrs=None):
+        template = 'widgets/textarea.html' if self.textarea else 'widgets/textinput.html'
+        context = {
+            'id': name,
+            # 'placeholder': name,
+            'value': value or '',
+            'readonly': 'readonly' in self.build_attrs() and self.build_attrs()['readonly']
+        }
+        if self.emailfield:
+            context['type'] = 'email'
+        return render_to_string(template, context)

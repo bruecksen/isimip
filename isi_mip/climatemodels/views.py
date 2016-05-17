@@ -17,6 +17,7 @@ from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, C
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 
+
 def impact_model_assign(request, username=None):
     user = User.objects.get(username=username)
     impactmodel = ImpactModel(owner=user)
@@ -30,7 +31,7 @@ def impact_model_assign(request, username=None):
                 imodel.save()
                 messages.success(request, "The new owner has been assigned successfully")
             else:
-                del(form.cleaned_data['model'])
+                del (form.cleaned_data['model'])
                 ImpactModel.objects.create(**form.cleaned_data)
                 messages.success(request, "The model has been successfully created and assigned")
             if 'next' in request.GET:
@@ -56,7 +57,7 @@ def impact_model_details(page, request, id):
             model_details.append(res)
     model_details[0]['opened'] = True
 
-    description = urlize(im.short_description) #or ''
+    description = urlize(im.short_description)  # or ''
     context = {
         'page': page,
         'subpage': Page(title='Impact Model: %s' % im.name),
@@ -76,6 +77,7 @@ def impact_model_details(page, request, id):
     template = 'climatemodels/details.html'
     return render(request, template, context)
 
+
 def impact_model_download(page, request):
     imodels = ImpactModel.objects.all()
     if 'sector' in request.GET:
@@ -84,13 +86,14 @@ def impact_model_download(page, request):
         imodels = imodels.filter(climate_data_sets__name=request.GET['driver'])
     if 'q' in request.GET:
         q = request.GET['q']
-        query = Q(name__icontains=q)|Q(sector__icontains=q)|Q(climate_data_sets__name__icontains=q) \
-                    | Q(contactperson__name__icontains=q) | Q(contactperson__email__icontains=q)
+        query = Q(name__icontains=q) | Q(sector__icontains=q) | Q(climate_data_sets__name__icontains=q) \
+                | Q(contactperson__name__icontains=q) | Q(contactperson__email__icontains=q)
         imodels = imodels.filter(query)
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="ImpactModels {:%Y-%m-%d}.xlsx"'.format(datetime.now())
     ImpactModelToXLSX(response, imodels)
     return response
+
 
 def impact_model_edit(page, request, id):
     impactmodel = ImpactModel.objects.get(id=id)
@@ -117,13 +120,14 @@ def impact_model_edit(page, request, id):
     template = 'climatemodels/edit_impact_model.html'
     return render(request, template, context)
 
+
 def impact_model_sector_edit(page, request, id):
     impactmodel = ImpactModel.objects.get(id=id)
     context = {'page': page, 'subpage': Page(title='Impact Model: %s' % impactmodel.name)}
     formular = get_sector_form(impactmodel.fk_sector_name)
 
     # No further changes, because the Sector has none.
-    if formular == None:
+    if formular is None:
         target_url = page.url + page.reverse_subpage('details', args=(impactmodel.id,))
         return HttpResponseRedirect(target_url)
 
@@ -167,7 +171,8 @@ def input_data_details(page, request, id):
                    {'notoggle': True, 'opened': True, 'term': 'Description',
                     'definitions': [{'text': data.description}]},
                    {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': [{'text': data.caveats}]},
-                   {'notoggle': True, 'opened': True, 'term': 'Download Instructions', 'definitions': [{'text': data.download_instructions}]},
+                   {'notoggle': True, 'opened': True, 'term': 'Download Instructions',
+                    'definitions': [{'text': data.download_instructions}]},
                ]
                }
     return render(request, template, context)

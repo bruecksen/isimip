@@ -15,7 +15,6 @@ class HideAdmin(admin.ModelAdmin):
         return {}
 
 
-
 class HideSectorAdmin(HideAdmin):
     readonly_fields = ('impact_model',)
 
