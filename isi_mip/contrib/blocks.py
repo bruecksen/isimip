@@ -5,7 +5,8 @@ from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 from django.utils.text import slugify
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, RichTextBlock as _RichTextBlock
+from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, \
+    RichTextBlock as _RichTextBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
 
@@ -20,10 +21,10 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
     max_length = len(text) if max_length == 0 else max_length
     c_index = text.rfind('.', min_length, max_length)
     if c_index != -1:
-        return text[:c_index+1]
+        return text[:c_index + 1]
     else:
         if len(text) > max_length:
-            return text[:max_length-2]+'..'
+            return text[:max_length - 2] + '..'
         else:
             return text
 
@@ -31,6 +32,7 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
 class SpecificPageChooserBlock(PageChooserBlock):
     # THIS WILL ONLY WORK IF https://github.com/torchbox/wagtail/pull/2449
     page_model = BlogIndexPage
+
     # TODO: Waiting on Upstream. For now, the following will do:
 
     @cached_property
@@ -46,8 +48,10 @@ class SpecificPageChooserBlock(PageChooserBlock):
 
 class IntegerBlock(FieldBlock):
     def __init__(self, required=True, help_text=None, max_value=None, min_value=None, **kwargs):
-        self.field = forms.IntegerField(required=required, help_text=help_text, max_value=max_value, min_value=min_value)
+        self.field = forms.IntegerField(required=required, help_text=help_text, max_value=max_value,
+                                        min_value=min_value)
         super().__init__(**kwargs)
+
 
 class EmailBlock(FieldBlock):
     def __init__(self, required=True, help_text=None, **kwargs):
@@ -91,7 +95,7 @@ class BlogBlock(blocks.StructBlock):
                 'arrow_right_link': True
             }
             try:
-                rendition = entry.header_image.get_rendition('max-800x800')
+                rendition = entry.header_image.get_rendition('fill-640x360-c100')
                 entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
                 entry_context['description'] = smart_truncate(entry.body, 0, 100)
             except:

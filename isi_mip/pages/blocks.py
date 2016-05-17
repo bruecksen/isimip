@@ -38,7 +38,7 @@ class SmallTeaserBlock(StructBlock):
         context = super().get_context(value)
         context['title'] = value.get('title')
         image = value.get('picture')
-        rendition = image.get_rendition('max-800x800')
+        rendition = image.get_rendition('fill-640x360-c100')
         context['image'] = {'url': rendition.url, 'name': image.title}
         context['href'] = value.get('link').url
         context['description'] = value.get('text')
@@ -146,7 +146,7 @@ class PaperBlock(StructBlock):
         context['url'] = value.get('link')
         image = value.get('picture')
         if image:
-            rendition = image.get_rendition('max-500x500')
+            rendition = image.get_rendition('fill-640x360-c100')
             context['image'] = {'url': rendition.url, 'name': image.title}
         context['source'] = {'description': 'Link to paper', 'href': value.get('link')}
 
@@ -181,7 +181,7 @@ class LinkBlock(StructBlock):
 
         image = value.get('picture')
         if image:
-            rendition = image.get_rendition('max-250x250')
+            rendition = image.get_rendition('fill-640x360-c100')
             context['image'] = {'url': rendition.url, 'name': image.title}
         if value.get('link'):
             context['href'] = value.get('link')
@@ -245,7 +245,7 @@ class ContactsBlock(StructBlock):
                                        "<a target='_blank' href='mailto:{e}'><i class='fa fa-envelope' aria-hidden='true'></i></a><br/><br/>".format(n=n, w=w, e=e)
             try:
                 sector_dict['image'] = {
-                    'url': sector.get('image').get_rendition('max-1200x1200').url,
+                    'url': sector.get('image').get_rendition('fill-640x360-c100').url,
                     'name': sector.get('image').title
                 }
             except:

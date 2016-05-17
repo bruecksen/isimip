@@ -66,7 +66,7 @@ class BlogIndexPage(_BlogIndexPage):
                 'arrow_right_link': True
             }
             try:
-                rendition = entry.header_image.get_rendition('max-800x800')
+                rendition = entry.header_image.get_rendition('fill-640x360-c100')
                 entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
                 entry_context['description'] = smart_truncate(body, 0, 100)
             except:
