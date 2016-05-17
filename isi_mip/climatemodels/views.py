@@ -61,7 +61,7 @@ def impact_model_details(page, request, id):
     context = {
         'page': page,
         'subpage': Page(title='Impact Model: %s' % im.name),
-        'description': description,
+        'description': description or '',
         'headline': im.name,
         'list': model_details,
     }
@@ -127,8 +127,8 @@ def impact_model_sector_edit(page, request, id):
     formular = get_sector_form(impactmodel.fk_sector_name)
 
     # No further changes, because the Sector has none.
+    target_url = page.url + page.reverse_subpage('details', args=(impactmodel.id,))
     if formular is None:
-        target_url = page.url + page.reverse_subpage('details', args=(impactmodel.id,))
         return HttpResponseRedirect(target_url)
 
     if request.method == 'POST':
@@ -136,6 +136,7 @@ def impact_model_sector_edit(page, request, id):
         if form.is_valid():
             form.save()
             messages.success(request, "Changes to your model have been saved successfully.")
+            HttpResponseRedirect(target_url)
         else:
             messages.warning(request, form.errors)
     else:
@@ -155,7 +156,7 @@ def input_data_details(page, request, id):
 
     context = {'page': page,
                'subpage': Page(title='Input Data Set: %s' % data),
-               'description': description,
+               'description': description or '',
                'list': [
                    {
                        'notoggle': True,
