@@ -2,19 +2,20 @@
 {% load static header footer breadcrumb %}
 
 {% block header %}
-	{% header %}
+    {% header %}
 {% endblock %}
 
 {% block content_container %}
-	<div class="container">
-		{% breadcrumb %}
-		{% include 'widgets/heading2.html' with text=page.title %}
-		{% block content %}
-			{{ page.content }}
-		{% endblock %}
-	</div>
+    <div class="container">
+        <br>
+        {% breadcrumb %}
+        {% include 'widgets/heading2.html' with text=page.title %}
+        {% block content %}
+            {{ page.content }}
+        {% endblock %}
+    </div>
 {% endblock %}
 
 {% block footer %}
-	{% footer %}
+    {% footer %}
 {% endblock %}
