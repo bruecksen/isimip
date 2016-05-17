@@ -760,7 +760,6 @@ class OutputData(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = 'Output data'
-        ordering = ('name', )
 
 
 SECTOR_MAPPING = {
