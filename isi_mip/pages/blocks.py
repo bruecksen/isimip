@@ -300,6 +300,11 @@ class ProtocolBlock(StructBlock):
                 'href': pdf.get('file').url,
                 'text': pdf.get('description')
             }]
+        try:
+            rendition = value.get('image').get_rendition('max-500x500')
+            context['image'] = {'url': rendition.url, 'name': value.get('image').title}
+        except:
+            pass
         return context
 
 

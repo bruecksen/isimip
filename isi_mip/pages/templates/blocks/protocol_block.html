@@ -4,9 +4,9 @@
 		{% include "widgets/link-list.html" %}
 	</div>
 	<div class="col-sm-4 col">
-		{% image value.image width-250 %}<br/>
-		<b>Complete Protocol</b><br/>
-		{{ value.version }}
+        {% include 'widgets/image.html' with url=image.url name=image.name %}
+		<h4>Complete Protocol</h4>
+		<p>{{ value.version }}</p>
 		{% if value.complete_pdf %}
 		{% include 'widgets/button.html' with href=value.complete_pdf.url primary=True text='Download' %}
 		{% endif %}
