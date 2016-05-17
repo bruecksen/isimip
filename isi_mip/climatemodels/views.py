@@ -57,11 +57,11 @@ def impact_model_details(page, request, id):
             model_details.append(res)
     model_details[0]['opened'] = True
 
-    description = urlize(im.short_description)  # or ''
+    description = urlize(im.short_description or '')  # or ''
     context = {
         'page': page,
         'subpage': Page(title='Impact Model: %s' % im.name),
-        'description': description or '',
+        'description': description,
         'headline': im.name,
         'list': model_details,
     }
@@ -136,7 +136,7 @@ def impact_model_sector_edit(page, request, id):
         if form.is_valid():
             form.save()
             messages.success(request, "Changes to your model have been saved successfully.")
-            HttpResponseRedirect(target_url)
+            return HttpResponseRedirect(target_url)
         else:
             messages.warning(request, form.errors)
     else:
@@ -156,7 +156,7 @@ def input_data_details(page, request, id):
 
     context = {'page': page,
                'subpage': Page(title='Input Data Set: %s' % data),
-               'description': description or '',
+               'description': description,
                'list': [
                    {
                        'notoggle': True,
