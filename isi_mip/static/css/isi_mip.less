@@ -1043,11 +1043,36 @@ h4, .h4 {
 .widget-table-selector {
 	select {
 		margin-bottom: 15px;
+
+		width: 100%;
+		max-width: none;
+		margin-right: 0;
+
+		@media(min-width:768px) { width: 225px; }
+		@media(min-width:992px) { width: 290px; }
+		@media(min-width:1200px) { width: 357px; }
+
+		+ select {
+			@media(min-width:768px) {
+				margin-left: 15px;
+			}
+		}
 	}
 	.widget-table-selector-search {
 		max-width: 300px;
 		display: inline-block;
 		margin-bottom: 15px;
+
+		width: 100%;
+		max-width: none;
+
+		@media(min-width:768px) { width: 200px; }
+		@media(min-width:992px) { width: 290px; }
+		@media(min-width:1200px) { width: 357px; }
+
+		@media(min-width:768px) {
+			float: right;
+		}
 	}
 }
 
