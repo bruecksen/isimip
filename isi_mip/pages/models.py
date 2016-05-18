@@ -331,19 +331,44 @@ class LinkListPage(Page):
 
 
 class DashboardPage(Page):
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        ims = ImpactModel.objects.filter(owner=request.user).order_by('name')
+        impage = ImpactModelsPage.objects.get()
+        impage_details = lambda imid: "<a href='{0}'>{{0}}</a>".format(
+            impage.url + impage.reverse_subpage('details', args=(imid, )))
+        impage_edit = lambda imid: "<a href='{0}'>{{0}}</a>".format(
+            impage.url + impage.reverse_subpage('edit', args=(imid,)))
+        context['head'] = {
+            'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Climate Driver'}, {'text': 'Contact'}, {'text': 'Edit'}]
+        }
+        bodyrows = []
+        for imodel in ims:
+            datasets = [str(x) for x in imodel.climate_data_sets.all()]
+            cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
+                       imodel.contactperson_set.all()]
+            values = [
+                [impage_details(imodel.id).format(imodel.name)],
+                [imodel.sector],
+                datasets,
+                ["<br/>".join(cpeople)],
+                [impage_edit(imodel.id).format("<i class='fa fa-edit'></i>")]
+            ]
+            row = {
+                'cols': [{'texts': x} for x in values]
+            }
+            bodyrows.append(row)
+        context['body'] = {'rows': bodyrows}
+        return context
+
     def serve(self, request, *args, **kwargs):
         request.is_preview = getattr(request, 'is_preview', False)
-        context = self.get_context(request, *args, **kwargs)
-        template = self.get_template(request, *args, **kwargs)
-
-        if request.user.is_authenticated():
-            ims = ImpactModel.objects.filter(owner=request.user)
-            context['ims'] = ims
-        else:
+        if not request.user.is_authenticated():
             messages.info(request, 'This is a restricted area. To proceed you need to log in.')
             return HttpResponseRedirect(reverse('login'))
-        # response = super(DashboardPage, self).serve(request, *args, **kwargs)
-        # return response
+
+        context = self.get_context(request, *args, **kwargs)
+        template = self.get_template(request, *args, **kwargs)
 
         return TemplateResponse(request, template, context)
 

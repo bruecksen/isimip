@@ -8,6 +8,7 @@ env.read_env(ROOT_DIR('.env'))
 
 
 DJANGO_APPS = (
+    'isi_mip.core',  # override contrib.auth templates
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +42,6 @@ CMS_APPS = (
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'isi_mip',
-    'isi_mip.core',
     'isi_mip.contrib',
     'isi_mip.styleguide',
 
