@@ -1,10 +1,19 @@
 <div class="widget-twitter-timeline">
+<h2 class="widget-twitter-timeline-heading"><span>Twitter Feed</span></h2>
+<div class="widget-twitter-timeline-border">
 <div class="row">
 	<div class="col-sm-5 text-center">
-	<p><i class="fa fa-twitter fa-3x"></i></p>
+	<span class="hidden-xs"><br><br><br><br></span>
+	<p><a href="https://twitter.com/{{ username }}" target="_blank"><i class="fa fa-twitter fa-3x"></i></a></p>
 	<h3>Follow us on Twitter</h3>
-	<p>Follow us on Twitter and we will keep you posted of every update and news about ISI-MIP.</p>
-	<p><a href="https://twitter.com/{{ username }}" target="_blank" class="btn btn-default">@{{ username }}</a></p>
+	<p>
+		Follow us on Twitter and we will keep you posted of every update and news about ISI-MIP.
+		<br><br>
+		<a href="https://twitter.com/{{ username }}" target="_blank" class="btn btn-primary btn-lg">
+			<i class="fa fa-twitter" aria-hidden="true"></i>&nbsp;&nbsp;
+			@{{ username }}
+		</a>
+	</p>
 	</div>
 	<div class="col-sm-7">
 
@@ -31,14 +40,14 @@
 						{{status.text|safe }}
 					</div>
 					{% if status.extended_entities %}
-					<div class="twitter-timeline-media">
+					<!-- <div class="twitter-timeline-media">
 						<div class="twitter-timeline-imagecontainer">
 							<img src="{{status.extended_entities.media_url_https}}">
 						</div>
-					</div>
+					</div> -->
 					{% endif %}
 					{% if status.quoted_status %}
-					<div class="twitter-timeline-quote">
+					<!-- <div class="twitter-timeline-quote">
 						{{status.quoted_status.text|safe}}
 						{% if status.quoted_status.media_url_https %}
 						<div class="twitter-timeline-quote-media">
@@ -47,10 +56,11 @@
 							</div>
 						</div>
 						{% endif %}
-					</div>
+					</div> -->
 					{% endif %}
 				</div>
 			{% endfor %}
 		</div>
 	</div><!-- row -->
+</div><!-- widget-twitter-timeline-border -->
 </div><!-- widget-twitter-timeline -->

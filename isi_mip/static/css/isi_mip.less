@@ -167,10 +167,16 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
 h3, .h3 {
 	text-transform: uppercase;
 }
-h2, .h2 {
+
+h1, .h1, h2, .h2 {
+	// H1 und H2 sehen gleich aus, nur semantisch verschieden.
 	font-weight: 400;
-	font-size: 28px;
+	font-size: 22px;
 	color: @color-neutral-dark;
+
+	@media(min-width:768px) {
+		font-size: 28px;
+	}
 }
 h3, .h3 {
 	font-weight: 300;
@@ -202,6 +208,15 @@ h4, .h4 {
 		color: @color-white;
 	}
 }
+.widget-heading-sm-two-lines {
+	// These headings have a minimum height of 2 lines.
+	@media(min-width:768px) {
+		min-height: 2.3em;
+	}
+	@media(min-width:992px) {
+		min-height: 0;
+	}
+}
 
 
 
@@ -231,6 +246,18 @@ h4, .h4 {
 	}
 
 	&.btn-primary {
+		border-color: @color-primary;
+		background-color: @color-primary;
+		color: @color-white;
+
+		&:hover, &:focus {
+		border-color: @color-primary-dark;
+		background-color: @color-primary-dark;
+		color: @color-white;
+		}
+	}
+
+	&.btn-secondary {
 		border-color: @color-secondary;
 		background-color: @color-secondary;
 		color: @color-white;
@@ -239,6 +266,15 @@ h4, .h4 {
 		border-color: @color-secondary-strong;
 		background-color: @color-secondary-strong;
 		color: @color-white;
+		}
+	}
+
+	&.btn-lg {
+		font-size: 16px;
+
+		@media(min-width:768px) {
+			font-size: 22px;
+			font-weight: normal;
 		}
 	}
 }
@@ -721,7 +757,7 @@ h4, .h4 {
 		position: relative;
 
 		@media(min-width:768px) {
-			min-height: 330px;
+			min-height: 280px;
 			// Magische Höhe, die ein Teaser mindestens hat
 		}
 
@@ -733,6 +769,30 @@ h4, .h4 {
 			left: 0;
 			width: 100%;
 			bottom: 0;
+		}
+	}
+
+	&.widget-page-teaser-withtitle {
+		&.widget-page-teaser-withrightlink {
+			@media(min-width:768px) {
+				min-height: 330px;
+				// Magische Höhe, die ein Teaser mindestens hat, wenn es einen Titel gibt
+			}
+		}
+	}
+
+	&.widget-page-teaser-border {
+		border:1px solid @color-neutral;
+
+		.widget-page-teaser-text {
+			margin: 10px 10px 10px 10px;
+		}
+
+		&.widget-page-teaser-withrightlink {
+			.widget-page-teaser-rightlink {
+				bottom: 10px;
+				padding-right: 10px;
+			}
 		}
 	}
 }
@@ -1204,7 +1264,37 @@ h4, .h4 {
 .widget-twitter-timeline {
 	font-family: "OpenSansEmoji", serif;
 	line-height: 1.3em;
+	position: relative;
+	margin-bottom: 15px;
 
+	.widget-twitter-timeline-heading {
+		text-transform: uppercase;
+		position: absolute;
+		top: -9px;
+		left: 50%;
+		font-size: 18px;
+
+		@media(min-width:768px) {
+			top: -15px;
+			font-size: 30px;
+		}
+
+		span {
+			background-color: @color-white;
+			padding: 0 15px;
+
+			// center
+			transform: translate(-50%,0);
+			-ms-transform: translate(-50%,0);
+			-webkit-transform: translate(-50%,0);
+			display: block;
+		}
+	}
+
+	.widget-twitter-timeline-border {
+		border: 1px solid @color-neutral;
+		padding: 30px 15px 15px 15px;
+	}
 
 	.twitter-timeline-update {
 		border-bottom: 1px solid #aaa;
@@ -1269,6 +1359,10 @@ h4, .h4 {
 			border: 1px solid #777;
 			padding: 15px;
 			word-wrap: break-word;
+		}
+
+		&:last-child {
+			border-bottom-width: 0;
 		}
 	}
 }

@@ -88,6 +88,14 @@ data = {
             'text': 'Die Fotografie von Geistern',
         },
     },
+    'heading2_smtwolines': {
+        'name': 'Heading 2 with two lines in SM',
+        'template': 'widgets/heading2.html',
+        'context': {
+            'widget_heading_sm_two_lines': True,
+            'text': 'Fotografie',
+        },
+    },
     'heading3': {
         'name': 'Heading 3',
         'template': 'widgets/heading3.html',
@@ -307,8 +315,9 @@ data = {
         'name': 'Page Teaser',
         'template': 'widgets/page-teaser.html',
         'context': {
+            'border': True,
             'href': 'http://bing.de/',
-            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum mit Rand',
             'text_right_link': True,
             'text_right_link_text': 'Learn more',
         },
@@ -405,6 +414,15 @@ data = {
             'href': 'https://www.mozilla.org/de/firefox/new/',
             'text': 'Download',
             'primary': True,
+        },
+    },
+    'button_secondary': {
+        'name': 'Button Secondary',
+        'template': 'widgets/button.html',
+        'context': {
+            'href': 'https://www.mozilla.org/de/firefox/new/',
+            'text': 'Download',
+            'secondary': True,
         },
     },
 
@@ -1170,6 +1188,7 @@ data = {
         'name': 'Twitter',
         'template': 'widgets/twitter.html',
         'context': {
+            'username': 'ISIMIPImpacts',
             'timeline': [
                {
                   "id_str":"783214",
