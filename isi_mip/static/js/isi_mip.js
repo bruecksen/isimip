@@ -331,14 +331,60 @@ $(function() {
 });
 
 
-// Smooth scrolling to anchors
-// https://stackoverflow.com/questions/14804941
-$("a[href^='#']").on('click', function(e) {
-	e.preventDefault();
-	var hash = this.hash;
-	$('html, body').animate({
-		scrollTop: $(this.hash).offset().top
-	}, 300, function(){
-		window.location.hash = hash;
+$(function() {
+	// Smooth scrolling to anchors
+	// https://stackoverflow.com/questions/14804941
+	$("a[href^='#']").on('click', function(e) {
+		e.preventDefault();
+		var hash = this.hash;
+		$('html, body').animate({
+			scrollTop: $(this.hash).offset().top
+		}, 300, function(){
+			window.location.hash = hash;
+		});
 	});
+});
+
+
+$(function() {
+	function alignrows() {
+		$('.row-align-page-teasers').each(function() {
+			var row = $(this);
+
+			// reset min-height
+			row.find('.widget-page-teaser').css('min-height', 0);
+
+			// Do nothing for XS
+			if (row.find('.widget-page-teaser .widget-page-teaser-xs-detector').is(':visible')) {
+				return;
+			}
+
+			var maxHeight = 0;
+			// search for highest col
+			row.find('> div').each(function() {
+				if ($(this).height() > maxHeight) maxHeight = $(this).height();
+			});
+			// align heights
+			row.find('> div').each(function() {
+				var col = $(this);
+				// old column height
+				var oldHeight = $(this).height();
+				var pageTeaser = col.find('.widget-page-teaser').eq(0);
+
+				// is there any page teaser?
+				if (!col.find('.widget-page-teaser').length) return;
+
+				// current page teaser height
+				curHeight = pageTeaser.outerHeight();
+
+				// set min height
+				pageTeaser.css('min-height', curHeight + maxHeight - oldHeight);
+			});
+		});
+	}
+
+	$(window).on('resize', function() {
+		alignrows();
+	});
+	alignrows();
 });
