@@ -319,11 +319,14 @@ class FAQPage(Page):
 
 
 class LinkListPage(Page):
-    links = StreamField([
-        ('link', LinkBlock()),
+    template = 'pages/default_page.html'
+
+    content = StreamField(BASE_BLOCKS + [
+        ('links', ListBlock(LinkBlock(), template='blocks/link_list_block.html')),
     ])
+
     content_panels = Page.content_panels + [
-        StreamFieldPanel('links'),
+        StreamFieldPanel('content'),
     ]
 
 
