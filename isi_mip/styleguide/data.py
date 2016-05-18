@@ -961,6 +961,7 @@ data = {
         'template': 'widgets/expandable.html',
         'context': {
             'headline': 'FAQ for researchers',
+            'editlink': '<a href="http://google.de">edit</a> | <a href="http://google.de">remove</a>',
             'list': [
                 {
                     'term': 'Regular definition, closed on load',

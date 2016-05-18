@@ -1,7 +1,11 @@
 <div class="widget-expandable">
 	{% if headline %}
 		<div class="widget-expandable-headline">
-			<div class="pull-right">{{ editlink|safe }}</div>
+			{% if editlink %}
+				<div class="widget-expandable-editlink">
+					{{ editlink|safe }}
+				</div>
+			{% endif %}
 			{{ headline }}
 			<div class="clearfix"></div>
 		</div>
