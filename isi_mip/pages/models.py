@@ -322,7 +322,7 @@ class LinkListPage(Page):
     template = 'pages/default_page.html'
 
     content = StreamField(BASE_BLOCKS + [
-        ('links', ListBlock(LinkBlock(), template='blocks/link_list_block.html')),
+        ('links', ListBlock(LinkBlock(), template='blocks/link_list_block.html', icon='fa fa-list-ul')),
     ])
 
     content_panels = Page.content_panels + [
