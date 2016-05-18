@@ -339,6 +339,21 @@ data = {
         },
     },
 
+    'page_teaser_wide_smallimage': {
+        'name': 'Page Teaser Wide with small image',
+        'template': 'widgets/page-teaser-wide.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'smallimage': True,
+            'image': {
+                'url': '/static/styleguide/test-images/silhouette.jpg',
+            },
+            'title': 'Impact Models',
+            'date': '8/12/2016',
+            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui.',
+            'arrow_right_link': True,
+        },
+    },
     'page_teaser_wide_wideimage': {
         'name': 'Page Teaser Wide with wide image',
         'template': 'widgets/page-teaser-wide.html',
