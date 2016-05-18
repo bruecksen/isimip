@@ -256,7 +256,7 @@ class ImpactModelsPage(RoutablePageWithDefault):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
-    content = StreamField(BASE_BLOCKS + [
+    content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS + [
         ('impact_models', ImpactModelsBlock()),
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
@@ -286,7 +286,7 @@ class OutputDataPage(Page):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
-    content = StreamField(BASE_BLOCKS + [
+    content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS + [
         ('output_data', OutputDataBlock()),
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
@@ -298,7 +298,7 @@ class OutputDataPage(Page):
 class OutcomesPage(Page):
     template = 'pages/default_page.html'
 
-    content = StreamField(BASE_BLOCKS + [
+    content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS + [
         ('papers', PapersBlock()),
     ])
     content_panels = Page.content_panels + [
@@ -337,7 +337,7 @@ class DashboardPage(Page):
             ims = ImpactModel.objects.filter(owner=request.user)
             context['ims'] = ims
         else:
-            messages.info(request,'This is a restricted area. To proceed you need to log in.')
+            messages.info(request, 'This is a restricted area. To proceed you need to log in.')
             return HttpResponseRedirect(reverse('login'))
         # response = super(DashboardPage, self).serve(request, *args, **kwargs)
         # return response
@@ -353,9 +353,9 @@ class FormPage(AbstractEmailForm):
     landing_page_template = 'pages/form_page_confirmation.html'
     subpage_types = []
 
-    top_content = StreamField(BASE_BLOCKS)
+    top_content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
     confirmation_text = models.TextField(default='Your registration was submitted')
-    bottom_content = StreamField(BASE_BLOCKS)
+    bottom_content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
 
     content_panels = AbstractEmailForm.content_panels + [
         StreamFieldPanel('top_content'),
@@ -377,7 +377,6 @@ class FormPage(AbstractEmailForm):
         ObjectList(Page.promote_panels, heading='Promote'),
         ObjectList(Page.settings_panels, heading='Settings', classname="settings"),
     ])
-
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
