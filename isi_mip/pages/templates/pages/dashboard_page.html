@@ -1,14 +1,8 @@
 {% extends "pages/default_page.html" %}
 
 {% block content %}
-
-	Your Impact Models:
-	<ul>
-		{% for im in ims %}
-			<li><a href="/impactmodels/details/{{ im.id }}/">{{ im }}</a></li>
-		{% endfor %}
-	</ul>
-
-	
-	<a href="{% url 'logout' %}">Logout</a>
+    {% url 'logout' as logouturl %}
+    {% include 'widgets/read-more-link.html' with align='right' text='Logout' url=logouturl %}
+    {% include 'widgets/heading3.html' with text='Your Impact Models' %}
+    {% include "widgets/table.html" %}
 {% endblock %}
