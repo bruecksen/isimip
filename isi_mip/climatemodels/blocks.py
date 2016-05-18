@@ -119,7 +119,7 @@ class OutputDataBlock(StructBlock):
             context['body']['rows'] += [
                 {'cols': [
                     {'texts': [outputdata.sector]},
-                    {'texts': [outputdata.model]},
+                    {'texts': [outputdata.model.name]},
                     {'texts': [scenarios]},
                     {'texts': drivers},
                     {'texts': [outputdata.date]}]
