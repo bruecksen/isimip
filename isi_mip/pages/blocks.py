@@ -167,6 +167,7 @@ class LinkBlock(StructBlock):
     picture = ImageChooserBlock(required=False)
     text = RichTextBlock(required=False)
     link = URLBlock(required=False)
+    date = DateBlock(required=False)
 
     class Meta:
         classname = 'link'
@@ -178,6 +179,7 @@ class LinkBlock(StructBlock):
         context['arrow_right_link'] = True
         context['title'] = value.get('title')
         context['description'] = value.get('text')
+        context['date'] = value.get('date')
 
         image = value.get('picture')
         if image:
