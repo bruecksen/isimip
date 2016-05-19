@@ -1,7 +1,7 @@
 {% extends "pages/default_page.html" %}
 
 {% block content %}
-	{{ page.description | safe }}
+	{{ page.description |default:'' | safe }}
     <div class="row">
         {% for entry in entries %}
             <div class="col-sm-3">
