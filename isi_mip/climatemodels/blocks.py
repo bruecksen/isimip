@@ -43,8 +43,7 @@ class ImpactModelsBlock(StructBlock):
         context['norowvisible'] = False  # true when no row is visible
 
         bodyrows = []
-        i = 0
-        for imodel in ims:
+        for i, imodel in enumerate(ims):
             datasets = [str(x) for x in imodel.climate_data_sets.all()]
             # import ipdb; ipdb.set_trace()
             cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
@@ -55,7 +54,6 @@ class ImpactModelsBlock(StructBlock):
                 'invisible': i >= value.get('rows_per_page'),
                 'cols': [{'texts': x} for x in values]
             }
-            i += 1
             bodyrows.append(row)
 
         context['body'] = {'rows': bodyrows}
@@ -114,11 +112,13 @@ class OutputDataBlock(StructBlock):
         }
 
         outputdata = OutputData.objects.order_by('sector','model')
-        for odat in outputdata:
+        for i, odat in enumerate(outputdata):
             drivers = [x.name for x in odat.drivers.all()]
             scenarios = ', '.join(x.name for x in odat.scenarios.all())
             context['body']['rows'] += [
-                {'cols': [
+                {
+                    'invisible': i >= value.get('rows_per_page'),
+                    'cols': [
                     {'texts': [odat.sector]},
                     {'texts': [odat.model.name]},
                     {'texts': [scenarios]},
