@@ -17,6 +17,8 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
     :param max_length: Maximal length of result string
     :return: Concattenated String
     """
+    if not text:
+        return ''
     text = strip_tags(text)
     max_length = len(text) if max_length == 0 else max_length
     c_index = text.rfind('.', min_length, max_length)
