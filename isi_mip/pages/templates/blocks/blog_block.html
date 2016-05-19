@@ -4,7 +4,7 @@
     <div class="row">
         {% for entry in entries %}
             <div class="col-sm-{{ inner_col }}">
-                {% include 'widgets/page-teaser.html' with image=entry.image href=entry.href description=entry.description title=entry.title date=entry.date arrow_right_link=entry.arrow_right_link border=True widget-page-teaser-magicgrow=True%}
+                {% include 'widgets/page-teaser.html' with image=entry.image href=entry.href description=entry.description title=entry.title date=entry.date arrow_right_link=entry.arrow_right_link border=True widget_page_teaser_magicgrow=True%}
             </div>
         {% endfor %}
     </div>
