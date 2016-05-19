@@ -258,6 +258,38 @@ class ContactsBlock(StructBlock):
         return context
 
 
+class SupporterBlock(StructBlock):
+    name = CharBlock()
+    image = ImageBlock(required=False)
+    content = RichTextBlock()
+
+class SupportersBlock(StructBlock):
+    supporters = ListBlock(SupporterBlock)
+    class Meta:
+        icon = 'fa fa-male'
+        template = 'blocks/supporters_block.html'
+    def get_context(self, value):
+        context = super().get_context(value)
+        context['supporters'] = []
+        for supporter in value.get('supporters'):
+            supp_dict = {'name': supporter.get('name'),
+                           'text': supporter.get('content')
+                           }
+            # for contact in supporter.get('contacts'):
+            #     n, w, e = contact.get('name'), contact.get('website'), contact.get('email')
+            #     supp_dict['text'] += "<p>{n} <a target='_blank' href='{w}'><i class='fa fa-external-link' aria-hidden='true'></i></a> " \
+            #                            "<a target='_blank' href='mailto:{e}'><i class='fa fa-envelope' aria-hidden='true'></i></a></p>".format(n=n, w=w, e=e)
+            try:
+                supp_dict['image'] = {
+                    'url': supporter.get('image').get_rendition('max-260x340').url,
+                    'name': supporter.get('image').title
+                }
+            except:
+                pass
+
+            context['supporters'] += [supp_dict]
+        return context
+
 class PDFBlock(StructBlock):
     file = DocumentChooserBlock()
     description = CharBlock()
