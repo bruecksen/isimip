@@ -101,7 +101,6 @@ class InputDataBlock(StructBlock):
         template = 'widgets/table.html'
 
 class OutputDataBlock(StructBlock):
-    description = RichTextBlock()
     rows_per_page = IntegerBlock(default=20, min_value=1, required=True)
 
     def get_context(self, value):
