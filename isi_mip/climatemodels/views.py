@@ -52,7 +52,7 @@ def impact_model_details(page, request, id):
     for k, v in im_values:
         if any((y for x, y in v)):
             res = {'term': k,
-                   'definitions': ({'text': "<i>%s</i>: %s" % (x, y)} for x, y in v if y)
+                   'definitions': ({'text': "%s: <i>%s</i>" % (x, y)} for x, y in v if y)
                    }
             model_details.append(res)
     model_details[0]['opened'] = True
