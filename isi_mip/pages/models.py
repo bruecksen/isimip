@@ -217,8 +217,8 @@ class GettingStartedPage(RoutablePageWithDefault):
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
         ObjectList(details_content_panels, heading='Input Data Details'),
-        ObjectList(Page.promote_panels, heading='Promote'),
-        ObjectList(Page.settings_panels, heading='Settings', classname="settings"),
+        ObjectList(RoutablePageWithDefault.promote_panels, heading='Promote'),
+        ObjectList(RoutablePageWithDefault.settings_panels, heading='Settings', classname="settings"),
     ])
 
 
@@ -379,8 +379,8 @@ class FormPage(AbstractEmailForm):
     edit_handler = TabbedInterface([
         ObjectList(content_panels, heading='Content'),
         ObjectList(form_content_panels, heading='Form Builder'),
-        ObjectList(Page.promote_panels, heading='Promote'),
-        ObjectList(Page.settings_panels, heading='Settings', classname="settings"),
+        ObjectList(AbstractEmailForm.promote_panels, heading='Promote'),
+        ObjectList(AbstractEmailForm.settings_panels, heading='Settings', classname="settings"),
     ])
 
     def get_context(self, request, *args, **kwargs):
