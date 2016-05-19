@@ -9,7 +9,7 @@
 	<div class="container">
 		<br>
 		{% breadcrumb %}
-		{% include 'widgets/heading2.html' with text=page.title %}
+		{% include 'widgets/heading1.html' with text=page.title %}
 		{% include 'blocks/toc_block.html' with toc=toc only %}
 		{% block content %}
 			{{ page.content }}

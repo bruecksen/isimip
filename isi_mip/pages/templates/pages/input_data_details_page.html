@@ -4,7 +4,7 @@
 	<div class="container">
         <br>
 		{% breadcrumb %}
-		{% include 'widgets/heading2.html' with text=subpage.title %}
+		{% include 'widgets/heading1.html' with text=subpage.title %}
 		{% block content %}
 			{{ description | safe }}<br/><br/>
 			{% include "widgets/expandable.html" %}

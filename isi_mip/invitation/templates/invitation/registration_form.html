@@ -5,7 +5,7 @@
     <div class="container">
         <br>
         {% breadcrumb %}
-        {% include 'widgets/heading2.html' with text='Registration' %}
+        {% include 'widgets/heading1.html' with text='Registration' %}
         {% block content %}
             <form action="{{ form_url }}" method="post" id="registration_form" novalidate>
 				{% template_form form as nf %}
