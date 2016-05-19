@@ -8,7 +8,7 @@
 		<h4>Complete Protocol</h4>
 		<p>{{ value.version }}</p>
 		{% if value.complete_pdf %}
-		{% include 'widgets/button.html' with href=value.complete_pdf.url primary=True text='Download' %}
+		{% include 'widgets/button.html' with href=value.complete_pdf.url secondary=True text='Download' %}
 		{% endif %}
 	</div>
 </div><!-- widget-columns-2-1 -->

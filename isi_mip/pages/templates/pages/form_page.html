@@ -7,7 +7,7 @@
         <form action="{% pageurl page %}" method="POST">
             {% csrf_token %}
             {{ form }}
-            <input type="submit" class="btn btn-primary" value="Absenden">
+            <input type="submit" class="btn btn-secondary" value="Absenden">
         </form>
     </div>
     <div class="form-page-bottom-content">{{ page.bottom_content }}</div>
