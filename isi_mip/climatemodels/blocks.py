@@ -102,6 +102,7 @@ class InputDataBlock(StructBlock):
 
 class OutputDataBlock(StructBlock):
     description = RichTextBlock()
+    rows_per_page = IntegerBlock(default=20, min_value=1, required=True)
 
     def get_context(self, value):
         context = super().get_context(value)
@@ -113,18 +114,26 @@ class OutputDataBlock(StructBlock):
             'rows': [],
         }
 
-        for outputdata in OutputData.objects.all():
-            drivers = [x.name for x in outputdata.drivers.all()]
-            scenarios = ', '.join(x.name for x in outputdata.scenarios.all())
+        outputdata = OutputData.objects.order_by('sector','model')
+        for odat in outputdata:
+            drivers = [x.name for x in odat.drivers.all()]
+            scenarios = ', '.join(x.name for x in odat.scenarios.all())
             context['body']['rows'] += [
                 {'cols': [
-                    {'texts': [outputdata.sector]},
-                    {'texts': [outputdata.model.name]},
+                    {'texts': [odat.sector]},
+                    {'texts': [odat.model.name]},
                     {'texts': [scenarios]},
                     {'texts': drivers},
-                    {'texts': [outputdata.date]}]
+                    {'texts': [odat.date]}]
                 }
             ]
+        numpages = math.ceil(outputdata.count() / value.get('rows_per_page'))
+        context['pagination'] = {
+            'rowsperpage': (value.get('rows_per_page')),
+            'numberofpages': numpages,  # number of pages with current filters
+            'pagenumbers': [{'number': i + 1, 'invisible': False} for i in range(numpages)],
+            'activepage': 1,  # set to something between 1 and numberofpages
+        }
         context['id'] = 'selectorable'
         context['tableid'] = 'selectorable'
         context['searchfield'] = {'value': ''}
