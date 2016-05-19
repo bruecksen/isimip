@@ -1,0 +1,7 @@
+{% if toc %}
+	<ul class="toc">
+	{% for entry in toc %}
+		<li><a href="{{ entry.href }}">{{ entry.text }}</a></li>
+	{% endfor %}
+	</ul>
+{% endif %}

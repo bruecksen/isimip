@@ -4,12 +4,12 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render
 from django.template.response import TemplateResponse
+from django.utils.text import slugify
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.contrib.settings.models import BaseSetting
-from wagtail.contrib.wagtailroutablepage.models import route, RoutablePage
+from wagtail.contrib.wagtailroutablepage.models import route, RoutablePageMixin
 from wagtail.wagtailadmin.edit_handlers import *
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page, Orderable
@@ -81,7 +81,28 @@ class BlogIndexPage(_BlogIndexPage):
         return super(BlogIndexPage, self).serve(request, *args, **kwargs)
 
 
-class RoutablePageWithDefault(RoutablePage):
+class TOCPage(Page):
+    show_toc = models.BooleanField(default=False, help_text='Show Table of Contents')
+
+    settings_panels = Page.settings_panels + [
+        FieldPanel('show_toc'),
+    ]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        if self.show_toc:
+            context['toc'] = []
+            for block in self.content:
+                if block.block_type == 'heading':
+                    link = "#"+slugify(block.value, allow_unicode=True)
+                    context['toc'] += [{'href': link, 'text': block.value}]
+        return context
+
+    class Meta:
+        abstract = True
+
+
+class RoutablePageWithDefault(RoutablePageMixin, TOCPage):
     @route(r'^$')
     def base(self, request):
         return TemplateResponse(
@@ -94,7 +115,7 @@ class RoutablePageWithDefault(RoutablePage):
         abstract = True
 
 
-class GenericPage(Page):
+class GenericPage(TOCPage):
     template = 'pages/default_page.html'
     content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
     content_panels = Page.content_panels + [
@@ -102,7 +123,7 @@ class GenericPage(Page):
     ]
 
 
-class HomePage(RoutablePageWithDefault):
+class HomePage(Page):
     parent_page_types = ['wagtailcore.Page']
 
     teaser_title = models.CharField(max_length=500)
@@ -160,53 +181,8 @@ class HomePage(RoutablePageWithDefault):
         }
         return context
 
-    # @route(r'^blog/$')
-    # @route(r'^blog/(?P<slug>\w+)/$')
-    # def blog(self, request, slug=None):
-    #     context = {}
-    #     if slug:
-    #         entries = BlogIndexPage.objects.get(slug=slug).blogs
-    #         context['title'] = slug.title()
-    #     else:
-    #         entries = BlogPage.objects.all().order_by('-date')
-    #         context['title'] = 'News'
-    #     template = 'pages/blog_list.html'
-    #     context['entries'] = []
-    #     for entry in entries:
-    #         entry_context = {
-    #             'date': entry.date,
-    #             'href': entry.id,
-    #             'description': smart_truncate(entry.body, 300, 350),
-    #             'title': entry.title,
-    #             'arrow_right_link': True
-    #         }
-    #         try:
-    #             rendition = entry.header_image.get_rendition('max-800x800')
-    #             entry_context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
-    #             entry_context['description'] = smart_truncate(entry.body, 0, 100)
-    #         except:
-    #             pass
-    #
-    #         context['entries'] += [entry_context]
-    #
-    #     return render(request, template, context)
-    #
-    # @route(r'^blog/(?P<slug>\w*)/(?P<id>\d+)/$')
-    # def blog_detail(self, request, id, slug=None):
-    #     template = 'pages/blog_detail.html'
-    #     entry = BlogPage.objects.get(id=id)
-    #     context = {'blog': entry}
-    #
-    #     try:
-    #         rendition = entry.header_image.get_rendition('max-800x800')
-    #         context['image'] = {'url': rendition.url, 'name': entry.header_image.title}
-    #     except:
-    #         pass
-    #
-    #     return render(request, template, context)
 
-
-class AboutPage(Page):
+class AboutPage(TOCPage):
     template = 'pages/default_page.html'
 
     content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS + [
@@ -282,7 +258,7 @@ class ImpactModelsPage(RoutablePageWithDefault):
         return impact_model_download(self, request)
 
 
-class OutputDataPage(Page):
+class OutputDataPage(TOCPage):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
@@ -295,7 +271,7 @@ class OutputDataPage(Page):
     ]
 
 
-class OutcomesPage(Page):
+class OutcomesPage(TOCPage):
     template = 'pages/default_page.html'
 
     content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS + [
@@ -306,7 +282,7 @@ class OutcomesPage(Page):
     ]
 
 
-class FAQPage(Page):
+class FAQPage(TOCPage):
     template = 'pages/default_page.html'
     parent_page_types = [HomePage]
 
@@ -318,7 +294,7 @@ class FAQPage(Page):
     ]
 
 
-class LinkListPage(Page):
+class LinkListPage(TOCPage):
     template = 'pages/default_page.html'
 
     content = StreamField(BASE_BLOCKS + [
