@@ -4,9 +4,9 @@
     <div class="row">
         {% for entry in entries %}
             <div class="col-sm-{{ inner_col }}">
-                {% include 'widgets/page-teaser.html' with image=entry.image href=entry.href description=entry.description title=entry.title date=entry.date arrow_right_link=entry.arrow_right_link %}
+                {% include 'widgets/page-teaser.html' with image=entry.image href=entry.href description=entry.description title=entry.title date=entry.date arrow_right_link=entry.arrow_right_link border=True%}
             </div>
         {% endfor %}
     </div>
-    {% include 'widgets/read-more-link.html' with align='right' text='See all' url=slug arrow=True %}
+    {% include 'widgets/read-more-link.html' with align='right' text='See all news' url=slug %}
 </div>
