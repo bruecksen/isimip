@@ -144,6 +144,7 @@ class PaperBlock(StructBlock):
         context['title'] = value.get('title')
         context['description'] = value.get('journal')
         context['url'] = value.get('link')
+        context['border'] = True
         image = value.get('picture')
         if image:
             rendition = image.get_rendition('fill-640x360-c100')
