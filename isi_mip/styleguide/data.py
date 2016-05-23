@@ -247,8 +247,9 @@ data = {
                 'url': '/static/styleguide/test-images/dog.jpg',
             },
             'title': 'Output Data',
-            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'description': 'Magicgrow Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
             'arrow_right_link': True,
+            'magicgrow': True,
         },
     },
 
@@ -258,8 +259,9 @@ data = {
         'context': {
             'href': 'http://bing.de/',
             'title': 'Input Data',
-            'description': 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit.',
+            'description': 'Magicgrow Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusm iste doloremque. Sed ut perspiciatis unde omnis iste natus error sit.',
             'arrow_right_link': True,
+            'magicgrow': True,
         },
     },
 
@@ -284,6 +286,22 @@ data = {
             'href': 'http://bing.de/',
             'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
             'arrow_right_link': True,
+            'border': True,
+        },
+    },
+
+
+
+    'page_teaser_notitle_noimage_externallink': {
+        'name': 'Page Teaser',
+        'template': 'widgets/page-teaser.html',
+        'context': {
+            'href': 'http://bing.de/',
+            'description': 'Magicgrow Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'external_link': True,
+            'external_link_text': 'Link to paper',
+            'border': True,
+            'magicgrow': True,
         },
     },
 
@@ -296,8 +314,9 @@ data = {
                 'url': '/static/styleguide/test-images/dog.jpg',
             },
             'title': 'Agriculture Sector',
-            'description': '<p><strong>Martha Musterfrau</strong><br><a href="https://sinnwerkstatt.com/team/">sinnwerkstatt.com/team/</a><br><a href="mailto:yolo@example.com">yolo@example.com</a></p><hr><p><strong>Martha Musterfrau</strong><br><a href="https://sinnwerkstatt.com/team/">sinnwerkstatt.com/team/alle/mitarbeiter/und/innen</a><br><a href="mailto:yolo-extra-lange-adresse@example.com">yoloextralangeadresse@example.com</a></p>',
+            'description': '<p><strong>Magicgrow Musterfrau</strong><br><a href="https://sinnwerkstatt.com/team/">sinnwerkstatt.com/team/</a><br><a href="mailto:yolo@example.com">yolo@example.com</a></p><hr><p><strong>Martha Musterfrau</strong><br><a href="https://sinnwerkstatt.com/team/">sinnwerkstatt.com/team/alle/mitarbeiter/und/innen</a><br><a href="mailto:yolo-extra-lange-adresse@example.com">yoloextralangeadresse@example.com</a></p>',
             'arrow_right_link': True,
+            'magicgrow': True,
         },
     },
 
@@ -306,7 +325,8 @@ data = {
         'template': 'widgets/page-teaser.html',
         'context': {
             'href': 'http://bing.de/',
-            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'description': 'Magicgrow Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
+            'magicgrow': True,
         },
     },
 
@@ -317,9 +337,10 @@ data = {
         'context': {
             'border': True,
             'href': 'http://bing.de/',
-            'description': 'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum mit Rand',
+            'description': 'Magicgrow Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum mit Rand',
             'text_right_link': True,
             'text_right_link_text': 'Learn more',
+            'magicgrow': True,
         },
     },
 

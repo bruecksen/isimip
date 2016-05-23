@@ -53,4 +53,13 @@
 		<div class="clearfix"></div>
 	</div>
 {% endif %}
+{% if external_link %}
+	<div class="widget-page-teaser-rightlink">
+		<a href="{{ href }}">
+			<i class="fa fa-external-link" aria-hidden="true"></i>
+			{{ external_link_text }}
+		</a>
+		<div class="clearfix"></div>
+	</div>
+{% endif %}
 </div><!-- widget-page-teaser-text -->

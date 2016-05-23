@@ -756,13 +756,6 @@ h4, .h4 {
 
 	&.widget-page-teaser-withrightlink {
 		position: relative;
-
-		@media(min-width:768px) {
-			// min-height: 280px;
-			// Magische Höhe, die ein Teaser mindestens hat
-		}
-
-
 		padding-bottom: 50px;
 
 		.widget-page-teaser-rightlink {
@@ -773,17 +766,8 @@ h4, .h4 {
 		}
 	}
 
-	&.widget-page-teaser-withtitle {
-		&.widget-page-teaser-withrightlink {
-			@media(min-width:768px) {
-				// min-height: 330px;
-				// Magische Höhe, die ein Teaser mindestens hat, wenn es einen Titel gibt
-			}
-		}
-	}
-
 	&.widget-page-teaser-border {
-		border:1px solid @color-neutral;
+		border:1px solid @color-neutral-light;
 
 		.widget-page-teaser-text {
 			margin: 10px 10px 10px 10px;
@@ -792,7 +776,8 @@ h4, .h4 {
 		&.widget-page-teaser-withrightlink {
 			.widget-page-teaser-rightlink {
 				bottom: 10px;
-				padding-right: 10px;
+				padding-right: 20px;
+				margin-left: 10px;
 			}
 		}
 	}
