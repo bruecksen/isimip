@@ -1,4 +1,4 @@
-<div class="widget-button{% if right %} pull-right{% endif %}">
+<div class="widget-button{% if right %} widget-button-pull-right{% endif %}">
 	{% if href %}
 	<a href="{{ href }}"{% if tableid %} data-tableid="{{ tableid }}"{% endif %} class="btn btn-{% if secondary %}secondary{% elif primary %}primary{% else %}default{% endif %}">
 		{{ text|safe }}

@@ -651,7 +651,13 @@ h4, .h4 {
 
 
 
-
+.widget-button {
+	&.widget-button-pull-right {
+		@media(min-width:768px) {
+			float: right;
+		}
+	}
+}
 
 .widget-richtext-content {
 	// TODO: Abstände der Headings einstellen
@@ -828,20 +834,54 @@ h4, .h4 {
 	padding: 15px;
 	margin-bottom: 30px;
 
-	.widget-download-link-icon {
-		color: @color-secondary;
-		margin-right: 15px;
-		margin-top: 10px;
-		font-size: 36px;
-		float: left;
+
+	&.widget-download-link-fontawesome {
+		.widget-download-link-icon {
+			color: @color-secondary;
+			margin-right: 15px;
+			margin-top: 10px;
+			font-size: 36px;
+			float: left;
+		}
+
+		.widget-download-link-text {
+			margin-left: 55px;
+		}
 	}
+
+	// Download-Button
+	.widget-button {
+		margin-top: 5px;
+
+		a {
+			display: block;
+			margin-bottom: 15px;
+
+			@media(min-width:768px) {
+				display: inline-block;
+				margin-bottom: 0;
+			}
+		}	
+	}
+
 	.widget-download-link-text {
 		font-size: 14px;
 		@media(min-width:768px) {
 			font-size: 18px;
 		}
 		display: block;
-		margin-top: 15px;
+		line-height: 51px;
+
+		@media(min-width:768px) {
+			margin-right: 165px;
+		}
+
+		> span {
+			line-height: 1.3em;
+			display: inline-block;
+			vertical-align: middle;
+			width: 100%;
+		}
 	}
 }
 

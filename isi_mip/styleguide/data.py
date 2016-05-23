@@ -469,7 +469,6 @@ data = {
         'context': {
             'button': {
                 'href': 'https://www.mozilla.org/de/firefox/new/',
-                'text': 'Download',
             },
             'description': 'Download PDF Mission / Implementation',
             'fontawesome': 'file-pdf-o',
@@ -481,13 +480,32 @@ data = {
         'context': {
             'button': {
                 'href': 'https://www.mozilla.org/de/firefox/new/',
-                'text': 'Download this file til you get enough',
             },
             'description': 'Download PDF Mission / Implementation the documentation of the life, universum and everything else in between just for the lulz and fun.',
             'fontawesome': 'file-pdf-o',
         },
     },
-
+    'download_link_monstertext': {
+        'name': 'Download Link',
+        'template': 'widgets/download-link.html',
+        'context': {
+            'button': {
+                'href': 'https://www.mozilla.org/de/firefox/new/',
+            },
+            'description': 'Download PDF Mission / Implementation the documentation of the life, universum and everything else in between just for the lulz and fun. Download PDF Mission / Implementation the documentation of the life, universum and everything else in between just for the lulz and fun. Download PDF Mission / Implementation the documentation of the life, universum and everything else in between just for the lulz and fun.',
+            'fontawesome': 'file-pdf-o',
+        },
+    },
+    'download_link_noicon': {
+        'name': 'Download Link',
+        'template': 'widgets/download-link.html',
+        'context': {
+            'button': {
+                'href': 'https://www.mozilla.org/de/firefox/new/',
+            },
+            'description': 'Download PDF Mission / Implementation the documentation of the life, universum and everything else in between just for the lulz and fun.',
+        },
+    },
     'indicator': {
         'name': 'Indicator',
         'template': 'widgets/indicator.html',
