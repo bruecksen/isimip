@@ -88,6 +88,14 @@ data = {
             'text': 'Die Fotografie von Geistern',
         },
     },
+    'heading2_link': {
+        'name': 'Heading 2 with link',
+        'template': 'widgets/heading2.html',
+        'context': {
+            'text': 'Die Fotografie von Geistern',
+            'href': 'http://linkausheading',
+        },
+    },
     'heading2_smtwolines': {
         'name': 'Heading 2 with two lines in SM',
         'template': 'widgets/heading2.html',
@@ -101,6 +109,14 @@ data = {
         'template': 'widgets/heading3.html',
         'context': {
             'text': 'Die Fotografie von Geistern',
+        },
+    },
+    'heading3_link': {
+        'name': 'Heading 3 with link',
+        'template': 'widgets/heading3.html',
+        'context': {
+            'text': 'Die Fotografie von Geistern',
+            'href': 'http://linkausheading',
         },
     },
     'heading3_slug': {

@@ -1,3 +1,6 @@
-<h3{% if slug %} id="{{ slug }}"{% endif %} class="widget-heading3{% if widget_heading_sm_two_lines %} widget-heading-sm-two-lines{% endif %}">{{ text }}
+<h3{% if slug %} id="{{ slug }}"{% endif %} class="widget-heading3{% if widget_heading_sm_two_lines %} widget-heading-sm-two-lines{% endif %}">
+	{% if href %}<a href="{{ href }}">{% endif %}
+		{{ text }}
+	{% if href %}</a>{% endif %}
 	{% if slug %}<a class="headerlink" href="#{{ slug }}" title="Permalink to this headline"><i style="font-size:0.6em;" class="fa fa-link" aria-hidden="true"></i></a>{% endif %}
 </h3>

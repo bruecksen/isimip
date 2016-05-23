@@ -1,1 +1,5 @@
-<h2{% if id %} id="{{ id }}"{% endif %} class="widget-heading2{% if widget_heading_sm_two_lines %} widget-heading-sm-two-lines{% endif %}">{{ text }}</h2>
+<h2{% if id %} id="{{ id }}"{% endif %} class="widget-heading2{% if widget_heading_sm_two_lines %} widget-heading-sm-two-lines{% endif %}">
+{% if href %}<a href="{{ href }}">{% endif %}
+	{{ text }}
+{% if href %}</a>{% endif %}
+</h2>
