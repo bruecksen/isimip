@@ -140,17 +140,24 @@ class PaperBlock(StructBlock):
 
     def get_context(self, value):
         context = super().get_context(value)
-        context['author'] = value.get('author')
-        context['title'] = value.get('title')
-        context['description'] = value.get('journal')
-        context['url'] = value.get('link')
-        context['border'] = True
+        c_update = {
+            'author': value.get('author'),
+            'title': value.get('title'),
+            'description': value.get('journal'),
+            'href': value.get('link'),
+            'external_link': True,
+            'external_link_text': 'Link to paper',
+            'magicgrow': True,
+            'border': True,
+        }
+        context.update(c_update)
+
+
         image = value.get('picture')
         if image:
             rendition = image.get_rendition('fill-640x360-c100')
             context['image'] = {'url': rendition.url, 'name': image.title}
-        context['source'] = {'description': 'Link to paper', 'href': value.get('link')}
-
+        # context['source'] = {'description': 'Link to paper', 'href': value.get('link')}
         return context
 
 
@@ -273,8 +280,8 @@ class SupportersBlock(StructBlock):
         context['supporters'] = []
         for supporter in value.get('supporters'):
             supp_dict = {'name': supporter.get('name'),
-                           'text': supporter.get('content')
-                           }
+                         'text': supporter.get('content')
+                         }
             # for contact in supporter.get('contacts'):
             #     n, w, e = contact.get('name'), contact.get('website'), contact.get('email')
             #     supp_dict['text'] += "<p>{n} <a target='_blank' href='{w}'><i class='fa fa-external-link' aria-hidden='true'></i></a> " \
