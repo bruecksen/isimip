@@ -280,6 +280,7 @@ class ImpactModel(models.Model):
         vname = self._get_verbose_field_name
         cpers_str = "{0.name} (<a href='mailto:{0.email}'>{0.email}</a>) {0.institute}"
         cpers = ', '.join([cpers_str.format(x) for x in self.contactperson_set.all()])
+        other_references = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.title_with_link() for x in self.other_references.all()])
         return [
             ('Basic information', [
                 # (vname('name'), self.name),
@@ -289,7 +290,7 @@ class ImpactModel(models.Model):
                 (vname('simulation_round'), ', '.join([x.name for x in self.simulation_round.all()])),
                 (vname('version'), self.version),
                 (vname('main_reference_paper'), self.main_reference_paper.title_with_link()),
-                ('Other references', ", ".join((x.title_with_link() for x in self.other_references.all()))),
+                ('Other references', other_references),
                 # (vname('short_description'), self.short_description),
             ]),
             ('Technical Information', [
