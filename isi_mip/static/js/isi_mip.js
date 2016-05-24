@@ -26,7 +26,7 @@ $(function() {
 				row.find('td:nth-child(' + colnumber + ')').find('.widget-table-col-line').each(function() {
 					var colline = $(this);
 					var collinetext = colline.text();
-					console.log($.trim(collinetext), $.trim(value));
+					// console.log($.trim(collinetext), $.trim(value));
 					if ( $.trim(collinetext) == $.trim(value) ) {
 						showcolline = true;
 					}
@@ -397,12 +397,13 @@ $(function() {
 
 			// force table cols to maximum of 50% table width
 			firstRowCols.each(function() {
-				console.log($(this).width(), tableWidth);
 				if ($(this).width() > tableWidth * 0.5) {
 					$(this).width(tableWidth * 0.5);
 				}
 			});
 		});
+
+		console.log('Table Colums set to max 50% width.');
 	}
 
 	$(window).on('resize colsreordered', function() {
