@@ -107,6 +107,10 @@ class ContactPerson(models.Model):
     def __str__(self):
         return "%s (%s) - %s" % (self.name, self.institute, self.email)
 
+    def pretty(self):
+        return "{0.name} (<a href='mailto:{0.email}'>{0.email}</a>) {0.institute}".format(self)
+
+
     class Meta:
         ordering = ('name',)
 
@@ -278,8 +282,7 @@ class ImpactModel(models.Model):
 
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
-        cpers_str = "{0.name} (<a href='mailto:{0.email}'>{0.email}</a>) {0.institute}"
-        cpers = ', '.join([cpers_str.format(x) for x in self.contactperson_set.all()])
+        cpers = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.pretty() for x in self.contactperson_set.all()])
         other_references = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.title_with_link() for x in self.other_references.all()])
         return [
             ('Basic information', [
