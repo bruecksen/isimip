@@ -288,7 +288,7 @@ class SupportersBlock(StructBlock):
             #                            "<a target='_blank' href='mailto:{e}'><i class='fa fa-envelope' aria-hidden='true'></i></a></p>".format(n=n, w=w, e=e)
             try:
                 supp_dict['image'] = {
-                    'url': supporter.get('image').get_rendition('max-260x340').url,
+                    'url': supporter.get('image').get_rendition('fill-500x500-c100').url,
                     'name': supporter.get('image').title
                 }
             except:
