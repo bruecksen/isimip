@@ -1005,80 +1005,87 @@ h4, .h4 {
 	}
 }
 
-.widget-table table {
-	margin-bottom: 15px;
-	border: 1px solid @color-neutral-light;
-
-	&.table > tbody > tr > td, &.table > tbody > tr > th,
-	&.table > tfoot > tr > td, &.table > tfoot > tr > th,
-	&.table > thead > tr > td, &.table > thead > tr > th {
-		border-width: 0;
+.widget-table {
+	.table-responsive {
+		border: 1px solid @color-neutral-light;
+		margin-bottom: 15px;		
 	}
 
-	> thead {
-		border-bottom: 1px solid @color-neutral;
+	table {
+		margin-bottom: 0;
 
-		tr.widget-table-headings {
-			background-color: @color-primary;
-			color: @color-white;
+		&.table > tbody > tr > td, &.table > tbody > tr > th,
+		&.table > tfoot > tr > td, &.table > tfoot > tr > th,
+		&.table > thead > tr > td, &.table > thead > tr > th {
+			border-width: 0;
+		}
 
-			th {
-				font-weight: 600;
+		> thead {
+			border-bottom: 1px solid @color-neutral;
+
+			tr.widget-table-headings {
+				background-color: @color-primary;
+				color: @color-white;
+
+				th {
+					font-weight: 600;
+
+					@media(min-width:992px) {
+						font-size: 16px;
+					}
+				}
+			}
+		}
+
+		> tbody > tr {
+			background-color: @color-white;
+
+			td {
+				// Bootstrap stops wrapping table cells on XS. Undo this.
+				white-space: normal !important;
+
+				*:first-child {
+					margin-top: 0;
+				}
+				*:last-child {
+					margin-bottom: 0;
+				}
 
 				@media(min-width:992px) {
 					font-size: 16px;
 				}
-			}
-		}
-	}
 
-	> tbody > tr {
-		background-color: @color-white;
-
-		td {
-			// Bootstrap stops wrapping table cells on XS. Undo this.
-			white-space: normal !important;
-
-			*:first-child {
-				margin-top: 0;
-			}
-			*:last-child {
-				margin-bottom: 0;
 			}
 
-			@media(min-width:992px) {
-				font-size: 16px;
+			&:nth-of-type(2n) {
+				background-color: @color-primary-light;
 			}
-
+			&:nth-of-type(2n+1) {
+				background-color: transparent;
+			}
+			&:hover {
+				background-color: fadeout(@color-neutral, 80%);
+			}
 		}
 
-		&:nth-of-type(2n) {
-			background-color: @color-primary-light;
+		> tfoot {
+			border-top: 1px solid @color-neutral;
 		}
-		&:nth-of-type(2n+1) {
-			background-color: transparent;
-		}
-		&:hover {
-			background-color: fadeout(@color-neutral, 80%);
-		}
-	}
 
-	> tfoot {
-		border-top: 1px solid @color-neutral;
-	}
-
-	.widget-table-showmore-button {
-		cursor: pointer;
-		font-size: 18px;
-		text-align: center;
-		background-color: @color-primary;
-		color: @color-white;
-	}
-	.widget-table-noentriesmessage {
-		text-align: center;
-		font-style: italic;
+		.widget-table-showmore-button {
+			cursor: pointer;
+			font-size: 18px;
+			text-align: center;
+			background-color: @color-primary;
+			color: @color-white;
+		}
+		.widget-table-noentriesmessage {
+			text-align: center;
+			font-style: italic;
+		}
 	}
 }
+
 
 .widget-table-selector {
 	select {

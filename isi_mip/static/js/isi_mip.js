@@ -71,9 +71,9 @@ $(function() {
 
 		// show or hide message that no rows to show
 		if (rowsintable) {
-			$('.widget-table-noentriesmessage').hide();
+			table.find('.widget-table-noentriesmessage td').hide();
 		} else {
-			$('.widget-table-noentriesmessage').show();
+			table.find('.widget-table-noentriesmessage td').show();
 		}
 
 		var numberofpages = Math.ceil(rowsintable / rowsperpage);
