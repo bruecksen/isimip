@@ -348,13 +348,14 @@ $(function() {
 
 $(function() {
 	function alignrows() {
+		// reset height of teasers
+		$('.widget-page-teaser-magicgrow').css('min-height', 0);
+
+
 		// Grow page teasers to row height
 		$('.widget-page-teaser-magicgrow').each(function() {
 			var pageTeaser = $(this);
 			var row = pageTeaser.closest('.row');
-
-			// reset min-height
-			pageTeaser.css('min-height', 0);
 
 			// Do nothing for XS
 			if (pageTeaser.find('.widget-page-teaser-xs-detector').is(':visible')) {
