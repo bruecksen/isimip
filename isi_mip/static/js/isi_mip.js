@@ -375,7 +375,7 @@ $(function() {
 		});
 	}
 
-	$(window).on('resize', function() {
+	$(window).on('resize load', function() {
 		alignrows();
 	});
 	alignrows();
