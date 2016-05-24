@@ -20,8 +20,12 @@ class ReferencePaper(Paper):
     def __str__(self):
         if self.doi:
             return "%s (<a target='_blank' href='http://dx.doi.org/%s'>%s</a>)" % (self.title, self.doi, self.doi)
-        else:
-            return self.title
+        return self.title
+
+    def title_with_link(self):
+        if self.doi:
+            return "<a target='_blank' href='http://dx.doi.org/{0.doi}'>{0.title}</a>)".format(self)
+        return self.title
 
 
 class ClimateDataType(models.Model):
@@ -285,7 +289,7 @@ class ImpactModel(models.Model):
                 (vname('simulation_round'), ', '.join([x.name for x in self.simulation_round.all()])),
                 (vname('version'), self.version),
                 (vname('main_reference_paper'), self.main_reference_paper),
-                ('Other references', ", ".join((x for x in self.other_references.all()))),
+                ('Other references', ", ".join((x.title_with_link() for x in self.other_references.all()))),
                 # (vname('short_description'), self.short_description),
             ]),
             ('Technical Information', [
