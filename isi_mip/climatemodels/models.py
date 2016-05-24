@@ -284,7 +284,8 @@ class ImpactModel(models.Model):
                 ('Contact Person', cpers),
                 (vname('simulation_round'), ', '.join([x.name for x in self.simulation_round.all()])),
                 (vname('version'), self.version),
-                # (vname('main_reference_paper'), self.main_reference_paper),
+                (vname('main_reference_paper'), self.main_reference_paper),
+                ('Other references', ", ".join((x for x in self.other_references.all()))),
                 # (vname('short_description'), self.short_description),
             ]),
             ('Technical Information', [
