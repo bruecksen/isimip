@@ -147,6 +147,8 @@ $(function() {
 
 		console.log('Table updated. activepage:',activepage,'filter:',filter,'rowsperpage:',rowsperpage,'rowsintable:',rowsintable,'numberofpages:',numberofpages, 'searchvalue:', searchvalue);
 
+		$(window).trigger('colsreordered');
+
 		// Update URL
 		// TODO
 	}
@@ -378,3 +380,34 @@ $(function() {
 	});
 	alignrows();
 });
+
+
+
+$(function() {
+	function aligncols() {
+		// Grow page teasers to row height
+		$('.widget-table').each(function() {
+			var table = $(this);
+			var tableWidth = table.width();
+
+			var firstRowCols = table.find('tbody > tr > td');
+
+			// reset width of cols
+			firstRowCols.css('width', 'auto');
+
+			// force table cols to maximum of 50% table width
+			firstRowCols.each(function() {
+				console.log($(this).width(), tableWidth);
+				if ($(this).width() > tableWidth * 0.5) {
+					$(this).width(tableWidth * 0.5);
+				}
+			});
+		});
+	}
+
+	$(window).on('resize colsreordered', function() {
+		aligncols();
+	});
+	aligncols();
+});
+
