@@ -18,8 +18,8 @@ class Region(models.Model):
 
 class ReferencePaper(Paper):
     def __str__(self):
-        if self.doi:
-            return "%s (<a target='_blank' href='http://dx.doi.org/%s'>%s</a>)" % (self.title, self.doi, self.doi)
+        # if self.doi:
+        #     return "%s (<a target='_blank' href='http://dx.doi.org/%s'>%s</a>)" % (self.title, self.doi, self.doi)
         return self.title
 
     def title_with_link(self):

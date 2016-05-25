@@ -22,7 +22,7 @@ class ImpactModelStartForm(forms.ModelForm):
 
 
 class ImpactModelForm(forms.ModelForm):
-    references = forms.CharField(max_length=400, label='References', required=False)
+    # references = forms.CharField(max_length=400, label='References', required=False)
     region = MyModelMultipleChoiceField(allowcustom=True, queryset=Region.objects, required=True)
     simulation_round = MyModelMultipleChoiceField(allowcustom=True, queryset=SimulationRound.objects)
     spatial_aggregation = MyModelSingleChoiceField(allowcustom=True, queryset=SpatialAggregation.objects)
@@ -34,12 +34,13 @@ class ImpactModelForm(forms.ModelForm):
 
     class Meta:
         model = ImpactModel
-        exclude = ('main_reference_paper', 'other_references', 'owner')
+        exclude = ('other_references', 'owner')
         # fields = '__all__'
         widgets = {
             'name': MyTextInput(),
             'sector': MyMultiSelect(),
             'version': MyTextInput(),
+            'main_reference_paper': MyTextInput(),
             'short_description': MyTextInput(),
             'spatial_resolution': MyMultiSelect(allowcustom=True),
             'temporal_resolution_climate': MyMultiSelect(allowcustom=True),
@@ -68,7 +69,6 @@ class ImpactModelForm(forms.ModelForm):
         instance = getattr(self, 'instance', None)
         if instance and instance.pk:
             self.fields['name'].widget.attrs['readonly'] = True
-            # self.fields['sector'].widget.attrs['readonly'] = True
 
 
 # SEKTOREN ############################################################
