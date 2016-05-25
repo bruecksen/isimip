@@ -146,7 +146,7 @@ class PaperBlock(StructBlock):
             'description': value.get('journal'),
             'href': value.get('link'),
             'external_link': True,
-            'external_link_text': 'Link to paper',
+            'external_link_text': 'Link',
             'magicgrow': True,
             'border': True,
         }
