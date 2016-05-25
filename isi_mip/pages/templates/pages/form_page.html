@@ -1,5 +1,5 @@
 {% extends "pages/default_page.html" %}
-{% load wagtailcore_tags%}
+{% load wagtailcore_tags template_form%}
 
 {% block content %}
     <div class="form-page-bottom-content">{{ page.top_content }}</div>
@@ -7,9 +7,10 @@
     <div class="form-page-form">
         <form action="{% pageurl page %}" method="POST">
             {% csrf_token %}
-            {{ form }}
+            {% template_form form as nf %}
+	        {{ nf }}
 	        <br>
-            <input type="submit" class="btn btn-secondary" value="Absenden">
+            <input type="submit" class="btn btn-secondary" value="{{ page.button_name }}">
         </form>
     </div>
 	<br>

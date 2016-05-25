@@ -362,12 +362,15 @@ class FormPage(AbstractEmailForm):
     confirmation_text = models.TextField(default='Your registration was submitted')
     bottom_content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
 
+    button_name = models.CharField(max_length=500, verbose_name='Button name', default='Submit')
+
     content_panels = AbstractEmailForm.content_panels + [
         StreamFieldPanel('top_content'),
         StreamFieldPanel('bottom_content')
     ]
     form_content_panels = [
         InlinePanel('form_fields', label="Form fields"),
+        FieldPanel('button_name'),
         FieldPanel('confirmation_text', classname="full"),
         MultiFieldPanel([
             FieldPanel('to_address', classname="full"),

@@ -356,7 +356,6 @@ $(function() {
 		$('.widget-page-teaser-magicgrow').each(function() {
 			var pageTeaser = $(this);
 			var row = pageTeaser.closest('.row');
-			console.log(row, pageTeaser);
 			// Do nothing for XS
 			if (pageTeaser.find('.widget-page-teaser-xs-detector').is(':visible')) {
 				return;
@@ -367,7 +366,6 @@ $(function() {
 			var colHeight = col.height();
 			var pageTeaserHeight = pageTeaser.outerHeight();
 
-			console.log(rowHeight, colHeight, pageTeaserHeight);
 			// set min height
 			pageTeaser.css('min-height', pageTeaserHeight + rowHeight - colHeight);
 		});
@@ -376,7 +374,7 @@ $(function() {
 	$(window).on('resize load', function() {
 		alignrows();
 	});
-	alignrows();
+	setTimeout(alignrows, 500);
 });
 
 

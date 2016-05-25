@@ -47,7 +47,6 @@ def template_form(form, **kwargs):
                    }
         context['readonly'] = 'readonly' in field.field.widget.attrs and field.field.widget.attrs['readonly']
 
-
         if isinstance(field.field.widget, MyTextInput):
             template = 'widgets/textinput.html'
         elif isinstance(field.field.widget, MyBooleanSelect):
@@ -74,7 +73,11 @@ def template_form(form, **kwargs):
 
             template = 'widgets/multiselect.html'
         else:
-            template = 'widgets/textinput.html'
+            try:
+                context['type'] = field.field.widget.input_type
+            except:
+                pass
+            template = 'widgets/formfield.html'
         string = render_to_string(template, context)
         newform[field.name] = string
     return newform
