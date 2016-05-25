@@ -1,70 +1,75 @@
 {% load static i18n messages wagtailuserbar header footer %}<!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{% block title %}{%  firstof subpage.title page.title "ISIMIP" %}{% endblock title %}</title>
-    {% block viewport %}<meta name="viewport" content="width=device-width, initial-scale=1">{% endblock %}
-    <meta name="description" content="">
-    <meta name="author" content="">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>{% block title %}{%  firstof subpage.title page.title "ISIMIP" %}{% endblock title %}</title>
+	{% block viewport %}<meta name="viewport" content="width=device-width, initial-scale=1">{% endblock %}
+	<meta name="description" content="">
+	<meta name="author" content="">
 
-    <meta property="og:description" content="ISIMIP"/>
-    <meta property="og:image" content="{% static 'images/og-image.png' %}"/>
-    <meta property="og:locale" content="de"/>
-    <meta property="og:site_name" content="ISIMIP"/>
-    <meta property="og:title" content="ISIMIP"/>
-    <meta property="og:url" content=""/>
-    <!-- http://realfavicongenerator.net/ -->
-    <link rel="apple-touch-icon" sizes="57x57" href="{% static 'images/favicons/apple-touch-icon-57x57.png' %}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'images/favicons/apple-touch-icon-60x60.png' %}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'images/favicons/apple-touch-icon-72x72.png' %}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'images/favicons/apple-touch-icon-76x76.png' %}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'images/favicons/apple-touch-icon-114x114.png' %}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'images/favicons/apple-touch-icon-120x120.png' %}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'images/favicons/apple-touch-icon-144x144.png' %}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'images/favicons/apple-touch-icon-152x152.png' %}">
-    <link rel="icon" type="image/png" href="{% static 'images/favicons/favicon-32x32.png' %}" sizes="32x32">
-    <link rel="icon" type="image/png" href="{% static 'images/favicons/favicon-96x96.png' %}" sizes="96x96">
-    <link rel="icon" type="image/png" href="{% static 'images/favicons/favicon-16x16.png' %}" sizes="16x16">
-    <link rel="manifest" href="{% static 'images/favicons/manifest.json' %}">
-    <link rel="mask-icon" href="{% static 'images/favicons/safari-pinned-tab.svg' %}" color="#5bbad5">
-    <link rel="shortcut icon" href="{% static 'images/favicons/favicon.ico' %}">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="{% static 'images/favicons/mstile-144x144.png' %}">
-    <meta name="msapplication-config" content="{% static 'images/favicons/browserconfig.xml' %}">
-    <meta name="theme-color" content="#ffffff">
+	<meta property="og:description" content="ISIMIP"/>
+	<meta property="og:image" content="{% static 'images/og-image.png' %}"/>
+	<meta property="og:locale" content="de"/>
+	<meta property="og:site_name" content="ISIMIP"/>
+	<meta property="og:title" content="ISIMIP"/>
+	<meta property="og:url" content=""/>
+	<!-- http://realfavicongenerator.net/ -->
+	<link rel="apple-touch-icon" sizes="57x57" href="{% static 'images/favicons/apple-touch-icon-57x57.png' %}">
+	<link rel="apple-touch-icon" sizes="60x60" href="{% static 'images/favicons/apple-touch-icon-60x60.png' %}">
+	<link rel="apple-touch-icon" sizes="72x72" href="{% static 'images/favicons/apple-touch-icon-72x72.png' %}">
+	<link rel="apple-touch-icon" sizes="76x76" href="{% static 'images/favicons/apple-touch-icon-76x76.png' %}">
+	<link rel="apple-touch-icon" sizes="114x114" href="{% static 'images/favicons/apple-touch-icon-114x114.png' %}">
+	<link rel="apple-touch-icon" sizes="120x120" href="{% static 'images/favicons/apple-touch-icon-120x120.png' %}">
+	<link rel="apple-touch-icon" sizes="144x144" href="{% static 'images/favicons/apple-touch-icon-144x144.png' %}">
+	<link rel="apple-touch-icon" sizes="152x152" href="{% static 'images/favicons/apple-touch-icon-152x152.png' %}">
+	<link rel="icon" type="image/png" href="{% static 'images/favicons/favicon-32x32.png' %}" sizes="32x32">
+	<link rel="icon" type="image/png" href="{% static 'images/favicons/favicon-96x96.png' %}" sizes="96x96">
+	<link rel="icon" type="image/png" href="{% static 'images/favicons/favicon-16x16.png' %}" sizes="16x16">
+	<link rel="manifest" href="{% static 'images/favicons/manifest.json' %}">
+	<link rel="mask-icon" href="{% static 'images/favicons/safari-pinned-tab.svg' %}" color="#5bbad5">
+	<link rel="shortcut icon" href="{% static 'images/favicons/favicon.ico' %}">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="msapplication-TileImage" content="{% static 'images/favicons/mstile-144x144.png' %}">
+	<meta name="msapplication-config" content="{% static 'images/favicons/browserconfig.xml' %}">
+	<meta name="theme-color" content="#ffffff">
 
-    {% block css %}
-        <link rel="stylesheet" href="{% static 'vendor/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static 'vendor/css/font-awesome.min.css' %}">
-        <link rel="stylesheet/less" type="text/css" href="{% static 'css/isi_mip.less' %}"/>
-        <script src="{% static 'vendor/js/less.min.js' %}"></script>
-    {% endblock %}
+	{% block css %}
+		<link rel="stylesheet" href="{% static 'vendor/css/bootstrap.min.css' %}">
+		<link rel="stylesheet" href="{% static 'vendor/css/font-awesome.min.css' %}">
+		<link rel="stylesheet/less" type="text/css" href="{% static 'css/isi_mip.less' %}"/>
+		<script src="{% static 'vendor/js/less.min.js' %}"></script>
+	{% endblock %}
 </head>
 
 <body>
 {% wagtailuserbar %}
 
 {% block header %}
-    {% header %}
+	{% header %}
 {% endblock %}
 
 
 {% block messages %}
-    <div class="container">
-        {% if messages %}
-            {% messages %}
-        {% endif %}
-    </div>
+	<div class="container">
+		{% if messages %}
+			{% messages %}
+		{% endif %}
+	</div>
 {% endblock %}
 
 {% block content_container %}
-    {% block content %}
-    {% endblock %}
+	{% block content %}
+	{% endblock %}
+{% endblock %}
+
+{% block spacebelow %}
+	<br>
+	<br>
 {% endblock %}
 
 {% block footer %}
-    {% footer %}
+	{% footer %}
 {% endblock %}
 
 
@@ -73,9 +78,9 @@
 
 
 {% block javascript %}
-    <script src="{% static 'vendor/js/jquery-2.2.1.min.js' %}"></script>
-    <script src="{% static 'vendor/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/isi_mip.js' %}"></script>
+	<script src="{% static 'vendor/js/jquery-2.2.1.min.js' %}"></script>
+	<script src="{% static 'vendor/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/isi_mip.js' %}"></script>
 {% endblock %}
 </body>
 </html>

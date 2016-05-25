@@ -79,13 +79,13 @@ def impact_model_details(page, request, id):
 
 
 def impact_model_download(page, request):
-    imodels = ImpactModel.objects.all()
+    imodels = ImpactModel.objects.order_by('name')
     if 'sector' in request.GET:
         imodels = imodels.filter(sector=request.GET['sector'])
     if 'driver' in request.GET:
         imodels = imodels.filter(climate_data_sets__name=request.GET['driver'])
-    if 'q' in request.GET:
-        q = request.GET['q']
+    if 'searchvalue' in request.GET:
+        q = request.GET['searchvalue']
         query = Q(name__icontains=q) | Q(sector__icontains=q) | Q(climate_data_sets__name__icontains=q) \
                 | Q(contactperson__name__icontains=q) | Q(contactperson__email__icontains=q)
         imodels = imodels.filter(query)

@@ -3,12 +3,16 @@
 
 {% block content %}
     <div class="form-page-bottom-content">{{ page.top_content }}</div>
+	<br>
     <div class="form-page-form">
         <form action="{% pageurl page %}" method="POST">
             {% csrf_token %}
             {{ form }}
+	        <br>
             <input type="submit" class="btn btn-secondary" value="Absenden">
         </form>
     </div>
+	<br>
+	<br>
     <div class="form-page-bottom-content">{{ page.bottom_content }}</div>
 {% endblock %}

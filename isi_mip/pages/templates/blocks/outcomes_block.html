@@ -4,11 +4,11 @@
 			<div class="col-sm-3" {% if forloop.counter > value.see_all_offset %} style="display:none;"{% endif %}>
 				{{ paper }}
 			</div>
-			{% cycle '' '' '' '<div class="clearfix"></div>' %}
+			{% cycle '' '' '' '</div><div class="row">' %}
 		{% endfor %}
 	</div>
 	{% if value.papers|length > value.see_all_offset %}
-		{% include "widgets/read-more-link.html" with align='right' arrow=True text='See all' url="#"%}
+		{% include "widgets/read-more-link.html" with align='right' arrow=True text='See all' url="."%}
 	{% endif %}
 	{% include 'widgets/horizontal-ruler.html' %}
 </div>

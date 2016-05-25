@@ -2,20 +2,25 @@
 {% load breadcrumb static %}
 
 {% block content_container %}
-    <div class="background-container" style="background-image: url({% static 'images/mountain-range.jpg' %});">
-        {% include 'widgets/head-super.html' with title=teaser.title text=teaser.text button=teaser.button %}
-        <div class="content-container container">
-            <div class="content-container-border">
-                <div class="content-container-inner">
-                    {% block content %}
-                        {{ page.content }}
-                    {% endblock %}
-                </div>
-            </div>
-        </div>
+	<div class="background-container" style="background-image: url({% static 'images/mountain-range.jpg' %});">
+		{% include 'widgets/head-super.html' with title=teaser.title text=teaser.text button=teaser.button %}
+		<div class="content-container container">
+			<div class="content-container-border">
+				<div class="content-container-inner">
+					{% block content %}
+						{% for row in page.content %}
+							{{ row }}
+							<br>
+						{% endfor %}
+					{% endblock %}
+				</div>
+			</div>
+		</div>
 
-        <br>
-        <br>
-    </div>
+		<br>
+		<br>
+	</div>
 {% endblock %}
 
+{% block spacebelow %}
+{% endblock %}

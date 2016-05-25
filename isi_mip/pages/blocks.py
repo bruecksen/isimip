@@ -218,7 +218,8 @@ class FAQsBlock(StructBlock):
         for faq in value.get('faqs'):
             res = {'term': faq.get('question'),
                    'definitions': [{'text': faq.get('answer')}],
-                   'opened': True}
+                   'opened': True,
+                   'notoggle': True}
             context['list'] += [res]
         return context
 

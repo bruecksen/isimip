@@ -322,14 +322,12 @@ $(function() {
 });
 
 $(function() {
-	$('.seeallblock').each(function() {
-		var seeallblock = $(this);
-		seeallblock.find('.widget-readmorelink').click(function (event) {
+	$('.seeallblock .widget-readmorelink').click(function (event) {
 			event.preventDefault();
-			seeallblock.find('.row .col-sm-3').show();
+			$(this).closest('.seeallblock').find('.col-sm-3').show();
 			$(this).remove();
+			$(window).trigger('resize');
 		});
-	});
 });
 
 
@@ -369,7 +367,7 @@ $(function() {
 			var colHeight = col.height();
 			var pageTeaserHeight = pageTeaser.outerHeight();
 
-
+			console.log(rowHeight, colHeight, pageTeaserHeight);
 			// set min height
 			pageTeaser.css('min-height', pageTeaserHeight + rowHeight - colHeight);
 		});

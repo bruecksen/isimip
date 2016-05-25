@@ -7,7 +7,7 @@
             <div class="col-sm-3">
                 {% include "widgets/page-teaser.html" with date=entry.date image=entry.image href=entry.href text=entry.text title=entry.title description=entry.description arrow_right_link=True magicgrow=True%}
             </div>
-            {% cycle '' '' '' '<div class="clearfix"></div><div class="widget-horizontal-ruler"><hr></div>' %}
+            {% cycle '' '' '' '</div><div class="widget-horizontal-ruler"><hr></div><div class="row">' %}
         {% endfor %}
     </div>
 

@@ -3,6 +3,6 @@
 		<div class="col-sm-3">
 			{% include 'widgets/page-teaser.html' with image=supporter.image title=supporter.name description=supporter.text %}
 		</div>
-		{% cycle '' '' '' '<div class="clearfix"></div><div class="widget-horizontal-ruler widget-horizontal-ruler-light"><hr></div>' %}
+		{% cycle '' '' '' '</div><div class="widget-horizontal-ruler widget-horizontal-ruler-light"><hr></div><div class="row">' %}
 	{% endfor %}
 </div>
