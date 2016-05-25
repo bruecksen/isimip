@@ -4,6 +4,7 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 from django.core import urlresolvers
 from django.core.urlresolvers import NoReverseMatch
 
+from isi_mip.sciencepaper.models import Author
 from .models import *
 
 
@@ -115,6 +116,7 @@ admin.site.register(ClimateDataType)
 admin.site.register(ClimateVariable)
 admin.site.register(InputPhase)
 admin.site.register(ReferencePaper)
+admin.site.register(Author, HideAdmin)
 admin.site.register(Region)
 admin.site.register(Scenario)
 admin.site.register(SocioEconomicInputVariables)

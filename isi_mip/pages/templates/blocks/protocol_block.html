@@ -4,11 +4,12 @@
 		{% include "widgets/link-list.html" %}
 	</div>
 	<div class="col-sm-4 col">
-        {% include 'widgets/image.html' with url=image.url name=image.name %}
+		{% include 'widgets/image.html' with url=image.url name=image.name %}
 		<h4>Complete Protocol</h4>
 		<p>{{ value.version }}</p>
 		{% if value.complete_pdf %}
-		{% include 'widgets/button.html' with href=value.complete_pdf.url secondary=True text='Download' %}
+			{% include 'widgets/button.html' with href=value.complete_pdf.url secondary=True text='Download' %}
+			<br>
 		{% endif %}
 	</div>
-</div><!-- widget-columns-2-1 -->
+</div>
