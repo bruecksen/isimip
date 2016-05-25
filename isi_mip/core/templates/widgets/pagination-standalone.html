@@ -1,0 +1,15 @@
+<div class="widget-pagination-standalone">
+{% if prevbutton_href %}
+	<a class="widget-pagination-prevbutton pull-left" href="{{ prevbutton_href }}">
+		<i class="fa fa-chevron-left"></i>
+		Previous
+	</a>
+{% endif %}
+{% if nextbutton_href %}
+	<a class="widget-pagination-nextbutton pull-right" href="{{ nextbutton_href }}">
+		Next
+		<i class="fa fa-chevron-right"></i>
+	</a>
+{% endif %}
+<div class="clearfix"></div>
+</div><!-- widget-pagination-standalone -->

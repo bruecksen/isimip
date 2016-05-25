@@ -40,6 +40,9 @@ a {
 		color: @color-primary-dark;
 	}
 }
+.super a {
+	color: @color-white;
+}
 
 
 .background-container {
@@ -591,6 +594,10 @@ h4, .h4 {
 						color: @color-primary;
 					}
 
+					@media(min-width:992px) {
+						padding-left: 35px;
+						padding-right: 35px;
+					}
 				}
 
 				&.active {
@@ -621,6 +628,11 @@ h4, .h4 {
 .widget-head-super {
 	margin-bottom: 30px;
 
+	@media(min-width:992px) {
+		margin-top: 20px;
+		margin-bottom: 40px;
+	}
+
 	.container {
 		text-align: center;
 
@@ -648,6 +660,10 @@ h4, .h4 {
 			margin-top: 28px;
 
 			.btn.btn-default {
+				@media(min-width:992px) {
+					padding-left: 35px;
+					padding-right: 35px;
+				}
 			}
 		}
 	}
@@ -666,7 +682,7 @@ h4, .h4 {
 
 .widget-richtext-content {
 	// TODO: Abstände der Headings einstellen
-	margin: 0 0 15px 0;
+	margin: 0 0 30px 0;
 
 
 	h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
@@ -745,12 +761,13 @@ h4, .h4 {
 	hr {
 		border-style: dashed;
 		margin: 10px 0;
+		border-top-color: @color-neutral-light;
 		border-top-width: 2px;
 	}
 }
 
 .widget-page-teaser, .widget-page-teaser-wide, .widget-page-teaser-flat {
-	margin-bottom: 15px;
+	margin-bottom: 30px;
 }
 
 .widget-page-teaser-flat {
@@ -798,6 +815,15 @@ h4, .h4 {
 	.widget-image {
 		margin-bottom: 15px;
 	}
+
+	.widget-page-teaser-rightlink {
+		margin-top: 15px;
+
+		.btn {
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
+	}
 }
 
 .super {
@@ -813,13 +839,14 @@ h4, .h4 {
 
 
 .widget-image {
-	margin-bottom: 15px;
+	margin-bottom: 30px;
 }
 
 
 
 .widget-horizontal-ruler {
 	margin-bottom: 30px;
+	margin-top: 15px;
 
 	hr {
 		border-top-color: @color-neutral-light;
@@ -949,7 +976,7 @@ h4, .h4 {
 
 
 
-.widget-pagination {
+.widget-pagination, .widget-pagination-standalone {
 	text-align: center;
 	padding: 5px 0;
 
@@ -989,6 +1016,11 @@ h4, .h4 {
 		@media(min-width:768px) {
 			font-size: 18px;
 		}
+
+		-webkit-user-select: none;  /* Chrome all / Safari all */
+		-moz-user-select: none;     /* Firefox all */
+		-ms-user-select: none;      /* IE 10+ */
+		user-select: none;          /* Likely future */
 		cursor: pointer;
 
 		&:hover {
@@ -1004,11 +1036,15 @@ h4, .h4 {
 		}
 	}
 }
+.widget-pagination-standalone {
+	margin-bottom: 30px;
+}
+
 
 .widget-table {
 	.table-responsive {
 		border: 1px solid @color-neutral-light;
-		margin-bottom: 15px;		
+		margin-bottom: 30px;		
 	}
 
 	table {
@@ -1021,7 +1057,7 @@ h4, .h4 {
 		}
 
 		> thead {
-			border-bottom: 1px solid @color-neutral;
+			border-bottom: 1px solid @color-neutral-light;
 
 			tr.widget-table-headings {
 				background-color: @color-primary;
@@ -1029,6 +1065,8 @@ h4, .h4 {
 
 				th {
 					font-weight: 600;
+					padding-top: 15px;
+					padding-bottom: 15px;
 
 					@media(min-width:992px) {
 						font-size: 16px;
@@ -1054,7 +1092,6 @@ h4, .h4 {
 				@media(min-width:992px) {
 					font-size: 16px;
 				}
-
 			}
 
 			&:nth-of-type(2n) {
@@ -1069,7 +1106,7 @@ h4, .h4 {
 		}
 
 		> tfoot {
-			border-top: 1px solid @color-neutral;
+			border-top: 1px solid @color-neutral-light;
 		}
 
 		.widget-table-showmore-button {
@@ -1096,8 +1133,6 @@ h4, .h4 {
 		margin-right: 0;
 
 		@media(min-width:768px) { width: 32%; }
-//		@media(min-width:992px) { width: 290px; }
-//		@media(min-width:1200px) { width: 357px; }
 
 		+ select {
 			@media(min-width:768px) {
@@ -1113,11 +1148,8 @@ h4, .h4 {
 		width: 100%;
 		max-width: none;
 
-		@media(min-width:768px) { width: 32%; }
-//		@media(min-width:992px) { width: 290px; }
-//		@media(min-width:1200px) { width: 357px; }
-
 		@media(min-width:768px) {
+			width: 32%;
 			float: right;
 		}
 	}
@@ -1126,7 +1158,7 @@ h4, .h4 {
 
 .widget-expandable {
 	border: 1px solid @color-neutral-light;
-	margin-bottom: 15px;
+	margin-bottom: 30px;
 	font-size: 14px;
 	@media(min-width:768px) {
 		font-size: 16px;
@@ -1255,7 +1287,7 @@ h4, .h4 {
 
 
 	i.fa-2x {
-		transform: translate(0px, 0.12em);
+		transform: translate(0px, 0.14em);
 	}
 }
 
@@ -1387,6 +1419,10 @@ h4, .h4 {
 		}
 	}
 
+	.btn-screenname {
+		text-transform: none;
+	}
+
 	.widget-twitter-timeline-border {
 		border: 1px solid @color-neutral-light;
 		padding: 30px 15px 15px 15px;
@@ -1394,7 +1430,7 @@ h4, .h4 {
 
 	.twitter-timeline-update {
 		font-family: "OpenSansEmoji", serif;
-		border-bottom: 1px solid #aaa;
+		border-bottom: 1px solid @color-neutral-light;
 		padding: 15px;
 		margin-bottom: 15px;
 

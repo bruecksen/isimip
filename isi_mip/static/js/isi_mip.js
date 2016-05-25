@@ -322,19 +322,19 @@ $(function() {
 });
 
 $(function() {
-	$('.seeallblock .widget-readmorelink').click(function (event) {
-			event.preventDefault();
-			$(this).closest('.seeallblock').find('.col-sm-3').show();
-			$(this).remove();
-			$(window).trigger('resize');
-		});
+	$('.seeallblock .widget-readmorelink').click(function(event) {
+		event.preventDefault();
+		$(this).closest('.seeallblock').find('.col-sm-3').show();
+		$(this).remove();
+		$(window).trigger('resize');
+	});
 });
 
 
 $(function() {
 	// Smooth scrolling to anchors
 	// https://stackoverflow.com/questions/14804941
-	$("a[href^='#']").on('click', function(e) {
+	$("a.anchor-scroll").on('click', function(e) {
 		e.preventDefault();
 		var hash = this.hash;
 		$('html, body').stop().animate({
@@ -409,4 +409,6 @@ $(function() {
 	});
 	aligncols();
 });
+
+
 

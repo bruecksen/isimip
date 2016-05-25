@@ -372,7 +372,8 @@ data = {
             'title': 'Impact Models',
             'date': '8/12/2016',
             'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui.',
-            'arrow_right_link': True,
+            'text_right_link': True,
+            'text_right_link_text': 'Learn more',
         },
     },
 
@@ -597,6 +598,15 @@ data = {
                 {'prepend': '16.3.2016', 'text': 'Die neue Veröffentlichung', 'href': 'http://google.de',},
                 {'text': 'Die neue Veröffentlichung', 'href': 'http://google.de',},
             ],
+        },
+    },
+
+    'pagination_standalone': {
+        'name': 'Pagination Standalone',
+        'template': 'widgets/pagination-standalone.html',
+        'context': {
+            'prevbutton_href': 'http://sinnwerkstatt.com',
+            'nextbutton_href': 'http://sinnwerkstatt.com',
         },
     },
 
