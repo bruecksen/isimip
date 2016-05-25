@@ -356,7 +356,7 @@ $(function() {
 		$('.widget-page-teaser-magicgrow').each(function() {
 			var pageTeaser = $(this);
 			var row = pageTeaser.closest('.row');
-
+			console.log(row, pageTeaser);
 			// Do nothing for XS
 			if (pageTeaser.find('.widget-page-teaser-xs-detector').is(':visible')) {
 				return;
