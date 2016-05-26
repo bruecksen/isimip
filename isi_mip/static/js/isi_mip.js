@@ -410,3 +410,89 @@ $(function() {
 
 
 
+$(function() {
+	// Paper editor
+
+
+	$('.widget-paper-editor').each(function() {
+		var paperEditor = $(this);
+
+		function addPaper(title) {
+			if ("Title",title) {
+				var url = "http://127.0.0.1:8000/static/styleguide/js/crossref-test.json";
+				// http://api.crossref.org/works?rows=1&query=Yolo
+
+				$.getJSON( url, function( data ) {
+					console.log("Paper found:", data);
+					if (!data.message) return;
+					if (!data.message.items) return;
+					if (!data.message.items[0]) return;
+
+					var paper = data.message.items[0];
+
+					var paperDoi = paper.DOI;
+					var paperIssn = paper.ISSN;
+					var paperUrl = paper.URL;
+					var paperDate = paper.created.timestamp;
+					var paperTitle = paper.title[0];
+
+					// clone template
+					var template = paperEditor.find('.widget-paper-visualisation-template').html();
+					paperEditor.find('.widget-paper-list').append(template);
+
+					// fill template
+					var newPaper = paperEditor.find('.widget-paper-list .widget-paper-visualisation').last();
+					newPaper.find('.paper-title').val(paperTitle);
+					newPaper.find('.paper-doi').val(paperDoi);
+					newPaper.find('.paper-issn').val(paperIssn);
+					newPaper.find('.paper-url').val(paperUrl);
+					newPaper.find('.paper-date').val(paperDate);
+				});
+
+			} else {
+				// clone template
+				var template = paperEditor.find('.widget-paper-visualisation-template').html();
+				paperEditor.find('.widget-paper-list').append(template);
+			}
+		}
+
+
+
+
+		// Remove paper
+		paperEditor.on('click', '.widget-paper-removebutton', function() {
+			$(this).closest('.widget-paper-visualisation').remove();
+		});
+
+		// Search for paper in Crossref database
+		paperEditor.find('.widget-paper-editor-searchform-button').click(function() {
+			// show search form
+			paperEditor.find('.widget-paper-searchform').show();
+			paperEditor.find('.widget-paper-addbuttons').hide();
+		});
+
+		paperEditor.find('.widget-paper-editor-search-button').click(function() {
+			// search paper
+			paperEditor.find('.widget-paper-searchform').hide();
+			paperEditor.find('.widget-paper-addbuttons').show();
+
+			var title = paperEditor.find('.widget-paper-searchform .widget-paper-searchform-title').val();
+			addPaper(title);
+		});
+
+		paperEditor.find('.widget-paper-editor-search-cancelbutton').click(function() {
+			// cancel search
+			paperEditor.find('.widget-paper-searchform').hide();
+			paperEditor.find('.widget-paper-addbuttons').show();
+		});
+
+
+		// Add paper manually
+		paperEditor.find('.widget-paper-editor-manual-button').click(function() {
+			addPaper();
+		});
+
+	});
+});
+
+

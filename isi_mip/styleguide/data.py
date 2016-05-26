@@ -1265,6 +1265,37 @@ data = {
         },
     },
 
+    'paper_editor': {
+        'name': 'Paper editor',
+        'template': 'widgets/paper-editor.html',
+        'context': {
+            'id': 'papereditor',
+            'papers': [
+                {
+                    'title': 'Die Ottifanten',
+                    'doi': 'DOIcodeZero',
+                    'issn': '90210',
+                    'date': 'Mar 2016',
+                    'url': 'http://sinnwerkstatt.com',
+                },
+                {
+                    'title': 'Los Simpsons',
+                    'doi': 'DOIcodeZero',
+                    'issn': '90210',
+                    'date': 'Mar 2016',
+                    'url': 'http://sinnwerkstatt.com',
+                },
+                {
+                    'title': 'Charmed',
+                    'doi': 'DOIcodeZero',
+                    'issn': '90210',
+                    'date': 'Mar 2016',
+                    'url': 'http://sinnwerkstatt.com',
+                },
+            ],
+        },
+    },
+
     'twitter': {
         'name': 'Twitter',
         'template': 'widgets/twitter.html',
