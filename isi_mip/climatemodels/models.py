@@ -331,7 +331,6 @@ class ImpactModel(models.Model):
             ('Extreme Events', [
                 (vname('extreme_events'), self.extreme_events),
                 (vname('anything_else'), self.anything_else),
-                (vname('comments'), self.comments),
             ])
         ]
 

@@ -58,7 +58,6 @@ class ImpactModelForm(forms.ModelForm):
             'management': MyTextInput(),
             'extreme_events': MyTextInput(),
             'anything_else': MyTextInput(),
-            'comments': MyTextInput(textarea=True),
         }
 
     def clean_references(self):
