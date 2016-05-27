@@ -138,7 +138,7 @@ class XLSImport:
         if line1[13].strip():
             water.vegetation = True if line1[13].lower().strip() == 'yes' else False
         water.vegetation_presentation = line1[14]
-        water.methods_evapotraspiration = line1[15]
+        water.methods_evapotranspiration = line1[15]
         water.methods_snowmelt = line1[16]
 
         water.save()

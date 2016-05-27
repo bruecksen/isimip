@@ -7,7 +7,7 @@ from isi_mip.climatemodels.widgets import MyMultiSelect, MyTextInput, MyBooleanS
 
 ContactPersonFormset = inlineformset_factory(ImpactModel, ContactPerson,
                                              extra=1, max_num=2, min_num=1, fields='__all__',
-                                             can_delete=False)
+                                             can_delete=False, help_texts='The scientists responsible for performing the simulations for this sector')
 
 
 class ImpactModelStartForm(forms.ModelForm):
@@ -208,7 +208,7 @@ class MarineEcosystemsForm(forms.ModelForm):
 
 
 class WaterForm(forms.ModelForm):
-    template = 'edit.html'
+    template = 'edit_water.html'
 
     class Meta:
         model = Water
@@ -228,7 +228,7 @@ class WaterForm(forms.ModelForm):
             'calibration_catchments': MyTextInput(),
             'vegetation': MyBooleanSelect(),
             'vegetation_representation': MyTextInput(),
-            'methods_evapotraspiration': MyTextInput(),
+            "methods_evapotranspiration": MyTextInput(),
             'methods_snowmelt': MyTextInput(),
         }
 

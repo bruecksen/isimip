@@ -161,92 +161,95 @@ class ImpactModel(models.Model):
         ('Water (global)', 'Water (global)'),
         ('Water (regional)', 'Water (regional)'),
     )
-    sector = models.CharField(max_length=500, choices=SECTOR_CHOICES)
-    region = models.ManyToManyField(Region, help_text="For which regions does the model produce results?")
-    # contact_person = models.ForeignKey(ContactPerson, null=True, blank=True)
+    sector = models.CharField(max_length=500, choices=SECTOR_CHOICES, help_text='The sector to which this information pertains. Some models may have further entries for other sectors.')
+    region = models.ManyToManyField(Region, help_text="Region for which model produces results")
     simulation_round = models.ManyToManyField(
         SimulationRound, blank=True,
-        help_text="For which ISIMIP simulation round are these model details relevant?"
+        help_text="The ISIMIP simulation round for which these model details are relevant"
     )
-    version = models.CharField(max_length=500, null=True, blank=True, verbose_name='Model version')
+    version = models.CharField(max_length=500, null=True, blank=True, verbose_name='Model version',
+                               help_text='The model version with which the simulations were run')
     main_reference_paper = models.ForeignKey(
-        ReferencePaper, null=True, blank=True, related_name='main_ref',
+        ReferencePaper, null=True, blank=True, related_name='main_ref', verbose_name='Reference paper: main reference',
         help_text="The single paper that should be cited when referring to simulation output from this model")
-    other_references = models.ManyToManyField(ReferencePaper, blank=True)
+    other_references = models.ManyToManyField(ReferencePaper, blank=True, verbose_name='Reference paper: other references',
+                                              help_text='Other papers describing aspects of this model')
     short_description = models.TextField(
         null=True, blank=True, verbose_name="Short model description",
         help_text="This short description should assist other researchers in briefly describing the model in a paper.")
 
     # technical information
-    spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True,
-                                           help_text="e.g. regular grid, points, hyrdotopes...")
+    spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True),
+                                           #help_text="e.g. regular grid, points, hyrdotopes...")
     spatial_resolution = ChoiceOrOtherField(
         max_length=500, choices=(('0.5°x0.5°', '0.5°x0.5°'),), blank=True, null=True, verbose_name='Spatial Resolution',
         help_text="The spatial resolution at which the ISIMIP simulations were run, if on a regular grid. Data was provided on a 0.5°x0.5° grid")
     TEMPORAL_RESOLUTION_CLIMATE_CHOICES = (('daily', 'daily'), ('monthly', 'monthly'), ('annual', 'annual'),)
     temporal_resolution_climate = ChoiceOrOtherField(
-        max_length=500, choices=TEMPORAL_RESOLUTION_CLIMATE_CHOICES, blank=True, null=True,
+        max_length=500, choices=TEMPORAL_RESOLUTION_CLIMATE_CHOICES, blank=True, null=True, verbose_name='Temporal resolution of input data: climate variables',
         help_text="ISIMIP data was provided in daily time steps")
-    temporal_resolution_co2 = ChoiceOrOtherField(max_length=500, choices=(('annual', 'annual'),), blank=True, null=True,
-                                                 help_text="ISIMIP data was provided in annual time steps")
-    temporal_resolution_land = ChoiceOrOtherField(max_length=500, choices=(('annual', 'annual'),), blank=True, null=True,
-                                                  help_text="ISIMIP data was provided in annual time steps")
-    temporal_resolution_soil = ChoiceOrOtherField(max_length=500, choices=(('constant', 'constant'),), blank=True, null=True,
-                                                  help_text="ISIMIP data was constant in time")
+    temporal_resolution_co2 = ChoiceOrOtherField(
+        max_length=500, choices=(('annual', 'annual'),), blank=True, null=True, verbose_name='Temporal resolution of input data: CO2',
+        help_text="ISIMIP data was provided in annual time steps")
+    temporal_resolution_land = ChoiceOrOtherField(
+        max_length=500, choices=(('annual', 'annual'),), blank=True, null=True, verbose_name='Temporal resolution of input data: land use/land cover',
+        help_text="ISIMIP data was provided in annual time steps")
+    temporal_resolution_soil = ChoiceOrOtherField(
+        max_length=500, choices=(('constant', 'constant'),), blank=True, null=True, verbose_name='Temporal resolution of input data: soil',
+                                                  help_text="ISIMIP data was fixed over time")
 
     # input data
     climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Climate data sets used",
                                                help_text="The climate-input data sets used in this simulation round")
     climate_variables = models.ManyToManyField(
-        ClimateVariable, blank=True,
-        help_text="Include variables that were derived from those provided in the ISIMIP input data set")
+        ClimateVariable, blank=True, verbose_name='Climate variables',
+        help_text="Including variables that were derived from those provided in the ISIMIP input data set")
     socioeconomic_input_variables = models.ManyToManyField(
         SocioEconomicInputVariables, blank=True, verbose_name="Socio-economic input variables",
-        help_text="Include resolution if relevant"
-    )
-    soil_dataset = models.TextField(null=True, blank=True, help_text="HWSD or GSWP3 were provided")
+        help_text="Including resolution where relevant")
+    soil_dataset = models.TextField(null=True, blank=True, verbose_name='Soil dataset',
+                                    help_text="HWSD or GSWP3 were provided")
     additional_input_data_sets = models.TextField(
-        null=True, blank=True,
-        help_text='List here any data sets used to drive the model that were not provided by ISIMIP'
+        null=True, blank=True, verbose_name='Additional input data sets',
+        help_text='Data sets used to drive the model that were not provided by ISIMIP'
     )
 
     # other
     exceptions_to_protocol = models.TextField(
-        null=True, blank=True,
-        help_text='Were any settings prescribed by the protocol overruled in order to run the model?'
+        null=True, blank=True, verbose_name='Exceptions',
+        help_text='Any settings prescribed by the ISIMIP protocol that were overruled when runing the model'
     )
     NA_YES_NO = ((None, '---------'), (True, 'Yes'), (False, 'No'))
     spin_up = models.NullBooleanField(
-        verbose_name='Did you spin-up your model?',
+        verbose_name='Was a spin-up performed?',
         help_text="'No' indicates the simulations were run starting in the first reporting year 1971",
         choices=NA_YES_NO
     )
     spin_up_design = models.TextField(
         null=True, blank=True, verbose_name='Spin-up design',
-        help_text="Include the length of the spin up, the CO2 concentration used, and any deviations from the spin-up procedure defined in the protocol."
+        help_text="Including the length of the spin up, the CO2 concentration used, and any deviations from the spin-up procedure defined in the protocol"
     )
     natural_vegetation_partition = models.TextField(
-        null=True, blank=True, help_text='How are areas covered by different types of natural vegetation partitioned?'
+        null=True, blank=True, help_text='How areas covered by different types of natural vegetation are partitioned'
     )
     natural_vegetation_dynamics = models.TextField(
         null=True, blank=True,
-        help_text='Is natural vegetation simulated dynamically? If so, please describe.'
+        help_text='Description of how natural vegetation is simulated dynamically where relevant'
     )
     natural_vegetation_cover_dataset = models.TextField(
-        null=True, blank=True, help_text='If natural vegetation cover is prescribed, which dataset is used?'
+        null=True, blank=True, help_text='Dataset used if natural vegetation cover is prescribed'
     )
     management = models.TextField(
         null=True, blank=True,
-        help_text='Which specific management and autonomous adaptation measures were applied? E.g. varying sowing dates in crop modles, dbh-related harvesting in forest models.'
+        help_text='Specific management and autonomous adaptation measures applied. E.g. varying sowing dates in crop models, dbh-related harvesting in forest models.'
     )
     extreme_events = models.TextField(
-        null=True, blank=True,
-        help_text='Which are the key challenges for this model in reproducing impacts of extreme events?'
+        null=True, blank=True, verbose_name='Key challenges',
+        help_text='Key challenges for this model in reproducing impacts of extreme events'
     )
-    anything_else = models.TextField(
+    anything_else = models.TextField(verbose_name='Additional comments',
         null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
     )
-    comments = models.TextField(null=True, blank=True, verbose_name='Additional comments')
 
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 
@@ -286,7 +289,6 @@ class ImpactModel(models.Model):
         other_references = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.title_with_link() for x in self.other_references.all()])
         return [
             ('Basic information', [
-                # (vname('name'), self.name),
                 (vname('sector'), self.sector),
                 (vname('region'), ', '.join([x.name for x in self.region.all()])),
                 ('Contact Person', cpers),
@@ -296,7 +298,7 @@ class ImpactModel(models.Model):
                 ('Other references', other_references),
                 # (vname('short_description'), self.short_description),
             ]),
-            ('Technical Information', [
+            ('Resolution', [
                 (vname('spatial_aggregation'), self.spatial_aggregation),
                 (vname('spatial_resolution'), self.spatial_resolution),
                 (vname('temporal_resolution_climate'), self.temporal_resolution_climate),
@@ -311,14 +313,22 @@ class ImpactModel(models.Model):
                 (vname('soil_dataset'), self.soil_dataset),
                 (vname('additional_input_data_sets'), self.additional_input_data_sets),
             ]),
-            ('Other', [
+            ('Exceptions to Protocol', [
                 (vname('exceptions_to_protocol'), self.exceptions_to_protocol),
+                ]),
+            ('Spin-up', [
                 (vname('spin_up'), 'Yes' if self.spin_up else 'No'),
                 (vname('spin_up_design'), self.spin_up_design if self.spin_up else ''),
+            ]),
+            ('Natural Vegetation', [
                 (vname('natural_vegetation_partition'), self.natural_vegetation_partition),
                 (vname('natural_vegetation_dynamics'), self.natural_vegetation_dynamics),
                 (vname('natural_vegetation_cover_dataset'), self.natural_vegetation_cover_dataset),
+            ]),
+            ('Management & Adaptation Measures', [
                 (vname('management'), self.management),
+            ]),
+            ('Extreme Events', [
                 (vname('extreme_events'), self.extreme_events),
                 (vname('anything_else'), self.anything_else),
                 (vname('comments'), self.comments),
@@ -378,7 +388,7 @@ class Sector(models.Model):
 class Agriculture(Sector):
     # Key input and Management, help_text="Provide a yes/no answer and a short description of how the process is included"
     crops = models.TextField(null=True, blank=True, verbose_name='Crops')
-    land_coverage = models.TextField(null=True, blank=True, verbose_name='Land coverage')
+    land_coverage = models.TextField(null=True, blank=True, verbose_name='Land cover')
     planting_date_decision = models.TextField(null=True, blank=True, verbose_name='Planting date decision')
     planting_density = models.TextField(null=True, blank=True, verbose_name='Planting density')
     crop_cultivars = models.TextField(null=True, blank=True, verbose_name='Crop cultivars')
@@ -390,19 +400,19 @@ class Agriculture(Sector):
     initial_soil_C_and_OM = models.TextField(null=True, blank=True, verbose_name='Initial soil C and OM')
     initial_crop_residue = models.TextField(null=True, blank=True, verbose_name='Initial crop residue')
     # Key model processes, help_text="Please specify methods for model calibration and validation"
-    lead_area_development = models.TextField(null=True, blank=True, verbose_name='Lead area development')
-    light_interception = models.TextField(null=True, blank=True, verbose_name='Light interception')
-    light_utilization = models.TextField(null=True, blank=True, verbose_name='Light utilization')
-    yield_formation = models.TextField(null=True, blank=True, verbose_name='Yield formation')
-    crop_phenology = models.TextField(null=True, blank=True, verbose_name='Crop phenology')
-    root_distribution_over_depth = models.TextField(null=True, blank=True, verbose_name='Root distribution over depth')
-    stresses_involved = models.TextField(null=True, blank=True, verbose_name='Stresses involved')
-    type_of_water_stress = models.TextField(null=True, blank=True, verbose_name='Type of water stress')
-    type_of_heat_stress = models.TextField(null=True, blank=True, verbose_name='Type of heat stress')
-    water_dynamics = models.TextField(null=True, blank=True, verbose_name='Water dynamics')
-    evapo_transpiration = models.TextField(null=True, blank=True, verbose_name='Evapo-transpiration')
-    soil_CN_modeling = models.TextField(null=True, blank=True, verbose_name='Soil CN modeling')
-    co2_effects = models.TextField(null=True, blank=True, verbose_name='CO2 Effects')
+    lead_area_development = models.TextField(null=True, blank=True, verbose_name='Lead area development', help_text='Methods for model calibration and validation')
+    light_interception = models.TextField(null=True, blank=True, verbose_name='Light interception', help_text='Methods for model calibration and validation')
+    light_utilization = models.TextField(null=True, blank=True, verbose_name='Light utilization', help_text='Methods for model calibration and validation')
+    yield_formation = models.TextField(null=True, blank=True, verbose_name='Yield formation', help_text='Methods for model calibration and validation')
+    crop_phenology = models.TextField(null=True, blank=True, verbose_name='Crop phenology', help_text='Methods for model calibration and validation')
+    root_distribution_over_depth = models.TextField(null=True, blank=True, verbose_name='Root distribution over depth', help_text='Methods for model calibration and validation')
+    stresses_involved = models.TextField(null=True, blank=True, verbose_name='Stresses involved', help_text='Methods for model calibration and validation')
+    type_of_water_stress = models.TextField(null=True, blank=True, verbose_name='Type of water stress', help_text='Methods for model calibration and validation')
+    type_of_heat_stress = models.TextField(null=True, blank=True, verbose_name='Type of heat stress', help_text='Methods for model calibration and validation')
+    water_dynamics = models.TextField(null=True, blank=True, verbose_name='Water dynamics', help_text='Methods for model calibration and validation')
+    evapo_transpiration = models.TextField(null=True, blank=True, verbose_name='Evapo-transpiration', help_text='Methods for model calibration and validation')
+    soil_CN_modeling = models.TextField(null=True, blank=True, verbose_name='Soil CN modeling', help_text='Methods for model calibration and validation')
+    co2_effects = models.TextField(null=True, blank=True, verbose_name='CO2 Effects', help_text='Methods for model calibration and validation')
     # Methods for model calibration and validation , help_text="Please specify methods for model calibration and validation"
     parameters_number_and_description = models.TextField(null=True, blank=True, verbose_name='Parameters, number and description')
     calibrated_values = models.TextField(null=True, blank=True, verbose_name='Calibrated values')
@@ -461,7 +471,7 @@ class BiomesForests(Sector):
         help_text='Is output (e.g. PFT cover) written out per grid-cell area or per land and water area within a grid cell, or land only?'
     )
     output_per_pft = models.TextField(
-        null=True, blank=True,
+        null=True, blank=True, verbose_name='Output per PFT?',
         help_text='Is output per PFT per unit area of that PFT, i.e. requiring weighting by the fractional coverage of each PFT to get the gridbox average?'
     )
     considerations = models.TextField(
@@ -471,15 +481,15 @@ class BiomesForests(Sector):
     # key model processes , help_text="Please provide yes/no and a short description how the process is included"
     dynamic_vegetation = models.TextField(null=True, blank=True)
     nitrogen_limitation = models.TextField(null=True, blank=True)
-    co2_effects = models.TextField(null=True, blank=True)
+    co2_effects = models.TextField(null=True, blank=True, verbose_name='CO2 effects')
     light_interception = models.TextField(null=True, blank=True)
-    light_utilization = models.TextField(null=True, blank=True, help_text="photosynthesis, RUE- approach?")
+    light_utilization = models.TextField(null=True, blank=True, help_text="photosynthesis, RUE-approach?")
     phenology = models.TextField(null=True, blank=True)
     water_stress = models.TextField(null=True, blank=True)
     heat_stress = models.TextField(null=True, blank=True)
     evapotranspiration_approach = models.TextField(verbose_name='Evapo-transpiration approach', null=True, blank=True)
     rooting_depth_differences = models.TextField(verbose_name='Differences in rooting depth', null=True, blank=True,
-                                                 help_text="Include how it changes.")
+                                                 help_text="Including how it changes")
     root_distribution = models.TextField(verbose_name='Root distribution over depth', null=True, blank=True)
     permafrost = models.TextField(null=True, blank=True)
     closed_energy_balance = models.TextField(null=True, blank=True)
@@ -497,19 +507,19 @@ class BiomesForests(Sector):
     mortality_other = models.TextField(verbose_name='Other', null=True, blank=True)
     mortality_remarks = models.TextField(verbose_name='Remarks', null=True, blank=True)
     # NBP components , help_text="Indicate whether the model includes the processes, and how the model accounts for the fluxes, i.e.what is the fate of the biomass? E.g.directly to atmsphere or let it go to other pool"
-    nbp_fire = models.TextField(null=True, blank=True, verbose_name='Fire')
+    nbp_fire = models.TextField(null=True, blank=True, verbose_name='Fire', help_text='Indicate whether the model includes fire, and how the model accounts for the fluxes, i.e. what is the fate of the biomass? E.g. directly to atmsphere or let it go to other pool')
     nbp_landuse_change = models.TextField(null=True, blank=True, verbose_name='Land-use change',
-                                          help_text="Deforestation, harvest and other land-use changes")
+                                          help_text="Indicate whether the model includes land-use change (e.g. deforestation harvest and otherland-use changes), and how the model accounts for the fluxes, i.e. what is the fate of the biomass? e.g. directly to atmsphere or let it go to other pool")
     nbp_harvest = models.TextField(
         null=True, blank=True, verbose_name='Harvest',
-        help_text="1: crops, 2: harvest from forest management, 3: harvest from grassland management"
+        help_text="Indicate whether the model includes harvest, and how the model accounts for the fluxes, i.e. what is the fate of the biomass? E.g. directly to atmsphere or let it go to other pool. 1: crops, 2: harvest from forest management, 3: harvest from grassland management."
     )
     nbp_other = models.TextField(null=True, blank=True, verbose_name='Other processes')
     nbp_comments = models.TextField(null=True, blank=True, verbose_name='Comments')
     # Plant Functional Types (PFTs)
     list_of_pfts = models.TextField(
         null=True, blank=True, verbose_name='List of PFTs',
-        help_text="Provide a list of PFTs using the folllowing format: <pft1_long_name> (<pft1_short_name>); <pft2_long_name> (<pft2_short_name>). Include long name in brackets if no short name is available."
+        help_text="Provide a list of PFTs using the folllowing format: [pft1_long_name] ([pft1_short_name]); [pft2_long_name] ([pft2_short_name]). Include long name in brackets if no short name is available."
     )
     pfts_comments = models.TextField(null=True, blank=True, verbose_name='Comments')
 
@@ -593,13 +603,13 @@ class Energy(Sector):
     output_economics = models.TextField(null=True, blank=True, verbose_name='Economics')
     output_other = models.TextField(null=True, blank=True, verbose_name='Other (agriculture, infrastructure, adaptation)')
     # Further Information
-    variables_not_directly_from_GCMs = models.TextField(null=True, blank=True, verbose_name='Variables not directly from GCMs')
-    response_function_of_energy_demand_to_HDD_CDD = models.TextField(null=True, blank=True, verbose_name='Response function of energy demand to HDD/CDD')
-    factor_definition_and_calculation = models.TextField(null=True, blank=True, verbose_name='Definition and calculation of variable potential and load factor')
-    biomass_types = models.TextField(null=True, blank=True, verbose_name='Biomass types')
-    maximum_potential_assumption = models.TextField(null=True, blank=True, verbose_name='Maximum potential assumption')
-    bioenergy_supply_costs = models.TextField(null=True, blank=True, verbose_name='Bioenergy supply costs')
-    socioeconomic_input = models.TextField(null=True, blank=True, verbose_name='Socio-economic input')
+    variables_not_directly_from_GCMs = models.TextField(null=True, blank=True, verbose_name='Variables not directly from GCMs', help_text='How are these calculated (including equations)?')
+    response_function_of_energy_demand_to_HDD_CDD = models.TextField(null=True, blank=True, verbose_name='Response function of energy demand to HDD/CDD', help_text='Including equations where appropriate')
+    factor_definition_and_calculation = models.TextField(null=True, blank=True, verbose_name='Definition and calculation of variable potential and load factor', help_text='Are these endogenous or exogenous to the model?')
+    biomass_types = models.TextField(null=True, blank=True, verbose_name='Biomass types', help_text='1st generation, 2nd generation, residues...')
+    maximum_potential_assumption = models.TextField(null=True, blank=True, verbose_name='Maximum potential assumption', help_text='Which information source is used?')
+    bioenergy_supply_costs = models.TextField(null=True, blank=True, verbose_name='Bioenergy supply costs', help_text='Include information on the functional forms and the data sources for deriving the supply curves')
+    socioeconomic_input = models.TextField(null=True, blank=True, verbose_name='Socio-economic input', help_text='Are SSP storylines implemented, or just GDP and population scenarios?')
 
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
@@ -685,7 +695,7 @@ class Water(Sector):
     soil_layers = models.TextField(null=True, blank=True,
                                    help_text='How many soil layers are used? Which qualities do they have?')
     water_use = models.TextField(null=True, blank=True, verbose_name='Water-use types',
-                                 help_text='Which types of water use are included?')
+                                 help_text='Which types of water use are included in the model?')
     water_sectors = models.TextField(
         null=True, blank=True, verbose_name='Water-use sectors',
         help_text='For the global-water-model varsoc and pressoc runs, which water sectors were included? E.g. irrigation, domestic, manufacturing, electricity, livestock.')
@@ -693,7 +703,7 @@ class Water(Sector):
     routing_data = models.TextField(null=True, blank=True, help_text='Which routing data are used?')
     land_use = models.TextField(null=True, blank=True, verbose_name='Land-use change effects',
                                 help_text='Which land-use change effects are included?')
-    dams_reservoirs = models.TextField(null=True, blank=True, verbose_name='Dams & Reservoirs',
+    dams_reservoirs = models.TextField(null=True, blank=True, verbose_name='Dam and reservoir implementation',
                                        help_text='Describe how are dams and reservoirs are implemented')
 
     calibration = models.BooleanField(verbose_name='Was the model calibrated?', default=False)
@@ -704,7 +714,7 @@ class Water(Sector):
                                               verbose_name='How many catchments were callibrated?')
     vegetation = models.BooleanField(verbose_name='Is CO2 fertilisation accounted for?', default=False)
     vegetation_representation = models.TextField(null=True, blank=True, verbose_name='How is vegetation represented?')
-    methods_evapotraspiration = models.TextField(null=True, blank=True, verbose_name='Potential evapotraspiration')
+    methods_evapotranspiration = models.TextField(null=True, blank=True, verbose_name='Potential evapotranspiration')
     methods_snowmelt = models.TextField(null=True, blank=True, verbose_name='Snow melt')
 
     def values_to_tuples(self) -> list:
@@ -725,7 +735,7 @@ class Water(Sector):
                 (vname('calibration_catchments'), self.calibration_catchments),
                 (vname('vegetation'), self.vegetation),
                 (vname('vegetation_representation'), self.vegetation_representation),
-                (vname('methods_evapotraspiration'), self.methods_evapotraspiration),
+                (vname('methods_evapotranspiration'), self.methods_evapotranspiration),
                 (vname('methods_snowmelt'), self.methods_snowmelt),
             ])
         ]
