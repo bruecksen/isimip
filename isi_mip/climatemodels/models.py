@@ -294,7 +294,7 @@ class ImpactModel(models.Model):
                 ('Contact Person', cpers),
                 (vname('simulation_round'), ', '.join([x.name for x in self.simulation_round.all()])),
                 (vname('version'), self.version),
-                (vname('main_reference_paper'), self.main_reference_paper.title_with_link()),
+                (vname('main_reference_paper'), self.main_reference_paper.title_with_link() if self.main_reference_paper else None),
                 ('Other references', other_references),
                 # (vname('short_description'), self.short_description),
             ]),
