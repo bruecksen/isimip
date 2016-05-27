@@ -179,7 +179,7 @@ class ImpactModel(models.Model):
         help_text="This short description should assist other researchers in briefly describing the model in a paper.")
 
     # technical information
-    spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True),
+    spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True)
                                            #help_text="e.g. regular grid, points, hyrdotopes...")
     spatial_resolution = ChoiceOrOtherField(
         max_length=500, choices=(('0.5°x0.5°', '0.5°x0.5°'),), blank=True, null=True, verbose_name='Spatial Resolution',
