@@ -20,7 +20,8 @@ def header(context, **kwargs):
             active = True
         else:
             active = False
-        links.append({'url': target.url, 'text': name, 'active': active})
+        if target.url:
+            links.append({'url': target.url, 'text': name, 'active': active})
 
     context['links'] = links
     context.update(kwargs)
