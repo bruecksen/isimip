@@ -1,3 +1,5 @@
+pip # get rid of annoying pip messages
+
 psycopg2==2.6.1
 
 pyexcel==0.2.1
