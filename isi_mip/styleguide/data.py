@@ -1265,11 +1265,33 @@ data = {
         },
     },
 
-    'paper_editor': {
-        'name': 'Paper editor',
+    'paper_editor_main': {
+        'name': 'Paper Editor – Main Paper',
         'template': 'widgets/paper-editor.html',
         'context': {
             'id': 'papereditor',
+            'label': 'Main Paper',
+            'help': 'Enter the main paper of the impact model.',
+            'maxpapercount': 1,
+            'papers': [
+                {
+                    'title': 'Die Ottifanten',
+                    'doi': 'DOIcodeZero',
+                    'issn': '90210',
+                    'date': 'Mar 2016',
+                    'url': 'http://sinnwerkstatt.com',
+                },
+            ],
+        },
+    },
+    'paper_editor_other': {
+        'name': 'Paper Editor – Other Papers',
+        'template': 'widgets/paper-editor.html',
+        'context': {
+            'id': 'papereditor',
+            'label': 'Other Papers',
+            'help': 'Enter the other papers of the impact model.',
+            'maxpapercount': 5,
             'papers': [
                 {
                     'title': 'Die Ottifanten',
@@ -1295,6 +1317,8 @@ data = {
             ],
         },
     },
+
+
 
     'twitter': {
         'name': 'Twitter',

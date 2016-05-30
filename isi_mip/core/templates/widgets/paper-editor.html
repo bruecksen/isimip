@@ -1,4 +1,11 @@
-<div class="widget-paper-editor">
+<div class="widget-paper-editor"{% if maxpapercount %}data-maxpapercount="{{ maxpapercount }}{% endif %}">
+	{% if label %}
+		<label class="control-label">{{ label }}{% if required %}<span class="asteriskField">*</span>{% endif %}</label>
+	{% endif %}
+	{% if help %}
+		<p class="help-block">{{ help }}</p>
+	{% endif %}
+	<br>
 	<div class="widget-paper-list">
 	{% for paper in papers %}
 		<div class="widget-paper-visualisation">
@@ -7,8 +14,7 @@
 			<label>Date <input class="paper-date" name="paper-date" value="{{ paper.date }}"></label>
 			<label>ISSN <input class="paper-issn" name="paper-issn" value="{{ paper.issn }}"></label>
 			<label>URL <input class="paper-url" name="paper-url" value="{{ paper.url }}"></label>
-			<button class="btn btn-default widget-paper-removebutton">remove this paper</button>
-			<hr>
+			<button class="btn btn-link widget-paper-removebutton">remove this paper</button>
 		</div>
 	{% endfor %}
 	</div>
@@ -20,12 +26,11 @@
 			<label>Date <input class="paper-date" name="paper-date"></label>
 			<label>ISSN <input class="paper-issn" name="paper-issn"></label>
 			<label>URL <input class="paper-url" name="paper-url"></label>
-			<button class="btn btn-default widget-paper-removebutton">remove this paper</button>
-			<hr>
+			<button class="btn btn-link widget-paper-removebutton">remove this paper</button>
 		</div>
 	</div>
 
-	<div class="widget-paper-addbuttons">
+	<div class="widget-paper-addbuttons"{% if maxpapercount %}{% if maxpapercount <= papers|length %} style="display: none;"{% endif %}{% endif %}>
 		<button class="btn btn-default widget-paper-editor-searchform-button">search paper</button>
 		<button class="btn btn-default widget-paper-editor-manual-button">add manually</button>
 	</div>

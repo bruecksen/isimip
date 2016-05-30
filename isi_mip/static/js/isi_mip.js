@@ -417,12 +417,28 @@ $(function() {
 	$('.widget-paper-editor').each(function() {
 		var paperEditor = $(this);
 
+
+		function checkMaxPaperCount() {
+			var maxPaperCount = paperEditor.data('maxpapercount');
+			if (!maxPaperCount) return;
+
+			var paperCount = paperEditor.find('.widget-paper-list .widget-paper-visualisation').length;
+
+			// Show buttons for adding new papers only when allowed number of papers
+			//  larger than actual number of papers.
+			if (maxPaperCount <= paperCount) {
+				paperEditor.find('.widget-paper-addbuttons').hide();
+			} else {
+				paperEditor.find('.widget-paper-addbuttons').show();
+			}
+		}
+
 		function addPaper(title) {
-			if ("Title",title) {
+			if (title) {
 				var url = "http://127.0.0.1:8000/static/styleguide/js/crossref-test.json";
 				// http://api.crossref.org/works?rows=1&query=Yolo
 
-				$.getJSON( url, function( data ) {
+				$.getJSON( url, {'query':title}, function( data ) {
 					console.log("Paper found:", data);
 					if (!data.message) return;
 					if (!data.message.items) return;
@@ -447,12 +463,15 @@ $(function() {
 					newPaper.find('.paper-issn').val(paperIssn);
 					newPaper.find('.paper-url').val(paperUrl);
 					newPaper.find('.paper-date').val(paperDate);
+
+					checkMaxPaperCount();
 				});
 
 			} else {
 				// clone template
 				var template = paperEditor.find('.widget-paper-visualisation-template').html();
 				paperEditor.find('.widget-paper-list').append(template);
+				checkMaxPaperCount();
 			}
 		}
 
@@ -460,19 +479,23 @@ $(function() {
 
 
 		// Remove paper
-		paperEditor.on('click', '.widget-paper-removebutton', function() {
+		paperEditor.on('click', '.widget-paper-removebutton', function(event) {
+			event.preventDefault();
 			$(this).closest('.widget-paper-visualisation').remove();
+			checkMaxPaperCount();
 		});
 
 		// Search for paper in Crossref database
-		paperEditor.find('.widget-paper-editor-searchform-button').click(function() {
-			// show search form
+		// show search form
+		paperEditor.find('.widget-paper-editor-searchform-button').click(function(event) {
+			event.preventDefault();
 			paperEditor.find('.widget-paper-searchform').show();
 			paperEditor.find('.widget-paper-addbuttons').hide();
 		});
 
-		paperEditor.find('.widget-paper-editor-search-button').click(function() {
-			// search paper
+		// search paper
+		paperEditor.find('.widget-paper-editor-search-button').click(function(event) {
+			event.preventDefault();
 			paperEditor.find('.widget-paper-searchform').hide();
 			paperEditor.find('.widget-paper-addbuttons').show();
 
@@ -480,15 +503,16 @@ $(function() {
 			addPaper(title);
 		});
 
-		paperEditor.find('.widget-paper-editor-search-cancelbutton').click(function() {
-			// cancel search
+		// cancel search
+		paperEditor.find('.widget-paper-editor-search-cancelbutton').click(function(event) {
+			event.preventDefault();
 			paperEditor.find('.widget-paper-searchform').hide();
 			paperEditor.find('.widget-paper-addbuttons').show();
 		});
 
-
 		// Add paper manually
-		paperEditor.find('.widget-paper-editor-manual-button').click(function() {
+		paperEditor.find('.widget-paper-editor-manual-button').click(function(event) {
+			event.preventDefault();
 			addPaper();
 		});
 
