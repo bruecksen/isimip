@@ -1,0 +1,49 @@
+{% extends 'climatemodels/edit.html' %}
+{% load template_form %}
+
+{% block form_content %}
+	{% template_form form as nf %}
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Technological Progress' %}
+		{{ nf.technological_progress }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Soil' %}
+		{{ nf.soil_layers }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Water Use' %}
+		{{ nf.water_use }}
+		{{ nf.water_sectors }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Routing' %}
+		{{ nf.routing }}
+		{{ nf.routing_data }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Land Use' %}
+		{{ nf.land_use }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Dams & Reservoirs' %}
+		{{ nf.dams_reservoirs }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Calibration' %}
+		{{ nf.calibration }}
+		{{ nf.calibration_years }}
+		{{ nf.calibration_dataset }}
+		{{ nf.calibration_catchments }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Vegetation' %}
+		{{ nf.vegetation }}
+		{{ nf.vegetation_representation }}
+	</fieldset>
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Methods' %}
+		{{ nf.methods_evapotranspiration }}
+		{{ nf.methods_snowmelt }}
+	</fieldset>
+{% endblock %}

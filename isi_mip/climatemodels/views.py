@@ -2,19 +2,16 @@ from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.messages.views import SuccessMessageMixin
 from django.core import urlresolvers
 from django.core.urlresolvers import reverse
-from django.db import transaction
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.utils.html import urlize
-from django.views.generic import UpdateView
 from wagtail.wagtailcore.models import Page
 
 from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, ContactPersonFormset, get_sector_form
-from isi_mip.climatemodels.models import ImpactModel, InputData
+from isi_mip.climatemodels.models import ImpactModel, InputData, ReferencePaper
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 
 
@@ -94,7 +91,6 @@ def impact_model_download(page, request):
     ImpactModelToXLSX(response, imodels)
     return response
 
-
 def impact_model_edit(page, request, id):
     impactmodel = ImpactModel.objects.get(id=id)
     context = {'page': page, 'subpage': Page(title='Impact Model: %s' % impactmodel.name)}
@@ -105,6 +101,25 @@ def impact_model_edit(page, request, id):
         if form.is_valid() and contactform.is_valid():
             form.save()
             contactform.save()
+
+            # save papers
+            titles, dois, dates, issns, urls = request.POST.getlist('paper-title'), request.POST.getlist('paper-doi'), \
+                                               request.POST.getlist('paper-date'), request.POST.getlist('paper-issn'),\
+                                               request.POST.getlist('paper-url')
+            for i, _ in enumerate(titles):
+                if dois[i]:
+                    rp = ReferencePaper.objects.get_or_create(
+                        doi=dois[i],
+                        defaults={'title':titles[i],
+                                  'journal_name': dates[i]})[0]
+                else:
+                    rp = ReferencePaper.objects.create(title=titles[i], journal_name=dates[i])
+                if i==0:
+                    impactmodel.main_reference_paper = rp
+                    impactmodel.save()
+                else:
+                    impactmodel.other_references.add(rp)
+
             messages.success(request, "Changes to your model have been saved successfully.")
             target_url = page.url + page.reverse_subpage('edit_sector', args=(impactmodel.id,))
             return HttpResponseRedirect(target_url)
@@ -117,6 +132,21 @@ def impact_model_edit(page, request, id):
         contactform = ContactPersonFormset(instance=impactmodel)
     context['form'] = form
     context['cform'] = contactform
+    context['papers'] = [{'date': 'Mar 2016',
+             'doi': 'DOIcodeZero',
+             'issn': '90210',
+             'title': 'Die Ottifanten',
+             'url': 'http://sinnwerkstatt.com'},
+            {'date': 'Apr 2016',
+             'doi': 'DOIcodeOne',
+             'issn': '90210',
+             'title': 'Los Simpsons',
+             'url': 'http://sinnwerkstatt.com'},
+            {'date': 'Mai 2016',
+             'doi': 'DOIcodeTwo',
+             'issn': '90210',
+             'title': 'Charmed',
+             'url': 'http://sinnwerkstatt.com'}]
     template = 'climatemodels/edit_impact_model.html'
     return render(request, template, context)
 

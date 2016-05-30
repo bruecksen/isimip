@@ -34,13 +34,13 @@ class ImpactModelForm(forms.ModelForm):
 
     class Meta:
         model = ImpactModel
-        exclude = ('other_references', 'owner')
+        exclude = ('main_reference_paper', 'other_references', 'owner')
         # fields = '__all__'
         widgets = {
             'name': MyTextInput(),
             'sector': MyMultiSelect(),
             'version': MyTextInput(),
-            'main_reference_paper': MyTextInput(),
+            # 'main_reference_paper': MyTextInput(),
             'short_description': MyTextInput(),
             'spatial_resolution': MyMultiSelect(allowcustom=True),
             'temporal_resolution_climate': MyMultiSelect(allowcustom=True),
@@ -60,8 +60,8 @@ class ImpactModelForm(forms.ModelForm):
             'anything_else': MyTextInput(),
         }
 
-    def clean_references(self):
-        pass  # TODO das muss noch implementiert werden
+    # def clean_references(self):
+    #     pass  # TODO das muss noch implementiert werden
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

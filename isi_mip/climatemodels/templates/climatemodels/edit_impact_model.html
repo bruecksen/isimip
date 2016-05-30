@@ -29,7 +29,13 @@
 				</div>
 				{{ nf.simulation_round }}
 				{{ nf.version }}
-				{{ nf.main_reference_paper }}
+				{#				{{ nf.main_reference_paper }}#}
+				<div class="widget-textinput form-group">
+					<label for="papers" class="control-label">Reference papers</label>
+					{% include 'widgets/paper-editor.html' with id=papereditor papers=papers %}
+					{#	<p class="help-block">The model version with which the simulations were run</p>#}
+				</div>
+
 				{{ nf.short_description }}
 			</fieldset>
 			<fieldset>
