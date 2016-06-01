@@ -7,10 +7,12 @@ from django.core.cache import cache
 
 class TwitterTimeline:
     KEY = 'twitter/twitter/timeline'
+    KEY_LT = 'twitter/twitter/timeline_longterm'
 
-    def __init__(self, count=20, cache_timeout=600):
+    def __init__(self, count=20, cache_timeout=600, cache_long_term_timeout=86400):
         self.count = count
         self.cache_timeout = cache_timeout
+        self.cache_long_term_timeout = cache_long_term_timeout
 
         self.re_url = re.compile('([A-Za-z]+:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&~\?\/.=]+)')
         self.re_url_sub = '<a href="\g<1>">\g<1></a>'
@@ -70,10 +72,16 @@ class TwitterTimeline:
     def get_timeline(self, username):
         result = cache.get(self.KEY)
         if not result:
-            api = self.connect()
-            timeline = api.user_timeline(username, count=self.count)
-            result = self.extract_tweets(timeline)
-            cache.set(self.KEY, result, self.cache_timeout)
+            try:
+                api = self.connect()
+                timeline = api.user_timeline(username, count=self.count)
+                result = self.extract_tweets(timeline)
+                cache.set(self.KEY, result, self.cache_timeout)
+                cache.set(self.KEY_LT, result, self.cache_long_term_timeout)
+            except:
+                result = cache.get(self.KEY_LT)
+                if not result:
+                    result = ''
         return result
 
 if __name__ == '__main__':

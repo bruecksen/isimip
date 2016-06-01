@@ -179,6 +179,7 @@ class HomePage(Page):
                 'fontawesome': 'facebook',
             }
         }
+        context['noborder'] = True
         return context
 
 
