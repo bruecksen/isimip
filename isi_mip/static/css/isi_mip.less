@@ -445,7 +445,12 @@ h4, .h4 {
 
 	.navbar.navbar-default {
 		margin-bottom: 0;
+
 		border-width: 0 0 1px 0;
+		&.navbar-noborder {
+			border-width: 0;
+		}
+
 		border-color: @color-neutral;
 		border-radius: 0;
 		background-color: @color-white;
@@ -636,7 +641,7 @@ h4, .h4 {
 	margin-bottom: 30px;
 
 	@media(min-width:992px) {
-		margin-top: 20px;
+		padding-top: 20px;
 		margin-bottom: 40px;
 	}
 

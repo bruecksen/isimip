@@ -36,6 +36,7 @@ data = {
         'template': 'widgets/header.html',
         'context': {
             'id': '1',
+            'noborder': True,
             'links': [
                 {'url': 'http://google.de/1', 'text': 'About'},
                 {'url': 'http://bing.de/2', 'text': 'Getting started'},
