@@ -45,6 +45,20 @@ a {
 }
 
 
+abbr[data-original-title], abbr[title] {
+	border-width: 0;
+	text-decoration: underline dotted;
+
+	&::after {
+		font-family: FontAwesome;
+		content: "\202f\f29c";
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: inherit;
+		text-rendering: auto;
+	}
+}
+
+
 .background-container {
 	// wrapper around whole page with background image
 	background-position: center;

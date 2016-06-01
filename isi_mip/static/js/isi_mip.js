@@ -411,6 +411,18 @@ $(function() {
 
 
 $(function() {
+	$('abbr[data-original-title], abbr[title]').each(function() {
+		$(this).popover({
+			'template': '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>',
+			'content': $(this).attr('title'),
+		});
+	})
+});
+
+
+
+
+$(function() {
 	// Paper editor
 
 
