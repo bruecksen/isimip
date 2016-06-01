@@ -458,11 +458,44 @@ $(function() {
 
 					var paper = data.message.items[0];
 
+
+					if (paper.author && paper.author[0]) {
+						paperAuthor = paper.author[0].family;
+
+						if (paper.author[0].given) {
+							paperAuthor += ', '+paper.author[0].given.charAt(0)+'.';
+						} else {
+							paperAuthor = '';
+						}
+
+					} else {
+						paperAuthor = '';
+					}
+
+					if (paper.title) {
+						var paperTitle = paper.title[0];
+					} else {
+						paperTitle = '';
+					}
+
+					if (paper['container-title']) {
+						paperJournal = paper['container-title'][0];
+					} else {
+						paperJournal = '';
+					}
+
+					paperVolume = paper.volume;
+					paperPage = paper.page;
+
 					var paperDoi = paper.DOI;
-					var paperIssn = paper.ISSN;
 					var paperUrl = paper.URL;
-					var paperDate = paper.created.timestamp;
-					var paperTitle = paper.title[0];
+
+					if (paper.created && paper.created.timestamp) {
+						var paperDate = new Date(paper.created.timestamp);
+						var paperDate = paperDate.getFullYear();
+					} else {
+						paperDate = '';
+					}
 
 					// clone template
 					var template = paperEditor.find('.widget-paper-visualisation-template').html();
@@ -470,9 +503,12 @@ $(function() {
 
 					// fill template
 					var newPaper = paperEditor.find('.widget-paper-list .widget-paper-visualisation').last();
+					newPaper.find('.paper-author').val(paperAuthor);
 					newPaper.find('.paper-title').val(paperTitle);
+					newPaper.find('.paper-journal').val(paperJournal);
+					newPaper.find('.paper-volume').val(paperVolume);
+					newPaper.find('.paper-page').val(paperPage);
 					newPaper.find('.paper-doi').val(paperDoi);
-					newPaper.find('.paper-issn').val(paperIssn);
 					newPaper.find('.paper-url').val(paperUrl);
 					newPaper.find('.paper-date').val(paperDate);
 

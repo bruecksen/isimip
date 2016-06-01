@@ -9,10 +9,13 @@
 	<div class="widget-paper-list">
 	{% for paper in papers %}
 		<div class="widget-paper-visualisation">
+			<label>Author <input class="paper-author" name="paper-author" value="{{ paper.author }}"></label>
 			<label>Title <input class="paper-title" name="paper-title" value="{{ paper.title }}"></label>
-			<label>DOI <input class="paper-doi" name="paper-doi" value="{{ paper.doi }}"></label>
+			<label>Journal <input class="paper-journal" name="paper-journal" value="{{ paper.journal }}"></label>
+			<label>Volume <input class="paper-volume" name="paper-volume" value="{{ paper.volume }}"></label>
+			<label>Page <input class="paper-page" name="paper-page" value="{{ paper.page }}"></label>
 			<label>Date <input class="paper-date" name="paper-date" value="{{ paper.date }}"></label>
-			<label>ISSN <input class="paper-issn" name="paper-issn" value="{{ paper.issn }}"></label>
+			<label>DOI <input class="paper-doi" name="paper-doi" value="{{ paper.doi }}"></label>
 			<label>URL <input class="paper-url" name="paper-url" value="{{ paper.url }}"></label>
 			<button class="btn btn-link widget-paper-removebutton">remove this paper</button>
 		</div>
@@ -21,10 +24,13 @@
 
 	<div class="widget-paper-visualisation-template" style="display: none;">
 		<div class="widget-paper-visualisation">
+			<label>Author <input class="paper-author" name="paper-author"></label>
 			<label>Title <input class="paper-title" name="paper-title"></label>
-			<label>DOI <input class="paper-doi" name="paper-doi"></label>
+			<label>Journal <input class="paper-journal" name="paper-journal"></label>
+			<label>Volume <input class="paper-volume" name="paper-volume"></label>
+			<label>Page <input class="paper-page" name="paper-page"></label>
 			<label>Date <input class="paper-date" name="paper-date"></label>
-			<label>ISSN <input class="paper-issn" name="paper-issn"></label>
+			<label>DOI <input class="paper-doi" name="paper-doi"></label>
 			<label>URL <input class="paper-url" name="paper-url"></label>
 			<button class="btn btn-link widget-paper-removebutton">remove this paper</button>
 		</div>
