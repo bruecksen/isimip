@@ -1801,6 +1801,16 @@ data = {
 
 
 
+    'twitter_empty': {
+        'name': 'Twitter Empty',
+        'template': 'widgets/twitter.html',
+        'context': {
+            'username': 'ISIMIPImpacts',
+            'timeline': False,
+        },
+    },
+
+
 
     'footer': {
         'name': 'Footer',
