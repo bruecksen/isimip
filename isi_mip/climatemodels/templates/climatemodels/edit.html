@@ -4,8 +4,8 @@
 	<div class="container">
 		<br>
 		{% breadcrumb %}
-		{% block title %}
-			{% include 'widgets/heading1.html' with text='Edit '|add:subpage.title %}
+		{% block pagetitle %}
+			{% include 'widgets/heading2.html' with text='Edit '|add:subpage.title %}
 		{% endblock %}
 		{% block content %}
 			<form method="POST">
