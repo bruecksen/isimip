@@ -1321,6 +1321,9 @@ h4, .h4 {
 
 
 .widget-nullboolean, .widget-multiselect {
+	.control-label {
+		margin-right: 10px;
+	}
 
 	.widget-options {
 		display: inline-block;
@@ -1380,14 +1383,8 @@ h4, .h4 {
 	.widget-options {
 
 		label.radio-inline, label.checkbox-inline {
-
-			+ label.radio-inline, + label.checkbox-inline {
-				margin-left: 10px;
-
-				span {
-					//border-left-width: 1px;
-				}
-			}
+			margin-right: 10px;
+			margin-bottom: 10px;
 		}
 
 		&.widget-options-notchecked {
@@ -1412,6 +1409,10 @@ h4, .h4 {
 	.widget-select-custom {
 		// Input for new tags
 		margin-top: 15px;
+
+		input {
+			max-width: 400px;
+		}
 	}
 }
 
