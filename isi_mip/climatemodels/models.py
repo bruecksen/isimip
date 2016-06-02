@@ -29,10 +29,10 @@ class ReferencePaper(Paper):
 
     def entry_with_link(self):
         author = "{} et al. ".format(self.lead_author) if self.lead_author else ''
-        title = "<a target='_blank' href='http://dx.doi.org/{0.doi}'>{0.title}</a>".format(self) if self.doi else self.title
-        journal = "{0.journal_name},{0.journal_volume},{0.journal_pages}".format(self)
+        title = "<a target='_blank' href='http://dx.doi.org/{0.doi}'>{0.title}</a>. ".format(self) if self.doi else self.title
+        journal = "{0.journal_name},{0.journal_volume},{0.journal_pages},".format(self) if self.journal_name else ''
         year = self.first_published.year if self.first_published else ''
-        return "{}{}. {},{}".format(author,title,journal,year)
+        return "{}{}{}{}".format(author,title,journal,year)
 
 
 class ClimateDataType(models.Model):
