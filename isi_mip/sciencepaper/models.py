@@ -22,7 +22,7 @@ class Author(models.Model):
 
 class Paper(models.Model):
     title = models.CharField(max_length=1000)
-    doi = models.CharField(max_length=500, null=True, blank=True, unique=True)
+    doi = models.CharField(max_length=500, null=True, blank=True)
 
     lead_author = models.CharField(max_length=500, blank=True, null=True)
     authors = models.ManyToManyField(Author, blank=True)

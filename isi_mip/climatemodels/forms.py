@@ -67,7 +67,6 @@ class ImpactModelForm(forms.ModelForm):
         else:
             try:
                 rp = ReferencePaper.objects.get_or_create(title=args['title'])[0]
-                rp.doi = args['doi']
             except ReferencePaper.MultipleObjectsReturned:
                 rp = ReferencePaper.objects.create(title=args['title'], doi=args['doi'])
         rp.lead_author = args['lead_author']
