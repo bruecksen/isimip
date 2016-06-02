@@ -16,11 +16,13 @@ class MyModelSingleChoiceField(forms.ModelChoiceField):
         self.fieldname = fieldname
 
     def add_new_choices(self, value):
+        if value in self.empty_values:
+            return None
         key = self.to_field_name or 'pk'
         try:
             self.queryset.get(**{key: value})
             new_value = value
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, self.queryset.model.DoesNotExist):
             new_v = self.queryset.get_or_create(**{self.fieldname: value})[0]
             new_value = str(getattr(new_v, key))
         value = new_value
@@ -40,13 +42,15 @@ class MyModelMultipleChoiceField(forms.ModelMultipleChoiceField):
         self.fieldname = fieldname
 
     def add_new_choices(self, value):
+        if value in self.empty_values:
+            return None
         key = self.to_field_name or 'pk'
         new_values = []
         for pk in value:
             try:
                 self.queryset.get(**{key: pk})
                 new_values += [pk]
-            except (ValueError, TypeError):
+            except (ValueError, TypeError, self.queryset.model.DoesNotExist):
                 new_v = self.queryset.get_or_create(**{self.fieldname: pk})[0]
                 new_values += [str(getattr(new_v, key))]
         value = new_values
