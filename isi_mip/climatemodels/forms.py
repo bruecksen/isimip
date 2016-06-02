@@ -59,6 +59,8 @@ class ImpactModelForm(forms.ModelForm):
 
     @staticmethod
     def _ref_paper(args):
+        if not args['doi'] and not args['title']:
+            return None
         if args['doi']:
             rp = ReferencePaper.objects.get_or_create(doi=args['doi'])[0]
             rp.title = args['title']
