@@ -44,8 +44,11 @@ def impact_model_assign(request, username=None):
 
 
 def impact_model_details(page, request, id):
-    im = ImpactModel.objects.get(id=id)
-    im_values = im.values_to_tuples() + im.fk_sector.values_to_tuples()
+    impactmodel = ImpactModel.objects.get(id=id)
+    subpage = {'title': 'Impact Model: %s' % impactmodel.name, 'url': ''}
+    context = {'page': page, 'subpage': subpage, 'headline': impactmodel.name}
+
+    im_values = impactmodel.values_to_tuples() + impactmodel.fk_sector.values_to_tuples()
     model_details = []
     for k, v in im_values:
         if any((y for x, y in v)):
@@ -54,23 +57,17 @@ def impact_model_details(page, request, id):
                    }
             model_details.append(res)
     model_details[0]['opened'] = True
+    context['list'] = model_details
+    context['description'] = urlize(impactmodel.short_description or '')  # or ''
 
-    description = urlize(im.short_description or '')  # or ''
-    context = {
-        'page': page,
-        'subpage': Page(title='Impact Model: %s' % im.name),
-        'description': description,
-        'headline': im.name,
-        'list': model_details,
-    }
-    if request.user == im.owner:
+    if request.user == impactmodel.owner:
         context['editlink'] = '<a href="{}">edit</a>'.format(
-            page.url + page.reverse_subpage('edit', args=(im.id,)))
+            page.url + page.reverse_subpage('edit', args=(impactmodel.id,)))
     else:
         context['editlink'] = ''
     if request.user.is_superuser:
         context['editlink'] += ' | <a href="{}">admin edit</a>'.format(
-            urlresolvers.reverse('admin:climatemodels_impactmodel_change', args=(im.id,)))
+            urlresolvers.reverse('admin:climatemodels_impactmodel_change', args=(impactmodel.id,)))
 
     template = 'climatemodels/details.html'
     return render(request, template, context)
@@ -94,7 +91,12 @@ def impact_model_download(page, request):
 
 def impact_model_edit(page, request, id):
     impactmodel = ImpactModel.objects.get(id=id)
-    context = {'page': page, 'subpage': Page(title='Impact Model: %s' % impactmodel.name)}
+    subpage = {
+        'title': 'Impact Model: %s' % impactmodel.name,
+        'url': page.url + page.reverse_subpage('details', args=(id,)),
+        'subpage': {'title': 'Edit', 'url': ''}
+    }
+    context = {'page': page, 'subpage': subpage}
 
     if request.method == 'POST':
         form = ImpactModelForm(request.POST, instance=impactmodel)
@@ -102,8 +104,12 @@ def impact_model_edit(page, request, id):
         if form.is_valid() and contactform.is_valid():
             form.save()
             contactform.save()
-            messages.success(request, "Changes to your model have been saved successfully.")
-            target_url = page.url + page.reverse_subpage('edit_sector', args=(impactmodel.id,))
+            if 'continue' in request.POST:
+                messages.info(request, "All changes to the base model have been saved. Here you can change sector specific details.")
+                target_url = page.url + page.reverse_subpage('edit_sector', args=(impactmodel.id,))
+            else:
+                messages.success(request, "Changes to your model have been saved successfully.")
+                target_url = page.url + page.reverse_subpage('details', args=(impactmodel.id,))
             return HttpResponseRedirect(target_url)
         else:
             messages.error(request, 'Your form has errors.')
@@ -120,7 +126,12 @@ def impact_model_edit(page, request, id):
 
 def impact_model_sector_edit(page, request, id):
     impactmodel = ImpactModel.objects.get(id=id)
-    context = {'page': page, 'subpage': Page(title='Impact Model: %s' % impactmodel.name)}
+    subpage = {
+        'title': 'Impact Model: %s' % impactmodel.name,
+        'url': page.url + page.reverse_subpage('details', args=(id,)),
+        'subpage': {'title': 'Edit Sector','url': ''}
+    }
+    context = {'page': page, 'subpage': subpage}
     formular = get_sector_form(impactmodel.fk_sector_name)
 
     # No further changes, because the Sector has none.
