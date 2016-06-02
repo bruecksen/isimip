@@ -1,11 +1,12 @@
 from datetime import datetime
 
+import requests
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core import urlresolvers
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http.response import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.utils.html import urlize
 from wagtail.wagtailcore.models import Page
@@ -101,25 +102,6 @@ def impact_model_edit(page, request, id):
         if form.is_valid() and contactform.is_valid():
             form.save()
             contactform.save()
-
-            # save papers
-            titles, dois, dates, issns, urls = request.POST.getlist('paper-title'), request.POST.getlist('paper-doi'), \
-                                               request.POST.getlist('paper-date'), request.POST.getlist('paper-issn'),\
-                                               request.POST.getlist('paper-url')
-            for i, _ in enumerate(titles):
-                if dois[i]:
-                    rp = ReferencePaper.objects.get_or_create(
-                        doi=dois[i],
-                        defaults={'title':titles[i],
-                                  'journal_name': dates[i]})[0]
-                else:
-                    rp = ReferencePaper.objects.create(title=titles[i], journal_name=dates[i])
-                if i==0:
-                    impactmodel.main_reference_paper = rp
-                    impactmodel.save()
-                else:
-                    impactmodel.other_references.add(rp)
-
             messages.success(request, "Changes to your model have been saved successfully.")
             target_url = page.url + page.reverse_subpage('edit_sector', args=(impactmodel.id,))
             return HttpResponseRedirect(target_url)
@@ -132,21 +114,6 @@ def impact_model_edit(page, request, id):
         contactform = ContactPersonFormset(instance=impactmodel)
     context['form'] = form
     context['cform'] = contactform
-    context['papers'] = [{'date': 'Mar 2016',
-             'doi': 'DOIcodeZero',
-             'issn': '90210',
-             'title': 'Die Ottifanten',
-             'url': 'http://sinnwerkstatt.com'},
-            {'date': 'Apr 2016',
-             'doi': 'DOIcodeOne',
-             'issn': '90210',
-             'title': 'Los Simpsons',
-             'url': 'http://sinnwerkstatt.com'},
-            {'date': 'Mai 2016',
-             'doi': 'DOIcodeTwo',
-             'issn': '90210',
-             'title': 'Charmed',
-             'url': 'http://sinnwerkstatt.com'}]
     template = 'climatemodels/edit_impact_model.html'
     return render(request, template, context)
 
@@ -207,3 +174,10 @@ def input_data_details(page, request, id):
                ]
                }
     return render(request, template, context)
+
+
+def crossref_proxy(request):
+    url = 'http://api.crossref.org/works?rows={rows}&query={query}'
+    response = requests.get(url.format(rows=5, query=request.GET['query']))
+    res = response.json()
+    return JsonResponse(res)

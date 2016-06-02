@@ -420,7 +420,12 @@ $(function() {
 });
 
 
-
+Date.prototype.yyyymmdd = function() {
+   var yyyy = this.getFullYear().toString();
+   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+   var dd  = this.getDate().toString();
+   return yyyy +"-"+ (mm[1]?mm:"0"+mm[0]) +"-"+ (dd[1]?dd:"0"+dd[0]); // padding
+  };
 
 $(function() {
 	// Paper editor
@@ -447,7 +452,7 @@ $(function() {
 
 		function addPaper(title) {
 			if (title) {
-				var url = "http://127.0.0.1:8000/static/styleguide/js/crossref-test.json";
+				var url = "/models/crossref/";
 				// http://api.crossref.org/works?rows=1&query=Yolo
 
 				$.getJSON( url, {'query':title}, function( data ) {
@@ -492,7 +497,7 @@ $(function() {
 
 					if (paper.created && paper.created.timestamp) {
 						var paperDate = new Date(paper.created.timestamp);
-						var paperDate = paperDate.getFullYear();
+						var paperDate = paperDate.yyyymmdd();
 					} else {
 						paperDate = '';
 					}
