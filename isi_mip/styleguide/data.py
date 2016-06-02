@@ -1120,6 +1120,17 @@ data = {
             'placeholder': 'Liesschen Müller',
         },
     },
+    'textinput_small': {
+        'name': 'Textinput Small',
+        'template': 'widgets/textinput.html',
+        'context': {
+            'id': 'textinputsmall',
+            'label': 'Name',
+            'value': 'Schon ausgefüllt',
+            'placeholder': 'Liesschen Müller',
+            'small': True,
+        },
+    },
     'textinput_helptext': {
         'name': 'Textinput with Helptext',
         'template': 'widgets/textinput.html',
@@ -1169,6 +1180,17 @@ data = {
             'label': 'Dein Leben',
             'value': 'Schon\nausgefüllt',
             'placeholder': 'Am Anfang war das Lieschen',
+        },
+    },
+    'textarea_small': {
+        'name': 'Textarea Small',
+        'template': 'widgets/textarea.html',
+        'context': {
+            'id': 'textareasmall',
+            'label': 'Dein Leben',
+            'value': 'Schon\nausgefüllt',
+            'placeholder': 'Am Anfang war das Lieschen',
+            'small': True,
         },
     },
     'textarea_error': {

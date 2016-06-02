@@ -9,13 +9,13 @@
 	<div class="widget-paper-list">
 	{% for paper in papers %}
 		<div class="widget-paper-visualisation">
-			<label>Author <input class="paper-author" name="{{ id }}-author" value="{{ paper.author|default:'' }}"></label>
-			<label>Title <input class="paper-title" name="{{ id }}-title" value="{{ paper.title|default:'' }}"></label>
-			<label>Journal <input class="paper-journal" name="{{ id }}-journal" value="{{ paper.journal|default:'' }}"></label>
-			<label>Volume <input class="paper-volume" name="{{ id }}-volume" value="{{ paper.volume|default:'' }}"></label>
-			<label>Page(s) <input class="paper-page" name="{{ id }}-page" value="{{ paper.page|default:'' }}"></label>
-			<label>Date <input class="paper-date" name="{{ id }}-date" value="{{ paper.date|default:'' }}"></label>
-			<label>DOI <input class="paper-doi" name="{{ id }}-doi" value="{{ paper.doi|default:'' }}"></label>
+			<label>Author <input class="paper-author form-control form-control-small" name="{{ id }}-author" value="{{ paper.author|default:'' }}"></label>
+			<label>Title <input class="paper-title form-control form-control-small" name="{{ id }}-title" value="{{ paper.title|default:'' }}"></label>
+			<label>Journal <input class="paper-journal form-control form-control-small" name="{{ id }}-journal" value="{{ paper.journal|default:'' }}"></label>
+			<label>Volume <input class="paper-volume form-control form-control-small" name="{{ id }}-volume" value="{{ paper.volume|default:'' }}"></label>
+			<label>Page(s) <input class="paper-page form-control form-control-small" name="{{ id }}-page" value="{{ paper.page|default:'' }}"></label>
+			<label>Date <input class="paper-date form-control form-control-small" name="{{ id }}-date" value="{{ paper.date|default:'' }}"></label>
+			<label>DOI <input class="paper-doi form-control form-control-small" name="{{ id }}-doi" value="{{ paper.doi|default:'' }}"></label>
 			<button class="btn btn-link widget-paper-removebutton">remove this paper</button>
 		</div>
 	{% endfor %}
@@ -23,13 +23,13 @@
 
 	<div class="widget-paper-visualisation-template" style="display: none;">
 		<div class="widget-paper-visualisation">
-			<label>Author <input class="paper-author" name="{{ id }}-author"></label>
-			<label>Title <input class="paper-title" name="{{ id }}-title"></label>
-			<label>Journal <input class="paper-journal" name="{{ id }}-journal"></label>
-			<label>Volume <input class="paper-volume" name="{{ id }}-volume"></label>
-			<label>Page(s) <input class="paper-page" name="{{ id }}-page"></label>
-			<label>Date <input class="paper-date" name="{{ id }}-date"></label>
-			<label>DOI <input class="paper-doi" name="{{ id }}-doi"></label>
+			<label>Author <input class="paper-author form-control form-control-small" name="{{ id }}-author"></label>
+			<label>Title <input class="paper-title form-control form-control-small" name="{{ id }}-title"></label>
+			<label>Journal <input class="paper-journal form-control form-control-small" name="{{ id }}-journal"></label>
+			<label>Volume <input class="paper-volume form-control form-control-small" name="{{ id }}-volume"></label>
+			<label>Page(s) <input class="paper-page form-control form-control-small" name="{{ id }}-page"></label>
+			<label>Date <input class="paper-date form-control form-control-small" name="{{ id }}-date"></label>
+			<label>DOI <input class="paper-doi form-control form-control-small" name="{{ id }}-doi"></label>
 			<button class="btn btn-link widget-paper-removebutton">remove this paper</button>
 		</div>
 	</div>
