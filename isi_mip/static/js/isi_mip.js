@@ -412,11 +412,29 @@ $(function() {
 
 $(function() {
 	$('abbr[data-original-title], abbr[title]').each(function() {
-		$(this).popover({
+		var initiator = $(this);
+
+		initiator.popover({
 			'template': '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>',
-			'content': $(this).attr('title'),
+			'content': initiator.attr('title'),
 		});
-	})
+
+
+		// http://stackoverflow.com/questions/32581987/need-click-twice-after-hide-a-shown-bootstrap-popover
+		initiator.on('hidden.bs.popover', function (e) {
+			$(e.target).data("bs.popover").inState = { click: false, hover: false, focus: false }
+		});
+
+
+		// Close popover on click outside initiating element
+		$('body').click(function(e) {
+			var target = $(e.target);
+			if (!target.closest(initiator).length) {
+				initiator.popover('hide');
+			}
+
+		});
+	});
 });
 
 
