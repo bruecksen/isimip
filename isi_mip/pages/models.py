@@ -198,7 +198,7 @@ class AboutPage(TOCPage):
 
 class GettingStartedPage(RoutablePageWithDefault):
     template = 'pages/default_page.html'
-    parent_page_types = [HomePage]
+    parent_page_types = [HomePage, 'GettingStartedPage']
 
     content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS + [
         ('protocol', ProtocolBlock()),

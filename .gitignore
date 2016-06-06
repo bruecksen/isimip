@@ -12,5 +12,3 @@ emails/
 whoosh_index/
 !.coveragerc
 !.gitignore
-
-isi_mip/static/css/isi_mip.css
