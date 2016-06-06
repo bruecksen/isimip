@@ -333,6 +333,28 @@ h4, .h4 {
 // ############# Widgets
 
 
+.widget-arrow-right-circle {
+	width: 26px;
+	height: auto;
+	display: inline-block;
+	transform: translate(0px, 0.48em);
+
+	circle {
+		fill: @color-black;
+	}
+}
+a .widget-arrow-right-circle {
+	circle {
+		fill: @color-primary;		
+	}
+}
+a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
+	circle {
+		fill: @color-primary-dark;
+	}
+}
+
+
 .widget-header {
 
 // ################ Use Hamburger for SM START ####################
@@ -1314,11 +1336,6 @@ h4, .h4 {
 		a {
 			font-weight: 600;
 		}
-	}
-
-
-	i.fa-2x {
-		transform: translate(0px, 0.14em);
 	}
 }
 
