@@ -1,4 +1,4 @@
-{% load static %}<!DOCTYPE html>
+{% load compile_static static %}<!DOCTYPE html>
 <html lang="de">
 <head>
 	<meta charset="utf-8">
@@ -37,8 +37,9 @@
 	{% block css %}
         <link rel="stylesheet" href="{% static 'vendor/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'vendor/css/font-awesome.min.css' %}">
-		<link rel="stylesheet/less" type="text/css" href="{% static 'css/isi_mip.less' %}"/>
-        <script src="{% static 'vendor/js/less.min.js' %}"></script>
+{#		<link rel="stylesheet/less" type="text/css" href="{% static 'css/isi_mip.less' %}"/>#}
+		<link rel="stylesheet" href="{% static 'css/isi_mip.less'|compile %}"/>
+{#        <script src="{% static 'vendor/js/less.min.js' %}"></script>#}
 	{% endblock %}
 </head>
 

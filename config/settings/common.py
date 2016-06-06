@@ -38,6 +38,7 @@ CMS_APPS = (
     'taggit',
 
     'blog',
+    'static_precompiler',
 )
 # Apps specific for this project go here.
 LOCAL_APPS = (
@@ -185,7 +186,9 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
+    'static_precompiler.finders.StaticPrecompilerFinder',
 )
+STATIC_PRECOMPILER_OUTPUT_DIR='.'
 
 MEDIA_ROOT = str(APPS_DIR('media'))
 MEDIA_URL = '/media/'
