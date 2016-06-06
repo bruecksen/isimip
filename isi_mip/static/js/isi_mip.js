@@ -471,7 +471,7 @@ $(function() {
 		function addPaper(title) {
 			if (title) {
 				var url = "/models/crossref/";
-				// http://api.crossref.org/works?rows=1&query=Yolo
+				// Same Origin mirror of this: http://api.crossref.org/works?rows=1&query=Yolo
 
 				$.getJSON( url, {'query':title}, function( data ) {
 					console.log("Paper found:", data);
@@ -560,6 +560,7 @@ $(function() {
 		// show search form
 		paperEditor.find('.widget-paper-editor-searchform-button').click(function(event) {
 			event.preventDefault();
+			paperEditor.find('.widget-paper-searchform .widget-paper-searchform-title').val('');
 			paperEditor.find('.widget-paper-searchform').show();
 			paperEditor.find('.widget-paper-addbuttons').hide();
 		});
