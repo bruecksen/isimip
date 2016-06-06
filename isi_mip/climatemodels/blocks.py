@@ -33,9 +33,10 @@ class ImpactModelsBlock(StructBlock):
         context['head'] = {
             'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Climate Driver'}, {'text': 'Contact'}]
         }
-        numpages = math.ceil(ims.count() / value.get('rows_per_page'))
+        rows_per_page = value.get('rows_per_page')
+        numpages = math.ceil(ims.count() / rows_per_page)
         context['pagination'] = {
-            'rowsperpage': (value.get('rows_per_page')),
+            'rowsperpage': (rows_per_page),
             'numberofpages': numpages,  # number of pages with current filters
             'pagenumbers': [{'number': i + 1, 'invisible': False} for i in range(numpages)],
             'activepage': 1,  # set to something between 1 and numberofpages
@@ -50,7 +51,7 @@ class ImpactModelsBlock(StructBlock):
             values = [["<a href='details/{0.id}/'>{0.name}</a>".format(imodel)], [imodel.sector]]
             values += [datasets] + [["<br/>".join(cpeople)]]
             row = {
-                'invisible': i >= value.get('rows_per_page'),
+                'invisible': i >= rows_per_page,
                 'cols': [{'texts': x} for x in values]
             }
             context['body']['rows'] += [row]
@@ -72,7 +73,8 @@ class InputDataBlock(StructBlock):
         context['body'] = {'rows': []}
 
         inputdata = InputData.objects.all()
-        numpages = math.ceil(inputdata.count() / value.get('row_limit'))
+        row_limit = value.get('row_limit')
+        numpages = math.ceil(inputdata.count() / row_limit)
 
         for i, idata in enumerate(inputdata):
             link = "<a href='details/{0.id}'>{0.name}</a>".format(idata)
@@ -81,11 +83,11 @@ class InputDataBlock(StructBlock):
                     {'texts': [link]},
                     {'texts': [idata.data_type]},
                     {'texts': [urlize(idata.description)]}],
-                    'invisible': i >= value.get('row_limit')
+                    'invisible': i >= row_limit
                 }
             ]
         context['pagination'] = {
-            'rowsperpage': (value.get('rows_per_page')),
+            'rowsperpage': row_limit,
             'numberofpages': numpages,  # number of pages with current filters
             'pagenumbers': [{'number': i + 1, 'invisible': False} for i in range(numpages)],
             'activepage': 1,  # set to something between 1 and numberofpages
