@@ -22,14 +22,16 @@ class Author(models.Model):
 
 class Paper(models.Model):
     title = models.CharField(max_length=1000)
-    doi = models.CharField(max_length=500, null=True, blank=True, unique=True)
+    doi = models.CharField(max_length=500, null=True, blank=True)
 
+    lead_author = models.CharField(max_length=500, blank=True, null=True)
     authors = models.ManyToManyField(Author, blank=True)
     journal_name = models.CharField(max_length=500, null=True, blank=True)
     journal_volume = models.IntegerField(null=True, blank=True)
     journal_number = models.IntegerField(null=True, blank=True)
     journal_pages = models.CharField(max_length=500, null=True, blank=True)
     first_published = models.DateField(null=True, blank=True)
+    # published_year = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return "%s (%s)" % (self.title, self.doi) if self.doi else self.title

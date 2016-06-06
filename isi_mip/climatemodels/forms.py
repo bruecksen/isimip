@@ -1,9 +1,10 @@
 from django import forms
 from django.forms import inlineformset_factory
+from dateutil.parser import parse
 
 from isi_mip.climatemodels.fields import MyModelSingleChoiceField, MyModelMultipleChoiceField
 from isi_mip.climatemodels.models import *
-from isi_mip.climatemodels.widgets import MyMultiSelect, MyTextInput, MyBooleanSelect
+from isi_mip.climatemodels.widgets import MyMultiSelect, MyTextInput, MyBooleanSelect, RefPaperWidget
 
 ContactPersonFormset = inlineformset_factory(ImpactModel, ContactPerson,
                                              extra=1, max_num=2, min_num=1, fields='__all__',
@@ -22,25 +23,21 @@ class ImpactModelStartForm(forms.ModelForm):
 
 
 class ImpactModelForm(forms.ModelForm):
-    # references = forms.CharField(max_length=400, label='References', required=False)
     region = MyModelMultipleChoiceField(allowcustom=True, queryset=Region.objects, required=True)
     simulation_round = MyModelMultipleChoiceField(allowcustom=True, queryset=SimulationRound.objects)
     spatial_aggregation = MyModelSingleChoiceField(allowcustom=True, queryset=SpatialAggregation.objects)
-    # 'main_reference_paper'
-    # 'other_references'
     climate_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
     climate_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=ClimateVariable.objects)
     socioeconomic_input_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=SocioEconomicInputVariables.objects)
-
     class Meta:
         model = ImpactModel
-        exclude = ('main_reference_paper', 'other_references', 'owner')
-        # fields = '__all__'
+        exclude = ('owner',)
         widgets = {
             'name': MyTextInput(),
             'sector': MyMultiSelect(),
             'version': MyTextInput(),
-            # 'main_reference_paper': MyTextInput(),
+            'main_reference_paper': RefPaperWidget(),
+            'other_references': RefPaperWidget(),
             'short_description': MyTextInput(),
             'spatial_resolution': MyMultiSelect(allowcustom=True),
             'temporal_resolution_climate': MyMultiSelect(allowcustom=True),
@@ -60,8 +57,59 @@ class ImpactModelForm(forms.ModelForm):
             'anything_else': MyTextInput(),
         }
 
-    # def clean_references(self):
-    #     pass  # TODO das muss noch implementiert werden
+    @staticmethod
+    def _ref_paper(args):
+        if not args['doi'] and not args['title']:
+            return None
+        if args['doi']:
+            rp = ReferencePaper.objects.get_or_create(doi=args['doi'])[0]
+            rp.title = args['title']
+        else:
+            try:
+                rp = ReferencePaper.objects.get_or_create(title=args['title'])[0]
+            except ReferencePaper.MultipleObjectsReturned:
+                rp = ReferencePaper.objects.create(title=args['title'], doi=args['doi'])
+        rp.lead_author = args['lead_author']
+        rp.journal_name = args['journal_name']
+        rp.journal_volume = args['journal_volume']
+        rp.journal_pages = args['journal_pages']
+        rp.first_published = args['first_published']
+        rp.save()
+        return rp
+
+    def clean_main_reference_paper(self):
+        myargs = {
+            'lead_author': self.data.getlist('main_reference_paper-author')[0],
+            'title': self.data.getlist('main_reference_paper-title')[0],
+            'journal_name': self.data.getlist('main_reference_paper-journal')[0],
+            'doi': self.data.getlist('main_reference_paper-doi')[0],
+            'journal_volume': self.data.getlist('main_reference_paper-volume')[0] or None,
+            'journal_pages': self.data.getlist('main_reference_paper-page')[0]
+        }
+        try:
+            myargs['first_published'] = parse(self.data.getlist('main_reference_paper-date')[0])
+        except:
+            myargs['first_published'] = None
+        return self._ref_paper(myargs)
+
+
+    def clean_other_references(self):
+        rps = []
+        for i in range(len(self.data.getlist('other_references-title')) - 1): # TODO: tom liefert zu viel :(
+            myargs = {
+                'lead_author': self.data.getlist('other_references-author')[i],
+                'title': self.data.getlist('other_references-title')[i],
+                'journal_name': self.data.getlist('other_references-journal')[i],
+                'doi': self.data.getlist('other_references-doi')[i],
+                'journal_volume': self.data.getlist('other_references-volume')[i] or None,
+                'journal_pages': self.data.getlist('other_references-page')[i]
+            }
+            try:
+                myargs['first_published'] = parse(self.data.getlist('other_references-date')[i])
+            except:
+                myargs['first_published'] = None    
+            rps += [self._ref_paper(myargs)]
+        return rps
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -2,9 +2,11 @@
 {% load breadcrumb template_form %}
 {% block content_container %}
 	<div class="container">
-        <br>
+		<br>
 		{% breadcrumb %}
-		{% include 'widgets/heading1.html' with text=subpage.title %}
+		{% block pagetitle %}
+			{% include 'widgets/heading2.html' with text='Edit '|add:subpage.title %}
+		{% endblock %}
 		{% block content %}
 			<form method="POST">
 				{% block form_content %}

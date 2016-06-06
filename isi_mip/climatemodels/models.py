@@ -27,6 +27,13 @@ class ReferencePaper(Paper):
             return "<a target='_blank' href='http://dx.doi.org/{0.doi}'>{0.title}</a>".format(self)
         return self.title
 
+    def entry_with_link(self):
+        author = "{} et al. ".format(self.lead_author) if self.lead_author else ''
+        title = "<a target='_blank' href='http://dx.doi.org/{0.doi}'>{0.title}</a>. ".format(self) if self.doi else self.title
+        journal = "{0.journal_name},{0.journal_volume},{0.journal_pages},".format(self) if self.journal_name else ''
+        year = self.first_published.year if self.first_published else ''
+        return "{}{}{}{}".format(author,title,journal,year)
+
 
 class ClimateDataType(models.Model):
     name = models.CharField(max_length=500, unique=True)
@@ -117,10 +124,10 @@ class ContactPerson(models.Model):
 
 class InputData(models.Model):
     name = models.CharField(max_length=500, unique=True)
-    data_type = models.ForeignKey(ClimateDataType, null=True, blank=True)
-    scenario = models.ForeignKey(Scenario, null=True, blank=True)
+    data_type = models.ForeignKey(ClimateDataType, null=True, blank=True, on_delete=models.SET_NULL)
+    scenario = models.ForeignKey(Scenario, null=True, blank=True, on_delete=models.SET_NULL)
     variables = models.ManyToManyField(ClimateVariable, blank=True)
-    phase = models.ForeignKey(InputPhase, null=True, blank=True)
+    phase = models.ForeignKey(InputPhase, null=True, blank=True, on_delete=models.SET_NULL)
     description = models.TextField(null=True, blank=True)
     caveats = models.TextField(null=True, blank=True)
     download_instructions = models.TextField(null=True, blank=True)
@@ -171,7 +178,8 @@ class ImpactModel(models.Model):
                                help_text='The model version with which the simulations were run')
     main_reference_paper = models.ForeignKey(
         ReferencePaper, null=True, blank=True, related_name='main_ref', verbose_name='Reference paper: main reference',
-        help_text="The single paper that should be cited when referring to simulation output from this model")
+        help_text="The single paper that should be cited when referring to simulation output from this model",
+        on_delete=models.SET_NULL)
     other_references = models.ManyToManyField(ReferencePaper, blank=True, verbose_name='Reference paper: other references',
                                               help_text='Other papers describing aspects of this model')
     short_description = models.TextField(
@@ -179,7 +187,7 @@ class ImpactModel(models.Model):
         help_text="This short description should assist other researchers in briefly describing the model in a paper.")
 
     # technical information
-    spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True)
+    spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True, on_delete=models.SET_NULL)
                                            #help_text="e.g. regular grid, points, hyrdotopes...")
     spatial_resolution = ChoiceOrOtherField(
         max_length=500, choices=(('0.5°x0.5°', '0.5°x0.5°'),), blank=True, null=True, verbose_name='Spatial Resolution',
@@ -281,12 +289,16 @@ class ImpactModel(models.Model):
         return getattr(self, self.fk_sector_name)
 
     def _get_verbose_field_name(self, field: str) -> str:
-        return self._meta.get_field_by_name(field)[0].verbose_name.title()
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name.title()
+        if fieldmeta.help_text:
+            ret = "<abbr title='{}'>{}</abbr>".format(fieldmeta.help_text, ret)
+        return ret
 
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
         cpers = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.pretty() for x in self.contactperson_set.all()])
-        other_references = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.title_with_link() for x in self.other_references.all()])
+        other_references = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.entry_with_link() for x in self.other_references.all()])
         return [
             ('Basic information', [
                 (vname('sector'), self.sector),
@@ -294,8 +306,8 @@ class ImpactModel(models.Model):
                 ('Contact Person', cpers),
                 (vname('simulation_round'), ', '.join([x.name for x in self.simulation_round.all()])),
                 (vname('version'), self.version),
-                (vname('main_reference_paper'), self.main_reference_paper.title_with_link() if self.main_reference_paper else None),
-                ('Other references', other_references),
+                (vname('main_reference_paper'), self.main_reference_paper.entry_with_link() if self.main_reference_paper else None),
+                (vname('other_references'), other_references),
                 # (vname('short_description'), self.short_description),
             ]),
             ('Resolution', [
@@ -768,7 +780,7 @@ class AgroEconomicModelling(Sector):
 
 class OutputData(models.Model):
     sector = models.CharField(max_length=500, choices=ImpactModel.SECTOR_CHOICES)
-    model = models.ForeignKey(ImpactModel)
+    model = models.ForeignKey(ImpactModel, null=True, blank=True, on_delete=models.SET_NULL)
     scenarios = models.ManyToManyField(Scenario)
     drivers = models.ManyToManyField(InputData)
     date = models.DateField()

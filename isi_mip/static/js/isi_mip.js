@@ -411,6 +411,41 @@ $(function() {
 
 
 $(function() {
+	$('abbr[data-original-title], abbr[title]').each(function() {
+		var initiator = $(this);
+
+		initiator.popover({
+			'template': '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>',
+			'content': initiator.attr('title'),
+		});
+
+
+		// http://stackoverflow.com/questions/32581987/need-click-twice-after-hide-a-shown-bootstrap-popover
+		initiator.on('hidden.bs.popover', function (e) {
+			$(e.target).data("bs.popover").inState = { click: false, hover: false, focus: false }
+		});
+
+
+		// Close popover on click outside initiating element
+		$('body').click(function(e) {
+			var target = $(e.target);
+			if (!target.closest(initiator).length) {
+				initiator.popover('hide');
+			}
+
+		});
+	});
+});
+
+
+Date.prototype.yyyymmdd = function() {
+   var yyyy = this.getFullYear().toString();
+   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+   var dd  = this.getDate().toString();
+   return yyyy +"-"+ (mm[1]?mm:"0"+mm[0]) +"-"+ (dd[1]?dd:"0"+dd[0]); // padding
+  };
+
+$(function() {
 	// Paper editor
 
 
@@ -435,7 +470,7 @@ $(function() {
 
 		function addPaper(title) {
 			if (title) {
-				var url = "http://127.0.0.1:8000/static/styleguide/js/crossref-test.json";
+				var url = "/models/crossref/";
 				// http://api.crossref.org/works?rows=1&query=Yolo
 
 				$.getJSON( url, {'query':title}, function( data ) {
@@ -446,11 +481,44 @@ $(function() {
 
 					var paper = data.message.items[0];
 
+
+					if (paper.author && paper.author[0]) {
+						paperAuthor = paper.author[0].family;
+
+						if (paper.author[0].given) {
+							paperAuthor += ', '+paper.author[0].given.charAt(0)+'.';
+						} else {
+							paperAuthor = '';
+						}
+
+					} else {
+						paperAuthor = '';
+					}
+
+					if (paper.title) {
+						var paperTitle = paper.title[0];
+					} else {
+						paperTitle = '';
+					}
+
+					if (paper['container-title']) {
+						paperJournal = paper['container-title'][0];
+					} else {
+						paperJournal = '';
+					}
+
+					paperVolume = paper.volume;
+					paperPage = paper.page;
+
 					var paperDoi = paper.DOI;
-					var paperIssn = paper.ISSN;
 					var paperUrl = paper.URL;
-					var paperDate = paper.created.timestamp;
-					var paperTitle = paper.title[0];
+
+					if (paper.created && paper.created.timestamp) {
+						var paperDate = new Date(paper.created.timestamp);
+						var paperDate = paperDate.yyyymmdd();
+					} else {
+						paperDate = '';
+					}
 
 					// clone template
 					var template = paperEditor.find('.widget-paper-visualisation-template').html();
@@ -458,9 +526,12 @@ $(function() {
 
 					// fill template
 					var newPaper = paperEditor.find('.widget-paper-list .widget-paper-visualisation').last();
+					newPaper.find('.paper-author').val(paperAuthor);
 					newPaper.find('.paper-title').val(paperTitle);
+					newPaper.find('.paper-journal').val(paperJournal);
+					newPaper.find('.paper-volume').val(paperVolume);
+					newPaper.find('.paper-page').val(paperPage);
 					newPaper.find('.paper-doi').val(paperDoi);
-					newPaper.find('.paper-issn').val(paperIssn);
 					newPaper.find('.paper-url').val(paperUrl);
 					newPaper.find('.paper-date').val(paperDate);
 

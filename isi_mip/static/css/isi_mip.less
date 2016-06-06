@@ -45,6 +45,21 @@ a {
 }
 
 
+abbr[data-original-title], abbr[title] {
+	border-width: 0;
+	text-decoration: none;
+
+	&::after {
+		font-family: FontAwesome;
+		content: "\202f\f29c";
+		font: normal normal normal 14px/1 FontAwesome;
+		font-size: 90%;
+		vertical-align: 0.4em;
+		text-rendering: auto;
+	}
+}
+
+
 .background-container {
 	// wrapper around whole page with background image
 	background-position: center;
@@ -103,6 +118,10 @@ a {
 		font-weight: normal;
 	}
 }
+textarea.form-control.form-control-small {
+	height: auto;
+}
+
 select.form-control {
 	max-width: 300px;
 	display: inline-block;
@@ -1304,8 +1323,18 @@ h4, .h4 {
 }
 
 
+.widget-textinput, .widget-textarea {
+	input.form-control.form-control-small, textarea.form-control.form-control-small {
+		max-width: 400px;
+		resize: both;
+	}
+}
+
 
 .widget-nullboolean, .widget-multiselect {
+	.control-label {
+		margin-right: 10px;
+	}
 
 	.widget-options {
 		display: inline-block;
@@ -1365,14 +1394,8 @@ h4, .h4 {
 	.widget-options {
 
 		label.radio-inline, label.checkbox-inline {
-
-			+ label.radio-inline, + label.checkbox-inline {
-				margin-left: 10px;
-
-				span {
-					//border-left-width: 1px;
-				}
-			}
+			margin-right: 10px;
+			margin-bottom: 10px;
 		}
 
 		&.widget-options-notchecked {
@@ -1397,6 +1420,10 @@ h4, .h4 {
 	.widget-select-custom {
 		// Input for new tags
 		margin-top: 15px;
+
+		input {
+			max-width: 400px;
+		}
 	}
 }
 
@@ -1415,7 +1442,8 @@ h4, .h4 {
 				text-align: right;
 
 				input {
-					width: 650px;
+					width: 610px;
+					display: inline-block;
 				}
 			}
 		}
@@ -1460,6 +1488,11 @@ h4, .h4 {
 	.widget-twitter-timeline-border {
 		border: 1px solid @color-neutral-light;
 		padding: 30px 15px 15px 15px;
+	}
+
+	.twitter-timeline-empty {
+		font-style: italic;
+		margin-top: 15px;
 	}
 
 	.twitter-timeline-update {

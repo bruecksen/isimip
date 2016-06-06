@@ -14,30 +14,30 @@ def breadcrumb(context, page=None, subpage=None, **kwargs):
 
     children = page.get_ancestors().live()
     for child in children[1:]:
-        active = False
         links.append({
             'text': child.title,
             'href': child.url,
-            'active': active,
         })
     context = {
         'links': links,
     }
-
-    if not subpage:
+    links.append({
+        'text': page.title,
+        'href': page.url,
+    })
+    if subpage:
         links.append({
-            'text': page.title,
+            'text': subpage['title'],
+            'href': subpage['url'],
         })
 
-    else:
-        links.append({
-            'text': page.title,
-            'href': page.url,
-            'active': True,
-        })
-        links.append({
-            'text': subpage.title,
-        })
+        if 'subpage' in subpage:
+            links.append({
+                'text': subpage['subpage']['title'],
+                'href': subpage['subpage']['url'],
+            })
+
+    links[-1]['href'] = ''
     context.update(kwargs)
     template = 'widgets/breadcrumb.html'
     return render_to_string(template, context=context)

@@ -2,7 +2,7 @@
 {% if label %}
 <label for="{{ id }}" class="control-label">{{ label }}{% if required %}<span class="asteriskField">*</span>{% endif %}</label>
 {% endif %}
-<input {% if required %}required="required" {% endif %}type="{% if type %}{{ type }}{% else %}text{% endif %}" class="form-control" id="{{ id }}" name="{{ id }}" value="{{ value }}" autocomplete="off"{% if placeholder %} placeholder="{{ placeholder }}"{% endif %}{% if required %} required="required"{% endif %}{% if readonly %} readonly="readonly"{% endif %}>
+<input {% if required %}required="required" {% endif %}type="{% if type %}{{ type }}{% else %}text{% endif %}" class="form-control{% if small %} form-control-small{% endif %}" id="{{ id }}" name="{{ id }}" value="{{ value }}" autocomplete="off"{% if placeholder %} placeholder="{{ placeholder }}"{% endif %}{% if required %} required="required"{% endif %}{% if readonly %} readonly="readonly"{% endif %}>
 {% if help %}
 	<p class="help-block">{{ help }}</p>
 {% endif %}
