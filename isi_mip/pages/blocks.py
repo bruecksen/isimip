@@ -209,11 +209,11 @@ class FAQsBlock(StructBlock):
 
     class Meta:
         icon = 'fa fa-medkit'
-        template = 'widgets/expandable.html'
+        template = 'blocks/faq_block.html'
 
     def get_context(self, value):
         context = super().get_context(value)
-        context['headline'] = value.get('title')
+        context['titel'] = value.get('title')
         context['list'] = []
         for faq in value.get('faqs'):
             res = {'term': faq.get('question'),
