@@ -247,7 +247,6 @@ class ImpactModelsPage(RoutablePageWithDefault):
 
     @route(r'edit/(?P<id>[0-9]*)/$')
     def edit(self, request, id=None):
-        # return ImpactModelEdit.as_view()
         return impact_model_edit(self, request, id)
 
     @route(r'edit/sector/(?P<id>[0-9]*)/$')
