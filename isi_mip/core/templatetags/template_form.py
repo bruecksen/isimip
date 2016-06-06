@@ -50,6 +50,7 @@ def template_form(form, **kwargs):
         context['readonly'] = 'readonly' in field.field.widget.attrs and field.field.widget.attrs['readonly']
 
         if isinstance(field.field.widget, MyTextInput):
+            context['small'] = True
             template = 'widgets/textinput.html'
         elif isinstance(field.field.widget, MyBooleanSelect):
             context['nullable'] = field.field.widget.nullable
