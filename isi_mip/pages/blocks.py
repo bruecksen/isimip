@@ -84,6 +84,7 @@ class BigTeaserBlock(StructBlock):
             'title': value.get('subtitle'),
             'description': value.get('text'),
             'divider': True,
+            'calendaricon': True,
             'date': "%s to %s" % (formats.date_format(value.get('from_date'), "SHORT_DATE_FORMAT"),
                                   formats.date_format(value.get('to_date'), "SHORT_DATE_FORMAT")),
         })
