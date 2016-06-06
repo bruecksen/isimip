@@ -2,10 +2,6 @@
 	{% if label %}
 		<label class="control-label">{{ label }}{% if required %}<span class="asteriskField">*</span>{% endif %}</label>
 	{% endif %}
-	{% if help %}
-		<p class="help-block">{{ help }}</p>
-	{% endif %}
-	<br>
 	<div class="widget-paper-list">
 	{% for paper in papers %}
 		<div class="widget-paper-visualisation">
@@ -47,5 +43,7 @@
 		<button class="btn btn-default widget-paper-editor-search-cancelbutton">cancel</button>
 		<button class="btn btn-default widget-paper-editor-search-button">search</button>
 	</div>
-
+	{% if help %}
+		<p class="help-block">{{ help }}</p>
+	{% endif %}
 </div><!-- widget-paper-editor -->
