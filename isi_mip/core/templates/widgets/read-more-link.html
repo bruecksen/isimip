@@ -2,6 +2,9 @@
 	<a href="{{ url }}"{% if external %} target="_blank"{% endif %}{% if tableid %} data-tableid="{{ tableid }}"{% endif %}>
 		{{ text|safe }}
 		{% if arrow %}
+			{% if text %}
+				&nbsp;
+			{% endif %}
 			<i class="fa fa-chevron-circle-right fa-2x"></i>
 		{% endif %}
 		{% if tinyarrow %}
