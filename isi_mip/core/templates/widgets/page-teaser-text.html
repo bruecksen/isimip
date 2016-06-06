@@ -4,7 +4,9 @@
 {% endif %}
 {% if date and datebeforetitle %}
 	<p class="widget-page-teaser-text-date">
-		<i class="fa fa-calendar"></i>
+		{% if calendaricon %}
+			<i class="fa fa-calendar"></i>
+		{% endif %}
 		{{ date }}
 	</p>
 {% endif %}
@@ -21,7 +23,9 @@
 {% endif %}
 {% if date and not datebeforetitle %}
 	<p class="widget-page-teaser-text-date">
-		<i class="fa fa-calendar"></i>
+		{% if calendaricon %}
+			<i class="fa fa-calendar"></i>
+		{% endif %}
 		{{ date }}
 	</p>
 {% endif %}
