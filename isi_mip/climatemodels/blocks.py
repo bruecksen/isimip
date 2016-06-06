@@ -42,10 +42,9 @@ class ImpactModelsBlock(StructBlock):
         }
         context['norowvisible'] = False  # true when no row is visible
 
-        bodyrows = []
+        context['body'] = {'rows': []}
         for i, imodel in enumerate(ims):
             datasets = [str(x) for x in imodel.climate_data_sets.all()]
-            # import ipdb; ipdb.set_trace()
             cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
                        imodel.contactperson_set.all()]
             values = [["<a href='details/{0.id}/'>{0.name}</a>".format(imodel)], [imodel.sector]]
@@ -54,9 +53,8 @@ class ImpactModelsBlock(StructBlock):
                 'invisible': i >= value.get('rows_per_page'),
                 'cols': [{'texts': x} for x in values]
             }
-            bodyrows.append(row)
+            context['body']['rows'] += [row]
 
-        context['body'] = {'rows': bodyrows}
         return context
 
     class Meta:
@@ -71,13 +69,11 @@ class InputDataBlock(StructBlock):
         context = super().get_context(value)
 
         context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Data Type'}, {'text': 'Description'}]}
-        context['body'] = {
-            'rowlimit': {'buttontext': 'See all <i class="fa fa-chevron-down"></i>',
-                         'rownumber': value.get('row_limit')},
-            'rows': []
-        }
+        context['body'] = {'rows': []}
 
         inputdata = InputData.objects.all()
+        numpages = math.ceil(inputdata.count() / value.get('row_limit'))
+
         for i, idata in enumerate(inputdata):
             link = "<a href='details/{0.id}'>{0.name}</a>".format(idata)
             context['body']['rows'] += [
@@ -88,9 +84,15 @@ class InputDataBlock(StructBlock):
                     'invisible': i >= value.get('row_limit')
                 }
             ]
-
-        if value.get('row_limit') < inputdata.count():
-            context['showalllink'] = {'buttontext': 'See all <i class="fa fa-chevron-down"></i>'}
+        context['pagination'] = {
+            'rowsperpage': (value.get('rows_per_page')),
+            'numberofpages': numpages,  # number of pages with current filters
+            'pagenumbers': [{'number': i + 1, 'invisible': False} for i in range(numpages)],
+            'activepage': 1,  # set to something between 1 and numberofpages
+        }
+        # if value.get('row_limit') < inputdata.count():
+        #     context['showalllink'] = {'buttontext': 'See all <i class="fa fa-chevron-down"></i>'}
+        print(context)
         return context
 
     class Meta:
