@@ -1051,21 +1051,24 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 		color: @color-black;
 
 		&:hover, &:focus {
-			color: @color-secondary;
+			color: @color-primary-dark;
 			text-decoration: none;
 		}
 
 		&.widget-pagination-pagelink-active {
-			background-color: @color-secondary;
+			background-color: @color-primary;
 			color: @color-white;
 
 			&:hover, &:focus {
 				color: @color-white;
+				background-color: @color-primary-dark;
 			}
 		}
 	}
 	.widget-pagination-prevbutton, .widget-pagination-nextbutton {
 		font-size: 14px;
+		color: @color-primary;
+
 		@media(min-width:768px) {
 			font-size: 18px;
 		}
@@ -1077,7 +1080,7 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 		cursor: pointer;
 
 		&:hover {
-			color: @color-secondary;
+			color: @color-primary-dark;
 		}
 
 		&.disabled {
@@ -1584,6 +1587,36 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 			border-bottom-width: 0;
 		}
 	}
+}
+
+
+// Spezialität von Nuts (Contact Person)
+.major-tom-rapper label {
+	margin-right:10px;
+}
+.major-tom-rapper input {
+	margin-right:15px;
+	display: inline-block;
+	max-width: 150px;
+	height: 33px;
+	font-size: 13px;
+	font-weight: normal;
+	border-radius: 4px;
+	border-width: 1px;
+	-webkit-transition: border-color 0.5s, background-color 0.5s;
+	transition: border-color 0.5s, background-color 0.5s;
+	padding: 6px 12px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+}
+.major-tom-rapper input:hover, .major-tom-rapper input:focus {
+	border-color: #4a4a4a;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 0, 0, 0.3);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 0, 0, 0.3);
+	outline: 0;
 }
 
 
