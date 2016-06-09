@@ -206,3 +206,11 @@ INVITATION_VALID_DAYS = 7
 
 WAGTAIL_SITE_NAME = 'ISIMIP'
 # WAGTAIL_ENABLE_UPDATE_CHECK = False
+
+TWITTER_CREDENTIALS = env.list('DJANGO_TWITTER_CREDENTIALS', default=[None,None,None,None])
+TWITTER_TIMELINE = {
+    'consumer_key': TWITTER_CREDENTIALS[0],
+    'consumer_secret': TWITTER_CREDENTIALS[1],
+    'access_token': TWITTER_CREDENTIALS[2],
+    'access_token_secret': TWITTER_CREDENTIALS[3]
+}
