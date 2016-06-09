@@ -98,7 +98,7 @@ class ImpactModelForm(forms.ModelForm):
 
     def clean_other_references(self):
         rps = []
-        for i in range(len(self.data.getlist('other_references-title'))):
+        for i in range(len(self.data.getlist('other_references-title')) -1):
             myargs = {
                 'lead_author': self.data.getlist('other_references-author')[i],
                 'title': self.data.getlist('other_references-title')[i],

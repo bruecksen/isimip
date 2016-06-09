@@ -207,7 +207,9 @@ class ImpactModel(models.Model):
     temporal_resolution_soil = ChoiceOrOtherField(
         max_length=500, choices=(('constant', 'constant'),), blank=True, null=True, verbose_name='Temporal resolution of input data: soil',
                                                   help_text="ISIMIP data was fixed over time")
-    temporal_resolution_info = models.TextField(verbose_name='Additional temporal resolution information', blank=True)
+    temporal_resolution_info = models.TextField(
+        verbose_name='Additional temporal resolution information', blank=True,
+        help_text='Anything else necessary to understand the temporal resolution at which the model operates')
 
     # input data
     climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Climate data sets used",
