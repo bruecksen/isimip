@@ -192,6 +192,8 @@ class ImpactModel(models.Model):
     spatial_resolution = ChoiceOrOtherField(
         max_length=500, choices=(('0.5°x0.5°', '0.5°x0.5°'),), blank=True, null=True, verbose_name='Spatial Resolution',
         help_text="The spatial resolution at which the ISIMIP simulations were run, if on a regular grid. Data was provided on a 0.5°x0.5° grid")
+    spatial_resolution_info = models.TextField(blank=True, verbose_name='Additional spatial aggregation & resolution information',
+                                               help_text='Anything else necessary to understand the spatial aggregation and resolution at which the model operates')
     TEMPORAL_RESOLUTION_CLIMATE_CHOICES = (('daily', 'daily'), ('monthly', 'monthly'), ('annual', 'annual'),)
     temporal_resolution_climate = ChoiceOrOtherField(
         max_length=500, choices=TEMPORAL_RESOLUTION_CLIMATE_CHOICES, blank=True, null=True, verbose_name='Temporal resolution of input data: climate variables',
@@ -205,6 +207,7 @@ class ImpactModel(models.Model):
     temporal_resolution_soil = ChoiceOrOtherField(
         max_length=500, choices=(('constant', 'constant'),), blank=True, null=True, verbose_name='Temporal resolution of input data: soil',
                                                   help_text="ISIMIP data was fixed over time")
+    temporal_resolution_info = models.TextField(verbose_name='Additional temporal resolution information', blank=True)
 
     # input data
     climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Climate data sets used",
@@ -212,6 +215,8 @@ class ImpactModel(models.Model):
     climate_variables = models.ManyToManyField(
         ClimateVariable, blank=True, verbose_name='Climate variables',
         help_text="Including variables that were derived from those provided in the ISIMIP input data set")
+    climate_variables_info = models.TextField(blank=True, verbose_name='Additional climate variables information',
+                                              help_text='Including how variables were derived that were not included in the ISIMIP input data')
     socioeconomic_input_variables = models.ManyToManyField(
         SocioEconomicInputVariables, blank=True, verbose_name="Socio-economic input variables",
         help_text="Including resolution where relevant")

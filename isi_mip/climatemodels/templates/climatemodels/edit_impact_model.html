@@ -37,15 +37,18 @@
 				{% include 'widgets/heading3.html' with text='Technical Information' %}
 				{{ nf.spatial_aggregation}}
 				{{ nf.spatial_resolution}}
+				{{ nf.spatial_resolution_info}}
 				{{ nf.temporal_resolution_climate}}
 				{{ nf.temporal_resolution_co2}}
 				{{ nf.temporal_resolution_land}}
 				{{ nf.temporal_resolution_soil}}
+				{{ nf.temporal_resolution_info}}
 			</fieldset>
 			<fieldset>
 				{% include 'widgets/heading3.html' with text='Input Data' %}
 				{{ nf.climate_data_sets}}
 				{{ nf.climate_variables}}
+				{{ nf.climate_variables_info}}
 				{{ nf.socioeconomic_input_variables}}
 				{{ nf.soil_dataset}}
 				{{ nf.additional_input_data_sets}}

@@ -78,7 +78,6 @@ def input_data_details(page, request, id):
                    {
                        'notoggle': True,
                        'opened': True,
-                       # 'term': data.name, # TODO: Tom schau mal hier.
                        'definitions': [
                            {'text': 'Data Type: %s' % data.data_type},
                            {'text': 'Scenario: %s' % data.scenario},
@@ -106,10 +105,14 @@ def crossref_proxy(request):
 # authentication required.. #########################################################
 def impact_model_edit(page, request, id):
     if not request.user.is_authenticated():
-        return HttpResponseRedirect('/')
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
     impactmodel = ImpactModel.objects.get(id=id)
     if not (request.user == impactmodel.owner or request.user.is_superuser):
-        return HttpResponseRedirect('/')
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
 
     subpage = {
         'title': 'Impact Model: %s' % impactmodel.name,
@@ -146,10 +149,14 @@ def impact_model_edit(page, request, id):
 
 def impact_model_sector_edit(page, request, id):
     if not request.user.is_authenticated():
-        return HttpResponseRedirect('/')
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
     impactmodel = ImpactModel.objects.get(id=id)
     if not (request.user == impactmodel.owner or request.user.is_superuser):
-        return HttpResponseRedirect('/')
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
 
     subpage = {
         'title': 'Impact Model: %s' % impactmodel.name,
@@ -181,7 +188,9 @@ def impact_model_sector_edit(page, request, id):
 
 def impact_model_assign(request, username=None):
     if not request.user.is_superuser:
-        return HttpResponseRedirect('/')
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
     user = User.objects.get(username=username)
     impactmodel = ImpactModel(owner=user)
 

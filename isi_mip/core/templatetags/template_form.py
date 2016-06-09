@@ -51,7 +51,10 @@ def template_form(form, **kwargs):
 
         if isinstance(field.field.widget, MyTextInput):
             context['small'] = True
-            template = 'widgets/textinput.html'
+            if field.field.widget.textarea:
+                template = 'widgets/textarea.html'
+            else:
+                template = 'widgets/textinput.html'
         elif isinstance(field.field.widget, MyBooleanSelect):
             context['nullable'] = field.field.widget.nullable
             template = 'widgets/nullboolean.html'
