@@ -93,6 +93,9 @@ FIXTURE_DIRS = (
 # EMAIL CONFIGURATION
 # ------------------------------------------------------------------------------
 EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_PORT = env('DJANGO_EMAIL_PORT', default=25)
+EMAIL_HOST = env('DJANGO_EMAIL_HOST', default='localhost')
+DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL', default='django@localhost')
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
