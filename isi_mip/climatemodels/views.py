@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from django.utils.html import urlize
+from django.utils.html import urlize, linebreaks
 from wagtail.wagtailcore.models import Page
 
 from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, ContactPersonFormset, get_sector_form
@@ -87,10 +87,10 @@ def input_data_details(page, request, id):
                        ]
                    },
                    {'notoggle': True, 'opened': True, 'term': 'Description',
-                    'definitions': [{'text': data.description}]},
-                   {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': [{'text': data.caveats}]},
+                    'definitions': [{'text': urlize(linebreaks(data.description))}]},
+                   {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': [{'text': urlize(linebreaks(data.caveats))}]},
                    {'notoggle': True, 'opened': True, 'term': 'Download Instructions',
-                    'definitions': [{'text': data.download_instructions}]},
+                    'definitions': [{'text': urlize(linebreaks(data.download_instructions))}]},
                ]
                }
     return render(request, template, context)
