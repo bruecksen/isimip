@@ -2,24 +2,23 @@
 {% load breadcrumb template_form %}
 
 {% block content_container %}
-    <div class="container">
-        <br>
-        {% breadcrumb %}
-        {% include 'widgets/heading1.html' with text='Registration' %}
-        {% block content %}
-            <form action="{{ form_url }}" method="post" id="registration_form" novalidate>
+	<div class="container">
+		<br>
+		{% breadcrumb %}
+		{% include 'widgets/heading1.html' with text='Registration' %}
+		{% block content %}
+			<form action="{{ form_url }}" method="post" id="registration_form" novalidate>
 				{% template_form form as nf %}
-					{{ nf }}
-
+				{{ nf }}
 				{% csrf_token %}
 				<div class="form-actions">
 					<input type="submit" name="submit" value="Register" class="btn btn-primary" id="submit-save">
 				</div>
 			</form>
 
-        {% endblock %}
-    </div>
-    <br>
-    <br>
+		{% endblock %}
+	</div>
+	<br>
+	<br>
 {% endblock %}
 

@@ -1,11 +1,12 @@
 from collections import OrderedDict
+
 from django import template
-from django.forms import BaseForm
+from django.forms import BaseForm, TextInput
 from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe, mark_for_escaping
+from django.utils.safestring import mark_safe
 
 from isi_mip.climatemodels.models import ReferencePaper
-from isi_mip.climatemodels.widgets import MyTextInput, MyMultiSelect, MyBooleanSelect, RefPaperWidget
+from isi_mip.climatemodels.widgets import MyMultiSelect, MyBooleanSelect, RefPaperWidget
 
 register = template.Library()
 
@@ -42,16 +43,14 @@ def template_form(form, **kwargs):
                    'help': field.help_text,
                    'id': field.name,
                    'label': field.label,
-                   # 'type': field.field.widget.input_type,
-                   #'type': 'number', # email, password
                    'value': value,
                    'required': field.field.required,
                    }
         context['readonly'] = 'readonly' in field.field.widget.attrs and field.field.widget.attrs['readonly']
-
-        if isinstance(field.field.widget, MyTextInput):
+        if isinstance(field.field.widget, TextInput):
+            context['type'] = field.field.widget.input_type if hasattr(field.field.widget, 'input_type') else 'text'
             context['small'] = True
-            if field.field.widget.textarea:
+            if hasattr(field.field.widget, 'textarea') and field.field.widget.textarea:
                 template = 'widgets/textarea.html'
             else:
                 template = 'widgets/textinput.html'
