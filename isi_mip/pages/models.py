@@ -313,9 +313,9 @@ class LinkListPage(TOCPage):
 
 
 class DashboardPage(Page):
-    private_model_message = models.TextField(null=True,blank=True)
-    settings_panels = Page.settings_panels + [
-        FieldPanel('private_model_message'),
+    impact_models_description = RichTextField(null=True,blank=True)
+    content_panels = Page.content_panels + [
+        RichTextFieldPanel('impact_models_description'),
     ]
 
     def get_context(self, request, *args, **kwargs):
@@ -329,9 +329,6 @@ class DashboardPage(Page):
         context['head'] = {
             'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Climate Driver'}, {'text': 'Contact'}, {'text': 'Edit'}, {'text': 'Public'}]
         }
-
-        if ims.filter(public=False) and self.private_model_message:
-                messages.warning(request, self.private_model_message)
 
         bodyrows = []
         for imodel in ims:

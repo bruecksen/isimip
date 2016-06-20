@@ -1,8 +1,9 @@
 {% extends "pages/default_page.html" %}
-
+{% load wagtailcore_tags %}
 {% block content %}
-    {% url 'logout' as logouturl %}
-    {% include 'widgets/read-more-link.html' with align='right' text='Logout' url=logouturl %}
-    {% include 'widgets/heading3.html' with text='Your Impact Models' %}
-    {% include "widgets/table.html" %}
+	{% url 'logout' as logouturl %}
+	{% include 'widgets/read-more-link.html' with align='right' text='Logout' url=logouturl %}
+	{% include 'widgets/heading3.html' with text='Your Impact Models' %}
+	{{ page.impact_models_description|richtext }}
+	{% include "widgets/table.html" %}
 {% endblock %}
