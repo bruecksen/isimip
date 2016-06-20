@@ -237,8 +237,13 @@ class ImpactModelsPage(RoutablePageWithDefault):
         ('impact_models', ImpactModelsBlock()),
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
+    private_model_message = models.TextField()
+
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
+    ]
+    settings_panels = RoutablePageWithDefault.settings_panels + [
+        FieldPanel('private_model_message'),
     ]
 
     @route(r'^details/(?P<id>\d+)/$')
@@ -308,6 +313,11 @@ class LinkListPage(TOCPage):
 
 
 class DashboardPage(Page):
+    private_model_message = models.TextField(null=True,blank=True)
+    settings_panels = Page.settings_panels + [
+        FieldPanel('private_model_message'),
+    ]
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         ims = ImpactModel.objects.filter(owner=request.user).order_by('name')
@@ -317,8 +327,12 @@ class DashboardPage(Page):
         impage_edit = lambda imid: "<a href='{0}'>{{0}}</a>".format(
             impage.url + impage.reverse_subpage('edit', args=(imid,)))
         context['head'] = {
-            'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Climate Driver'}, {'text': 'Contact'}, {'text': 'Edit'}]
+            'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Climate Driver'}, {'text': 'Contact'}, {'text': 'Edit'}, {'text': 'Public'}]
         }
+
+        if ims.filter(public=False) and self.private_model_message:
+                messages.warning(request, self.private_model_message)
+
         bodyrows = []
         for imodel in ims:
             datasets = [str(x) for x in imodel.climate_data_sets.all()]
@@ -329,10 +343,11 @@ class DashboardPage(Page):
                 [imodel.sector],
                 datasets,
                 ["<br/>".join(cpeople)],
-                [impage_edit(imodel.id).format("<i class='fa fa-edit'></i>")]
+                [impage_edit(imodel.id).format("<i class='fa fa-edit'></i>")],
+                ['<i class="fa fa-{}" aria-hidden="true"></i>'.format('check' if imodel.public else 'times')],
             ]
             row = {
-                'cols': [{'texts': x} for x in values]
+                'cols': [{'texts': x} for x in values],
             }
             bodyrows.append(row)
         context['body'] = {'rows': bodyrows}

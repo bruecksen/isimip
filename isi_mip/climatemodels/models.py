@@ -267,6 +267,7 @@ class ImpactModel(models.Model):
     )
 
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    public = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('name', 'sector')
@@ -320,14 +321,17 @@ class ImpactModel(models.Model):
             ('Resolution', [
                 (vname('spatial_aggregation'), self.spatial_aggregation),
                 (vname('spatial_resolution'), self.spatial_resolution),
+                (vname('spatial_resolution_info'), self.spatial_resolution_info),
                 (vname('temporal_resolution_climate'), self.temporal_resolution_climate),
                 (vname('temporal_resolution_co2'), self.temporal_resolution_co2),
                 (vname('temporal_resolution_land'), self.temporal_resolution_land),
                 (vname('temporal_resolution_soil'), self.temporal_resolution_soil),
+                (vname('temporal_resolution_info'), self.temporal_resolution_info),
             ]),
             ('Input Data', [
                 (vname('climate_data_sets'), ', '.join([x.name for x in self.climate_data_sets.all()])),
                 (vname('climate_variables'), ', '.join([x.as_span() for x in self.climate_variables.all()])),
+                (vname('climate_variables_info'),  self.climate_variables_info),
                 (vname('socioeconomic_input_variables'), ', '.join([x.name for x in self.socioeconomic_input_variables.all()])),
                 (vname('soil_dataset'), self.soil_dataset),
                 (vname('additional_input_data_sets'), self.additional_input_data_sets),

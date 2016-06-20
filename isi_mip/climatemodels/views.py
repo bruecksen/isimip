@@ -42,6 +42,9 @@ def impact_model_details(page, request, id):
         context['editlink'] += ' | <a href="{}">admin edit</a>'.format(
             urlresolvers.reverse('admin:climatemodels_impactmodel_change', args=(impactmodel.id,)))
 
+    if not impactmodel.public:
+        messages.warning(request, page.private_model_message)
+
     template = 'climatemodels/details.html'
     return render(request, template, context)
 
@@ -142,6 +145,10 @@ def impact_model_edit(page, request, id):
     else:
         form = ImpactModelForm(instance=impactmodel)
         contactform = ContactPersonFormset(instance=impactmodel)
+
+    if not impactmodel.public:
+        messages.warning(request, page.private_model_message)
+
     context['form'] = form
     context['cform'] = contactform
     template = 'climatemodels/edit_impact_model.html'
@@ -182,6 +189,10 @@ def impact_model_sector_edit(page, request, id):
             messages.warning(request, form.errors)
     else:
         form = formular(instance=impactmodel.fk_sector)
+
+    if not impactmodel.public:
+        messages.warning(request, page.private_model_message)
+
     context['form'] = form
     template = 'climatemodels/{}'.format(formular.template)
     return render(request, template, context)

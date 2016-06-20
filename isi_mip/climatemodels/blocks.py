@@ -15,7 +15,7 @@ class ImpactModelsBlock(StructBlock):
     def get_context(self, value):
         context = super().get_context(value)
 
-        ims = ImpactModel.objects.order_by('name')
+        ims = ImpactModel.objects.order_by('name').filter(public=True)
 
         # Filter und Suchfelder
         context['tableid'] = 'selectortable'
@@ -52,7 +52,7 @@ class ImpactModelsBlock(StructBlock):
             values += [datasets] + [["<br/>".join(cpeople)]]
             row = {
                 'invisible': i >= rows_per_page,
-                'cols': [{'texts': x} for x in values]
+                'cols': [{'texts': x} for x in values],
             }
             context['body']['rows'] += [row]
 
