@@ -38,7 +38,8 @@ class ImpactModelAdmin(admin.ModelAdmin):
     sector_link.allow_tags = True
     sector_link.short_description = 'Sector settings'
     readonly_fields = ('sector_link',)
-
+    list_display = ('name', 'sector', 'public', )
+    list_filter = ('public', 'sector' )
     inlines = [ContactPersonAdmin]
 
     fieldsets = [
