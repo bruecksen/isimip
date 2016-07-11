@@ -475,6 +475,9 @@ $(function() {
 
 				$.getJSON( url, {'query':title}, function( data ) {
 					console.log("Paper found:", data);
+					if (data.unavailable) {
+						console.warn(data.message);
+					}
 					if (!data.message) return;
 					if (!data.message.items) return;
 					if (!data.message.items[0]) return;

@@ -100,9 +100,15 @@ def input_data_details(page, request, id):
 
 
 def crossref_proxy(request):
-    url = 'http://api.crossref.org/works?rows={rows}&query={query}'
-    response = requests.get(url.format(rows=5, query=request.GET['query']))
-    res = response.json()
+    try:
+        url = 'http://api.crossref.org/works?rows={rows}&query={query}'
+        response = requests.get(url.format(rows=5, query=request.GET['query']))
+        res = response.json()
+    except requests.exceptions.ConnectionError as e:
+        res = {
+            'unavailable': True,
+            'message': 'CrossRef.org is currently unavailable. Please try again later.'
+        }
     return JsonResponse(res)
 
 
