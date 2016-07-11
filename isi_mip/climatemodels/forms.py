@@ -280,7 +280,7 @@ class WaterForm(forms.ModelForm):
             'calibration_dataset': MyTextInput(),
             'calibration_catchments': MyTextInput(),
             'vegetation': MyBooleanSelect(),
-            'vegetation_representation': MyTextInput(),
+            'vegetation_representation': MyTextInput(textarea=True),
             "methods_evapotranspiration": MyTextInput(textarea=True),
             'methods_snowmelt': MyTextInput(textarea=True),
         }
