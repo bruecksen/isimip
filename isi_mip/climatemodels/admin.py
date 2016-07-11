@@ -51,10 +51,11 @@ class ImpactModelAdmin(admin.ModelAdmin):
         ('Technical Information', {
             'fields': [
                 # resolution
-                'spatial_aggregation', 'spatial_resolution', 'temporal_resolution_climate', 'temporal_resolution_co2',
-                'temporal_resolution_land', 'temporal_resolution_soil',
+                'spatial_aggregation', 'spatial_resolution', 'spatial_resolution_info', 'temporal_resolution_climate',
+                'temporal_resolution_co2', 'temporal_resolution_land', 'temporal_resolution_soil',
+                'temporal_resolution_info',
                 # input data
-                'climate_data_sets', 'climate_variables',
+                'climate_data_sets', 'climate_variables', 'climate_variables_info',
                 'socioeconomic_input_variables', 'soil_dataset', 'additional_input_data_sets',
                 # more
                 'exceptions_to_protocol', 'spin_up', 'spin_up_design',
