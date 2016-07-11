@@ -31,7 +31,7 @@ class ImpactModelForm(forms.ModelForm):
     socioeconomic_input_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=SocioEconomicInputVariables.objects)
     class Meta:
         model = ImpactModel
-        exclude = ('owner',)
+        exclude = ('owner', 'public')
         widgets = {
             'name': MyTextInput(),
             'sector': MyMultiSelect(),
