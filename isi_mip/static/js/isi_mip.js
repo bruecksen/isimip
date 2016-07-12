@@ -470,7 +470,7 @@ $(function() {
 
 		function addPaper(title) {
 			if (title) {
-				var url = "/models/crossref/";
+				var url = paperEditor.data('apibaseurl');
 				// Same Origin mirror of this: http://api.crossref.org/works?rows=1&query=Yolo
 
 				$.getJSON( url, {'query':title}, function( data ) {
