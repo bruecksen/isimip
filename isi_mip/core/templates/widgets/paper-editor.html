@@ -31,8 +31,11 @@
 	</div>
 
 	<div class="widget-paper-addbuttons"{% if maxpapercount %}{% if maxpapercount <= papers|length %} style="display: none;"{% endif %}{% endif %}>
-		<button class="btn btn-default widget-paper-editor-searchform-button">search paper</button>
-		<button class="btn btn-default widget-paper-editor-manual-button">add manually</button>
+		<p class="widget-paper-addbuttons-errormessage bg-danger" style="display: none;">
+			Paper search does not work at the moment.
+		</p>
+		<button class="btn btn-default widget-paper-editor-manual-button"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i> add manually</button>
+		<button class="btn btn-default widget-paper-editor-searchform-button"><i class="fa fa-search fa-fw" aria-hidden="true"></i> search paper</button>
 	</div>
 
 	<div class="widget-paper-searchform" style="display: none;">
@@ -40,8 +43,8 @@
 		<p>
 			<input class="form-control widget-paper-searchform-title form-control-small" autocomplete="off" placeholder="title">
 		</p>
-		<button class="btn btn-default widget-paper-editor-search-cancelbutton">cancel</button>
-		<button class="btn btn-default widget-paper-editor-search-button">search</button>
+		<button class="btn btn-default widget-paper-editor-search-cancelbutton"><i class="fa fa-times fa-fw" aria-hidden="true"></i> cancel</button>
+		<button class="btn btn-default widget-paper-editor-search-button"><i class="fa fa-search fa-fw" aria-hidden="true"></i> search</button>
 	</div>
 	{% if help %}
 		<p class="help-block">{{ help }}</p>
