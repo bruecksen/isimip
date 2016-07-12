@@ -266,20 +266,15 @@ class ImpactModel(models.Model):
         null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
     )
 
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    # owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="+")
+    owners = models.ManyToManyField(User)
     public = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('name', 'sector')
         ordering = ('name', )
-        # verbose_name_plural = 'Impact Models'
 
     def save(self, *args, **kwargs):
-        if not self.owner_id:
-            self.owner_id = 1
-        # if self.sector:
-        #     if ImpactModel.objects.get(id=self.pk).sector != self.sector:
-        #         import ipdb; ipdb.set_trace()
         super().save(*args, **kwargs)
         SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self)
 

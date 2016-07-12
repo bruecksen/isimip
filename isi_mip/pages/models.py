@@ -320,7 +320,7 @@ class DashboardPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        ims = ImpactModel.objects.filter(owner=request.user).order_by('name')
+        ims = ImpactModel.objects.filter(owners=request.user).order_by('name')
         impage = ImpactModelsPage.objects.get()
         impage_details = lambda imid: "<a href='{0}'>{{0}}</a>".format(
             impage.url + impage.reverse_subpage('details', args=(imid, )))

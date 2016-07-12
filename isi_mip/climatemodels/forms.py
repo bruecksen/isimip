@@ -12,14 +12,13 @@ ContactPersonFormset = inlineformset_factory(ImpactModel, ContactPerson,
 
 
 class ImpactModelStartForm(forms.ModelForm):
-    owner = forms.ModelChoiceField(queryset=User.objects, label='Model owner')
     model = forms.ModelChoiceField(queryset=ImpactModel.objects.order_by('name'), required=False)
     name = forms.CharField(label='New Impact Model', required=False)
     sector = forms.ChoiceField(choices=ImpactModel.SECTOR_CHOICES, required=False)
 
     class Meta:
         model = ImpactModel
-        fields = ('owner', 'model', 'name', 'sector')
+        fields = ('model', 'name', 'sector')
 
 
 class ImpactModelForm(forms.ModelForm):
@@ -31,7 +30,7 @@ class ImpactModelForm(forms.ModelForm):
     socioeconomic_input_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=SocioEconomicInputVariables.objects)
     class Meta:
         model = ImpactModel
-        exclude = ('owner',)
+        exclude = ('owners', 'public')
         widgets = {
             'name': MyTextInput(),
             'sector': MyMultiSelect(),

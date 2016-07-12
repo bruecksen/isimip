@@ -33,7 +33,7 @@ def impact_model_details(page, request, id):
     context['list'] = model_details
     context['description'] = urlize(impactmodel.short_description or '')  # or ''
 
-    if request.user == impactmodel.owner:
+    if request.user in impactmodel.owners.all():
         context['editlink'] = '<a href="{}">edit</a>'.format(
             page.url + page.reverse_subpage('edit', args=(impactmodel.id,)))
     else:
@@ -119,7 +119,7 @@ def impact_model_edit(page, request, id):
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
     impactmodel = ImpactModel.objects.get(id=id)
-    if not (request.user == impactmodel.owner or request.user.is_superuser):
+    if not (request.user in impactmodel.owners.all() or request.user.is_superuser):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
@@ -167,7 +167,7 @@ def impact_model_sector_edit(page, request, id):
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
     impactmodel = ImpactModel.objects.get(id=id)
-    if not (request.user == impactmodel.owner or request.user.is_superuser):
+    if not (request.user in impactmodel.owners.all() or request.user.is_superuser):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
@@ -209,21 +209,22 @@ def impact_model_assign(request, username=None):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
+
     user = User.objects.get(username=username)
-    impactmodel = ImpactModel(owner=user)
+    impactmodel = ImpactModel()
 
     if request.method == 'POST':
         form = ImpactModelStartForm(request.POST, instance=impactmodel)
         if form.is_valid():
             imodel = form.cleaned_data['model']
             if imodel:
-                imodel.owner = form.cleaned_data['owner']
+                imodel.owners.add(user)
                 imodel.save()
-                messages.success(request, "The new owner has been assigned successfully")
+                messages.success(request, "{} has been added to the list of owners for \"{}\"".format(user, imodel))
             else:
                 del (form.cleaned_data['model'])
-                ImpactModel.objects.create(**form.cleaned_data)
-                messages.success(request, "The model has been successfully created and assigned")
+                imodel = ImpactModel.objects.create(**form.cleaned_data)
+                messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(imodel, user))
             if 'next' in request.GET:
                 return HttpResponseRedirect(request.GET['next'])
             return HttpResponseRedirect(reverse('admin:auth_user_list'))
@@ -232,4 +233,4 @@ def impact_model_assign(request, username=None):
     else:
         form = ImpactModelStartForm(instance=impactmodel)
     template = 'climatemodels/assign.html'
-    return render(request, template, {'form': form})
+    return render(request, template, {'form': form, 'owner': user})
