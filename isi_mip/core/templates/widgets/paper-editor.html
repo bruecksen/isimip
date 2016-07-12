@@ -1,4 +1,4 @@
-<div class="widget-paper-editor"{% if maxpapercount %}data-maxpapercount="{{ maxpapercount }}{% endif %}">
+<div class="widget-paper-editor"{% if maxpapercount %} data-maxpapercount="{{ maxpapercount }}"{% endif %}{% if apibaseurl %} data-apibaseurl="{{ apibaseurl }}"{% endif %}>
 	{% if label %}
 		<label class="control-label">{{ label }}{% if required %}<span class="asteriskField">*</span>{% endif %}</label>
 	{% endif %}

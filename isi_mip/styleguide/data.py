@@ -1363,6 +1363,8 @@ data = {
         'template': 'widgets/paper-editor.html',
         'context': {
             'id': 'papereditor',
+            # 'apibaseurl': '/models/crossref/',
+            'apibaseurl': '/static/styleguide/js/crossref-test.json',
             'label': 'Main Paper',
             'help': 'Enter the main paper of the impact model.',
             'maxpapercount': 1,
@@ -1385,6 +1387,8 @@ data = {
         'template': 'widgets/paper-editor.html',
         'context': {
             'id': 'papereditor',
+            # 'apibaseurl': '/models/crossref/',
+            'apibaseurl': '/static/styleguide/js/crossref-test.json',
             'label': 'Other Papers',
             'help': 'Enter the other papers of the impact model.',
             'maxpapercount': 5,
