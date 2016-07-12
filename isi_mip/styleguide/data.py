@@ -1388,7 +1388,7 @@ data = {
         'context': {
             'id': 'papereditor',
             # 'apibaseurl': '/models/crossref/',
-            'apibaseurl': '/static/styleguide/js/crossref-test.json',
+            'apibaseurl': '/static/styleguide/js/crossref-test2.json',
             'label': 'Other Papers',
             'help': 'Enter the other papers of the impact model.',
             'maxpapercount': 5,
