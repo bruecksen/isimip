@@ -476,6 +476,7 @@ $(function() {
 				// Same Origin mirror of this: http://api.crossref.org/works?rows=1&query=Yolo
 
 				$.getJSON( url, {'query':title}, function( data ) {
+
 					if (!data.message || !data.message.items || !data.message.items[0]) {
 						console.log('No paper found!');
 						paperEditor.find('.widget-paper-addbuttons-errormessage').show();
@@ -545,6 +546,9 @@ $(function() {
 					newPaper.find('.paper-date').val(paperDate);
 
 					checkMaxPaperCount();
+				}).error(function() {
+					console.log('Crossref API broken.');
+					paperEditor.find('.widget-paper-addbuttons-errormessage').show();
 				});
 
 			} else {
