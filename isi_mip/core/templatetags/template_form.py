@@ -78,6 +78,7 @@ def template_form(form, **kwargs):
             template = 'widgets/multiselect.html'
         elif isinstance(field.field.widget, RefPaperWidget):
             context['papers'] = []
+            context['apibaseurl'] = '/models/crossref/'
             if isinstance(value, list):
                 context['maxpapercount'] = 5
             else:
