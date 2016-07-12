@@ -64,8 +64,11 @@ class ImpactModelForm(forms.ModelForm):
         if not args['doi'] and not args['title']:
             return None
         if args['doi']:
-            rp = ReferencePaper.objects.get_or_create(doi=args['doi'])[0]
-            rp.title = args['title']
+            try:
+                rp = ReferencePaper.objects.get_or_create(doi=args['doi'])[0]
+                rp.title = args['title']
+            except ReferencePaper.MultipleObjectsReturned:
+                rp = ReferencePaper.objects.create(title=args['title'], doi=args['doi'])
         else:
             try:
                 rp = ReferencePaper.objects.get_or_create(title=args['title'])[0]

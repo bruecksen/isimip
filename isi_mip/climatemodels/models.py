@@ -309,7 +309,8 @@ class ImpactModel(models.Model):
                 ('Contact Person', cpers),
                 (vname('simulation_round'), ', '.join([x.name for x in self.simulation_round.all()])),
                 (vname('version'), self.version),
-                (vname('main_reference_paper'), self.main_reference_paper.entry_with_link() if self.main_reference_paper else None),
+                (vname('main_reference_paper'),
+                 self.main_reference_paper.entry_with_link() if self.main_reference_paper else None),
                 (vname('other_references'), other_references),
                 # (vname('short_description'), self.short_description),
             ]),
@@ -326,16 +327,17 @@ class ImpactModel(models.Model):
             ('Input Data', [
                 (vname('climate_data_sets'), ', '.join([x.name for x in self.climate_data_sets.all()])),
                 (vname('climate_variables'), ', '.join([x.as_span() for x in self.climate_variables.all()])),
-                (vname('climate_variables_info'),  self.climate_variables_info),
-                (vname('socioeconomic_input_variables'), ', '.join([x.name for x in self.socioeconomic_input_variables.all()])),
+                (vname('climate_variables_info'), self.climate_variables_info),
+                (vname('socioeconomic_input_variables'),
+                 ', '.join([x.name for x in self.socioeconomic_input_variables.all()])),
                 (vname('soil_dataset'), self.soil_dataset),
                 (vname('additional_input_data_sets'), self.additional_input_data_sets),
             ]),
             ('Exceptions to Protocol', [
                 (vname('exceptions_to_protocol'), self.exceptions_to_protocol),
-                ]),
+            ]),
             ('Spin-up', [
-                (vname('spin_up'), 'Yes' if self.spin_up else 'No'),
+                (vname('spin_up'), 'Yes' if self.spin_up == True else 'No' if self.spin_up == False else ''),
                 (vname('spin_up_design'), self.spin_up_design if self.spin_up else ''),
             ]),
             ('Natural Vegetation', [
