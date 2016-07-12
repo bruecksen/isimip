@@ -439,11 +439,11 @@ $(function() {
 
 
 Date.prototype.yyyymmdd = function() {
-   var yyyy = this.getFullYear().toString();
-   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-   var dd  = this.getDate().toString();
-   return yyyy +"-"+ (mm[1]?mm:"0"+mm[0]) +"-"+ (dd[1]?dd:"0"+dd[0]); // padding
-  };
+	var yyyy = this.getFullYear().toString();
+	var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+	var dd  = this.getDate().toString();
+	return yyyy +"-"+ (mm[1]?mm:"0"+mm[0]) +"-"+ (dd[1]?dd:"0"+dd[0]); // padding
+};
 
 $(function() {
 	// Paper editor
@@ -485,17 +485,21 @@ $(function() {
 					var paper = data.message.items[0];
 
 
-					if (paper.author && paper.author[0]) {
-						paperAuthor = paper.author[0].family;
+					var paperAuthor = '';
+					if (paper.author) {
+						// Iterate authors
+						$.each(paper.author, function(index, author) {
+							paperAuthor += author.family;
 
-						if (paper.author[0].given) {
-							paperAuthor += ', '+paper.author[0].given.charAt(0)+'.';
-						} else {
-							paperAuthor = '';
-						}
+							if (author.given) {
+								paperAuthor += ' '+author.given.charAt(0);
+							}
 
-					} else {
-						paperAuthor = '';
+							paperAuthor += ', ';
+						});
+
+						// Get rid of last ", "
+						paperAuthor = paperAuthor.slice(0, -2);
 					}
 
 					if (paper.title) {
