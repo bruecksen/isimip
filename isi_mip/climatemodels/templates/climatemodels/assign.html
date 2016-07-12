@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls admin_static admin_modify %}
+{% load i18n static  %}
 
 {% block extrahead %}{{ block.super }}
 	<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -23,18 +23,28 @@
 {% endif %}
 
 {% block content_title %}
-	<h1>Assign or create Impact Model</h1>
+	<h1>Assign or create Impact Model for {{ owner }}</h1>
 {% endblock %}
 
-{% block content %}<div id="content-main">
-	<form action="{{ form_url }}" method="post" id="registration_form" novalidate>
-		{% csrf_token %}
-		<p>{{ form.owner.label }}: {{ form.owner }}</p>
-		<p>{{ form.model.label }}: {{ form.model }}</p>
-		OR:
-		<p>{{ form.name.label }}: {{ form.name }}</p>
-		<p>{{ form.sector.label }}: {{ form.sector }}</p>
-		<input type="submit" value="Save">
-	</form>
-</div>
+{% block content %}
+	<div id="content-main">
+		<form action="{{ form_url }}" method="post" id="registration_form" novalidate>
+			{% csrf_token %}
+			<p>{{ form.model.label }}: {{ form.model }}</p>
+
+			<div class="tohide">OR: <p>{{ form.name.label }}: {{ form.name }} &nbsp;{{ form.sector.label }}: {{ form.sector }}</p></div>
+			<input type="submit" value="Save">
+		</form>
+	</div>
+	<script src="{% static 'vendor/js/jquery-2.2.1.min.js' %}"></script>
+	<script>
+		$(function() {
+			$("#id_model").change(function() {
+				if ($(this).find(":selected").val())
+					$(".tohide").hide();
+				else
+					$(".tohide").show();
+			}).change();
+		});
+	</script>
 {% endblock %}

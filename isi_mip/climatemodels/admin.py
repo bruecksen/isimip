@@ -38,7 +38,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
     sector_link.allow_tags = True
     sector_link.short_description = 'Sector settings'
     readonly_fields = ('sector_link',)
-    list_display = ('name', 'sector', 'public', )
+    list_display = ('name', 'sector', 'public' )
     list_filter = ('public', 'sector' )
     inlines = [ContactPersonAdmin]
 
@@ -61,7 +61,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
                 'exceptions_to_protocol', 'spin_up', 'spin_up_design',
                 'natural_vegetation_partition', 'natural_vegetation_dynamics', 'natural_vegetation_cover_dataset',
                 'management', 'extreme_events',
-                'anything_else', 'owner', 'public',
+                'anything_else', 'owners', 'public',
             ],
         }),
     ]
