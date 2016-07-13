@@ -86,7 +86,7 @@ RAVEN_CONFIG = {
     'DSN': SENTRY_DSN
 }
 
-
+INVITATION_VALID_DAYS = 365
 
 INSTALLED_APPS += ("gunicorn", )
 
