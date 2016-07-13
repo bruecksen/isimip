@@ -124,7 +124,7 @@ class OutputDataBlock(StructBlock):
                     'invisible': i >= value.get('rows_per_page'),
                     'cols': [
                     {'texts': [odat.sector]},
-                    {'texts': [odat.model.name]},
+                    {'texts': [odat.model.name if odat.model else '']},
                     {'texts': [scenarios]},
                     {'texts': drivers},
                     {'texts': [odat.date]}]
