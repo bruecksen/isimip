@@ -113,10 +113,9 @@ class ImpactModelForm(forms.ModelForm):
                 myargs['first_published'] = parse(self.data.getlist('other_references-date')[i])
             except:
                 myargs['first_published'] = None
-            rps.append(self._ref_paper(myargs))
-            # paperparse = self._ref_paper(myargs)
-            # if paperparse:
-            #     rps.append(paperparse)
+
+            rp = self._ref_paper(myargs)
+            rps += [rp] if rp is not None else []
         return rps
 
     def __init__(self, *args, **kwargs):
@@ -277,11 +276,11 @@ class WaterForm(forms.ModelForm):
             'routing_data': MyTextInput(textarea=True),
             'land_use': MyTextInput(textarea=True),
             'dams_reservoirs': MyTextInput(textarea=True),
-            'calibration': MyBooleanSelect(),
+            'calibration': MyBooleanSelect(nullable=True),
             'calibration_years': MyTextInput(),
             'calibration_dataset': MyTextInput(),
             'calibration_catchments': MyTextInput(),
-            'vegetation': MyBooleanSelect(),
+            'vegetation': MyBooleanSelect(nullable=True),
             'vegetation_representation': MyTextInput(textarea=True),
             "methods_evapotranspiration": MyTextInput(textarea=True),
             'methods_snowmelt': MyTextInput(textarea=True),
