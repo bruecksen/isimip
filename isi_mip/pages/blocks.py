@@ -85,9 +85,13 @@ class BigTeaserBlock(StructBlock):
             'description': value.get('text'),
             'divider': True,
             'calendaricon': True,
-            'date': "%s to %s" % (formats.date_format(value.get('from_date'), "SHORT_DATE_FORMAT"),
-                                  formats.date_format(value.get('to_date'), "SHORT_DATE_FORMAT")),
         })
+        if value.get('from_date') and value.get('to_date'):
+            context['date'] = '"{} to {}"'.format(
+                formats.date_format(value.get('from_date'), "SHORT_DATE_FORMAT"),
+                formats.date_format(value.get('to_date'), "SHORT_DATE_FORMAT")
+            )
+
 
         context['wideimage'] = self.wideimage
         return context
