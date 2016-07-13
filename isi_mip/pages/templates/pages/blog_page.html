@@ -1,6 +1,6 @@
 {% extends "pages/default_page.html" %}
 {% block content %}
-    Posted by {{ blog.author.first_name }} {{ blog.author.last_name }} on {{ blog.date }}<br/>
+    Posted {% if blog.author %}by {{ blog.author.first_name }} {{ blog.author.last_name }}{% endif %} on {{ blog.date }}<br/>
     <br/>
     <div class="row widget-columns-2-1">
         <div class="col-sm-8 col">
