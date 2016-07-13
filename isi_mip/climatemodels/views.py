@@ -227,6 +227,7 @@ def impact_model_assign(request, username=None):
             else:
                 del (form.cleaned_data['model'])
                 imodel = ImpactModel.objects.create(**form.cleaned_data)
+                imodel.owners.add(user)
                 imodel.public = False
                 imodel.save()
                 messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(imodel, user))
