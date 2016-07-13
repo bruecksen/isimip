@@ -615,3 +615,25 @@ $(function() {
 });
 
 
+
+$( window ).load(function() {
+	var scrolled = false;
+	$( window ).scroll(function() {
+		if (scrolled) return;
+
+		$('.mail-secret').each(function() {
+			var addr = $(this).text();
+			addr = addr.slice(0, $('body').position().top + 3) + addr.slice($('.gap').height());
+			var atpos = addr.indexOf('@');
+			addr = addr.replace('@', '');
+			atpos -= $('.gap').height();
+			addr = addr.slice(0, atpos) + "@" + addr.slice(atpos);
+			$(this).text(addr).attr('href', 'mailto:'+addr);
+		});
+
+		scrolled = true;
+	});
+});
+$(function() {
+	$('body').append('<div class="gap" style="height:4px; display: none;"></div>');
+});
