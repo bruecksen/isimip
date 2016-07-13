@@ -681,7 +681,7 @@ class MarineEcosystems(Sector):
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
         return [
-            (self._meta.verbose_name, [
+            ('Information specific to marine ecosystems & fisheries', [
                 (vname('defining_features'), self.defining_features),
                 (vname('spatial_scale'), self.spatial_scale),
                 (vname('spatial_resolution'), self.spatial_resolution),
@@ -739,21 +739,37 @@ class Water(Sector):
     def values_to_tuples(self) -> list:
         vname = self._get_verbose_field_name
         return [
-            (self._meta.verbose_name, [
+            ('Technological Progress', [
                 (vname('technological_progress'), self.technological_progress),
+                ]),
+            ('Soil', [
                 (vname('soil_layers'), self.soil_layers),
+            ]),
+            ('Water Use', [
                 (vname('water_use'), self.water_use),
                 (vname('water_sectors'), self.water_sectors),
+            ]),
+            ('Routing', [
                 (vname('routing'), self.routing),
                 (vname('routing_data'), self.routing_data),
+            ]),
+            ('Land Use', [
                 (vname('land_use'), self.land_use),
+            ]),
+            ('Dams & Reservoirs', [
                 (vname('dams_reservoirs'), self.dams_reservoirs),
+            ]),
+            ('Calibration', [
                 (vname('calibration'), self.calibration),
                 (vname('calibration_years'), self.calibration_years),
                 (vname('calibration_dataset'), self.calibration_dataset),
                 (vname('calibration_catchments'), self.calibration_catchments),
+            ]),
+            ('Vegetation', [
                 (vname('vegetation'), self.vegetation),
                 (vname('vegetation_representation'), self.vegetation_representation),
+            ]),
+            ('Methods', [
                 (vname('methods_evapotranspiration'), self.methods_evapotranspiration),
                 (vname('methods_snowmelt'), self.methods_snowmelt),
             ])

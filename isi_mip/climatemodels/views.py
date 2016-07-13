@@ -227,6 +227,8 @@ def impact_model_assign(request, username=None):
             else:
                 del (form.cleaned_data['model'])
                 imodel = ImpactModel.objects.create(**form.cleaned_data)
+                imodel.public = False
+                imodel.save()
                 messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(imodel, user))
             send_email(request, user, imodel)
             if 'next' in request.GET:
