@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core import urlresolvers
@@ -8,12 +9,14 @@ from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.utils.html import urlize, linebreaks
 from wagtail.wagtailcore.models import Page
 
 from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, ContactPersonFormset, get_sector_form
 from isi_mip.climatemodels.models import ImpactModel, InputData, ReferencePaper
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
+from isi_mip.invitation.views import InvitationView
 
 
 def impact_model_details(page, request, id):
@@ -225,6 +228,7 @@ def impact_model_assign(request, username=None):
                 del (form.cleaned_data['model'])
                 imodel = ImpactModel.objects.create(**form.cleaned_data)
                 messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(imodel, user))
+            send_email(request, user, imodel)
             if 'next' in request.GET:
                 return HttpResponseRedirect(request.GET['next'])
             return HttpResponseRedirect(reverse('admin:auth_user_list'))
@@ -234,3 +238,23 @@ def impact_model_assign(request, username=None):
         form = ImpactModelStartForm(instance=impactmodel)
     template = 'climatemodels/assign.html'
     return render(request, template, {'form': form, 'owner': user})
+
+
+def send_email(request, user, imodel):
+    invite = user.invitation_set.last()
+    register_link = reverse('accounts:register', kwargs={'pk': user.id, 'token': invite.token})
+    context = {
+        'url': request.build_absolute_uri(register_link),
+        'model_name': imodel.name,
+        'sector': imodel.sector,
+        'username': user.username,
+        'valid_until': invite.valid_until,
+    }
+    subject = render_to_string(InvitationView.email_subject_template,
+                               context)
+    # Force subject to a single line to avoid header-injection
+    # issues.
+    subject = ''.join(subject.splitlines())
+    message = render_to_string(InvitationView.email_body_template,
+                               context)
+    user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)

@@ -43,26 +43,27 @@ class InvitationView(FormView):
             valid_until=self.valid_until)
 
         messages.success(self.request, 'User has been invited successfully.')
-        self.send_email()
+        #self.send_email()
         return super(InvitationView, self).form_valid(form)
 
-    def send_email(self):
-        user = User.objects.get(username=self.invite.user)
-        register_link = reverse('accounts:register', kwargs={'pk':user.id,'token':self.invite.token} )
-
-        context = {
-            'url': self.request.build_absolute_uri(register_link),
-            'expiration_days': self.valid_until,
-            'site': get_current_site(self.request)
-        }
-        subject = render_to_string(self.email_subject_template,
-                                   context)
-        # Force subject to a single line to avoid header-injection
-        # issues.
-        subject = ''.join(subject.splitlines())
-        message = render_to_string(self.email_body_template,
-                                   context)
-        user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+    # UNUSED because in this case it needs to happen after model assignment :\
+    # def send_email(self):
+    #     user = User.objects.get(username=self.invite.user)
+    #     register_link = reverse('accounts:register', kwargs={'pk':user.id,'token':self.invite.token} )
+    #
+    #     context = {
+    #         'url': self.request.build_absolute_uri(register_link),
+    #         'expiration_days': self.valid_until,
+    #         'site': get_current_site(self.request)
+    #     }
+    #     subject = render_to_string(self.email_subject_template,
+    #                                context)
+    #     # Force subject to a single line to avoid header-injection
+    #     # issues.
+    #     subject = ''.join(subject.splitlines())
+    #     message = render_to_string(self.email_body_template,
+    #                                context)
+    #     user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
 
 
 class RegistrationView(UpdateView):

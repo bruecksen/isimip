@@ -1,6 +1,16 @@
+Dear ISIMIP Impact Modeller,
 
-days: {{expiration_days}}
+You are receiving this email because you are listed as the contact person for the {{model_name}} model participating in the Inter-Sectoral Impact Model Intercomparison Project (ISIMIP) in the {{sector}} sector. As you know, we have been collecting key information about each participating model in order to assist other ISIMIP participants and potential users of the ISIMIP data when conducting impacts analyses based on these data. This information has now been compiled into a database, which is housed on the new ISIMIP website (www.isimip.org/impactmodels). Each impact model has its own publicly viewable entry. Only those with the model-specific login details can edit the respective entry.
 
-site: {{site}}
+You are now invited to login to the database using registration link: {{url}} username: {{username}}
+You will be asked to enter your name and to create a password - your name will not be shown publicly).
 
-url: {{url}}
+If you have previously provided input into the ISIMIP 'Model Experiment Documentation', you should find this already in your model's database entry. We strongly recommend that you take the time to check if everything has been entered correctly, and to fill in any missing data entries. It is particularly important that the contact person/people are kept up-to-date, so that potential users of your model's data can contact you regarding co-authorship and technical questions.
+
+Please note that the information entered in the database should pertain to the version of the model used to produce impacts simulations for the current simulation round, ISIMIP2a. For models providing data for more than one sector, there is *one model entry per sector* and the contact people can differ from sector to sector.
+
+Please note that at this point the entry for your model is not publicly viewable. As of 25 July, 2016, all model entries will be made publicly viewable, unless specifically requested. However, we ask that you send us a quick email at info@isimip.org as soon as you've had a chance to look over your model's entry, so that we can start populating the database sooner.
+
+Should you have any questions about your model's entry in the database, please don't hesitate to contact the ISIMIP Management Group (info@isimip.org).
+
+Best wishes, Lila Warszawski
