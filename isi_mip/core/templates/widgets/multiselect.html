@@ -1,4 +1,4 @@
-<div class="widget-multiselect form-group{% if error %} has-error{% endif %}">
+<div class="widget-multiselect form-group{% if error %} has-error{% endif %}{% if nullable %} widget-multiselect-nullable{% endif %}">
 {% if label %}
 <label class="control-label">{{ label }}{% if required %}<span class="asteriskField">*</span>{% endif %}</label>
 {% endif %}

@@ -284,6 +284,16 @@ $(function() {
 			sortItems();
 		});
 
+
+		if (selectfield.hasClass('widget-multiselect-nullable')) {
+			// Radios are deselectable
+			selectfield.on('click', '.widget-options-checked label', function() {
+				// deselect this
+				$(this).find('input').prop('checked', false);
+				// this triggers sortItems() automatically.
+			});
+		}
+
 		selectfield.find('.widget-select-customvalue').keypress(function (event) {
 			var key = event.which;
 			if(key == 13) { // the enter key code

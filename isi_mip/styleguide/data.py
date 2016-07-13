@@ -1339,6 +1339,23 @@ data = {
             ],
         },
     },
+    'singleselect_nullable': {
+        'name': 'Singleselect with null option',
+        'template': 'widgets/multiselect.html',
+        'context': {
+            'id': 'singleselect-null',
+            'label': 'Von wann ist dein Longboard, wenn du eins hast?',
+            'singleselect': True,
+            'allowcustom': True,
+            'nullable': True,
+            'options': [
+                {'value':'alt', 'label':'Alt', 'checked':False},
+                {'value':'neu', 'label':'Neu', 'checked':False},
+                {'value':'von gestern', 'label':'Von gestern', 'checked':False},
+                {'value':'neu 2016', 'label':'neu 2016', 'checked':True},
+            ],
+        },
+    },
     'singleselect_error': {
         'name': 'Singleselect',
         'template': 'widgets/multiselect.html',
