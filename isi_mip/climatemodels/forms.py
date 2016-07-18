@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory
 from dateutil.parser import parse
 
@@ -83,18 +84,21 @@ class ImpactModelForm(forms.ModelForm):
         return rp
 
     def clean_main_reference_paper(self):
-        myargs = {
-            'lead_author': self.data.getlist('main_reference_paper-author')[0],
-            'title': self.data.getlist('main_reference_paper-title')[0],
-            'journal_name': self.data.getlist('main_reference_paper-journal')[0],
-            'doi': self.data.getlist('main_reference_paper-doi')[0],
-            'journal_volume': self.data.getlist('main_reference_paper-volume')[0] or None,
-            'journal_pages': self.data.getlist('main_reference_paper-page')[0]
-        }
         try:
-            myargs['first_published'] = parse(self.data.getlist('main_reference_paper-date')[0])
+            myargs = {
+                'lead_author': self.data.getlist('main_reference_paper-author')[0],
+                'title': self.data.getlist('main_reference_paper-title')[0],
+                'journal_name': self.data.getlist('main_reference_paper-journal')[0],
+                'doi': self.data.getlist('main_reference_paper-doi')[0],
+                'journal_volume': self.data.getlist('main_reference_paper-volume')[0] or None,
+                'journal_pages': self.data.getlist('main_reference_paper-page')[0]
+            }
+            try:
+                myargs['first_published'] = parse(self.data.getlist('main_reference_paper-date')[0])
+            except:
+                myargs['first_published'] = None
         except:
-            myargs['first_published'] = None
+            raise ValidationError('Problems adding the main reference paper')
         return self._ref_paper(myargs)
 
 

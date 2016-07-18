@@ -20,7 +20,11 @@ from isi_mip.invitation.views import InvitationView
 
 
 def impact_model_details(page, request, id):
-    impactmodel = ImpactModel.objects.get(id=id)
+    try:
+        impactmodel = ImpactModel.objects.get(id=id)
+    except:
+        messages.warning(request, 'Unknown model')
+        return HttpResponseRedirect('/impactmodels/')
     subpage = {'title': 'Impact Model: %s' % impactmodel.name, 'url': ''}
     context = {'page': page, 'subpage': subpage, 'headline': impactmodel.name}
 

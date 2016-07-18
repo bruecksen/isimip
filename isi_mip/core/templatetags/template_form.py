@@ -61,6 +61,7 @@ def template_form(form, **kwargs):
             context.update({
                 'allowcustom': field.field.widget.allowcustom,
                 'singleselect': not field.field.widget.multiselect,
+                'nullable': not field.field.required,
                 'options': []
             })
             for k, v in field.field.choices:
