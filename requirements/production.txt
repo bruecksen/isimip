@@ -4,4 +4,4 @@
 
 raven==5.16.0
 gunicorn==19.4.5
-django-email-obfuscator-0.1.4
+django-email-obfuscator==0.1.4
