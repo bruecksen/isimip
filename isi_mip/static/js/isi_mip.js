@@ -280,19 +280,24 @@ $(function() {
 			});
 		}
 
+
+		if (selectfield.hasClass('widget-multiselect-nullable')) {
+			// Radios are deselectable
+			selectfield.on('click', '.widget-options-checked label', function(event) {
+				// deselect this
+				$(this).find('input').prop('checked', false);
+				// Nicht gleich wieder aktivieren.
+				event.preventDefault();
+				// Vorsichtshalber nochmal sortieren.
+				sortItems();
+			});
+		}
+
 		selectfield.on('change', 'input', function() {
 			sortItems();
 		});
 
 
-		if (selectfield.hasClass('widget-multiselect-nullable')) {
-			// Radios are deselectable
-			selectfield.on('click', '.widget-options-checked label', function() {
-				// deselect this
-				$(this).find('input').prop('checked', false);
-				// this triggers sortItems() automatically.
-			});
-		}
 
 		selectfield.find('.widget-select-customvalue').keypress(function (event) {
 			var key = event.which;
