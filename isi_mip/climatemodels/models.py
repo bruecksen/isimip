@@ -810,7 +810,9 @@ class OutputData(models.Model):
     date = models.DateField()
 
     def __str__(self):
-        return "%s : %s" % (self.sector, self.model.name)
+        if self.model:
+            return "%s : %s" % (self.sector, self.model.name)
+        return self.sector
 
     class Meta:
         verbose_name = verbose_name_plural = 'Output data'

@@ -88,7 +88,7 @@ RAVEN_CONFIG = {
 
 INVITATION_VALID_DAYS = 365
 
-INSTALLED_APPS += ("gunicorn", )
+INSTALLED_APPS += ("gunicorn", "email_obfuscator")
 
 DATABASES['default'] = env.db("DATABASE_URL")
 

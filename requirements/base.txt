@@ -17,3 +17,5 @@ django-static-precompiler==1.4
 
 wagtail==1.5.2
 wagtail-blog==1.6.6
+
+html5lib==0.9999999
