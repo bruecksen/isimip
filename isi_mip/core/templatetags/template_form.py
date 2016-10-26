@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 from django import template
-from django.forms import BaseForm, TextInput, TextArea
+from django.forms import BaseForm, TextInput, Textarea
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
@@ -54,7 +54,7 @@ def template_form(form, **kwargs):
                 template = 'widgets/textarea.html'
             else:
                 template = 'widgets/textinput.html'
-        elif isinstance(field.field.widget, TextArea):
+        elif isinstance(field.field.widget, Textarea):
             context['type'] = field.field.widget.input_type if hasattr(field.field.widget, 'input_type') else 'text'
             context['small'] = True
             template = 'widgets/textarea.html'
