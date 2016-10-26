@@ -1,17 +1,15 @@
-{% extends "base.html" %}
+{% extends "pages/default_page.html" %}
 {% load wagtailcore_tags %}
 
 {% block content %}
-    <h2 class="page-title">{{ page.title }}</h2>
-    {{ page.top_content }}
+    <div class="form-page-bottom-content">{{ page.top_content }}</div>
+    <br>
     <div class="row">
         <div class="col-sm-6">
             {% include 'widgets/messages.html' with messages=confirmation_messages %}
         </div>
-        <div class="col-sm-6">
-            {{ page.side_content }}
-        </div>
     </div>
-    <br>
-    {{ page.bottom_content }}
+  <br>
+  <br>
+    <div class="form-page-bottom-content">{{ page.bottom_content }}</div>
 {% endblock %}
