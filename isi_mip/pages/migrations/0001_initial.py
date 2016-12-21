@@ -20,7 +20,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('blog', '0008_auto_20160401_1645'),
         ('wagtailcore', '0023_alter_page_revision_on_delete_behaviour'),
     ]
 
