@@ -10,7 +10,7 @@ xlsxwriter==0.8.6
 requests==2.10.0
 tweepy==3.5.0
 
-Django==1.9.7
+Django==1.10.4
 django-environ==0.4.0
 django_compressor==2.0
 django-static-precompiler==1.4

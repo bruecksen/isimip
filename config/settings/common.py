@@ -54,7 +54,8 @@ LOCAL_APPS = (
     'isi_mip.choiceorotherfield',
     'isi_mip.sciencepaper',
 
-    'isi_mip.twitter'
+    'isi_mip.twitter',
+
 )
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + CMS_APPS
 

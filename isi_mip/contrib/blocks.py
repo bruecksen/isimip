@@ -32,20 +32,7 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
 
 
 class SpecificPageChooserBlock(PageChooserBlock):
-    # THIS WILL ONLY WORK IF https://github.com/torchbox/wagtail/pull/2449
     page_model = BlogIndexPage
-
-    # TODO: Waiting on Upstream. For now, the following will do:
-
-    @cached_property
-    def target_model(self):
-        return self.page_model
-
-    @cached_property
-    def widget(self):
-        from wagtail.wagtailadmin.widgets import AdminPageChooser
-        ct = ContentType.objects.get_for_model(self.page_model)
-        return AdminPageChooser(content_type=ct, can_choose_root=self.can_choose_root)
 
 
 class IntegerBlock(FieldBlock):
