@@ -87,9 +87,9 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # FIXTURE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-FIXTURE_DIRS
-FIXTURE_DIRS = (
-    str(APPS_DIR.path('fixtures')),
-)
+# FIXTURE_DIRS = (
+#     str(APPS_DIR.path('fixtures')),
+# )
 
 # EMAIL CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL', default='django@localhost'
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ("Sinnwerkstatt Admin", 'webmaster@sinnwerkstatt.com'),
+    ("Admin", 'webmaster@brueck.io'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
