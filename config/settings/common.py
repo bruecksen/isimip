@@ -193,7 +193,7 @@ STATICFILES_FINDERS = (
 )
 STATIC_PRECOMPILER_OUTPUT_DIR='.'
 
-MEDIA_ROOT = str(APPS_DIR('media'))
+MEDIA_ROOT = str(ROOT_DIR('media'))
 MEDIA_URL = '/media/'
 
 ROOT_URLCONF = 'config.urls'
