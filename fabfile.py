@@ -50,10 +50,10 @@ def deploy():
     with cd(env.path):
         run("git pull %(push_remote)s %(push_branch)s" % env)
         with virtualenv(env.virtualenv_path):
-            # run("pip install -Ur requirements/production.txt")
-            # run("./manage.py collectstatic --noinput --settings=config.settings.production")
+            run("pip install -Ur requirements/production.txt")
+            run("./manage.py collectstatic --noinput --settings=config.settings.production")
 
-    # migrate()
+    migrate()
     reload_webserver()
     ping()
 
