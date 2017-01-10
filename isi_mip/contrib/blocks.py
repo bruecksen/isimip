@@ -32,7 +32,7 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
 
 
 class SpecificPageChooserBlock(PageChooserBlock):
-    page_model = BlogIndexPage
+    target_model = BlogIndexPage
 
 
 class IntegerBlock(FieldBlock):
@@ -65,7 +65,7 @@ class BlogBlock(blocks.StructBlock):
         title = value.get('title') or (blog_index.title if blog_index else 'Blog')
         entry_count = value.get('entry_count')
 
-        entries = BlogPage.objects.all().order_by('-date')
+        entries = blog_index.blogs if blog_index else BlogPage.objects.all().order_by('-date')
         entries = entries[:entry_count]
         # context['teaser_template'] = 'widgets/page-teaser.html'
         context['count'] = entry_count
