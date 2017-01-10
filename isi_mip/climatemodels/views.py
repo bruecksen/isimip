@@ -25,7 +25,7 @@ def impact_model_details(page, request, id):
     except:
         messages.warning(request, 'Unknown model')
         return HttpResponseRedirect('/impactmodels/')
-    subpage = {'title': 'Impact Model: %s' % impactmodel.name, 'url': ''}
+    subpage = {'title': 'Impact model: %s' % impactmodel.name, 'url': ''}
     context = {'page': page, 'subpage': subpage, 'headline': impactmodel.name}
 
     im_values = impactmodel.values_to_tuples() + impactmodel.fk_sector.values_to_tuples()
@@ -81,7 +81,7 @@ def input_data_details(page, request, id):
         description += ' <a href="{}">admin edit</a>'.format(
             urlresolvers.reverse('admin:climatemodels_inputdata_change', args=(data.id,)))
 
-    subpage = {'title': 'Input Data: %s' % data.name, 'url': ''}
+    subpage = {'title': 'Input data set: %s' % data.name, 'url': ''}
     context = {'page': page,
                'subpage': subpage,
                'description': description,
