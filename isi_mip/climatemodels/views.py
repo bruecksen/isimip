@@ -81,7 +81,7 @@ def input_data_details(page, request, id):
         description += ' <a href="{}">admin edit</a>'.format(
             urlresolvers.reverse('admin:climatemodels_inputdata_change', args=(data.id,)))
 
-    subpage = {'title': 'Impact Model: %s' % data.name, 'url': ''}
+    subpage = {'title': 'Input Data: %s' % data.name, 'url': ''}
     context = {'page': page,
                'subpage': subpage,
                'description': description,
