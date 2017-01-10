@@ -65,7 +65,7 @@ class BlogBlock(blocks.StructBlock):
         title = value.get('title') or (blog_index.title if blog_index else 'Blog')
         entry_count = value.get('entry_count')
 
-        entries = blog_index.blogs if blog_index else BlogPage.objects.all().order_by('-date')
+        entries = BlogPage.objects.all().order_by('-date')
         entries = entries[:entry_count]
         # context['teaser_template'] = 'widgets/page-teaser.html'
         context['count'] = entry_count
