@@ -292,7 +292,7 @@ class ImpactModel(models.Model):
         return getattr(self, self.fk_sector_name)
 
     def _get_verbose_field_name(self, field: str) -> str:
-        fieldmeta = self._meta.get_field(field)
+        fieldmeta = self.model._meta.get_field(field)
         ret = fieldmeta.verbose_name.title()
         if fieldmeta.help_text:
             ret = "<abbr title='{}'>{}</abbr>".format(fieldmeta.help_text, ret)
@@ -398,7 +398,7 @@ class Sector(models.Model):
         return type(self).__name__
 
     def _get_verbose_field_name(self, field: str) -> str:
-        return self._meta.get_field_by_name(field)[0].verbose_name.title()
+        return self.model._meta.get_field_by_name(field)[0].verbose_name.title()
 
     def values_to_tuples(self) -> list:
         return []
