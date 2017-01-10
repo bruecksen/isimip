@@ -10,5 +10,7 @@ media/
 static-collected/
 emails/
 whoosh_index/
+*.sublime-project
+*.sublime-workspace
 !.coveragerc
 !.gitignore
