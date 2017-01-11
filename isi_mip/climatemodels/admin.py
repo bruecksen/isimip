@@ -20,17 +20,29 @@ class HideSectorAdmin(HideAdmin):
     readonly_fields = ('impact_model',)
 
 
+class BaseImpactModelAdmin(admin.ModelAdmin):
+    model = BaseImpactModel
+
+
 class ContactPersonAdmin(admin.TabularInline):
     model = ContactPerson
     extra = 1
 
 
-class BaseImpactModelAdmin(admin.ModelAdmin):
-    model = BaseImpactModel
+class TechnicalInformationAdmin(admin.StackedInline):
+    model = TechnicalInformation
+
+
+class InputDataInformationAdmin(admin.StackedInline):
+    model = InputDataInformation
+
+
+class OtherInformationAdmin(admin.StackedInline):
+    model = OtherInformation
 
 
 class ImpactModelAdmin(admin.ModelAdmin):
-    inlines = [ContactPersonAdmin]
+    inlines = [ContactPersonAdmin, TechnicalInformationAdmin, InputDataInformationAdmin, OtherInformationAdmin]
     model = ImpactModel
 
     def get_name(self, obj):
@@ -40,6 +52,8 @@ class ImpactModelAdmin(admin.ModelAdmin):
 
     def get_sector(self, obj):
         return obj.base_model.sector
+    get_sector.admin_order_field = 'sector'
+    get_sector.short_description = 'Sector'
 
     def sector_link(self, obj):
         try:

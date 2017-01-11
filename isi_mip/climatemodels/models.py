@@ -196,86 +196,6 @@ class ImpactModel(models.Model):
         on_delete=models.SET_NULL)
     other_references = models.ManyToManyField(ReferencePaper, blank=True, verbose_name='Reference paper: other references',
                                               help_text='Other papers describing aspects of this model')
-    # technical information
-    spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True, on_delete=models.SET_NULL)
-                                           #help_text="e.g. regular grid, points, hyrdotopes...")
-    spatial_resolution = ChoiceOrOtherField(
-        max_length=500, choices=(('0.5°x0.5°', '0.5°x0.5°'),), blank=True, null=True, verbose_name='Spatial Resolution',
-        help_text="The spatial resolution at which the ISIMIP simulations were run, if on a regular grid. Data was provided on a 0.5°x0.5° grid")
-    spatial_resolution_info = models.TextField(blank=True, verbose_name='Additional spatial aggregation & resolution information',
-                                               help_text='Anything else necessary to understand the spatial aggregation and resolution at which the model operates')
-    TEMPORAL_RESOLUTION_CLIMATE_CHOICES = (('daily', 'daily'), ('monthly', 'monthly'), ('annual', 'annual'),)
-    temporal_resolution_climate = ChoiceOrOtherField(
-        max_length=500, choices=TEMPORAL_RESOLUTION_CLIMATE_CHOICES, blank=True, null=True, verbose_name='Temporal resolution of input data: climate variables',
-        help_text="ISIMIP data was provided in daily time steps")
-    temporal_resolution_co2 = ChoiceOrOtherField(
-        max_length=500, choices=(('annual', 'annual'),), blank=True, null=True, verbose_name='Temporal resolution of input data: CO2',
-        help_text="ISIMIP data was provided in annual time steps")
-    temporal_resolution_land = ChoiceOrOtherField(
-        max_length=500, choices=(('annual', 'annual'),), blank=True, null=True, verbose_name='Temporal resolution of input data: land use/land cover',
-        help_text="ISIMIP data was provided in annual time steps")
-    temporal_resolution_soil = ChoiceOrOtherField(
-        max_length=500, choices=(('constant', 'constant'),), blank=True, null=True, verbose_name='Temporal resolution of input data: soil',
-                                                  help_text="ISIMIP data was fixed over time")
-    temporal_resolution_info = models.TextField(
-        verbose_name='Additional temporal resolution information', blank=True,
-        help_text='Anything else necessary to understand the temporal resolution at which the model operates')
-
-    # input data
-    climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Climate data sets used",
-                                               help_text="The climate-input data sets used in this simulation round")
-    climate_variables = models.ManyToManyField(
-        ClimateVariable, blank=True, verbose_name='Climate variables',
-        help_text="Including variables that were derived from those provided in the ISIMIP input data set")
-    climate_variables_info = models.TextField(blank=True, verbose_name='Additional climate variables information',
-                                              help_text='Including how variables were derived that were not included in the ISIMIP input data')
-    socioeconomic_input_variables = models.ManyToManyField(
-        SocioEconomicInputVariables, blank=True, verbose_name="Socio-economic input variables",
-        help_text="Including resolution where relevant")
-    soil_dataset = models.TextField(null=True, blank=True, verbose_name='Soil dataset',
-                                    help_text="HWSD or GSWP3 were provided")
-    additional_input_data_sets = models.TextField(
-        null=True, blank=True, verbose_name='Additional input data sets',
-        help_text='Data sets used to drive the model that were not provided by ISIMIP'
-    )
-
-    # other
-    exceptions_to_protocol = models.TextField(
-        null=True, blank=True, verbose_name='Exceptions',
-        help_text='Any settings prescribed by the ISIMIP protocol that were overruled when runing the model'
-    )
-    NA_YES_NO = ((None, '---------'), (True, 'Yes'), (False, 'No'))
-    spin_up = models.NullBooleanField(
-        verbose_name='Was a spin-up performed?',
-        help_text="'No' indicates the simulations were run starting in the first reporting year 1971",
-        choices=NA_YES_NO
-    )
-    spin_up_design = models.TextField(
-        null=True, blank=True, verbose_name='Spin-up design',
-        help_text="Including the length of the spin up, the CO2 concentration used, and any deviations from the spin-up procedure defined in the protocol"
-    )
-    natural_vegetation_partition = models.TextField(
-        null=True, blank=True, help_text='How areas covered by different types of natural vegetation are partitioned'
-    )
-    natural_vegetation_dynamics = models.TextField(
-        null=True, blank=True,
-        help_text='Description of how natural vegetation is simulated dynamically where relevant'
-    )
-    natural_vegetation_cover_dataset = models.TextField(
-        null=True, blank=True, help_text='Dataset used if natural vegetation cover is prescribed'
-    )
-    management = models.TextField(
-        null=True, blank=True,
-        help_text='Specific management and autonomous adaptation measures applied. E.g. varying sowing dates in crop models, dbh-related harvesting in forest models.'
-    )
-    extreme_events = models.TextField(
-        null=True, blank=True, verbose_name='Key challenges',
-        help_text='Key challenges for this model in reproducing impacts of extreme events'
-    )
-    anything_else = models.TextField(verbose_name='Additional comments',
-        null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
-    )
-
     public = models.BooleanField(default=True)
 
     class Meta:
@@ -347,6 +267,103 @@ class ImpactModel(models.Model):
                 (vname('anything_else'), self.anything_else),
             ])
         ]
+
+
+class TechnicalInformation(models.Model):
+    impact_model = models.OneToOneField(
+        ImpactModel,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True, on_delete=models.SET_NULL)
+    spatial_resolution = ChoiceOrOtherField(
+        max_length=500, choices=(('0.5°x0.5°', '0.5°x0.5°'),), blank=True, null=True, verbose_name='Spatial Resolution',
+        help_text="The spatial resolution at which the ISIMIP simulations were run, if on a regular grid. Data was provided on a 0.5°x0.5° grid")
+    spatial_resolution_info = models.TextField(blank=True, verbose_name='Additional spatial aggregation & resolution information',
+                                               help_text='Anything else necessary to understand the spatial aggregation and resolution at which the model operates')
+    TEMPORAL_RESOLUTION_CLIMATE_CHOICES = (('daily', 'daily'), ('monthly', 'monthly'), ('annual', 'annual'),)
+    temporal_resolution_climate = ChoiceOrOtherField(
+        max_length=500, choices=TEMPORAL_RESOLUTION_CLIMATE_CHOICES, blank=True, null=True, verbose_name='Temporal resolution of input data: climate variables',
+        help_text="ISIMIP data was provided in daily time steps")
+    temporal_resolution_co2 = ChoiceOrOtherField(
+        max_length=500, choices=(('annual', 'annual'),), blank=True, null=True, verbose_name='Temporal resolution of input data: CO2',
+        help_text="ISIMIP data was provided in annual time steps")
+    temporal_resolution_land = ChoiceOrOtherField(
+        max_length=500, choices=(('annual', 'annual'),), blank=True, null=True, verbose_name='Temporal resolution of input data: land use/land cover',
+        help_text="ISIMIP data was provided in annual time steps")
+    temporal_resolution_soil = ChoiceOrOtherField(
+        max_length=500, choices=(('constant', 'constant'),), blank=True, null=True, verbose_name='Temporal resolution of input data: soil', help_text="ISIMIP data was fixed over time")
+    temporal_resolution_info = models.TextField(
+        verbose_name='Additional temporal resolution information', blank=True,
+        help_text='Anything else necessary to understand the temporal resolution at which the model operates')
+
+
+class InputDataInformation(models.Model):
+    impact_model = models.OneToOneField(
+        ImpactModel,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Climate data sets used",
+                                               help_text="The climate-input data sets used in this simulation round")
+    climate_variables = models.ManyToManyField(
+        ClimateVariable, blank=True, verbose_name='Climate variables',
+        help_text="Including variables that were derived from those provided in the ISIMIP input data set")
+    climate_variables_info = models.TextField(blank=True, verbose_name='Additional climate variables information',
+                                              help_text='Including how variables were derived that were not included in the ISIMIP input data')
+    socioeconomic_input_variables = models.ManyToManyField(
+        SocioEconomicInputVariables, blank=True, verbose_name="Socio-economic input variables",
+        help_text="Including resolution where relevant")
+    soil_dataset = models.TextField(null=True, blank=True, verbose_name='Soil dataset',
+                                    help_text="HWSD or GSWP3 were provided")
+    additional_input_data_sets = models.TextField(
+        null=True, blank=True, verbose_name='Additional input data sets',
+        help_text='Data sets used to drive the model that were not provided by ISIMIP'
+    )
+
+
+class OtherInformation(models.Model):
+    impact_model = models.OneToOneField(
+        ImpactModel,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    exceptions_to_protocol = models.TextField(
+        null=True, blank=True, verbose_name='Exceptions',
+        help_text='Any settings prescribed by the ISIMIP protocol that were overruled when runing the model'
+    )
+    NA_YES_NO = ((None, '---------'), (True, 'Yes'), (False, 'No'))
+    spin_up = models.NullBooleanField(
+        verbose_name='Was a spin-up performed?',
+        help_text="'No' indicates the simulations were run starting in the first reporting year 1971",
+        choices=NA_YES_NO
+    )
+    spin_up_design = models.TextField(
+        null=True, blank=True, verbose_name='Spin-up design',
+        help_text="Including the length of the spin up, the CO2 concentration used, and any deviations from the spin-up procedure defined in the protocol"
+    )
+    natural_vegetation_partition = models.TextField(
+        null=True, blank=True, help_text='How areas covered by different types of natural vegetation are partitioned'
+    )
+    natural_vegetation_dynamics = models.TextField(
+        null=True, blank=True,
+        help_text='Description of how natural vegetation is simulated dynamically where relevant'
+    )
+    natural_vegetation_cover_dataset = models.TextField(
+        null=True, blank=True, help_text='Dataset used if natural vegetation cover is prescribed'
+    )
+    management = models.TextField(
+        null=True, blank=True,
+        help_text='Specific management and autonomous adaptation measures applied. E.g. varying sowing dates in crop models, dbh-related harvesting in forest models.'
+    )
+    extreme_events = models.TextField(
+        null=True, blank=True, verbose_name='Key challenges',
+        help_text='Key challenges for this model in reproducing impacts of extreme events'
+    )
+    anything_else = models.TextField(verbose_name='Additional comments',
+        null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
+    )
+
 
 
 class Sector(models.Model):
