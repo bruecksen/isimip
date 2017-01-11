@@ -54,7 +54,6 @@ class ClimateVariable(models.Model):
             return '{0.name} ({0.abbreviation})'.format(self)
         return self.name
 
-
     def as_span(self):
         if self.abbreviation:
             return '<abbr title="{0.name}">{0.abbreviation}</abbr>'.format(self)
@@ -116,7 +115,6 @@ class ContactPerson(models.Model):
 
     def pretty(self):
         return "{0.name} (<a href='mailto:{0.email}'>{0.email}</a>) {0.institute}".format(self)
-
 
     class Meta:
         ordering = ('name',)
@@ -263,8 +261,8 @@ class ImpactModel(models.Model):
         help_text='Key challenges for this model in reproducing impacts of extreme events'
     )
     anything_else = models.TextField(verbose_name='Additional comments',
-            null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
-        )
+        null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
+    )
 
     # owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="+")
     owners = models.ManyToManyField(User)
@@ -549,7 +547,7 @@ class BiomesForests(Sector):
                 (vname('output'), self.output),
                 (vname('output_per_pft'), self.output_per_pft),
                 (vname('considerations'), self.considerations),
-                ]),
+            ]),
             ('Key model processes', [
                 (vname('dynamic_vegetation'), self.dynamic_vegetation),
                 (vname('nitrogen_limitation'), self.nitrogen_limitation),
