@@ -7,16 +7,14 @@ from django.http.response import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
 from modelcluster.fields import ParentalKey
-from modelcluster.models import ClusterableModel
-from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.wagtailroutablepage.models import route, RoutablePageMixin
 from wagtail.wagtailadmin.edit_handlers import *
 from wagtail.wagtailcore.fields import RichTextField, StreamField
-from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailcore.models import Page
 from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
-from isi_mip.climatemodels.models import ImpactModel, InputData
+from isi_mip.climatemodels.models import ImpactModel
 from isi_mip.climatemodels.views import impact_model_details, impact_model_edit, input_data_details, \
     impact_model_download, impact_model_sector_edit
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate

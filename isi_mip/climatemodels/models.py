@@ -32,7 +32,7 @@ class ReferencePaper(Paper):
         title = "<a target='_blank' href='http://dx.doi.org/{0.doi}'>{0.title}</a>. ".format(self) if self.doi else self.title
         journal = "{0.journal_name},{0.journal_volume},{0.journal_pages},".format(self) if self.journal_name else ''
         year = self.first_published.year if self.first_published else ''
-        return "{}{}{}{}".format(author,title,journal,year)
+        return "{}{}{}{}".format(author, title, journal, year)
 
 
 class ClimateDataType(models.Model):
@@ -263,8 +263,8 @@ class ImpactModel(models.Model):
         help_text='Key challenges for this model in reproducing impacts of extreme events'
     )
     anything_else = models.TextField(verbose_name='Additional comments',
-        null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
-    )
+            null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
+        )
 
     # owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="+")
     owners = models.ManyToManyField(User)
@@ -337,7 +337,7 @@ class ImpactModel(models.Model):
                 (vname('exceptions_to_protocol'), self.exceptions_to_protocol),
             ]),
             ('Spin-up', [
-                (vname('spin_up'), 'Yes' if self.spin_up == True else 'No' if self.spin_up == False else ''),
+                (vname('spin_up'), 'Yes' if self.spin_up is True else 'No' if self.spin_up is False else ''),
                 (vname('spin_up_design'), self.spin_up_design if self.spin_up else ''),
             ]),
             ('Natural Vegetation', [
@@ -593,10 +593,14 @@ class BiomesForests(Sector):
 
     class Meta:
         abstract = True
+
+
 class Biomes(BiomesForests):
     class Meta:
         verbose_name_plural = 'Biomes'
         verbose_name = 'Biomes'
+
+
 class Forests(BiomesForests):
     class Meta:
         verbose_name_plural = 'Forests'
@@ -696,10 +700,14 @@ class MarineEcosystems(Sector):
 
     class Meta:
         abstract = True
+
+
 class MarineEcosystemsGlobal(MarineEcosystems):
     class Meta:
         verbose_name = 'Marine Ecosystems and Fisheries (global)'
         verbose_name_plural = 'Marine Ecosystems and Fisheries (global)'
+
+
 class MarineEcosystemsRegional(MarineEcosystems):
     class Meta:
         verbose_name = 'Marine Ecosystems and Fisheries (regional)'
@@ -777,26 +785,43 @@ class Water(Sector):
 
     class Meta:
         abstract = True
+
+
 class WaterGlobal(Water):
     class Meta:
-        verbose_name='Water (global)'
+        verbose_name = 'Water (global)'
         verbose_name_plural = 'Water (global)'
+
+
 class WaterRegional(Water):
     class Meta:
         verbose_name = 'Water (regional)'
         verbose_name_plural = 'Water (regional)'
 
 
-class Biodiversity(Sector): pass
-class Health(Sector): pass
+class Biodiversity(Sector):
+    pass
+
+
+class Health(Sector):
+    pass
+
+
 class CoastalInfrastructure(Sector):
     class Meta:
         verbose_name = 'Coastal Infrastructure'
         verbose_name_plural = 'Coastal Infrastructure'
-class Permafrost(Sector): pass
+
+
+class Permafrost(Sector):
+    pass
+
+
 class ComputableGeneralEquilibriumModelling(Sector):
     class Meta:
         verbose_name = verbose_name_plural = 'Computable General Equilibrium Modelling'
+
+
 class AgroEconomicModelling(Sector):
     class Meta:
         verbose_name = verbose_name_plural = 'Agro-Economic Modelling'
