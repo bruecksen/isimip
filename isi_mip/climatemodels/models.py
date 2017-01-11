@@ -16,6 +16,17 @@ class Region(models.Model):
         ordering = ('name', )
 
 
+class SimulationRound(models.Model):
+    name = models.CharField(max_length=500, unique=True)
+    order = models.SmallIntegerField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ('-order',)
+
+
 class ReferencePaper(Paper):
     def __str__(self):
         # if self.doi:
@@ -57,16 +68,6 @@ class ClimateVariable(models.Model):
     def as_span(self):
         if self.abbreviation:
             return '<abbr title="{0.name}">{0.abbreviation}</abbr>'.format(self)
-        return self.name
-
-    class Meta:
-        ordering = ('name',)
-
-
-class InputPhase(models.Model):
-    name = models.CharField(max_length=500, unique=True)
-
-    def __str__(self):
         return self.name
 
     class Meta:
@@ -125,7 +126,7 @@ class InputData(models.Model):
     data_type = models.ForeignKey(ClimateDataType, null=True, blank=True, on_delete=models.SET_NULL)
     scenario = models.ForeignKey(Scenario, null=True, blank=True, on_delete=models.SET_NULL)
     variables = models.ManyToManyField(ClimateVariable, blank=True)
-    phase = models.ForeignKey(InputPhase, null=True, blank=True, on_delete=models.SET_NULL)
+    simulation_round = models.ForeignKey(SimulationRound, null=True, blank=True, on_delete=models.SET_NULL)
     description = models.TextField(null=True, blank=True)
     caveats = models.TextField(null=True, blank=True)
     download_instructions = models.TextField(null=True, blank=True)
@@ -138,17 +139,7 @@ class InputData(models.Model):
         ordering = ('name',)
 
 
-class SimulationRound(models.Model):
-    name = models.CharField(max_length=500, unique=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        ordering = ('name',)
-
-
-class ImpactModel(models.Model):
+class BaseImpactModel(models.Model):
     name = models.CharField(max_length=500)
     SECTOR_CHOICES = (
         ('Agriculture', 'Agriculture'),
@@ -168,8 +159,33 @@ class ImpactModel(models.Model):
     )
     sector = models.CharField(max_length=500, choices=SECTOR_CHOICES, help_text='The sector to which this information pertains. Some models may have further entries for other sectors.')
     region = models.ManyToManyField(Region, help_text="Region for which model produces results")
-    simulation_round = models.ManyToManyField(
-        SimulationRound, blank=True,
+    short_description = models.TextField(
+        null=True, blank=True, verbose_name="Short model description",
+        help_text="This short description should assist other researchers in briefly describing the model in a paper.")
+    owners = models.ManyToManyField(User)
+
+    def __str__(self):
+        return "%s (%s)" % (self.name, self.sector)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self)
+
+    @property
+    def fk_sector_name(self):
+        sector = SECTOR_MAPPING[self.sector]
+        sectorname = sector._meta.label_lower.rsplit('.')[-1]
+        return sectorname
+
+    @property
+    def fk_sector(self):
+        return getattr(self, self.fk_sector_name)
+
+
+class ImpactModel(models.Model):
+    base_model = models.ForeignKey(BaseImpactModel, null=True, blank=True, related_name='base_model', on_delete=models.SET_NULL)
+    simulation_round = models.ForeignKey(
+        SimulationRound, blank=True, null=True, on_delete=models.SET_NULL,
         help_text="The ISIMIP simulation round for which these model details are relevant"
     )
     version = models.CharField(max_length=500, null=True, blank=True, verbose_name='Model version',
@@ -180,10 +196,6 @@ class ImpactModel(models.Model):
         on_delete=models.SET_NULL)
     other_references = models.ManyToManyField(ReferencePaper, blank=True, verbose_name='Reference paper: other references',
                                               help_text='Other papers describing aspects of this model')
-    short_description = models.TextField(
-        null=True, blank=True, verbose_name="Short model description",
-        help_text="This short description should assist other researchers in briefly describing the model in a paper.")
-
     # technical information
     spatial_aggregation = models.ForeignKey(SpatialAggregation, null=True, blank=True, on_delete=models.SET_NULL)
                                            #help_text="e.g. regular grid, points, hyrdotopes...")
@@ -264,30 +276,14 @@ class ImpactModel(models.Model):
         null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
     )
 
-    # owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="+")
-    owners = models.ManyToManyField(User)
     public = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ('name', 'sector')
-        ordering = ('name', )
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self)
+        unique_together = ('base_model', 'simulation_round')
+        ordering = ('base_model', 'simulation_round')
 
     def __str__(self):
-        return "%s (%s)" % (self.name, self.sector)
-
-    @property
-    def fk_sector_name(self):
-        sector = SECTOR_MAPPING[self.sector]
-        sectorname = sector._meta.label_lower.rsplit('.')[-1]
-        return sectorname
-
-    @property
-    def fk_sector(self):
-        return getattr(self, self.fk_sector_name)
+        return "%s #%s (%s)" % (self.base_model.name, self.simulation_round, self.base_model.sector)
 
     def _get_verbose_field_name(self, field: str) -> str:
         fieldmeta = self._meta.get_field(field)
@@ -826,7 +822,7 @@ class AgroEconomicModelling(Sector):
 
 
 class OutputData(models.Model):
-    sector = models.CharField(max_length=500, choices=ImpactModel.SECTOR_CHOICES)
+    sector = models.CharField(max_length=500, choices=BaseImpactModel.SECTOR_CHOICES)
     model = models.ForeignKey(ImpactModel, null=True, blank=True, on_delete=models.SET_NULL)
     scenarios = models.ManyToManyField(Scenario)
     drivers = models.ManyToManyField(InputData)

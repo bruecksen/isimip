@@ -25,46 +25,36 @@ class ContactPersonAdmin(admin.TabularInline):
     extra = 1
 
 
+class BaseImpactModelAdmin(admin.ModelAdmin):
+    model = BaseImpactModel
+
+
 class ImpactModelAdmin(admin.ModelAdmin):
+    inlines = [ContactPersonAdmin]
+    model = ImpactModel
+
+    def get_name(self, obj):
+        return obj.base_model.name
+    get_name.admin_order_field = 'name'
+    get_name.short_description = 'Name'
+
+    def get_sector(self, obj):
+        return obj.base_model.sector
+
     def sector_link(self, obj):
         try:
-            adminurl = "admin:%s_change" % obj.fk_sector._meta.db_table
-            link = urlresolvers.reverse(adminurl, args=[obj.fk_sector.id])
-            return '<a href="%s">%s</a>' % (link, obj.fk_sector._meta.verbose_name)
+            adminurl = "admin:%s_change" % obj.base_model.fk_sector._meta.db_table
+            link = urlresolvers.reverse(adminurl, args=[obj.base_model.fk_sector.id])
+            return '<a href="%s">%s</a>' % (link, obj.base_model.fk_sector._meta.verbose_name)
         except NoReverseMatch:
-            return '<span style="color:#666;">{} has no specific attributes.</span>'.format(obj.fk_sector._meta.verbose_name)
+            return '<span style="color:#666;">{} has no specific attributes.</span>'.format(obj.base_model.fk_sector._meta.verbose_name)
         except KeyError:
             return '<span style="color:#666;">will be shown, once the model is saved.</span>'
     sector_link.allow_tags = True
     sector_link.short_description = 'Sector settings'
     readonly_fields = ('sector_link',)
-    list_display = ('name', 'sector', 'public' )
-    list_filter = ('public', 'sector' )
-    inlines = [ContactPersonAdmin]
-
-    fieldsets = [
-        ('Basic Information', {
-            'fields': ['name', 'sector', 'sector_link', 'region', 'simulation_round',
-                       'version',
-                       'main_reference_paper', 'other_references', 'short_description']}
-         ),
-        ('Technical Information', {
-            'fields': [
-                # resolution
-                'spatial_aggregation', 'spatial_resolution', 'spatial_resolution_info', 'temporal_resolution_climate',
-                'temporal_resolution_co2', 'temporal_resolution_land', 'temporal_resolution_soil',
-                'temporal_resolution_info',
-                # input data
-                'climate_data_sets', 'climate_variables', 'climate_variables_info',
-                'socioeconomic_input_variables', 'soil_dataset', 'additional_input_data_sets',
-                # more
-                'exceptions_to_protocol', 'spin_up', 'spin_up_design',
-                'natural_vegetation_partition', 'natural_vegetation_dynamics', 'natural_vegetation_cover_dataset',
-                'management', 'extreme_events',
-                'anything_else', 'owners', 'public',
-            ],
-        }),
-    ]
+    list_display = ('get_name', 'simulation_round', 'get_sector',)
+    list_filter = ('public', 'base_model__sector',)
 
 
 class AgricultureAdmin(HideSectorAdmin):
@@ -95,6 +85,7 @@ class AgricultureAdmin(HideSectorAdmin):
     ]
 
 
+admin.site.register(BaseImpactModel, BaseImpactModelAdmin)
 admin.site.register(ImpactModel, ImpactModelAdmin)
 admin.site.register(InputData)
 admin.site.register(OutputData)
@@ -116,7 +107,6 @@ admin.site.register(Biodiversity, HideSectorAdmin)
 
 admin.site.register(ClimateDataType)
 admin.site.register(ClimateVariable)
-admin.site.register(InputPhase)
 admin.site.register(ReferencePaper)
 admin.site.register(Author, HideAdmin)
 admin.site.register(Region)
