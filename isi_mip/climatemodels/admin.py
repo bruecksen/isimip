@@ -16,6 +16,11 @@ class HideAdmin(admin.ModelAdmin):
         return {}
 
 
+class SimulationRoundAdmin(admin.ModelAdmin):
+    model = SimulationRound
+    prepopulated_fields = {'slug': ('name',), }
+
+
 class HideSectorAdmin(HideAdmin):
     readonly_fields = ('impact_model',)
 
@@ -127,5 +132,5 @@ admin.site.register(Region)
 admin.site.register(Scenario)
 admin.site.register(SocioEconomicInputVariables)
 admin.site.register(ContactPerson)
-admin.site.register(SimulationRound)
+admin.site.register(SimulationRound, SimulationRoundAdmin)
 admin.site.register(SpatialAggregation)

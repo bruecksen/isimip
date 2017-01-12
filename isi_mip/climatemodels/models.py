@@ -18,6 +18,7 @@ class Region(models.Model):
 
 class SimulationRound(models.Model):
     name = models.CharField(max_length=500, unique=True)
+    slug = models.SlugField()
     order = models.SmallIntegerField()
 
     def __str__(self):

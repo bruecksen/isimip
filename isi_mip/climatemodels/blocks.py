@@ -4,7 +4,7 @@ from django.utils.html import urlize
 from wagtail.wagtailcore.blocks import StructBlock
 from wagtail.wagtailcore.blocks.field_block import TextBlock
 
-from isi_mip.climatemodels.models import InputData, OutputData, ImpactModel
+from isi_mip.climatemodels.models import InputData, OutputData, ImpactModel, SimulationRound
 from isi_mip.contrib.blocks import IntegerBlock, RichTextBlock
 
 
@@ -15,23 +15,22 @@ class ImpactModelsBlock(StructBlock):
     def get_context(self, value):
         context = super().get_context(value)
 
-        ims = ImpactModel.objects.order_by('name').filter(public=True)
+        ims = ImpactModel.objects.order_by('base_model__name', 'simulation_round').filter(public=True)
 
         # Filter und Suchfelder
         context['tableid'] = 'selectortable'
         context['searchfield'] = {'value': ''}
-        sector_options = [{'value': x} for x in ims.values_list('sector', flat=True).distinct().order_by('sector')]
-        cdriver_options = [{'value': x} for x in
-                           InputData.objects.values_list('name', flat=True).distinct().order_by('name')]
+        sector_options = [{'value': x} for x in ims.values_list('base_model__sector', flat=True).distinct().order_by('base_model__sector')]
+        simulation_round_options = [{'value': x} for x in SimulationRound.objects.values_list('name', flat=True).distinct().order_by('-order')]
         context['selectors'] = [
             {'colnumber': '2', 'all_value': 'All Sectors', 'options': sector_options, 'name': 'sector'},
-            {'colnumber': '3', 'all_value': 'All Climate Drivers', 'options': cdriver_options, 'name': 'driver'},
+            {'colnumber': '3', 'all_value': 'All Simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
         ]
 
         # Tabelle
         context['id'] = 'selectortable'
         context['head'] = {
-            'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Climate Driver'}, {'text': 'Contact'}]
+            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Contact'}]
         }
         rows_per_page = value.get('rows_per_page')
         numpages = math.ceil(ims.count() / rows_per_page)
@@ -45,11 +44,10 @@ class ImpactModelsBlock(StructBlock):
 
         context['body'] = {'rows': []}
         for i, imodel in enumerate(ims):
-            datasets = [str(x) for x in imodel.climate_data_sets.all()]
             cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
                        imodel.contactperson_set.all()]
-            values = [["<a href='details/{0.id}/'>{0.name}</a>".format(imodel)], [imodel.sector]]
-            values += [datasets] + [["<br/>".join(cpeople)]]
+            values = [["<a href='details/{1.id}/'>{0.name}</a>".format(imodel.base_model, imodel)], [imodel.simulation_round.name], [imodel.base_model.sector]]
+            values += [["<br/>".join(cpeople)]]
             row = {
                 'invisible': i >= rows_per_page,
                 'cols': [{'texts': x} for x in values],
