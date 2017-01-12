@@ -6,6 +6,10 @@ from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
 from isi_mip.sciencepaper.models import Paper
 
 
+def generate_helptext(help_text, value):
+    return "<abbr title='{}'>{}</abbr>".format(help_text, value)
+
+
 class Region(models.Model):
     name = models.CharField(max_length=500, unique=True)
 
@@ -168,23 +172,16 @@ class BaseImpactModel(models.Model):
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        SECTOR_MAPPING[self.sector].objects.get_or_create(impact_model=self)
-
-    @property
-    def fk_sector_name(self):
-        sector = SECTOR_MAPPING[self.sector]
-        sectorname = sector._meta.label_lower.rsplit('.')[-1]
-        return sectorname
-
-    @property
-    def fk_sector(self):
-        return getattr(self, self.fk_sector_name)
+    def _get_verbose_field_name(self, field):
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name.title()
+        if fieldmeta.help_text:
+            ret = generate_helptext(fieldmeta.help_text, ret)
+        return ret
 
 
 class ImpactModel(models.Model):
-    base_model = models.ForeignKey(BaseImpactModel, null=True, blank=True, related_name='base_model', on_delete=models.SET_NULL)
+    base_model = models.ForeignKey(BaseImpactModel, null=True, blank=True, related_name='impact_model', on_delete=models.SET_NULL)
     simulation_round = models.ForeignKey(
         SimulationRound, blank=True, null=True, on_delete=models.SET_NULL,
         help_text="The ISIMIP simulation round for which these model details are relevant"
@@ -206,68 +203,47 @@ class ImpactModel(models.Model):
     def __str__(self):
         return "%s #%s (%s)" % (self.base_model.name, self.simulation_round, self.base_model.sector)
 
-    def _get_verbose_field_name(self, field: str) -> str:
+    @property
+    def fk_sector_name(self):
+        sector = SECTOR_MAPPING[self.base_model.sector]
+        sectorname = sector._meta.label_lower.rsplit('.')[-1]
+        return sectorname
+
+    @property
+    def fk_sector(self):
+        return getattr(self, self.fk_sector_name)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        SECTOR_MAPPING[self.base_model.sector].objects.get_or_create(impact_model=self)
+
+    def _get_verbose_field_name(self, field):
         fieldmeta = self._meta.get_field(field)
         ret = fieldmeta.verbose_name.title()
         if fieldmeta.help_text:
-            ret = "<abbr title='{}'>{}</abbr>".format(fieldmeta.help_text, ret)
+            ret = generate_helptext(fieldmeta.help_text, ret)
         return ret
 
-    def values_to_tuples(self) -> list:
+    def values_to_tuples(self):
         vname = self._get_verbose_field_name
+        bvname = self.base_model._get_verbose_field_name
         cpers = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.pretty() for x in self.contactperson_set.all()])
         other_references = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.entry_with_link() for x in self.other_references.all()])
+        # ', '.join([x.name for x in self.simulation_round.all()])
         return [
             ('Basic information', [
-                (vname('sector'), self.sector),
-                (vname('region'), ', '.join([x.name for x in self.region.all()])),
+                (bvname('sector'), self.base_model.sector),
+                (bvname('region'), ', '.join([x.name for x in self.base_model.region.all()])),
                 ('Contact Person', cpers),
-                (vname('simulation_round'), ', '.join([x.name for x in self.simulation_round.all()])),
+                (vname('simulation_round'), self.simulation_round.name),
                 (vname('version'), self.version),
                 (vname('main_reference_paper'),
                  self.main_reference_paper.entry_with_link() if self.main_reference_paper else None),
                 (vname('other_references'), other_references),
-                # (vname('short_description'), self.short_description),
             ]),
-            ('Resolution', [
-                (vname('spatial_aggregation'), self.spatial_aggregation),
-                (vname('spatial_resolution'), self.spatial_resolution),
-                (vname('spatial_resolution_info'), self.spatial_resolution_info),
-                (vname('temporal_resolution_climate'), self.temporal_resolution_climate),
-                (vname('temporal_resolution_co2'), self.temporal_resolution_co2),
-                (vname('temporal_resolution_land'), self.temporal_resolution_land),
-                (vname('temporal_resolution_soil'), self.temporal_resolution_soil),
-                (vname('temporal_resolution_info'), self.temporal_resolution_info),
-            ]),
-            ('Input Data', [
-                (vname('climate_data_sets'), ', '.join([x.name for x in self.climate_data_sets.all()])),
-                (vname('climate_variables'), ', '.join([x.as_span() for x in self.climate_variables.all()])),
-                (vname('climate_variables_info'), self.climate_variables_info),
-                (vname('socioeconomic_input_variables'),
-                 ', '.join([x.name for x in self.socioeconomic_input_variables.all()])),
-                (vname('soil_dataset'), self.soil_dataset),
-                (vname('additional_input_data_sets'), self.additional_input_data_sets),
-            ]),
-            ('Exceptions to Protocol', [
-                (vname('exceptions_to_protocol'), self.exceptions_to_protocol),
-            ]),
-            ('Spin-up', [
-                (vname('spin_up'), 'Yes' if self.spin_up is True else 'No' if self.spin_up is False else ''),
-                (vname('spin_up_design'), self.spin_up_design if self.spin_up else ''),
-            ]),
-            ('Natural Vegetation', [
-                (vname('natural_vegetation_partition'), self.natural_vegetation_partition),
-                (vname('natural_vegetation_dynamics'), self.natural_vegetation_dynamics),
-                (vname('natural_vegetation_cover_dataset'), self.natural_vegetation_cover_dataset),
-            ]),
-            ('Management & Adaptation Measures', [
-                (vname('management'), self.management),
-            ]),
-            ('Extreme Events', [
-                (vname('extreme_events'), self.extreme_events),
-                (vname('anything_else'), self.anything_else),
-            ])
-        ]
+            self.technicalinformation.values_to_tuples(),
+            self.inputdatainformation.values_to_tuples(),
+        ] + self.otherinformation.values_to_tuples()
 
 
 class TechnicalInformation(models.Model):
@@ -298,6 +274,26 @@ class TechnicalInformation(models.Model):
         verbose_name='Additional temporal resolution information', blank=True,
         help_text='Anything else necessary to understand the temporal resolution at which the model operates')
 
+    def _get_verbose_field_name(self, field):
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name.title()
+        if fieldmeta.help_text:
+            ret = generate_helptext(fieldmeta.help_text, ret)
+        return ret
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        return ('Resolution', [
+                (vname('spatial_aggregation'), self.spatial_aggregation),
+                (vname('spatial_resolution'), self.spatial_resolution),
+                (vname('spatial_resolution_info'), self.spatial_resolution_info),
+                (vname('temporal_resolution_climate'), self.temporal_resolution_climate),
+                (vname('temporal_resolution_co2'), self.temporal_resolution_co2),
+                (vname('temporal_resolution_land'), self.temporal_resolution_land),
+                (vname('temporal_resolution_soil'), self.temporal_resolution_soil),
+                (vname('temporal_resolution_info'), self.temporal_resolution_info),
+                ])
+
 
 class InputDataInformation(models.Model):
     impact_model = models.OneToOneField(
@@ -321,6 +317,24 @@ class InputDataInformation(models.Model):
         null=True, blank=True, verbose_name='Additional input data sets',
         help_text='Data sets used to drive the model that were not provided by ISIMIP'
     )
+
+    def _get_verbose_field_name(self, field):
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name.title()
+        if fieldmeta.help_text:
+            ret = generate_helptext(fieldmeta.help_text, ret)
+        return ret
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        return ('Input Data', [
+                (vname('climate_data_sets'), ', '.join([x.name for x in self.climate_data_sets.all()])),
+                (vname('climate_variables'), ', '.join([x.as_span() for x in self.climate_variables.all()])),
+                (vname('climate_variables_info'), self.climate_variables_info),
+                (vname('socioeconomic_input_variables'), ', '.join([x.name for x in self.socioeconomic_input_variables.all()])),
+                (vname('soil_dataset'), self.soil_dataset),
+                (vname('additional_input_data_sets'), self.additional_input_data_sets),
+                ])
 
 
 class OtherInformation(models.Model):
@@ -361,10 +375,41 @@ class OtherInformation(models.Model):
         null=True, blank=True, verbose_name='Key challenges',
         help_text='Key challenges for this model in reproducing impacts of extreme events'
     )
-    anything_else = models.TextField(verbose_name='Additional comments',
+    anything_else = models.TextField(
+        verbose_name='Additional comments',
         null=True, blank=True, help_text='Anything else necessary to reproduce and/or understand the simulation output'
     )
 
+    def _get_verbose_field_name(self, field):
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name.title()
+        if fieldmeta.help_text:
+            ret = generate_helptext(fieldmeta.help_text, ret)
+        return ret
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        return [
+            ('Exceptions to Protocol', [
+                (vname('exceptions_to_protocol'), self.exceptions_to_protocol),
+            ]),
+            ('Spin-up', [
+                (vname('spin_up'), 'Yes' if self.spin_up is True else 'No' if self.spin_up is False else ''),
+                (vname('spin_up_design'), self.spin_up_design if self.spin_up else ''),
+            ]),
+            ('Natural Vegetation', [
+                (vname('natural_vegetation_partition'), self.natural_vegetation_partition),
+                (vname('natural_vegetation_dynamics'), self.natural_vegetation_dynamics),
+                (vname('natural_vegetation_cover_dataset'), self.natural_vegetation_cover_dataset),
+            ]),
+            ('Management & Adaptation Measures', [
+                (vname('management'), self.management),
+            ]),
+            ('Extreme Events', [
+                (vname('extreme_events'), self.extreme_events),
+                (vname('anything_else'), self.anything_else),
+            ])
+        ]
 
 
 class Sector(models.Model):
@@ -761,7 +806,7 @@ class Water(Sector):
         return [
             ('Technological Progress', [
                 (vname('technological_progress'), self.technological_progress),
-                ]),
+            ]),
             ('Soil', [
                 (vname('soil_layers'), self.soil_layers),
             ]),

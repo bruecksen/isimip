@@ -11,10 +11,9 @@ from django.http.response import HttpResponse, HttpResponseRedirect, JsonRespons
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.html import urlize, linebreaks
-from wagtail.wagtailcore.models import Page
 
 from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, ContactPersonFormset, get_sector_form
-from isi_mip.climatemodels.models import ImpactModel, InputData, ReferencePaper
+from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 from isi_mip.invitation.views import InvitationView
 
@@ -22,11 +21,13 @@ from isi_mip.invitation.views import InvitationView
 def impact_model_details(page, request, id):
     try:
         impactmodel = ImpactModel.objects.get(id=id)
+        base_model = impactmodel.base_model
     except:
         messages.warning(request, 'Unknown model')
         return HttpResponseRedirect('/impactmodels/')
-    subpage = {'title': 'Impact model: %s' % impactmodel.name, 'url': ''}
-    context = {'page': page, 'subpage': subpage, 'headline': impactmodel.name}
+    title = 'Impact model: %s' % base_model.name
+    subpage = {'title': title, 'url': ''}
+    context = {'page': page, 'subpage': subpage, 'headline': base_model.name}
 
     im_values = impactmodel.values_to_tuples() + impactmodel.fk_sector.values_to_tuples()
     model_details = []
@@ -38,9 +39,17 @@ def impact_model_details(page, request, id):
             model_details.append(res)
     model_details[0]['opened'] = True
     context['list'] = model_details
-    context['description'] = urlize(impactmodel.short_description or '')  # or ''
+    context['description'] = urlize(base_model.short_description or '')
 
-    if request.user in impactmodel.owners.all():
+    model_simulation_rounds = []
+    for im in base_model.impact_model.all():
+        model_simulation_rounds.append({
+            'name': im.simulation_round.name,
+            'url': page.url + page.reverse_subpage('details', args=(im.id,)),
+            'active': im.simulation_round == impactmodel.simulation_round,
+        })
+    context['model_simulation_rounds'] = model_simulation_rounds
+    if request.user in base_model.owners.all():
         context['editlink'] = '<a href="{}">edit</a>'.format(
             page.url + page.reverse_subpage('edit', args=(impactmodel.id,)))
     else:
@@ -126,13 +135,13 @@ def impact_model_edit(page, request, id):
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
     impactmodel = ImpactModel.objects.get(id=id)
-    if not (request.user in impactmodel.owners.all() or request.user.is_superuser):
+    if not (request.user in impactmodel.base_model.owners.all() or request.user.is_superuser):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
 
     subpage = {
-        'title': 'Impact Model: %s' % impactmodel.name,
+        'title': 'Impact Model: %s' % impactmodel.base_model.name,
         'url': page.url + page.reverse_subpage('details', args=(id,)),
         'subpage': {'title': 'Edit', 'url': ''}
     }
@@ -174,7 +183,7 @@ def impact_model_sector_edit(page, request, id):
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
     impactmodel = ImpactModel.objects.get(id=id)
-    if not (request.user in impactmodel.owners.all() or request.user.is_superuser):
+    if not (request.user in impactmodel.base_model.owners.all() or request.user.is_superuser):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
@@ -225,13 +234,13 @@ def impact_model_assign(request, username=None):
         if form.is_valid():
             imodel = form.cleaned_data['model']
             if imodel:
-                imodel.owners.add(user)
+                imodel.base_model.owners.add(user)
                 imodel.save()
                 messages.success(request, "{} has been added to the list of owners for \"{}\"".format(user, imodel))
             else:
                 del (form.cleaned_data['model'])
                 imodel = ImpactModel.objects.create(**form.cleaned_data)
-                imodel.owners.add(user)
+                imodel.base_model.owners.add(user)
                 imodel.public = False
                 imodel.save()
                 messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(imodel, user))
