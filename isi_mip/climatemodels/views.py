@@ -44,7 +44,7 @@ def impact_model_details(page, request, id):
         return HttpResponseRedirect('/impactmodels/')
     title = 'Impact model: %s' % base_model.name
     subpage = {'title': title, 'url': ''}
-    context = {'page': page, 'subpage': subpage, }
+    context = {'page': page, 'subpage': subpage, 'headline': '-'}
     can_edit_model = False
     if request.user in base_model.owners.all() or request.user.is_superuser:
         can_edit_model = True
@@ -70,7 +70,7 @@ def impact_model_details(page, request, id):
             'simulation_round': im.simulation_round.name,
             'simulation_round_slug': im.simulation_round.slug,
             'model_name': base_model.name,
-            'edit_url': edit_link,
+            'edit_link': edit_link,
             'details': model_details
         })
     context['description'] = urlize(base_model.short_description or '')
