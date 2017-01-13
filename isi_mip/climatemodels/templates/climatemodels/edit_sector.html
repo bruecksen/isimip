@@ -1,0 +1,25 @@
+{% extends 'pages/default_page.html' %}
+{% load breadcrumb template_form %}
+{% block content_container %}
+  <div class="container scrollable-container">
+		<br>
+		{% breadcrumb %}
+		{% block pagetitle %}
+			{% include 'widgets/heading2.html' with text='Edit '|add:subpage.title %}
+		{% endblock %}
+		{% block content %}
+			<form method="POST">
+				{% block form_content %}
+					{% include 'widgets/heading3.html' with text='Base Information' %}
+					{% include 'widgets/richtext-content.html' with content=page.common_attributes_text %}
+					{% template_form form as nf %}
+					{{ nf }}
+				{% endblock %}
+				{% csrf_token %}
+				<div class="form-actions">
+					<input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-save">
+				</div>
+			</form>
+		{% endblock %}
+	</div>
+{% endblock %}

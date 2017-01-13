@@ -4,7 +4,7 @@ from django.utils.html import urlize
 from wagtail.wagtailcore.blocks import StructBlock
 from wagtail.wagtailcore.blocks.field_block import TextBlock
 
-from isi_mip.climatemodels.models import InputData, OutputData, ImpactModel, SimulationRound
+from isi_mip.climatemodels.models import InputData, OutputData, BaseImpactModel, SimulationRound
 from isi_mip.contrib.blocks import IntegerBlock, RichTextBlock
 
 
@@ -15,12 +15,12 @@ class ImpactModelsBlock(StructBlock):
     def get_context(self, value):
         context = super().get_context(value)
 
-        ims = ImpactModel.objects.order_by('base_model__name', 'simulation_round').filter(public=True)
+        bims = BaseImpactModel.objects.order_by('name').filter(impact_model__public=True).distinct()
 
         # Filter und Suchfelder
         context['tableid'] = 'selectortable'
         context['searchfield'] = {'value': ''}
-        sector_options = [{'value': x} for x in ims.values_list('base_model__sector', flat=True).distinct().order_by('base_model__sector')]
+        sector_options = [{'value': x} for x in bims.values_list('sector', flat=True).distinct().order_by('sector')]
         simulation_round_options = [{'value': x} for x in SimulationRound.objects.values_list('name', flat=True).distinct().order_by('-order')]
         context['selectors'] = [
             {'colnumber': '2', 'all_value': 'All Simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
@@ -33,7 +33,7 @@ class ImpactModelsBlock(StructBlock):
             'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Contact'}]
         }
         rows_per_page = value.get('rows_per_page')
-        numpages = math.ceil(ims.count() / rows_per_page)
+        numpages = math.ceil(bims.count() / rows_per_page)
         context['pagination'] = {
             'rowsperpage': (rows_per_page),
             'numberofpages': numpages,  # number of pages with current filters
@@ -43,11 +43,12 @@ class ImpactModelsBlock(StructBlock):
         context['norowvisible'] = False  # true when no row is visible
 
         context['body'] = {'rows': []}
-        for i, imodel in enumerate(ims):
-            cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
-                       imodel.contactperson_set.all()]
-            values = [["<a href='details/{1.id}/'>{0.name}</a>".format(imodel.base_model, imodel)], [imodel.simulation_round.name], [imodel.base_model.sector]]
-            values += [["<br/>".join(cpeople)]]
+        for i, bmodel in enumerate(bims):
+            # cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
+                       # bmodel.contactperson_set.all()]
+            simulation_rounds = bmodel.impact_model.all().values_list('simulation_round__name', flat=True)
+            values = [["<a href='details/{0.id}/'>{0.name}</a>".format(bmodel, bmodel)], simulation_rounds, [bmodel.sector]]
+            # values += [["<br/>".join(cpeople)]]
             row = {
                 'invisible': i >= rows_per_page,
                 'cols': [{'texts': x} for x in values],

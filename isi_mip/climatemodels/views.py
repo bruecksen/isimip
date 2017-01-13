@@ -14,7 +14,7 @@ from django.utils.html import urlize, linebreaks
 
 from isi_mip.climatemodels.forms import ImpactModelStartForm, ContactPersonFormset, get_sector_form, \
     BaseImpactModelForm, ImpactModelForm, TechnicalInformationModelForm, InputDataInformationModelForm, OtherInformationModelForm
-from isi_mip.climatemodels.models import ImpactModel, InputData
+from isi_mip.climatemodels.models import ImpactModel, InputData, BaseImpactModel
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 from isi_mip.invitation.views import InvitationView
 
@@ -38,46 +38,55 @@ FORM_STEPS = {
 
 def impact_model_details(page, request, id):
     try:
-        impactmodel = ImpactModel.objects.get(id=id)
-        base_model = impactmodel.base_model
+        base_model = BaseImpactModel.objects.get(id=id)
     except:
         messages.warning(request, 'Unknown model')
         return HttpResponseRedirect('/impactmodels/')
     title = 'Impact model: %s' % base_model.name
     subpage = {'title': title, 'url': ''}
-    context = {'page': page, 'subpage': subpage, 'headline': base_model.name}
+    context = {'page': page, 'subpage': subpage, }
+    can_edit_model = False
+    if request.user in base_model.owners.all() or request.user.is_superuser:
+        can_edit_model = True
 
-    im_values = impactmodel.values_to_tuples() + impactmodel.fk_sector.values_to_tuples()
-    model_details = []
-    for k, v in im_values:
-        if any((y for x, y in v)):
-            res = {'term': k,
-                   'definitions': ({'text': "%s: <i>%s</i>" % (x, y)} for x, y in v if y)
-                   }
-            model_details.append(res)
-    model_details[0]['opened'] = True
-    context['list'] = model_details
-    context['description'] = urlize(base_model.short_description or '')
+    # context['editlink'] += ' | <a href="{}">admin edit</a>'.format(
+    #     urlresolvers.reverse('admin:climatemodels_impactmodel_change', args=(impactmodel.id,)))
 
     model_simulation_rounds = []
     for im in base_model.impact_model.all():
+        im_values = im.values_to_tuples() + im.fk_sector.values_to_tuples()
+        model_details = []
+        for k, v in im_values:
+            if any((y for x, y in v)):
+                res = {'term': k,
+                       'definitions': ({'text': "%s: <i>%s</i>" % (x, y)} for x, y in v if y)
+                       }
+                model_details.append(res)
+        model_details[0]['opened'] = True
+        edit_link = ''
+        if can_edit_model:
+            edit_link = '<a href="{}">edit</a>'.format(page.url + page.reverse_subpage('edit', args=(im.id,)))
         model_simulation_rounds.append({
-            'name': im.simulation_round.name,
-            'url': page.url + page.reverse_subpage('details', args=(im.id,)),
-            'active': im.simulation_round == impactmodel.simulation_round,
+            'simulation_round': im.simulation_round.name,
+            'simulation_round_slug': im.simulation_round.slug,
+            'model_name': base_model.name,
+            'edit_url': edit_link,
+            'details': model_details
         })
+    context['description'] = urlize(base_model.short_description or '')
     context['model_simulation_rounds'] = model_simulation_rounds
-    if request.user in base_model.owners.all():
-        context['editlink'] = '<a href="{}">edit</a>'.format(
-            page.url + page.reverse_subpage('edit', args=(impactmodel.id,)))
-    else:
-        context['editlink'] = ''
-    if request.user.is_superuser:
-        context['editlink'] += ' | <a href="{}">admin edit</a>'.format(
-            urlresolvers.reverse('admin:climatemodels_impactmodel_change', args=(impactmodel.id,)))
+    bm_values = base_model.values_to_tuples()
+    for k, v in bm_values:
+        if any((y for x, y in v)):
+            res = {'term': k,
+                   'definitions': ({'text': "%s: <i>%s</i>" % (x, y)} for x, y in v if y),
+                   'opened': True
+                   }
+    context['base_model'] = [res, ]
+    # raise Exception()
 
-    if not impactmodel.public:
-        messages.warning(request, page.private_model_message)
+    # if not impactmodel.public:
+    #     messages.warning(request, page.private_model_message)
 
     template = 'climatemodels/details.html'
     return render(request, template, context)

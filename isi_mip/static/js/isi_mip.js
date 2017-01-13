@@ -642,3 +642,11 @@ $( window ).load(function() {
 $(function() {
 	$('body').append('<div class="gap" style="height:4px; display: none;"></div>');
 });
+
+// $(function() {
+// 	$('#impact-model-tabs a').click(function (e) {
+// 		console.log('click');
+// 		e.preventDefault()
+// 		$(this).tab('show')
+// })
+// });

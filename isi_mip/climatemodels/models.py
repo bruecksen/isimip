@@ -182,6 +182,14 @@ class BaseImpactModel(models.Model):
             ret = generate_helptext(fieldmeta.help_text, ret)
         return ret
 
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        return [
+            ('Common information', [
+                (vname('sector'), self.sector),
+                (vname('region'), ', '.join([x.name for x in self.region.all()])),
+            ])]
+
 
 class ImpactModel(models.Model):
     base_model = models.ForeignKey(BaseImpactModel, null=True, blank=True, related_name='impact_model', on_delete=models.SET_NULL)
@@ -235,10 +243,7 @@ class ImpactModel(models.Model):
         # ', '.join([x.name for x in self.simulation_round.all()])
         return [
             ('Basic information', [
-                (bvname('sector'), self.base_model.sector),
-                (bvname('region'), ', '.join([x.name for x in self.base_model.region.all()])),
                 ('Contact Person', cpers),
-                (vname('simulation_round'), self.simulation_round.name),
                 (vname('version'), self.version),
                 (vname('main_reference_paper'),
                  self.main_reference_paper.entry_with_link() if self.main_reference_paper else None),
