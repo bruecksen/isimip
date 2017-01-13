@@ -22,42 +22,34 @@ class ImpactModelStartForm(forms.ModelForm):
         fields = ('model', 'name', 'sector')
 
 
-class ImpactModelForm(forms.ModelForm):
+class BaseImpactModelForm(forms.ModelForm):
     region = MyModelMultipleChoiceField(allowcustom=True, queryset=Region.objects, required=True)
-    simulation_round = MyModelMultipleChoiceField(allowcustom=True, queryset=SimulationRound.objects)
-    spatial_aggregation = MyModelSingleChoiceField(allowcustom=True, queryset=SpatialAggregation.objects)
-    climate_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    climate_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=ClimateVariable.objects)
-    socioeconomic_input_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=SocioEconomicInputVariables.objects)
+
     class Meta:
-        model = ImpactModel
+        model = BaseImpactModel
         exclude = ('owners', 'public')
         widgets = {
             'name': MyTextInput(),
             'sector': MyMultiSelect(),
+            'short_description': MyTextInput(textarea=True),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        if instance and instance.pk:
+            self.fields['name'].widget.attrs['readonly'] = True
+
+
+class ImpactModelForm(forms.ModelForm):
+
+    class Meta:
+        model = ImpactModel
+        exclude = ('base_model', 'public', 'simulation_round')
+        widgets = {
             'version': MyTextInput(),
             'main_reference_paper': RefPaperWidget(),
             'other_references': RefPaperWidget(),
-            'short_description': MyTextInput(textarea=True),
-            'spatial_resolution': MyMultiSelect(allowcustom=True),
-            'spatial_resolution_info': MyTextInput(textarea=True),
-            'temporal_resolution_climate': MyMultiSelect(allowcustom=True),
-            'temporal_resolution_co2': MyMultiSelect(allowcustom=True),
-            'temporal_resolution_land': MyMultiSelect(allowcustom=True),
-            'temporal_resolution_soil': MyMultiSelect(allowcustom=True),
-            'temporal_resolution_info': MyTextInput(textarea=True),
-            'climate_variables_info': MyTextInput(textarea=True),
-            'soil_dataset': MyTextInput(),
-            'additional_input_data_sets': MyTextInput(),
-            'exceptions_to_protocol': MyTextInput(textarea=True),
-            'spin_up': MyBooleanSelect(nullable=True),
-            'spin_up_design': MyTextInput(textarea=True),
-            'natural_vegetation_partition': MyTextInput(textarea=True),
-            'natural_vegetation_dynamics': MyTextInput(textarea=True),
-            'natural_vegetation_cover_dataset': MyTextInput(),
-            'management': MyTextInput(textarea=True),
-            'extreme_events': MyTextInput(textarea=True),
-            'anything_else': MyTextInput(textarea=True),
         }
 
     @staticmethod
@@ -101,10 +93,9 @@ class ImpactModelForm(forms.ModelForm):
             raise ValidationError('Problems adding the main reference paper')
         return self._ref_paper(myargs)
 
-
     def clean_other_references(self):
         rps = []
-        for i in range(len(self.data.getlist('other_references-title')) -1):
+        for i in range(len(self.data.getlist('other_references-title')) - 1):
             myargs = {
                 'lead_author': self.data.getlist('other_references-author')[i],
                 'title': self.data.getlist('other_references-title')[i],
@@ -122,11 +113,55 @@ class ImpactModelForm(forms.ModelForm):
             rps += [rp] if rp is not None else []
         return rps
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        instance = getattr(self, 'instance', None)
-        if instance and instance.pk:
-            self.fields['name'].widget.attrs['readonly'] = True
+
+class TechnicalInformationModelForm(forms.ModelForm):
+    spatial_aggregation = MyModelSingleChoiceField(allowcustom=True, queryset=SpatialAggregation.objects)
+
+    class Meta:
+        model = TechnicalInformation
+        exclude = ('impact_model',)
+        widgets = {
+            'spatial_resolution': MyMultiSelect(allowcustom=True),
+            'spatial_resolution_info': MyTextInput(textarea=True),
+            'temporal_resolution_climate': MyMultiSelect(allowcustom=True),
+            'temporal_resolution_co2': MyMultiSelect(allowcustom=True),
+            'temporal_resolution_land': MyMultiSelect(allowcustom=True),
+            'temporal_resolution_soil': MyMultiSelect(allowcustom=True),
+            'temporal_resolution_info': MyTextInput(textarea=True),
+        }
+
+
+class InputDataInformationModelForm(forms.ModelForm):
+    climate_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
+    climate_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=ClimateVariable.objects)
+    socioeconomic_input_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=SocioEconomicInputVariables.objects)
+
+    class Meta:
+        model = InputDataInformation
+        exclude = ('impact_model',)
+        widgets = {
+            'climate_variables_info': MyTextInput(textarea=True),
+            'soil_dataset': MyTextInput(),
+            'additional_input_data_sets': MyTextInput(),
+        }
+
+
+class OtherInformationModelForm(forms.ModelForm):
+
+    class Meta:
+        model = OtherInformation
+        exclude = ('impact_model',)
+        widgets = {
+            'exceptions_to_protocol': MyTextInput(textarea=True),
+            'spin_up': MyBooleanSelect(nullable=True),
+            'spin_up_design': MyTextInput(textarea=True),
+            'natural_vegetation_partition': MyTextInput(textarea=True),
+            'natural_vegetation_dynamics': MyTextInput(textarea=True),
+            'natural_vegetation_cover_dataset': MyTextInput(),
+            'management': MyTextInput(textarea=True),
+            'extreme_events': MyTextInput(textarea=True),
+            'anything_else': MyTextInput(textarea=True),
+        }
 
 
 # SEKTOREN ############################################################

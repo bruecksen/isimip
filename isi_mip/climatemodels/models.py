@@ -169,6 +169,9 @@ class BaseImpactModel(models.Model):
         help_text="This short description should assist other researchers in briefly describing the model in a paper.")
     owners = models.ManyToManyField(User)
 
+    class Meta:
+        ordering = ('name', 'sector')
+
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
 

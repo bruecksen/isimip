@@ -12,10 +12,28 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.html import urlize, linebreaks
 
-from isi_mip.climatemodels.forms import ImpactModelForm, ImpactModelStartForm, ContactPersonFormset, get_sector_form
+from isi_mip.climatemodels.forms import ImpactModelStartForm, ContactPersonFormset, get_sector_form, \
+    BaseImpactModelForm, ImpactModelForm, TechnicalInformationModelForm, InputDataInformationModelForm, OtherInformationModelForm
 from isi_mip.climatemodels.models import ImpactModel, InputData
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 from isi_mip.invitation.views import InvitationView
+
+STEP_SHOW_DETAILS = 'details'
+STEP_BASE = 'edit_base'
+STEP_DETAIL = 'edit_detail'
+STEP_TECHNICAL_INFORMATION = 'edit_technical_information'
+STEP_INPUT_DATA = 'edit_input_data'
+STEP_OTHER = 'edit_other'
+STEP_SECTOR = 'edit_sector'
+
+FORM_STEPS = {
+    STEP_BASE: {'form': BaseImpactModelForm, 'next': STEP_DETAIL, 'verbose_name': 'Base Information'},
+    STEP_DETAIL: {'form': ImpactModelForm, 'next': STEP_TECHNICAL_INFORMATION, 'verbose_name': 'Detail Information'},
+    STEP_TECHNICAL_INFORMATION: {'form': TechnicalInformationModelForm, 'next': STEP_INPUT_DATA, 'verbose_name': 'Technical Information'},
+    STEP_INPUT_DATA: {'form': InputDataInformationModelForm, 'next': STEP_OTHER, 'verbose_name': 'Input Data Information'},
+    STEP_OTHER: {'form': OtherInformationModelForm, 'next': STEP_SECTOR, 'verbose_name': 'Other Information'},
+    STEP_SECTOR: {'form': None, 'next': STEP_SHOW_DETAILS, 'verbose_name': 'Sector specific Information'},
+}
 
 
 def impact_model_details(page, request, id):
@@ -129,80 +147,95 @@ def crossref_proxy(request):
 
 
 # authentication required.. #########################################################
-def impact_model_edit(page, request, id):
+def impact_model_edit(page, request, id, current_step):
     if not request.user.is_authenticated():
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
-    impactmodel = ImpactModel.objects.get(id=id)
-    if not (request.user in impactmodel.base_model.owners.all() or request.user.is_superuser):
+    impact_model = ImpactModel.objects.get(id=id)
+    if not (request.user in impact_model.base_model.owners.all() or request.user.is_superuser):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
 
+    next_step = FORM_STEPS[current_step]["next"]
+    form = FORM_STEPS[current_step]["form"]
     subpage = {
-        'title': 'Impact Model: %s' % impactmodel.base_model.name,
+        'title': 'Impact Model: %s (%s)' % (impact_model.base_model.name, impact_model.simulation_round.name),
         'url': page.url + page.reverse_subpage('details', args=(id,)),
-        'subpage': {'title': 'Edit', 'url': ''}
+        'subpage': {'title': 'Edit %s' % FORM_STEPS[current_step]['verbose_name'], 'url': ''}
     }
     context = {'page': page, 'subpage': subpage}
+    if not impact_model.public:
+        messages.warning(request, page.private_model_message)
+    target_url = page.url + page.reverse_subpage(next_step, args=(impact_model.id,))
+    if current_step == STEP_DETAIL:
+        return impact_model_detail_edit(page, request, context, impact_model, current_step, next_step, target_url)
+    elif current_step == STEP_SECTOR:
+        return impact_model_sector_edit(page, request, context, impact_model)
+    else:
+        if current_step == STEP_BASE:
+            instance = impact_model.base_model
+        elif current_step == STEP_TECHNICAL_INFORMATION:
+            instance = impact_model.technicalinformation
+        elif current_step == STEP_INPUT_DATA:
+            instance = impact_model.inputdatainformation
+        elif current_step == STEP_OTHER:
+            instance = impact_model.otherinformation
+        return impact_model_base_edit(page, request, context, form, instance, current_step, next_step, target_url)
 
+
+def impact_model_base_edit(page, request, context, form, instance, current_step, next_step, target_url):
     if request.method == 'POST':
-        form = ImpactModelForm(request.POST, instance=impactmodel)
-        contactform = ContactPersonFormset(request.POST, instance=impactmodel)
+        form = form(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            message = "All {} have been saved. Here you can edit {}.".format(FORM_STEPS[current_step]["verbose_name"], FORM_STEPS[next_step]["verbose_name"])
+            messages.info(request, message)
+            return HttpResponseRedirect(target_url)
+        else:
+            messages.error(request, 'Your form has errors.')
+            messages.warning(request, form.errors)
+    else:
+        form = form(instance=instance)
+    context['form'] = form
+    template = 'climatemodels/%s.html' % (current_step)
+    return render(request, template, context)
+
+
+def impact_model_detail_edit(page, request, context, impact_model, current_step, next_step, target_url):
+    if request.method == 'POST':
+        form = ImpactModelForm(request.POST, instance=impact_model)
+        contactform = ContactPersonFormset(request.POST, instance=impact_model)
         if form.is_valid() and contactform.is_valid():
             form.save()
             contactform.save()
-            if 'continue' in request.POST:
-                messages.info(request, "All changes to the base model have been saved. Here you can change sector specific details.")
-                target_url = page.url + page.reverse_subpage('edit_sector', args=(impactmodel.id,))
-            else:
-                messages.success(request, "Changes to your model have been saved successfully.")
-                target_url = page.url + page.reverse_subpage('details', args=(impactmodel.id,))
+            message = "All {} have been saved. Here you can edit {}.".format(FORM_STEPS[current_step]["verbose_name"], FORM_STEPS[next_step]["verbose_name"])
+            messages.info(request, message)
             return HttpResponseRedirect(target_url)
         else:
             messages.error(request, 'Your form has errors.')
             messages.warning(request, form.errors)
             messages.warning(request, contactform.errors)
     else:
-        form = ImpactModelForm(instance=impactmodel)
-        contactform = ContactPersonFormset(instance=impactmodel)
-
-    if not impactmodel.public:
-        messages.warning(request, page.private_model_message)
-
+        form = ImpactModelForm(instance=impact_model)
+        contactform = ContactPersonFormset(instance=impact_model)
     context['form'] = form
     context['cform'] = contactform
-    template = 'climatemodels/edit_impact_model.html'
+    template = 'climatemodels/%s.html' % (current_step)
     return render(request, template, context)
 
 
-def impact_model_sector_edit(page, request, id):
-    if not request.user.is_authenticated():
-        messages.info(request, 'You need to be logged in to perform this action.')
-        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
-        return HttpResponseRedirect(nexturl)
-    impactmodel = ImpactModel.objects.get(id=id)
-    if not (request.user in impactmodel.base_model.owners.all() or request.user.is_superuser):
-        messages.info(request, 'You need to be logged in to perform this action.')
-        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
-        return HttpResponseRedirect(nexturl)
-
-    subpage = {
-        'title': 'Impact Model: %s' % impactmodel.name,
-        'url': page.url + page.reverse_subpage('details', args=(id,)),
-        'subpage': {'title': 'Edit Sector','url': ''}
-    }
-    context = {'page': page, 'subpage': subpage}
-    formular = get_sector_form(impactmodel.fk_sector_name)
+def impact_model_sector_edit(page, request, context, impact_model):
+    formular = get_sector_form(impact_model.fk_sector_name)
 
     # No further changes, because the Sector has none.
-    target_url = page.url + page.reverse_subpage('details', args=(impactmodel.id,))
+    target_url = page.url + page.reverse_subpage('details', args=(impact_model.id,))
     if formular is None:
         return HttpResponseRedirect(target_url)
 
     if request.method == 'POST':
-        form = formular(request.POST, instance=impactmodel.fk_sector)
+        form = formular(request.POST, instance=impact_model.fk_sector)
         if form.is_valid():
             form.save()
             messages.success(request, "Changes to your model have been saved successfully.")
@@ -210,10 +243,7 @@ def impact_model_sector_edit(page, request, id):
         else:
             messages.warning(request, form.errors)
     else:
-        form = formular(instance=impactmodel.fk_sector)
-
-    if not impactmodel.public:
-        messages.warning(request, page.private_model_message)
+        form = formular(instance=impact_model.fk_sector)
 
     context['form'] = form
     template = 'climatemodels/{}'.format(formular.template)

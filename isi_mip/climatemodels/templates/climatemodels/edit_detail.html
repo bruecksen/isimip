@@ -1,0 +1,38 @@
+{% extends 'climatemodels/edit_base.html' %}
+{% load template_form %}
+
+{% block content %}
+	<form method="POST">
+		{% block form_content %}
+			{% template_form form as nf %}
+			<fieldset>
+				{% include 'widgets/heading3.html' with text='Detail Information' %}
+				{{ cform.management_form }}
+				{{ nf.simulation_round }}
+				{{ nf.version }}
+				<div id="div_id_cperson0" class="form-group">
+					<label class="control-label requiredField">
+						Contact person<span class="asteriskField">*</span>
+					</label>
+					<div class="controls">
+						<span class="major-tom-rapper">{{ cform.0 }}</span>
+					</div>
+				</div>
+				<div id="div_id_cperson0" class="form-group">
+					<label class="control-label requiredField">
+						Optional second contact person
+					</label>
+					<div class="controls">
+						<span class="major-tom-rapper">{{ cform.1 }}</span>
+					</div>
+				</div>
+				{{ nf.main_reference_paper }}
+				{{ nf.other_references }}
+			</fieldset>
+		{% endblock %}
+		{% csrf_token %}
+		<div class="form-actions">
+			<input type="submit" name="continue" value="Save and edit technical information" class="btn btn-primary">
+		</div>
+	</form>
+{% endblock %}

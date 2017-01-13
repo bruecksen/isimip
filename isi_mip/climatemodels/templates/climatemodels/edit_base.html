@@ -10,12 +10,14 @@
 		{% block content %}
 			<form method="POST">
 				{% block form_content %}
+					{% include 'widgets/heading3.html' with text='Base Information' %}
+					{% include 'widgets/richtext-content.html' with content=page.common_attributes_text %}
 					{% template_form form as nf %}
 					{{ nf }}
 				{% endblock %}
 				{% csrf_token %}
 				<div class="form-actions">
-					<input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-save">
+					<input type="submit" name="submit" value="Save and edit detail information" class="btn btn-primary" id="submit-save">
 				</div>
 			</form>
 		{% endblock %}

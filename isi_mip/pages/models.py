@@ -16,7 +16,7 @@ from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
 from isi_mip.climatemodels.models import ImpactModel
 from isi_mip.climatemodels.views import impact_model_details, impact_model_edit, input_data_details, \
-    impact_model_download, impact_model_sector_edit
+    impact_model_download, impact_model_sector_edit, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION, STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
 
@@ -220,8 +220,6 @@ class GettingStartedPage(RoutablePageWithDefault):
         ObjectList(RoutablePageWithDefault.settings_panels, heading='Settings', classname="settings"),
     ])
 
-
-
     @route(r'^details/(?P<id>\d+)/$')
     def details(self, request, id):
         return input_data_details(self, request, id)
@@ -236,12 +234,14 @@ class ImpactModelsPage(RoutablePageWithDefault):
         ('blog', BlogBlock(template='blocks/flat_blog_block.html')),
     ])
     private_model_message = models.TextField()
+    common_attributes_text = models.TextField()
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
     settings_panels = RoutablePageWithDefault.settings_panels + [
         FieldPanel('private_model_message'),
+        FieldPanel('common_attributes_text'),
     ]
 
     @route(r'^details/(?P<id>\d+)/$')
@@ -250,11 +250,27 @@ class ImpactModelsPage(RoutablePageWithDefault):
 
     @route(r'edit/(?P<id>[0-9]*)/$')
     def edit(self, request, id=None):
-        return impact_model_edit(self, request, id)
+        return impact_model_edit(self, request, id, STEP_BASE)
+
+    @route(r'edit/detail/(?P<id>[0-9]*)/$')
+    def edit_detail(self, request, id=None):
+        return impact_model_edit(self, request, id, STEP_DETAIL)
+
+    @route(r'edit/technical_information/(?P<id>[0-9]*)/$')
+    def edit_technical_information(self, request, id=None):
+        return impact_model_edit(self, request, id, STEP_TECHNICAL_INFORMATION)
+
+    @route(r'edit/input_data/(?P<id>[0-9]*)/$')
+    def edit_input_data(self, request, id=None):
+        return impact_model_edit(self, request, id, STEP_INPUT_DATA)
+
+    @route(r'edit/other/(?P<id>[0-9]*)/$')
+    def edit_other(self, request, id=None):
+        return impact_model_edit(self, request, id, STEP_OTHER)
 
     @route(r'edit/sector/(?P<id>[0-9]*)/$')
     def edit_sector(self, request, id=None):
-        return impact_model_sector_edit(self, request, id)
+        return impact_model_edit(self, request, id, STEP_SECTOR)
 
     @route(r'download/$')
     def download(self, request):

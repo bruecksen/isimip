@@ -1,0 +1,27 @@
+{% extends 'climatemodels/edit_base.html' %}
+{% load template_form %}
+
+{% block content %}
+	<form method="POST">
+		{% block form_content %}
+			{% template_form form as nf %}
+			<fieldset>
+				{% include 'widgets/heading3.html' with text='Other' %}
+				{{ nf.exceptions_to_protocol}}
+				{{ nf.spin_up}}
+				{{ nf.spin_up_design}}
+				{{ nf.natural_vegetation_partition}}
+				{{ nf.natural_vegetation_dynamics}}
+				{{ nf.natural_vegetation_cover_dataset}}
+				{{ nf.management}}
+				{{ nf.extreme_events}}
+				{{ nf.anything_else}}
+				{{ nf.comments}}
+			</fieldset>
+		{% endblock %}
+		{% csrf_token %}
+		<div class="form-actions">
+			<input type="submit" name="continue" value="Save and edit sector-specific information" class="btn btn-primary">
+		</div>
+	</form>
+{% endblock %}

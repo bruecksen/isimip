@@ -1,0 +1,23 @@
+{% extends 'climatemodels/edit_base.html' %}
+{% load template_form %}
+
+{% block content %}
+	<form method="POST">
+		{% block form_content %}
+			{% template_form form as nf %}
+			<fieldset>
+				{% include 'widgets/heading3.html' with text='Input Data' %}
+				{{ nf.climate_data_sets}}
+				{{ nf.climate_variables}}
+				{{ nf.climate_variables_info}}
+				{{ nf.socioeconomic_input_variables}}
+				{{ nf.soil_dataset}}
+				{{ nf.additional_input_data_sets}}
+			</fieldset>
+		{% endblock %}
+		{% csrf_token %}
+		<div class="form-actions">
+			<input type="submit" name="continue" value="Save and edit other information" class="btn btn-primary">
+		</div>
+	</form>
+{% endblock %}

@@ -5,9 +5,11 @@
         <br>
 		{% breadcrumb %}
 		{% include 'widgets/heading1.html' with text=subpage.title %}
+		<div class="container">
 		{% for sr in model_simulation_rounds %}
 			<a href="{{ sr.url }}" class="btn btn-xs{% if sr.active %} btn-primary active{% endif %}">{{ sr.name }}</a> 
 		{% endfor %}
+		</div>
 		{% block content %}
 			{{ description | safe }}<br/><br/>
 			{% include "widgets/expandable.html" %}
