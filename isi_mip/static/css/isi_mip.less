@@ -335,7 +335,27 @@ h4, .h4 {
 	}
 }
 
+// Buttons
+#impact-model-tabs .nav-pills {
+	&>li+li {
+		margin-left: -1px;
+	}
+	li a{
+		border: 1px solid @color-neutral-light;
+		border-bottom: none;
+		text-transform: uppercase;
+		padding: 10px 15px;
+		font-weight: 600;
+		border-radius: 0;
+		-webkit-transition: color 0.5s, border-color 0.5s, background-color 0.5s;
+		transition: color 0.5s, border-color 0.5s, background-color 0.5s;
 
+		@media(min-width:992px) {
+			font-size: 16px;
+			padding: 15px 25px;
+		}
+	}
+}
 
 // ############# Widgets
 
