@@ -120,7 +120,7 @@ class ContactPerson(models.Model):
         return "%s (%s) - %s" % (self.name, self.institute, self.email)
 
     def pretty(self):
-        return "{0.name} (<a href='mailto:{0.email}'>{0.email}</a>) {0.institute}".format(self)
+        return "{0.name} (<a href='mailto:{0.email}'>{0.email}</a>), {0.institute}".format(self)
 
     class Meta:
         ordering = ('name',)
@@ -335,7 +335,7 @@ class InputDataInformation(models.Model):
 
     def values_to_tuples(self):
         vname = self._get_verbose_field_name
-        return ('Input Data', [
+        return ('Input data sets used', [
                 (vname('climate_data_sets'), ', '.join([x.name for x in self.climate_data_sets.all()])),
                 (vname('climate_variables'), ', '.join([x.as_span() for x in self.climate_variables.all()])),
                 (vname('climate_variables_info'), self.climate_variables_info),
@@ -355,11 +355,11 @@ class OtherInformation(models.Model):
         null=True, blank=True, verbose_name='Exceptions',
         help_text='Any settings prescribed by the ISIMIP protocol that were overruled when runing the model'
     )
-    NA_YES_NO = ((None, '---------'), (True, 'Yes'), (False, 'No'))
+    YES_NO = ((True, 'Yes'), (False, 'No'))
     spin_up = models.NullBooleanField(
         verbose_name='Was a spin-up performed?',
         help_text="'No' indicates the simulations were run starting in the first reporting year 1971",
-        choices=NA_YES_NO
+        choices=YES_NO
     )
     spin_up_design = models.TextField(
         null=True, blank=True, verbose_name='Spin-up design',

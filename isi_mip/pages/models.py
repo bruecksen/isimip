@@ -14,7 +14,7 @@ from wagtail.wagtailcore.models import Page
 from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
-from isi_mip.climatemodels.models import ImpactModel
+from isi_mip.climatemodels.models import ImpactModel, BaseImpactModel
 from isi_mip.climatemodels.views import impact_model_details, impact_model_edit, input_data_details, \
     impact_model_download, impact_model_sector_edit, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION, STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
@@ -334,33 +334,30 @@ class DashboardPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        ims = ImpactModel.objects.filter(owners=request.user).order_by('name')
+        base_impact_models = BaseImpactModel.objects.filter(owners=request.user).order_by('name')
         impage = ImpactModelsPage.objects.get()
         impage_details = lambda imid: "<a href='{0}'>{{0}}</a>".format(
             impage.url + impage.reverse_subpage('details', args=(imid, )))
         impage_edit = lambda imid: "<a href='{0}'>{{0}}</a>".format(
             impage.url + impage.reverse_subpage('edit', args=(imid,)))
         context['head'] = {
-            'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Climate Driver'}, {'text': 'Contact'}, {'text': 'Edit'}, {'text': 'Public'}]
+            'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Simulation round'}, {'text': 'Edit'}, {'text': 'Public'}]
         }
 
         bodyrows = []
-        for imodel in ims:
-            datasets = [str(x) for x in imodel.climate_data_sets.all()]
-            cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
-                       imodel.contactperson_set.all()]
-            values = [
-                [impage_details(imodel.id).format(imodel.name)],
-                [imodel.sector],
-                datasets,
-                ["<br/>".join(cpeople)],
-                [impage_edit(imodel.id).format("<i class='fa fa-edit'></i>")],
-                ['<i class="fa fa-{}" aria-hidden="true"></i>'.format('check' if imodel.public else 'times')],
-            ]
-            row = {
-                'cols': [{'texts': x} for x in values],
-            }
-            bodyrows.append(row)
+        for bims in base_impact_models:
+            for imodel in bims.impact_model.all():
+                values = [
+                    [impage_details(imodel.id).format(bims.name)],
+                    [bims.sector],
+                    [imodel.simulation_round.name],
+                    [impage_edit(imodel.id).format("<i class='fa fa-edit'></i>")],
+                    ['<i class="fa fa-{}" aria-hidden="true"></i>'.format('check' if imodel.public else 'times')],
+                ]
+                row = {
+                    'cols': [{'texts': x} for x in values],
+                }
+                bodyrows.append(row)
         context['body'] = {'rows': bodyrows}
         return context
 

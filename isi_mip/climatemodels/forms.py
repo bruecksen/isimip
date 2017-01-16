@@ -153,7 +153,7 @@ class OtherInformationModelForm(forms.ModelForm):
         exclude = ('impact_model',)
         widgets = {
             'exceptions_to_protocol': MyTextInput(textarea=True),
-            'spin_up': MyBooleanSelect(nullable=True),
+            'spin_up': MyBooleanSelect(nullable=False),
             'spin_up_design': MyTextInput(textarea=True),
             'natural_vegetation_partition': MyTextInput(textarea=True),
             'natural_vegetation_dynamics': MyTextInput(textarea=True),
