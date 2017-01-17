@@ -51,8 +51,9 @@ class ReferencePaper(Paper):
         return "{}{}{}{}".format(author, title, journal, year)
 
 
-class ClimateDataType(models.Model):
+class DataType(models.Model):
     name = models.CharField(max_length=500, unique=True)
+    is_climate_data_type = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -114,7 +115,7 @@ class ContactPerson(models.Model):
     name = models.CharField(max_length=500, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     institute = models.CharField(max_length=500, null=True, blank=True)
-    impact_model = models.ForeignKey('ImpactModel', null=True, blank=True)
+    base_impact_model = models.ForeignKey('BaseImpactModel', null=True, blank=True)
 
     def __str__(self):
         return "%s (%s) - %s" % (self.name, self.institute, self.email)
@@ -128,7 +129,7 @@ class ContactPerson(models.Model):
 
 class InputData(models.Model):
     name = models.CharField(max_length=500, unique=True)
-    data_type = models.ForeignKey(ClimateDataType, null=True, blank=True, on_delete=models.SET_NULL)
+    data_type = models.ForeignKey(DataType, null=True, blank=True, on_delete=models.SET_NULL)
     scenario = models.ForeignKey(Scenario, null=True, blank=True, on_delete=models.SET_NULL)
     variables = models.ManyToManyField(ClimateVariable, blank=True)
     simulation_round = models.ForeignKey(SimulationRound, null=True, blank=True, on_delete=models.SET_NULL)
@@ -184,10 +185,12 @@ class BaseImpactModel(models.Model):
 
     def values_to_tuples(self):
         vname = self._get_verbose_field_name
+        cpers = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.pretty() for x in self.contactperson_set.all()])
         return [
             ('Common information', [
                 (vname('sector'), self.sector),
                 (vname('region'), ', '.join([x.name for x in self.region.all()])),
+                ('Contact Person', cpers),
             ])]
 
 
@@ -205,6 +208,8 @@ class ImpactModel(models.Model):
         on_delete=models.SET_NULL)
     other_references = models.ManyToManyField(ReferencePaper, blank=True, verbose_name='Reference paper: other references',
                                               help_text='Other papers describing aspects of this model')
+    responsible_person = models.CharField(max_length=500, null=True, blank=True, verbose_name='Responsible person',
+                               help_text='Person responsible for the simulations in this simulation round if not the main contact person')
     public = models.BooleanField(default=True)
 
     class Meta:
@@ -238,16 +243,14 @@ class ImpactModel(models.Model):
     def values_to_tuples(self):
         vname = self._get_verbose_field_name
         bvname = self.base_model._get_verbose_field_name
-        cpers = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.pretty() for x in self.contactperson_set.all()])
         other_references = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.entry_with_link() for x in self.other_references.all()])
-        # ', '.join([x.name for x in self.simulation_round.all()])
         return [
             ('Basic information', [
-                ('Contact Person', cpers),
                 (vname('version'), self.version),
                 (vname('main_reference_paper'),
                  self.main_reference_paper.entry_with_link() if self.main_reference_paper else None),
                 (vname('other_references'), other_references),
+                (vname('responsible_person'), self.responsible_person),
             ]),
             self.technicalinformation.values_to_tuples(),
             self.inputdatainformation.values_to_tuples(),

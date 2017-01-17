@@ -249,18 +249,18 @@ class ImpactModelsPage(RoutablePageWithDefault):
         return impact_model_details(self, request, id)
 
     @route(r'edit/(?P<id>[0-9]*)/$')
-    def edit(self, request, id=None):
+    def edit_base(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_BASE)
 
     @route(r'edit/detail/(?P<id>[0-9]*)/$')
     def edit_detail(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_DETAIL)
 
-    @route(r'edit/technical_information/(?P<id>[0-9]*)/$')
+    @route(r'edit/technical-information/(?P<id>[0-9]*)/$')
     def edit_technical_information(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_TECHNICAL_INFORMATION)
 
-    @route(r'edit/input_data/(?P<id>[0-9]*)/$')
+    @route(r'edit/input-data/(?P<id>[0-9]*)/$')
     def edit_input_data(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_INPUT_DATA)
 
@@ -341,7 +341,7 @@ class DashboardPage(Page):
         impage_edit = lambda imid: "<a href='{0}'>{{0}}</a>".format(
             impage.url + impage.reverse_subpage('edit', args=(imid,)))
         context['head'] = {
-            'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Simulation round'}, {'text': 'Edit'}, {'text': 'Public'}]
+            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Edit'}, {'text': 'Public'}]
         }
 
         bodyrows = []
@@ -349,8 +349,8 @@ class DashboardPage(Page):
             for imodel in bims.impact_model.all():
                 values = [
                     [impage_details(imodel.id).format(bims.name)],
-                    [bims.sector],
                     [imodel.simulation_round.name],
+                    [bims.sector],
                     [impage_edit(imodel.id).format("<i class='fa fa-edit'></i>")],
                     ['<i class="fa fa-{}" aria-hidden="true"></i>'.format('check' if imodel.public else 'times')],
                 ]

@@ -643,10 +643,11 @@ $(function() {
 	$('body').append('<div class="gap" style="height:4px; display: none;"></div>');
 });
 
-// $(function() {
-// 	$('#impact-model-tabs a').click(function (e) {
-// 		console.log('click');
-// 		e.preventDefault()
-// 		$(this).tab('show')
-// })
-// });
+$(function() {
+	// set next value and submit edit form
+	$('.form-sidebar a').click(function (e) {
+		$('#edit-model-form input[name=next]').val($(this).attr('href').substring(1));
+		$('#edit-model-form').submit();
+		e.preventDefault();
+	})
+});

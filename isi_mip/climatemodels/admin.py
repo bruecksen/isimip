@@ -25,13 +25,14 @@ class HideSectorAdmin(HideAdmin):
     readonly_fields = ('impact_model',)
 
 
-class BaseImpactModelAdmin(admin.ModelAdmin):
-    model = BaseImpactModel
-
-
 class ContactPersonAdmin(admin.TabularInline):
     model = ContactPerson
     extra = 1
+
+
+class BaseImpactModelAdmin(admin.ModelAdmin):
+    model = BaseImpactModel
+    inlines = [ContactPersonAdmin, ]
 
 
 class TechnicalInformationAdmin(admin.StackedInline):
@@ -47,7 +48,7 @@ class OtherInformationAdmin(admin.StackedInline):
 
 
 class ImpactModelAdmin(admin.ModelAdmin):
-    inlines = [ContactPersonAdmin, TechnicalInformationAdmin, InputDataInformationAdmin, OtherInformationAdmin]
+    inlines = [TechnicalInformationAdmin, InputDataInformationAdmin, OtherInformationAdmin]
     model = ImpactModel
 
     def get_name(self, obj):
@@ -103,6 +104,9 @@ class AgricultureAdmin(HideSectorAdmin):
         })
     ]
 
+class DataTypeAdmin(admin.ModelAdmin):
+    model = DataType
+    list_display = ('name', 'is_climate_data_type')
 
 admin.site.register(BaseImpactModel, BaseImpactModelAdmin)
 admin.site.register(ImpactModel, ImpactModelAdmin)
@@ -124,7 +128,7 @@ admin.site.register(Biodiversity, HideSectorAdmin)
 # admin.site.register(ComputableGeneralEquilibriumModelling, HideSectorAdmin)
 # admin.site.register(AgroEconomicModelling, HideSectorAdmin)
 
-admin.site.register(ClimateDataType)
+admin.site.register(DataType, DataTypeAdmin)
 admin.site.register(ClimateVariable)
 admin.site.register(ReferencePaper)
 admin.site.register(Author, HideAdmin)

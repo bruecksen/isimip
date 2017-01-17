@@ -7,7 +7,7 @@ from isi_mip.climatemodels.fields import MyModelSingleChoiceField, MyModelMultip
 from isi_mip.climatemodels.models import *
 from isi_mip.climatemodels.widgets import MyMultiSelect, MyTextInput, MyBooleanSelect, RefPaperWidget
 
-ContactPersonFormset = inlineformset_factory(ImpactModel, ContactPerson,
+ContactPersonFormset = inlineformset_factory(BaseImpactModel, ContactPerson,
                                              extra=1, max_num=2, min_num=1, fields='__all__',
                                              can_delete=False, help_texts='The scientists responsible for performing the simulations for this sector')
 
@@ -50,6 +50,7 @@ class ImpactModelForm(forms.ModelForm):
             'version': MyTextInput(),
             'main_reference_paper': RefPaperWidget(),
             'other_references': RefPaperWidget(),
+            'responsible_person': MyTextInput(),
         }
 
     @staticmethod
@@ -144,6 +145,10 @@ class InputDataInformationModelForm(forms.ModelForm):
             'soil_dataset': MyTextInput(),
             'additional_input_data_sets': MyTextInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(InputDataInformationModelForm, self).__init__(*args, **kwargs)
+        self.fields['climate_variables'].queryset = InputData.objects.filter(data_type__is_climate_data_type=True)
 
 
 class OtherInformationModelForm(forms.ModelForm):

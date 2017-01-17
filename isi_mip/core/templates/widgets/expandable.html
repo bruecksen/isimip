@@ -10,6 +10,16 @@
 			<div class="clearfix"></div>
 		</div>
 	{% endif %}
+	{% if not headline and editlink %}
+		<div class="widget-expandable-headline white">
+			{% if editlink %}
+				<div class="widget-expandable-editlink">
+					{{ editlink|safe }}
+				</div>
+			{% endif %}
+			<div class="clearfix"></div>
+		</div>
+	{% endif %}
 	<div class="widget-expandable-list">
 		{% for listitem in list %}
 			<div class="widget-expandable-listitem

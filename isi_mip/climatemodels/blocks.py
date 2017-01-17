@@ -44,11 +44,11 @@ class ImpactModelsBlock(StructBlock):
 
         context['body'] = {'rows': []}
         for i, bmodel in enumerate(bims):
-            # cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
-                       # bmodel.contactperson_set.all()]
+            cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
+                       bmodel.contactperson_set.all()]
             simulation_rounds = bmodel.impact_model.all().values_list('simulation_round__name', flat=True)
             values = [["<a href='details/{0.id}/'>{0.name}</a>".format(bmodel, bmodel)], simulation_rounds, [bmodel.sector]]
-            # values += [["<br/>".join(cpeople)]]
+            values += [["<br/>".join(cpeople)]]
             row = {
                 'invisible': i >= rows_per_page,
                 'cols': [{'texts': x} for x in values],

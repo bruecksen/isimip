@@ -1,24 +1,54 @@
 {% extends 'pages/default_page.html' %}
 {% load breadcrumb template_form %}
 {% block content_container %}
-  <div class="container scrollable-container">
+	<div class="container scrollable-container">
+		<div data-spy="affix" data-offset-top="90" data-offset-bottom="200" class="form-sidebar">
+		<ul class="list-unstyled">
+			{% for step in steps %}
+				<li><a href="#{{ step.name }}" class="{% if step.is_active %}active{% elif step.is_next %}next{% endif %}">{% if step.is_active %}<i class="fa fa-chevron-left" aria-hidden="true"></i> {% endif %}{{ forloop.counter }}. {{ step.verbose_name }}</a></li>
+			{% endfor %}
+		</ul>
+		</div>
 		<br>
 		{% breadcrumb %}
 		{% block pagetitle %}
 			{% include 'widgets/heading2.html' with text='Edit '|add:subpage.title %}
 		{% endblock %}
 		{% block content %}
-			<form method="POST">
+			<form method="POST" id="edit-model-form">
 				{% block form_content %}
 					{% include 'widgets/heading3.html' with text='Base Information' %}
-					{% include 'widgets/richtext-content.html' with content=page.common_attributes_text %}
+					{# {% include 'widgets/richtext-content.html' with content=page.common_attributes_text %} #}
+					{{ cform.management_form }}
 					{% template_form form as nf %}
-					{{ nf }}
+					{{ nf.name }}
+					{{ nf.sector }}
+					{{ nf.region }}
+					<div id="div_id_cperson0" class="form-group">
+						<label class="control-label requiredField">
+							Contact person<span class="asteriskField">*</span>
+						</label>
+						<div class="controls">
+							<span class="major-tom-rapper">{{ cform.0 }}</span>
+						</div>
+					</div>
+					<div id="div_id_cperson0" class="form-group">
+						<label class="control-label requiredField">
+							Optional second contact person
+						</label>
+						<div class="controls">
+							<span class="major-tom-rapper">{{ cform.1 }}</span>
+						</div>
+					</div>
+					{{ nf.short_description }}
 				{% endblock %}
 				{% csrf_token %}
+				<input type="hidden" name="next" value=""/>
+				{% block form_action %}
 				<div class="form-actions">
-					<input type="submit" name="submit" value="Save and edit detail information" class="btn btn-primary" id="submit-save">
+					<input type="submit" name="submit-button" value="Save and edit detail information" class="btn btn-primary">
 				</div>
+				{% endblock %}
 			</form>
 		{% endblock %}
 	</div>

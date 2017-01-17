@@ -1,25 +1,22 @@
 {% extends 'climatemodels/edit_base.html' %}
 {% load template_form %}
 
-{% block content %}
-	<form method="POST">
-		{% block form_content %}
-			{% template_form form as nf %}
-			<fieldset>
-				{% include 'widgets/heading3.html' with text='Technical Information' %}
-				{{ nf.spatial_aggregation}}
-				{{ nf.spatial_resolution}}
-				{{ nf.spatial_resolution_info}}
-				{{ nf.temporal_resolution_climate}}
-				{{ nf.temporal_resolution_co2}}
-				{{ nf.temporal_resolution_land}}
-				{{ nf.temporal_resolution_soil}}
-				{{ nf.temporal_resolution_info}}
-			</fieldset>
-		{% endblock %}
-		{% csrf_token %}
-		<div class="form-actions">
-			<input type="submit" name="continue" value="Save and edit input data information" class="btn btn-primary">
-		</div>
-	</form>
+{% block form_content %}
+	{% template_form form as nf %}
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Technical Information' %}
+		{{ nf.spatial_aggregation}}
+		{{ nf.spatial_resolution}}
+		{{ nf.spatial_resolution_info}}
+		{{ nf.temporal_resolution_climate}}
+		{{ nf.temporal_resolution_co2}}
+		{{ nf.temporal_resolution_land}}
+		{{ nf.temporal_resolution_soil}}
+		{{ nf.temporal_resolution_info}}
+	</fieldset>
+{% endblock %}
+{% block form_action %}
+	<div class="form-actions">
+		<input type="submit" name="submit-button" value="Save and edit input data information" class="btn btn-primary">
+	</div>
 {% endblock %}

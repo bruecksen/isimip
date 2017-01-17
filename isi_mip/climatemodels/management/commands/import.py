@@ -3,7 +3,7 @@ from datetime import date
 from django.core.management.base import BaseCommand
 
 from isi_mip.climatemodels.import_xlsx import XLSImport
-from isi_mip.climatemodels.models import InputData, ClimateDataType, InputPhase, ClimateVariable, OutputData, \
+from isi_mip.climatemodels.models import InputData, DataType, InputPhase, ClimateVariable, OutputData, \
     ImpactModel, Scenario
 
 
@@ -19,7 +19,7 @@ class Command(BaseCommand):
         xls = XLSImport(filename)
         xls.run()
         inputdata = InputData.objects.get_or_create(name='Princeton')[0]
-        inputdata.data_type = ClimateDataType.objects.get_or_create(name='Historical climate')[0]
+        inputdata.data_type = DataType.objects.get_or_create(name='Historical climate')[0]
         inputdata.scenario = Scenario.objects.get_or_create(name='hist-obs')[0]
         cvariables = [
             ('daily mean temperature', 'tas'),

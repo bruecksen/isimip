@@ -1264,7 +1264,6 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 		@media(min-width:768px) {
 			font-size: 18px;
 		}
-
 		.widget-expandable-editlink {
 			float: right;
 			font-size: 14px;
@@ -1276,6 +1275,14 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 			a {
 				color: inherit;
 				text-decoration: underline;
+			}
+		}
+		&.white {
+			color: @color-black;
+			background-color: @color-white;
+			border-bottom: 1px solid @color-neutral;
+			.widget-expandable-editlink {
+				float: left;
 			}
 		}
 	}
@@ -1625,6 +1632,51 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 	}
 }
 
+.form-sidebar {
+	position: fixed;
+	top: 170px;
+	right: 60px;
+	width: 240px;
+	z-index: 9999;
+	background-color: white;
+	ul {
+		margin: 15px;
+		li {
+			padding: 3px;
+			a {
+				color: @color-neutral;
+				&.active {
+					color: @color-secondary;
+					margin-left: -14px;
+				}
+				&.next {
+					color: @color-primary;
+				}
+			}
+		}
+	}
+}
+
+dl.base-model {
+	ul {
+		list-style-type: none;
+		padding: 0;
+	}
+	dd, dt {
+		line-height: 2;
+		font-size: 16px;
+	}
+	dt {
+		padding-right: 15px;
+		abbr {
+			margin-right: -15px;
+		}
+	}
+}
+
+#edit-model-form {
+	width: 87%;
+}
 
 // Spezialität von Nuts (Contact Person)
 .major-tom-rapper label {

@@ -7,7 +7,14 @@
 		{% include 'widgets/heading1.html' with text=subpage.title %}
 		{% block content %}
 			{{ description | safe }}<br/><br/>
-			{% include "widgets/expandable.html" with list=base_model %}
+			<dl class="dl-horizontal base-model">
+			{% for listitem in base_model %}
+					{% for definition in listitem.definitions %}
+						<dt>{{ definition.key|safe }}</dt>
+						<dd>{{ definition.value|safe }}</dd>
+					{% endfor %}
+			{% endfor %}
+			</dl>
 			<!-- Nav tabs -->
 			<div id="impact-model-tabs">
 				<ul class="nav nav-pills" role="tablist">
