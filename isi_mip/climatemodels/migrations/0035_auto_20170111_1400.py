@@ -18,7 +18,7 @@ def move_data_to_base_impact_model(apps, schema_editor):
     )
     fast_track.order = 1
     fast_track.save()
-    isimip2a = SimulationRoundModel.objects.get_or_create(
+    isimip2a, created = SimulationRoundModel.objects.get_or_create(
         name="ISIMIP2a",
         defaults={'order': 2, }
     )
