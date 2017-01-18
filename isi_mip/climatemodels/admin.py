@@ -107,6 +107,7 @@ class AgricultureAdmin(HideSectorAdmin):
         })
     ]
 
+
 class DataTypeAdmin(admin.ModelAdmin):
     model = DataType
     list_display = ('name', 'is_climate_data_type')
@@ -117,6 +118,18 @@ class InputDataAdmin(admin.ModelAdmin):
     model = InputData
     list_display = ('name', 'data_type', 'simulation_round', 'scenario')
     list_filter = ('data_type', 'simulation_round',)
+
+
+class ClimateVariableAdmin(admin.ModelAdmin):
+    model = ClimateVariable
+
+    def get_type(self, obj):
+        return ','.join(set([input_data.data_type.name for input_data in obj.inputdata_set.all().distinct()]))
+    get_type.admin_order_field = 'sector__name'
+    get_type.short_description = 'Data type'
+    list_display = ('name', 'abbreviation', 'get_type')
+    list_filter = ('inputdata__data_type__name',)
+
 
 admin.site.register(BaseImpactModel, BaseImpactModelAdmin)
 admin.site.register(ImpactModel, ImpactModelAdmin)
@@ -139,7 +152,7 @@ admin.site.register(Biodiversity, HideSectorAdmin)
 # admin.site.register(AgroEconomicModelling, HideSectorAdmin)
 
 admin.site.register(DataType, DataTypeAdmin)
-admin.site.register(ClimateVariable)
+admin.site.register(ClimateVariable, ClimateVariableAdmin)
 admin.site.register(ReferencePaper)
 admin.site.register(Author, HideAdmin)
 admin.site.register(Region)
