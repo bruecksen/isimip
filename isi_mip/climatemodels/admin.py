@@ -53,12 +53,12 @@ class ImpactModelAdmin(admin.ModelAdmin):
 
     def get_name(self, obj):
         return obj.base_model.name
-    get_name.admin_order_field = 'name'
+    get_name.admin_order_field = 'base_model__name'
     get_name.short_description = 'Name'
 
     def get_sector(self, obj):
         return obj.base_model.sector
-    get_sector.admin_order_field = 'sector'
+    get_sector.admin_order_field = 'sector__name'
     get_sector.short_description = 'Sector'
 
     def sector_link(self, obj):

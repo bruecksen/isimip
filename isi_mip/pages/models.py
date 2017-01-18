@@ -16,7 +16,8 @@ from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
 from isi_mip.climatemodels.models import ImpactModel, BaseImpactModel
 from isi_mip.climatemodels.views import impact_model_details, impact_model_edit, input_data_details, \
-    impact_model_download, impact_model_sector_edit, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION, STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR
+    impact_model_download, impact_model_sector_edit, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION, STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR, \
+    duplicate_impact_model, create_new_impact_model
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
 
@@ -272,6 +273,14 @@ class ImpactModelsPage(RoutablePageWithDefault):
     def edit_sector(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_SECTOR)
 
+    @route(r'duplicate/(?P<impact_model_id>[0-9]*)/(?P<simulation_round_id>[0-9]*)/$')
+    def duplicate(self, request, impact_model_id=None, simulation_round_id=None):
+        return duplicate_impact_model(self, request, impact_model_id, simulation_round_id)
+
+    @route(r'create/(?P<base_model_id>[0-9]*)/(?P<simulation_round_id>[0-9]*)/$')
+    def create(self, request, base_model_id=None, simulation_round_id=None):
+        return create_new_impact_model(self, request, base_model_id, simulation_round_id)
+
     @route(r'download/$')
     def download(self, request):
         return impact_model_download(self, request)
@@ -327,7 +336,7 @@ class LinkListPage(TOCPage):
 
 
 class DashboardPage(Page):
-    impact_models_description = RichTextField(null=True,blank=True)
+    impact_models_description = RichTextField(null=True, blank=True)
     content_panels = Page.content_panels + [
         RichTextFieldPanel('impact_models_description'),
     ]
@@ -336,12 +345,16 @@ class DashboardPage(Page):
         context = super().get_context(request, *args, **kwargs)
         base_impact_models = BaseImpactModel.objects.filter(owners=request.user).order_by('name')
         impage = ImpactModelsPage.objects.get()
-        impage_details = lambda imid: "<a href='{0}'>{{0}}</a>".format(
+        impage_details = lambda imid: "<span class='action'><a href='{0}' class=''>{{0}}</a></span>".format(
             impage.url + impage.reverse_subpage('details', args=(imid, )))
-        impage_edit = lambda imid: "<a href='{0}'>{{0}}</a>".format(
-            impage.url + impage.reverse_subpage('edit', args=(imid,)))
+        impage_edit = lambda imid: "<span class='action'><i class='fa fa-edit'></i> <a href='{0}' class=''>{{0}}</a></span>".format(
+            impage.url + impage.reverse_subpage('edit_base', args=(imid,)))
+        impage_create = lambda bmid, srid: "<span class='action'><i class='fa fa-file-o'></i> <a href='{0}' class=''>{{0}}</a></span>".format(
+            impage.url + impage.reverse_subpage('create', args=(bmid, srid)))
+        impage_duplicate = lambda imid, srid: "<span class='action'><i class='fa fa-files-o'></i> <a href='{0}' class=''>{{0}}</a></span>".format(
+            impage.url + impage.reverse_subpage('duplicate', args=(imid, srid)))
         context['head'] = {
-            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Edit'}, {'text': 'Public'}]
+            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Public'}, {'text': 'Action'}]
         }
 
         bodyrows = []
@@ -350,9 +363,26 @@ class DashboardPage(Page):
                 values = [
                     [impage_details(imodel.id).format(bims.name)],
                     [imodel.simulation_round.name],
-                    [bims.sector],
-                    [impage_edit(imodel.id).format("<i class='fa fa-edit'></i>")],
                     ['<i class="fa fa-{}" aria-hidden="true"></i>'.format('check' if imodel.public else 'times')],
+                    [impage_edit(imodel.id).format("Edit")],
+                ]
+                row = {
+                    'cols': [{'texts': x} for x in values],
+                }
+                bodyrows.append(row)
+            duplicate_impact_model = bims.can_duplicate_from()
+            for sr in bims.get_missing_simulation_rounds():
+                duplicate_model_text = ''
+                if duplicate_impact_model:
+                    duplicate_model_text = impage_duplicate(duplicate_impact_model.id, sr.id).format("Duplicate from %s" % duplicate_impact_model.simulation_round)
+                values = [
+                    [bims.name],
+                    [sr.name],
+                    [],
+                    [
+                        impage_create(bims.id, sr.id).format("Start from scratch"),
+                        duplicate_model_text
+                    ],
                 ]
                 row = {
                     'cols': [{'texts': x} for x in values],

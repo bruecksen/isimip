@@ -18,7 +18,7 @@
 			<form method="POST" id="edit-model-form">
 				{% block form_content %}
 					{% include 'widgets/heading3.html' with text='Base Information' %}
-					{# {% include 'widgets/richtext-content.html' with content=page.common_attributes_text %} #}
+					{% include 'widgets/richtext-content.html' with content=page.common_attributes_text %}
 					{{ cform.management_form }}
 					{% template_form form as nf %}
 					{{ nf.name }}

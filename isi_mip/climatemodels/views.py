@@ -15,7 +15,7 @@ from django.utils.html import urlize, linebreaks
 
 from isi_mip.climatemodels.forms import ImpactModelStartForm, ContactPersonFormset, get_sector_form, \
     BaseImpactModelForm, ImpactModelForm, TechnicalInformationModelForm, InputDataInformationModelForm, OtherInformationModelForm
-from isi_mip.climatemodels.models import ImpactModel, InputData, BaseImpactModel
+from isi_mip.climatemodels.models import ImpactModel, InputData, BaseImpactModel, SimulationRound
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 from isi_mip.invitation.views import InvitationView
 
@@ -66,7 +66,7 @@ def impact_model_details(page, request, id):
         model_details[0]['opened'] = True
         edit_link = ''
         if can_edit_model:
-            edit_link = '<a href="{}">Edit</a>'.format(page.url + page.reverse_subpage(STEP_BASE, args=(im.id,)))
+            edit_link = '<i class="fa fa-cog" aria-hidden="true"></i> <a href="{}">Edit simulation round {}</a>'.format(page.url + page.reverse_subpage(STEP_BASE, args=(im.id,)), im.simulation_round.name)
         model_simulation_rounds.append({
             'simulation_round': im.simulation_round.name,
             'simulation_round_slug': im.simulation_round.slug,
@@ -156,6 +156,47 @@ def crossref_proxy(request):
     return JsonResponse(res)
 
 
+def create_new_impact_model(page, request, base_model_id, simulation_round_id):
+    if not request.user.is_authenticated():
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
+    base_impact_model = BaseImpactModel.objects.get(id=base_model_id)
+    simulation_round = SimulationRound.objects.get(id=simulation_round_id)
+    if not (request.user in base_impact_model.owners.all() or request.user.is_superuser):
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
+
+    # Impact model
+    impact_model = ImpactModel(
+        base_model=base_impact_model,
+        simulation_round=simulation_round,
+        public=True,
+    )
+    impact_model.save()
+    target_url = page.url + page.reverse_subpage(STEP_BASE, args=(impact_model.id,))
+    messages.success(request, 'The model has been successfully created! Please make sure to go through every step to insert the data.')
+    return HttpResponseRedirect(target_url)
+
+
+def duplicate_impact_model(page, request, impact_model_id, simulation_round_id):
+    if not request.user.is_authenticated():
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
+    impact_model = ImpactModel.objects.get(id=impact_model_id)
+    simulation_round = SimulationRound.objects.get(id=simulation_round_id)
+    if not (request.user in impact_model.base_model.owners.all() or request.user.is_superuser):
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
+    duplicate = impact_model.duplicate(simulation_round)
+    target_url = page.url + page.reverse_subpage(STEP_BASE, args=(duplicate.id,))
+    messages.success(request, 'The model has been duplicated successfully! Please make sure to go through every step to update or confirm the duplicated data.')
+    return HttpResponseRedirect(target_url)
+
+
 # authentication required.. #########################################################
 def impact_model_edit(page, request, id, current_step):
     if not request.user.is_authenticated():
@@ -209,8 +250,8 @@ def impact_model_base_edit(page, request, context, form, instance, current_step,
         form = form(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            message = "All {} have been saved. Here you can edit {}.".format(FORM_STEPS[current_step]["verbose_name"], FORM_STEPS[next_step]["verbose_name"])
-            messages.info(request, message)
+            message = "All {} have been successfully saved.".format(FORM_STEPS[current_step]["verbose_name"])
+            messages.success(request, message)
             return HttpResponseRedirect(target_url)
         else:
             messages.error(request, 'Your form has errors.')
@@ -229,8 +270,8 @@ def impact_model_detail_edit(page, request, context, base_impact_model, current_
         if form.is_valid() and contactform.is_valid():
             form.save()
             contactform.save()
-            message = "All {} have been saved. Here you can edit {}.".format(FORM_STEPS[current_step]["verbose_name"], FORM_STEPS[next_step]["verbose_name"])
-            messages.info(request, message)
+            message = "All {} have been successfully saved.".format(FORM_STEPS[current_step]["verbose_name"])
+            messages.success(request, message)
             return HttpResponseRedirect(target_url)
         else:
             messages.error(request, 'Your form has errors.')
@@ -255,7 +296,7 @@ def impact_model_sector_edit(page, request, context, impact_model, target_url):
         form = formular(request.POST, instance=impact_model.fk_sector)
         if form.is_valid():
             form.save()
-            messages.success(request, "Changes to your model have been saved successfully.")
+            messages.success(request, "Thank you! All changes to your model have been saved successfully.")
             return HttpResponseRedirect(target_url)
         else:
             messages.warning(request, form.errors)

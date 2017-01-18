@@ -148,7 +148,7 @@ class InputDataInformationModelForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(InputDataInformationModelForm, self).__init__(*args, **kwargs)
-        self.fields['climate_variables'].queryset = InputData.objects.filter(data_type__is_climate_data_type=True)
+        self.fields['climate_variables'].queryset = ClimateVariable.objects.filter(inputdata__data_type__is_climate_data_type=True).distinct()
 
 
 class OtherInformationModelForm(forms.ModelForm):

@@ -1283,6 +1283,9 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 			border-bottom: 1px solid @color-neutral;
 			.widget-expandable-editlink {
 				float: left;
+				a {
+					font-weight: normal;
+				}
 			}
 		}
 	}
@@ -1676,6 +1679,14 @@ dl.base-model {
 
 #edit-model-form {
 	width: 87%;
+}
+
+.widget-table {
+	span.action {
+		color: @color-primary;
+		padding-bottom: 10px;
+		display: block;
+	}
 }
 
 // Spezialität von Nuts (Contact Person)

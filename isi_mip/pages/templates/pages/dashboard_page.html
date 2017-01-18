@@ -3,7 +3,7 @@
 {% block content %}
 	{% url 'logout' as logouturl %}
 	{% include 'widgets/read-more-link.html' with align='right' text='Logout' url=logouturl %}
-	{{ page.impact_models_description|richtext }}
+	{% include 'widgets/richtext-content.html' with content=page.impact_models_description %}
 	{% include 'widgets/heading3.html' with text='Your Impact Models' %}
 	{% include "widgets/table.html" %}
 {% endblock %}
