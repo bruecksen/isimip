@@ -4,11 +4,9 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
-from isi_mip.climatemodels.models import ImpactModel
-
 
 def migrate_owner_to_owners(apps, schema_editor):
-    ims = ImpactModel.objects.all()
+    ims = apps.get_model('climatemodels', 'ImpactModel').objects.all()
     for im in ims:
         im.owners.add(im.owner)
         im.save()
