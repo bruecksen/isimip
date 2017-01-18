@@ -12,12 +12,14 @@ from django.http.response import HttpResponse, HttpResponseRedirect, JsonRespons
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.html import urlize, linebreaks
+from django.template import Template, Context
 
 from isi_mip.climatemodels.forms import ImpactModelStartForm, ContactPersonFormset, get_sector_form, \
     BaseImpactModelForm, ImpactModelForm, TechnicalInformationModelForm, InputDataInformationModelForm, OtherInformationModelForm
 from isi_mip.climatemodels.models import ImpactModel, InputData, BaseImpactModel, SimulationRound
 from isi_mip.climatemodels.tools import ImpactModelToXLSX
 from isi_mip.invitation.views import InvitationView
+from isi_mip.core.models import Invitation
 
 STEP_SHOW_DETAILS = 'details'
 STEP_BASE = 'edit_base'
@@ -321,6 +323,7 @@ def impact_model_assign(request, username=None):
         form = ImpactModelStartForm(request.POST, instance=base_impact_model)
         if form.is_valid():
             bimodel = form.cleaned_data['model']
+            send_invitation_email = form.cleaned_data.pop('send_invitation_email')
             if bimodel:
                 bimodel.owners.add(user)
                 bimodel.save()
@@ -332,7 +335,8 @@ def impact_model_assign(request, username=None):
                 bimodel.public = False
                 bimodel.save()
                 messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(bimodel, user))
-            send_email(request, user, bimodel)
+            if send_invitation_email:
+                send_email(request, user, bimodel)
             if 'next' in request.GET:
                 return HttpResponseRedirect(request.GET['next'])
             return HttpResponseRedirect(reverse('admin:auth_user_list'))
@@ -354,11 +358,12 @@ def send_email(request, user, bimodel):
         'username': user.username,
         'valid_until': invite.valid_until,
     }
-    subject = render_to_string(InvitationView.email_subject_template,
-                               context)
+    invitation = Invitation.for_site(request.site)
+    template = Template(invitation.subject)
+    subject = template.render(Context(context))
     # Force subject to a single line to avoid header-injection
     # issues.
     subject = ''.join(subject.splitlines())
-    message = render_to_string(InvitationView.email_body_template,
-                               context)
+    template = Template(invitation.body)
+    message = template.render(Context(context))
     user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)

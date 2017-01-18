@@ -16,6 +16,7 @@ class ImpactModelStartForm(forms.ModelForm):
     model = forms.ModelChoiceField(queryset=BaseImpactModel.objects.order_by('name'), required=False)
     name = forms.CharField(label='New Impact Model', required=False)
     sector = forms.ChoiceField(choices=BaseImpactModel.SECTOR_CHOICES, required=False)
+    send_invitation_email = forms.BooleanField(label='Send the invitation email?', required=False, initial=True)
 
     class Meta:
         model = BaseImpactModel

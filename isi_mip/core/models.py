@@ -54,5 +54,5 @@ class FooterLink(Orderable, models.Model):
 
 @register_setting(icon='mail')
 class Invitation(BaseSetting):
-    subject = models.CharField(max_length=500, help_text='Invitation subject')
+    subject = models.CharField(max_length=500, help_text='Invitation subject', default='[ISIMIP] Registration invitation for impact-model database')
     body = models.TextField()
