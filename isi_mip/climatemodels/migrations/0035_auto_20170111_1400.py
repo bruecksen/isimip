@@ -12,10 +12,16 @@ def move_data_to_base_impact_model(apps, schema_editor):
     BaseImpactModel = apps.get_model('climatemodels', 'BaseImpactModel')
 
     SimulationRoundModel = apps.get_model('climatemodels', 'SimulationRound')
-    fast_track = SimulationRoundModel.objects.get_or_create(name="Fast Track")
+    fast_track, created = SimulationRoundModel.objects.get_or_create(
+        name="Fast Track",
+        defaults={'order': 1, 'slug': 'fast_track'}
+    )
     fast_track.order = 1
     fast_track.save()
-    isimip2a = SimulationRoundModel.objects.get_or_create(name="ISIMIP2a")
+    isimip2a = SimulationRoundModel.objects.get_or_create(
+        name="ISIMIP2a",
+        defaults={'order': 2, 'slug': 'isimip2a'}
+    )
     isimip2a.order = 2
     isimip2a.save()
     for impact_model in ImpactModel.objects.all():
