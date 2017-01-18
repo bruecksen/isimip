@@ -19,6 +19,7 @@ class HideAdmin(admin.ModelAdmin):
 class SimulationRoundAdmin(admin.ModelAdmin):
     model = SimulationRound
     prepopulated_fields = {'slug': ('name',), }
+    list_display = ('name', 'order')
 
 
 class HideSectorAdmin(HideAdmin):
@@ -33,6 +34,8 @@ class ContactPersonAdmin(admin.TabularInline):
 class BaseImpactModelAdmin(admin.ModelAdmin):
     model = BaseImpactModel
     inlines = [ContactPersonAdmin, ]
+    list_display = ('name', 'sector')
+    list_filter = ('sector',)
 
 
 class TechnicalInformationAdmin(admin.StackedInline):
@@ -107,10 +110,17 @@ class AgricultureAdmin(HideSectorAdmin):
 class DataTypeAdmin(admin.ModelAdmin):
     model = DataType
     list_display = ('name', 'is_climate_data_type')
+    list_filter = ('is_climate_data_type',)
+
+
+class InputDataAdmin(admin.ModelAdmin):
+    model = InputData
+    list_display = ('name', 'data_type', 'simulation_round', 'scenario')
+    list_filter = ('data_type', 'simulation_round',)
 
 admin.site.register(BaseImpactModel, BaseImpactModelAdmin)
 admin.site.register(ImpactModel, ImpactModelAdmin)
-admin.site.register(InputData)
+admin.site.register(InputData, InputDataAdmin)
 admin.site.register(OutputData)
 
 admin.site.register(Agriculture, AgricultureAdmin)

@@ -9,7 +9,7 @@ from wagtail.wagtailcore.models import Page, Orderable
 from isi_mip.climatemodels.models import ImpactModel
 
 
-@register_setting
+@register_setting(icon='list-ul')
 class HeaderLinks(ClusterableModel, BaseSetting):
     panels = [
         InlinePanel('header_links', label="Link"),
@@ -29,7 +29,7 @@ class HeaderLink(Orderable, models.Model):
     ]
 
 
-@register_setting
+@register_setting(icon='list-ul')
 class FooterLinks(ClusterableModel, BaseSetting):
     panels = [
         InlinePanel('footer_links', label="Link"),
@@ -50,3 +50,9 @@ class FooterLink(Orderable, models.Model):
         FieldPanel('_name'),
 
     ]
+
+
+@register_setting(icon='mail')
+class Invitation(BaseSetting):
+    subject = models.CharField(max_length=500, help_text='Invitation subject')
+    body = models.TextField()

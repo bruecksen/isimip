@@ -13,12 +13,12 @@ ContactPersonFormset = inlineformset_factory(BaseImpactModel, ContactPerson,
 
 
 class ImpactModelStartForm(forms.ModelForm):
-    model = forms.ModelChoiceField(queryset=ImpactModel.objects.order_by('name'), required=False)
+    model = forms.ModelChoiceField(queryset=BaseImpactModel.objects.order_by('name'), required=False)
     name = forms.CharField(label='New Impact Model', required=False)
     sector = forms.ChoiceField(choices=BaseImpactModel.SECTOR_CHOICES, required=False)
 
     class Meta:
-        model = ImpactModel
+        model = BaseImpactModel
         fields = ('model', 'name', 'sector')
 
 

@@ -315,42 +315,42 @@ def impact_model_assign(request, username=None):
         return HttpResponseRedirect(nexturl)
 
     user = User.objects.get(username=username)
-    impactmodel = ImpactModel()
+    base_impact_model = BaseImpactModel()
 
     if request.method == 'POST':
-        form = ImpactModelStartForm(request.POST, instance=impactmodel)
+        form = ImpactModelStartForm(request.POST, instance=base_impact_model)
         if form.is_valid():
-            imodel = form.cleaned_data['model']
-            if imodel:
-                imodel.base_model.owners.add(user)
-                imodel.save()
-                messages.success(request, "{} has been added to the list of owners for \"{}\"".format(user, imodel))
+            bimodel = form.cleaned_data['model']
+            if bimodel:
+                bimodel.owners.add(user)
+                bimodel.save()
+                messages.success(request, "{} has been added to the list of owners for \"{}\"".format(user, bimodel))
             else:
                 del (form.cleaned_data['model'])
-                imodel = ImpactModel.objects.create(**form.cleaned_data)
-                imodel.base_model.owners.add(user)
-                imodel.public = False
-                imodel.save()
-                messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(imodel, user))
-            send_email(request, user, imodel)
+                bimodel = BaseImpactModel.objects.create(**form.cleaned_data)
+                bimodel.owners.add(user)
+                bimodel.public = False
+                bimodel.save()
+                messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(bimodel, user))
+            send_email(request, user, bimodel)
             if 'next' in request.GET:
                 return HttpResponseRedirect(request.GET['next'])
             return HttpResponseRedirect(reverse('admin:auth_user_list'))
         else:
             messages.warning(request, form.errors)
     else:
-        form = ImpactModelStartForm(instance=impactmodel)
+        form = ImpactModelStartForm(instance=base_impact_model)
     template = 'climatemodels/assign.html'
     return render(request, template, {'form': form, 'owner': user})
 
 
-def send_email(request, user, imodel):
+def send_email(request, user, bimodel):
     invite = user.invitation_set.last()
     register_link = reverse('accounts:register', kwargs={'pk': user.id, 'token': invite.token})
     context = {
         'url': request.build_absolute_uri(register_link),
-        'model_name': imodel.name,
-        'sector': imodel.sector,
+        'model_name': bimodel.name,
+        'sector': bimodel.sector,
         'username': user.username,
         'valid_until': invite.valid_until,
     }
