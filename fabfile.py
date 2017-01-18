@@ -57,6 +57,14 @@ def deploy():
     reload_webserver()
     ping()
 
+
+def soft_deploy():
+    with cd(env.path):
+        run("git pull %(push_remote)s %(push_branch)s" % env)
+
+    reload_webserver()
+    ping()
+
 #
 # def init_fixtures():
 #     with virtualenv(env.virtualenv_path):
