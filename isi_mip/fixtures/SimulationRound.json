@@ -1,1 +1,0 @@
-[{"model": "climatemodels.simulationround", "pk": 2, "fields": {"name": "Fast Track", "slug": "fast-track", "order": 1}}, {"model": "climatemodels.simulationround", "pk": 3, "fields": {"name": "ISIMIP2a", "slug": "isimip2a", "order": 2}}]

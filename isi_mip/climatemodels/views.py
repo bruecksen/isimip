@@ -65,7 +65,8 @@ def impact_model_details(page, request, id):
                        'definitions': ({'text': "%s: <i>%s</i>" % (x, y), 'key': x, 'value': y} for x, y in v if y)
                        }
                 model_details.append(res)
-        model_details[0]['opened'] = True
+        if model_details:
+            model_details[0]['opened'] = True
         edit_link = ''
         if can_edit_model:
             edit_link = '<i class="fa fa-cog" aria-hidden="true"></i> <a href="{}">Edit simulation round {}</a>'.format(page.url + page.reverse_subpage(STEP_BASE, args=(im.id,)), im.simulation_round.name)
