@@ -1,6 +1,7 @@
 from django.apps import apps
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
@@ -559,7 +560,10 @@ class BaseSector(models.Model):
 
 
 class GenericSector(BaseSector):
-    pass
+    data = JSONField()
+
+    def __str__(self):
+        return 'Generic sector of %s' % impact_model
 
 
 class Agriculture(BaseSector):

@@ -332,8 +332,12 @@ class WaterForm(forms.ModelForm):
         }
 
 
-class GenericSectorForm(forms.Form):
+class GenericSectorForm(forms.ModelForm):
     template = 'edit_generic_sector.html'
+
+    class Meta:
+        model = GenericSector
+        exclude = ('impact_model', 'data')
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.pop('instance', None)
@@ -347,6 +351,7 @@ class GenericSectorForm(forms.Form):
                     fields.append(field.name)
                     self.fields[field.name] = forms.CharField(widget=MyTextInput(textarea=True), help_text=field.help_text, required=False, initial='')
                 self.groups.append({'name': group.name, 'fields': fields, 'description': group.description})
+
 
 
 def get_sector_form(sector):
