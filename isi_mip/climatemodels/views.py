@@ -290,7 +290,7 @@ def impact_model_detail_edit(page, request, context, base_impact_model, current_
 
 
 def impact_model_sector_edit(page, request, context, impact_model, target_url):
-    formular = get_sector_form(impact_model.fk_sector_name)
+    formular = get_sector_form(impact_model.base_model.sector)
 
     if formular is None:
         return HttpResponseRedirect(target_url)
@@ -307,6 +307,7 @@ def impact_model_sector_edit(page, request, context, impact_model, target_url):
         form = formular(instance=impact_model.fk_sector)
 
     context['form'] = form
+    context['sector'] = impact_model.base_model.sector.name
     template = 'climatemodels/{}'.format(formular.template)
     return render(request, template, context)
 

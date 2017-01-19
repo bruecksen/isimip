@@ -180,6 +180,34 @@ class Sector(models.Model):
         ordering = ('name',)
 
 
+class SectorInformationGroup(models.Model):
+    sector = models.ForeignKey(Sector)
+    name = models.CharField(max_length=500, unique=True)
+    description = models.TextField(blank=True)
+    order = models.SmallIntegerField(default=0)
+
+    def __str__(self):
+        return '%s (%s)' % (self.name, self.sector.name)
+
+    class Meta:
+        verbose_name_plural = 'Sector information groups'
+        ordering = ('order', 'name')
+
+
+class SectorInformationField(models.Model):
+    information_group = models.ForeignKey(SectorInformationGroup, related_name='fields')
+    name = models.CharField(max_length=500)
+    help_text = models.CharField(max_length=500, blank=True)
+    order = models.SmallIntegerField(default=0)
+
+    def __str__(self):
+        return '%s' % (self.name, )
+
+    class Meta:
+        verbose_name_plural = 'Sector information fields'
+        ordering = ('order', 'name')
+        unique_together = ('name', 'information_group')
+
 
 class BaseImpactModel(models.Model):
     name = models.CharField(max_length=500)
@@ -271,10 +299,11 @@ class ImpactModel(models.Model):
 
     def save(self, *args, **kwargs):
         is_duplication = kwargs.pop('is_duplication', False)
+        is_creation = self.pk is None
         super().save(*args, **kwargs)
-        if not is_duplication:
+        if not is_duplication and is_creation:
             # if model gets duplicated we handle related instances in the duplicate method
-            self.base_model.sector.class_name.objects.get_or_create(impact_model=self)
+            self.base_model.sector.model.objects.get_or_create(impact_model=self)
             TechnicalInformation.objects.get_or_create(impact_model=self)
             InputDataInformation.objects.get_or_create(impact_model=self)
             OtherInformation.objects.get_or_create(impact_model=self)
@@ -529,7 +558,7 @@ class BaseSector(models.Model):
         return []
 
 
-class GenericSector(models.Model):
+class GenericSector(BaseSector):
     pass
 
 

@@ -121,6 +121,22 @@ class SectorAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',), }
 
 
+class SectorInformationFieldAdmin(admin.StackedInline):
+    model = SectorInformationField
+
+
+class SectorInformationGroupAdmin(admin.ModelAdmin):
+    model = SectorInformationGroup
+    inlines = [SectorInformationFieldAdmin]
+
+    def get_sector(self, obj):
+        return obj.sector.name
+    get_sector.admin_order_field = 'sector__name'
+    get_sector.short_description = 'Sector'
+    list_display = ('get_sector', 'name', 'order')
+    list_filter = ('sector__name', )
+
+
 class InputDataAdmin(admin.ModelAdmin):
     model = InputData
     list_display = ('name', 'data_type', )
@@ -155,11 +171,8 @@ admin.site.register(Forests, HideSectorAdmin)
 admin.site.register(MarineEcosystemsGlobal, HideSectorAdmin)
 admin.site.register(MarineEcosystemsRegional, HideSectorAdmin)
 admin.site.register(Biodiversity, HideSectorAdmin)
-# admin.site.register(Health, HideSectorAdmin)
-# admin.site.register(CoastalInfrastructure, HideSectorAdmin)
-# admin.site.register(Permafrost, HideSectorAdmin)
-# admin.site.register(ComputableGeneralEquilibriumModelling, HideSectorAdmin)
-# admin.site.register(AgroEconomicModelling, HideSectorAdmin)
+
+admin.site.register(SectorInformationGroup, SectorInformationGroupAdmin)
 
 admin.site.register(DataType, DataTypeAdmin)
 admin.site.register(ClimateVariable, ClimateVariableAdmin)

@@ -332,6 +332,23 @@ class WaterForm(forms.ModelForm):
         }
 
 
+class GenericSectorForm(forms.Form):
+    template = 'edit_generic_sector.html'
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.pop('instance', None)
+        super(GenericSectorForm, self).__init__(*args, **kwargs)
+        if instance:
+            sector = instance.impact_model.base_model.sector
+            self.groups = []
+            for group in SectorInformationGroup.objects.filter(sector=sector):
+                fields = []
+                for field in group.fields.all():
+                    fields.append(field.name)
+                    self.fields[field.name] = forms.CharField(widget=MyTextInput(textarea=True), help_text=field.help_text, required=False, initial='')
+                self.groups.append({'name': group.name, 'fields': fields, 'description': group.description})
+
+
 def get_sector_form(sector):
     mapping = {
         'agriculture': AgricultureForm,
@@ -348,5 +365,6 @@ def get_sector_form(sector):
         'permafrost': None,
         'waterglobal': WaterForm,
         'waterregional': WaterForm,
+        'genericsector': GenericSectorForm,
     }
-    return mapping[sector]
+    return mapping[sector.class_name.lower()]

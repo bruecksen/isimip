@@ -1,4 +1,4 @@
-{% extends 'climatemodels/edit_base.html' %}
+{% extends 'climatemodels/edit_sector.html' %}
 {% load template_form %}
 
 {% block form_content %}
@@ -16,9 +16,4 @@
 		{{ nf.anything_else}}
 		{{ nf.comments}}
 	</fieldset>
-{% endblock %}
-{% block form_action %}
-	<div class="form-actions">
-		<input type="submit" name="submit-button" value="Save and edit sector-specific information" class="btn btn-primary">
-	</div>
 {% endblock %}

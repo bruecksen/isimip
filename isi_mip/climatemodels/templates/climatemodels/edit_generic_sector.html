@@ -1,0 +1,17 @@
+{% extends 'climatemodels/edit_sector.html' %}
+{% load template_form %}
+{% load keyvalue %}
+
+{% block form_content %}
+	{% template_form form as nf %}
+		{% include 'widgets/heading3.html' with text=sector %}
+		{% for group in form.groups %}
+			<fieldset>
+			{% include 'widgets/heading3.html' with text=group.name %}
+			{% include 'widgets/richtext-content.html' with content=group.description %}
+			{% for field in group.fields %}
+				{{ nf|keyvalue:field }}
+			{% endfor %}
+			</fieldset>
+		{% endfor %}
+{% endblock %}
