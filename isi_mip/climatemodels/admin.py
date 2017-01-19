@@ -116,8 +116,8 @@ class DataTypeAdmin(admin.ModelAdmin):
 
 class InputDataAdmin(admin.ModelAdmin):
     model = InputData
-    list_display = ('name', 'data_type', 'simulation_round', 'scenario')
-    list_filter = ('data_type', 'simulation_round',)
+    list_display = ('name', 'data_type', )
+    list_filter = ('data_type', )
 
 
 class ClimateVariableAdmin(admin.ModelAdmin):

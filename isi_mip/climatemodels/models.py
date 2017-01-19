@@ -130,9 +130,9 @@ class ContactPerson(models.Model):
 class InputData(models.Model):
     name = models.CharField(max_length=500, unique=True)
     data_type = models.ForeignKey(DataType, null=True, blank=True, on_delete=models.SET_NULL)
-    scenario = models.ForeignKey(Scenario, null=True, blank=True, on_delete=models.SET_NULL)
+    scenario = models.ManyToManyField(Scenario, blank=True, related_name='scenarios')
     variables = models.ManyToManyField(ClimateVariable, blank=True)
-    simulation_round = models.ForeignKey(SimulationRound, null=True, blank=True, on_delete=models.SET_NULL)
+    simulation_round = models.ManyToManyField(SimulationRound, blank=True, related_name='simulationrounds')
     description = models.TextField(null=True, blank=True, default='')
     caveats = models.TextField(null=True, blank=True)
     download_instructions = models.TextField(null=True, blank=True, default='')
