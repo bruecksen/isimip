@@ -131,8 +131,8 @@ def input_data_details(page, request, id):
                        'opened': True,
                        'definitions': [
                            {'text': 'Data Type: %s' % data.data_type},
-                           {'text': 'Scenario: %s' % data.scenario},
-                           {'text': 'Phase: %s' % data.phase},
+                           {'text': 'Scenarios: %s' % ', '.join((x.name for x in data.scenario.all()))},
+                           {'text': 'Simulation rounds: %s' % ', '.join((x.name for x in data.simulation_round.all()))},
                            {'text': 'Variables: %s' % ', '.join((x.as_span() for x in data.variables.all()))},
                        ]
                    },
