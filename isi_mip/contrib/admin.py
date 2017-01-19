@@ -32,8 +32,8 @@ class UserAdmin(admin.ModelAdmin):
             return '-'
         results = []
         for bm in base_models:
-            link = urlresolvers.reverse(adminurl, args=[bm.id])
-            results.append('<a href="%s">%s</a>' % (link, bm))
+            link = urlresolvers.reverse(adminurl, args=[bm.sector.id])
+            results.append('<a href="%s">%s</a>' % (link, bm.sector))
         return ', '.join(results)
     get_sector.admin_order_field = 'get_sector'
     get_sector.short_description = 'Sector'
