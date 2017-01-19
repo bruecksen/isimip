@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 from django.core import urlresolvers
 from django.core.urlresolvers import NoReverseMatch
+from django.forms import CheckboxSelectMultiple
 
 from isi_mip.sciencepaper.models import Author
 from .models import *
@@ -118,6 +119,9 @@ class InputDataAdmin(admin.ModelAdmin):
     model = InputData
     list_display = ('name', 'data_type', )
     list_filter = ('data_type', )
+    formfield_overrides = {
+        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
+    }
 
 
 class ClimateVariableAdmin(admin.ModelAdmin):
