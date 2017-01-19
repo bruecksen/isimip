@@ -27,14 +27,9 @@ class UserAdmin(admin.ModelAdmin):
     def get_sector(self, obj):
         try:
             base_models = BaseImpactModel.objects.filter(owners=obj)
-            adminurl = "admin:%s_change" % Sector._meta.db_table
         except:
             return '-'
-        results = []
-        for bm in base_models:
-            link = urlresolvers.reverse(adminurl, args=[bm.sector.id])
-            results.append('<a href="%s">%s</a>' % (link, bm.sector))
-        return ', '.join(results)
+        return ', '.join([bm.sector for bm in base_models])
     get_sector.admin_order_field = 'get_sector'
     get_sector.short_description = 'Sector'
     get_sector.allow_tags = True
