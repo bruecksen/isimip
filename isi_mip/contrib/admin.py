@@ -18,7 +18,7 @@ class UserAdmin(admin.ModelAdmin):
         results = []
         for bm in base_models:
             link = urlresolvers.reverse(adminurl, args=[bm.id])
-            results.append('<a href="%s">%s</a>' % (link, bm.name))
+            results.append('<a href="%s">%s</a>' % (link, bm))
         return ', '.join(results)
     get_model.admin_order_field = 'get_model'
     get_model.short_description = 'Impact Model'
