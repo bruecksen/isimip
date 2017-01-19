@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -145,6 +146,41 @@ class InputData(models.Model):
         ordering = ('name',)
 
 
+class Sector(models.Model):
+    name = models.CharField(max_length=500, unique=True)
+    slug = models.SlugField()
+    SECTOR_MAPPING = (
+        ('GenericSector', 'Generic Sector'),
+        ('Agriculture', 'Agriculture'),
+        ('Energy', 'Energy'),
+        ('WaterGlobal', 'Water (global)'),
+        ('WaterRegional', 'Water (regional)'),
+        ('Biomes', 'Biomes'),
+        ('Forests', 'Forests'),
+        ('MarineEcosystemsGlobal', 'Marine Ecosystems and Fisheries (global)'),
+        ('MarineEcosystemsRegional', 'Marine Ecosystems and Fisheries (regional)'),
+        ('Biodiversity', 'Biodiversity'),
+        ('Health', 'Health'),
+        ('CoastalInfrastructure', 'Coastal Infrastructure',),
+        ('Permafrost', 'Permafrost'),
+        ('ComputableGeneralEquilibriumModelling', 'Computable General Equilibrium Modelling'),
+        ('AgroEconomicModelling', 'Agro-Economic Modelling'),
+    )
+    class_name = models.CharField(max_length=500, choices=SECTOR_MAPPING, default='GenericSector')
+
+    @property
+    def model(self):
+        return apps.get_model(app_label='climatemodels', model_name=self.class_name)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Sectors'
+        ordering = ('name',)
+
+
+
 class BaseImpactModel(models.Model):
     name = models.CharField(max_length=500)
     SECTOR_CHOICES = (
@@ -163,7 +199,7 @@ class BaseImpactModel(models.Model):
         ('Water (global)', 'Water (global)'),
         ('Water (regional)', 'Water (regional)'),
     )
-    sector = models.CharField(max_length=500, choices=SECTOR_CHOICES, help_text='The sector to which this information pertains. Some models may have further entries for other sectors.')
+    sector = models.ForeignKey(Sector, help_text='The sector to which this information pertains. Some models may have further entries for other sectors.')
     region = models.ManyToManyField(Region, help_text="Region for which model produces results")
     short_description = models.TextField(
         null=True, blank=True, default='', verbose_name="Short model description",
@@ -227,9 +263,7 @@ class ImpactModel(models.Model):
 
     @property
     def fk_sector_name(self):
-        sector = SECTOR_MAPPING[self.base_model.sector]
-        sectorname = sector._meta.label_lower.rsplit('.')[-1]
-        return sectorname
+        return self.base_model.sector.class_name.lower()
 
     @property
     def fk_sector(self):
@@ -240,7 +274,7 @@ class ImpactModel(models.Model):
         super().save(*args, **kwargs)
         if not is_duplication:
             # if model gets duplicated we handle related instances in the duplicate method
-            SECTOR_MAPPING[self.base_model.sector].objects.get_or_create(impact_model=self)
+            self.base_model.sector.class_name.objects.get_or_create(impact_model=self)
             TechnicalInformation.objects.get_or_create(impact_model=self)
             InputDataInformation.objects.get_or_create(impact_model=self)
             OtherInformation.objects.get_or_create(impact_model=self)
@@ -479,41 +513,8 @@ class OtherInformation(models.Model):
         ]
 
 
-class Sector(models.Model):
+class BaseSector(models.Model):
     impact_model = models.OneToOneField(ImpactModel)
-
-    @staticmethod
-    def get(name: str):
-        name = name.lower().strip()
-        if "agriculture" in name:
-            return Agriculture
-        if "energy" in name:
-            return Energy
-        if "water" in name:
-            if "regional" in name:
-                return WaterRegional
-            return WaterGlobal
-        if "biomes" in name:
-            return Biomes
-        if "forests" in name:
-            return Forests
-        if "marine" in name:
-            if "regional" in name:
-                return MarineEcosystemsRegional
-            return MarineEcosystemsGlobal
-        if "biodiversity" in name:
-            return Biodiversity
-        if "health" in name:
-            return Health
-        if "coastal" in name or "infrastructure" in name:
-            return CoastalInfrastructure
-        if "permafrost" in name:
-            return Permafrost
-        if "equilibrium":
-            return ComputableGeneralEquilibriumModelling
-        if "agro-economic" in name:
-            return AgroEconomicModelling
-        raise Exception("Couldn't match sector type:", name)
 
     class Meta:
         abstract = True
@@ -521,14 +522,18 @@ class Sector(models.Model):
     def __str__(self):
         return type(self).__name__
 
-    def _get_verbose_field_name(self, field: str) -> str:
+    def _get_verbose_field_name(self, field):
         return self._meta.get_field(field).verbose_name.title()
 
-    def values_to_tuples(self) -> list:
+    def values_to_tuples(self):
         return []
 
 
-class Agriculture(Sector):
+class GenericSector(models.Model):
+    pass
+
+
+class Agriculture(BaseSector):
     # Key input and Management, help_text="Provide a yes/no answer and a short description of how the process is included"
     crops = models.TextField(null=True, blank=True, default='', verbose_name='Crops')
     land_coverage = models.TextField(null=True, blank=True, default='', verbose_name='Land cover')
@@ -607,7 +612,7 @@ class Agriculture(Sector):
         ]
 
 
-class BiomesForests(Sector):
+class BiomesForests(BaseSector):
     # technological_progress = models.TextField(null=True, blank=True, default='')
     output = models.TextField(
         null=True, blank=True, default='', verbose_name='Output format',
@@ -731,7 +736,7 @@ class Forests(BiomesForests):
         verbose_name = 'Forests'
 
 
-class Energy(Sector):
+class Energy(BaseSector):
     # Model & Method Characteristics
     model_type = models.TextField(null=True, blank=True, default='', verbose_name='Model type')
     temporal_extent = models.TextField(null=True, blank=True, default='', verbose_name='Temporal extent')
@@ -794,7 +799,7 @@ class Energy(Sector):
         ]
 
 
-class MarineEcosystems(Sector):
+class MarineEcosystems(BaseSector):
     defining_features = models.TextField(null=True, blank=True, default='', verbose_name='Defining features')
     spatial_scale = models.TextField(null=True, blank=True, default='', verbose_name='Spatial scale')
     spatial_resolution = models.TextField(null=True, blank=True, default='', verbose_name='Spatial resolution')
@@ -838,7 +843,7 @@ class MarineEcosystemsRegional(MarineEcosystems):
         verbose_name_plural = 'Marine Ecosystems and Fisheries (regional)'
 
 
-class Water(Sector):
+class Water(BaseSector):
     technological_progress = models.TextField(
         null=True, blank=True, default='',
         help_text='Does the model account for GDP changes and technological progress? If so, how are these integrated into the runs?'
@@ -923,36 +928,36 @@ class WaterRegional(Water):
         verbose_name_plural = 'Water (regional)'
 
 
-class Biodiversity(Sector):
+class Biodiversity(BaseSector):
     pass
 
 
-class Health(Sector):
+class Health(BaseSector):
     pass
 
 
-class CoastalInfrastructure(Sector):
+class CoastalInfrastructure(BaseSector):
     class Meta:
         verbose_name = 'Coastal Infrastructure'
         verbose_name_plural = 'Coastal Infrastructure'
 
 
-class Permafrost(Sector):
+class Permafrost(BaseSector):
     pass
 
 
-class ComputableGeneralEquilibriumModelling(Sector):
+class ComputableGeneralEquilibriumModelling(BaseSector):
     class Meta:
         verbose_name = verbose_name_plural = 'Computable General Equilibrium Modelling'
 
 
-class AgroEconomicModelling(Sector):
+class AgroEconomicModelling(BaseSector):
     class Meta:
         verbose_name = verbose_name_plural = 'Agro-Economic Modelling'
 
 
 class OutputData(models.Model):
-    sector = models.CharField(max_length=500, choices=BaseImpactModel.SECTOR_CHOICES)
+    sector = models.ForeignKey(Sector)
     model = models.ForeignKey(ImpactModel, null=True, blank=True, on_delete=models.SET_NULL)
     scenarios = models.ManyToManyField(Scenario)
     drivers = models.ManyToManyField(InputData)
@@ -965,21 +970,3 @@ class OutputData(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = 'Output data'
-
-
-SECTOR_MAPPING = {
-    'Agriculture': Agriculture,
-    'Energy': Energy,
-    'Water (global)': WaterGlobal,
-    'Water (regional)': WaterRegional,
-    'Biomes': Biomes,
-    'Forests': Forests,
-    'Marine Ecosystems and Fisheries (global)': MarineEcosystemsGlobal,
-    'Marine Ecosystems and Fisheries (regional)': MarineEcosystemsRegional,
-    'Biodiversity': Biodiversity,
-    'Health': Health,
-    'Coastal Infrastructure': CoastalInfrastructure,
-    'Permafrost': Permafrost,
-    'Computable General Equilibrium Modelling': ComputableGeneralEquilibriumModelling,
-    'Agro-Economic Modelling': AgroEconomicModelling,
-}

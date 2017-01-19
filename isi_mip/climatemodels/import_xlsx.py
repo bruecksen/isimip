@@ -3,11 +3,11 @@ import pyexcel as pe
 import pyexcel.ext.xlsx
 
 from isi_mip.sciencepaper import crossrefpy
-from isi_mip.climatemodels.models import ImpactModel, Region, Sector, ReferencePaper, \
-    SocioEconomicInputVariables, SECTOR_MAPPING, ContactPerson, ClimateVariable, SpatialAggregation, Water, \
+from isi_mip.climatemodels.models import ImpactModel, Region, BaseSector, ReferencePaper, \
+    SocioEconomicInputVariables, ContactPerson, ClimateVariable, SpatialAggregation, Water, \
     Agriculture, Energy, MarineEcosystems, Biomes, BiomesForests
 
-
+# Import is broken due to major model changes
 class XLSImport:
     def __init__(self, filename):
         self.filename = filename
@@ -29,8 +29,10 @@ class XLSImport:
         try:
             general = ImpactModel.objects.get(name=zeile[2])
         except:
-            sectordings = Sector.get(zeile[0] + ' ' + zeile[1])
-            name = list(SECTOR_MAPPING.keys())[list(SECTOR_MAPPING.values()).index(sectordings)]
+            sectordings = BaseSector.get(zeile[0] + ' ' + zeile[1])
+            # IMPORT ist broken, cause to major model changes. 
+            # name = list(SECTOR_MAPPING.keys())[list(SECTOR_MAPPING.values()).index(sectordings)]
+            name = None
             general = ImpactModel.objects.create(name=zeile[2], sector=name)
         print(general)
         # return

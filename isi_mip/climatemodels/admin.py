@@ -115,6 +115,12 @@ class DataTypeAdmin(admin.ModelAdmin):
     list_filter = ('is_climate_data_type',)
 
 
+class SectorAdmin(admin.ModelAdmin):
+    model = Sector
+    list_display = ('name', 'class_name')
+    prepopulated_fields = {'slug': ('name',), }
+
+
 class InputDataAdmin(admin.ModelAdmin):
     model = InputData
     list_display = ('name', 'data_type', )
@@ -139,7 +145,7 @@ admin.site.register(BaseImpactModel, BaseImpactModelAdmin)
 admin.site.register(ImpactModel, ImpactModelAdmin)
 admin.site.register(InputData, InputDataAdmin)
 admin.site.register(OutputData)
-
+admin.site.register(Sector, SectorAdmin)
 admin.site.register(Agriculture, AgricultureAdmin)
 admin.site.register(Energy, HideSectorAdmin)
 admin.site.register(WaterGlobal, HideSectorAdmin)
