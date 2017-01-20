@@ -35,7 +35,7 @@ FORM_STEPS = OrderedDict([
     (STEP_TECHNICAL_INFORMATION, {'form': TechnicalInformationModelForm, 'next': STEP_INPUT_DATA, 'verbose_name': 'Technical Information'}),
     (STEP_INPUT_DATA, {'form': InputDataInformationModelForm, 'next': STEP_OTHER, 'verbose_name': 'Input Data Information'}),
     (STEP_OTHER, {'form': OtherInformationModelForm, 'next': STEP_SECTOR, 'verbose_name': 'Other Information'}),
-    (STEP_SECTOR, {'form': None, 'next': STEP_SHOW_DETAILS, 'verbose_name': 'Sector specific Information'})
+    (STEP_SECTOR, {'form': None, 'next': None, 'verbose_name': 'Sector specific Information'})
 ])
 
 
@@ -228,7 +228,8 @@ def impact_model_edit(page, request, id, current_step):
     if next_parameter:
         target_url = page.url + page.reverse_subpage(next_parameter, args=(impact_model.id,))
     elif current_step == STEP_SECTOR:
-        target_url = page.url + page.reverse_subpage(next_step, args=(impact_model.base_model.id,))
+        # TODO find a better solution for redirect url
+        target_url = '/dashboard/'
     else:
         target_url = page.url + page.reverse_subpage(next_step, args=(impact_model.id,))
 
