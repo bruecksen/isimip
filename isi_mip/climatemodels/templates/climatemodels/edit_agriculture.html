@@ -1,5 +1,6 @@
 {% extends 'climatemodels/edit_sector.html' %}
 {% load template_form %}
+{% load keyvalue %}
 
 {% block form_content %}
 	{% template_form form as nf %}
@@ -46,4 +47,15 @@
 		{{ nf.temporal_scale_of_calibration_validation }}
 		{{ nf.criteria_for_evaluation }}
 	</fieldset>
+	{% for group in form.generic_groups %}
+		<fieldset>
+		{% include 'widgets/heading3.html' with text=group.name %}
+		{% if group.description %}
+			{% include 'widgets/richtext-content.html' with content=group.description %}
+		{% endif %}
+		{% for field in group.fields %}
+			{{ nf|keyvalue:field }}
+		{% endfor %}
+		</fieldset>
+	{% endfor %}
 {% endblock %}

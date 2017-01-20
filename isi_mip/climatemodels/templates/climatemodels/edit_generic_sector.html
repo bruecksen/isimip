@@ -5,10 +5,12 @@
 {% block form_content %}
 	{% template_form form as nf %}
 		{% include 'widgets/heading3.html' with text=sector %}
-		{% for group in form.groups %}
+		{% for group in form.generic_groups %}
 			<fieldset>
 			{% include 'widgets/heading3.html' with text=group.name %}
-			{% include 'widgets/richtext-content.html' with content=group.description %}
+			{% if group.description %}
+				{% include 'widgets/richtext-content.html' with content=group.description %}
+			{% endif %}
 			{% for field in group.fields %}
 				{{ nf|keyvalue:field }}
 			{% endfor %}

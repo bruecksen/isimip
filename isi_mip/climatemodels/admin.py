@@ -67,11 +67,11 @@ class ImpactModelAdmin(admin.ModelAdmin):
 
     def sector_link(self, obj):
         try:
-            adminurl = "admin:%s_change" % obj.base_model.fk_sector._meta.db_table
-            link = urlresolvers.reverse(adminurl, args=[obj.base_model.fk_sector.id])
-            return '<a href="%s">%s</a>' % (link, obj.base_model.fk_sector._meta.verbose_name)
+            adminurl = "admin:%s_%s_change" % (obj.fk_sector._meta.app_label, obj.fk_sector._meta.model_name)
+            link = urlresolvers.reverse(adminurl, args=[obj.fk_sector.id])
+            return '<a href="%s">%s</a>' % (link, obj.fk_sector)
         except NoReverseMatch:
-            return '<span style="color:#666;">{} has no specific attributes.</span>'.format(obj.base_model.fk_sector._meta.verbose_name)
+            return '<span style="color:#666;">{} has no specific attributes.</span>'.format(obj.fk_sector._meta.verbose_name)
         except KeyError:
             return '<span style="color:#666;">will be shown, once the model is saved.</span>'
     sector_link.allow_tags = True
@@ -123,11 +123,13 @@ class SectorAdmin(admin.ModelAdmin):
 
 class SectorInformationFieldAdmin(admin.StackedInline):
     model = SectorInformationField
+    prepopulated_fields = {'identifier': ('name',), }
 
 
 class SectorInformationGroupAdmin(admin.ModelAdmin):
     model = SectorInformationGroup
     inlines = [SectorInformationFieldAdmin]
+    prepopulated_fields = {'identifier': ('name',), }
 
     def get_sector(self, obj):
         return obj.sector.name
@@ -171,6 +173,7 @@ admin.site.register(Forests, HideSectorAdmin)
 admin.site.register(MarineEcosystemsGlobal, HideSectorAdmin)
 admin.site.register(MarineEcosystemsRegional, HideSectorAdmin)
 admin.site.register(Biodiversity, HideSectorAdmin)
+admin.site.register(GenericSector, HideSectorAdmin)
 
 admin.site.register(SectorInformationGroup, SectorInformationGroupAdmin)
 

@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.utils.text import slugify
 
 from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
 from isi_mip.sciencepaper.models import Paper
@@ -183,7 +184,8 @@ class Sector(models.Model):
 
 class SectorInformationGroup(models.Model):
     sector = models.ForeignKey(Sector)
-    name = models.CharField(max_length=500, unique=True)
+    name = models.CharField(max_length=500)
+    identifier = models.SlugField()
     description = models.TextField(blank=True)
     order = models.SmallIntegerField(default=0)
 
@@ -193,11 +195,13 @@ class SectorInformationGroup(models.Model):
     class Meta:
         verbose_name_plural = 'Sector information groups'
         ordering = ('order', 'name')
+        unique_together = ('sector', 'name')
 
 
 class SectorInformationField(models.Model):
     information_group = models.ForeignKey(SectorInformationGroup, related_name='fields')
     name = models.CharField(max_length=500)
+    identifier = models.SlugField()
     help_text = models.CharField(max_length=500, blank=True)
     order = models.SmallIntegerField(default=0)
 
@@ -208,6 +212,10 @@ class SectorInformationField(models.Model):
         verbose_name_plural = 'Sector information fields'
         ordering = ('order', 'name')
         unique_together = ('name', 'information_group')
+
+    @property
+    def unique_identifier(self):
+        return '%s-%s' % (self.information_group.identifier, self.identifier)
 
 
 class BaseImpactModel(models.Model):
@@ -545,6 +553,7 @@ class OtherInformation(models.Model):
 
 class BaseSector(models.Model):
     impact_model = models.OneToOneField(ImpactModel)
+    data = JSONField(blank=True, null=True, default=dict)
 
     class Meta:
         abstract = True
@@ -553,17 +562,35 @@ class BaseSector(models.Model):
         return type(self).__name__
 
     def _get_verbose_field_name(self, field):
-        return self._meta.get_field(field).verbose_name.title()
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name.title()
+        if fieldmeta.help_text:
+            ret = generate_helptext(fieldmeta.help_text, ret)
+        return ret
+
+    def _get_generic_verbose_field_name(self, field):
+        ret = field.name
+        if field.help_text:
+            ret = generate_helptext(field.help_text, ret)
+        return ret
 
     def values_to_tuples(self):
-        return []
+        groups = []
+        vname = self._get_generic_verbose_field_name
+        for group in SectorInformationGroup.objects.filter(sector=self.impact_model.base_model.sector):
+                fields = []
+                for field in group.fields.all():
+                    fields.append((vname(field), self.data.get(field.unique_identifier, '')))
+                groups.append((group.name, fields))
+        return groups
 
 
 class GenericSector(BaseSector):
-    data = JSONField()
-
     def __str__(self):
-        return 'Generic sector of %s' % impact_model
+        return '%s' % self.impact_model.base_model.sector
+
+    class Meta:
+        verbose_name = 'Generic sector'
 
 
 class Agriculture(BaseSector):
@@ -602,8 +629,9 @@ class Agriculture(BaseSector):
     temporal_scale_of_calibration_validation = models.TextField(null=True, blank=True, default='', verbose_name='Temporal scale of calibration/validation')
     criteria_for_evaluation = models.TextField(null=True, blank=True, default='', verbose_name='Criteria for evaluation (validation)')
 
-    def values_to_tuples(self) -> list:
+    def values_to_tuples(self):
         vname = self._get_verbose_field_name
+        generic = super(Agriculture, self).values_to_tuples()
         return [
             ('Key input and Management', [
                 (vname('crops'), self.crops),
@@ -642,7 +670,7 @@ class Agriculture(BaseSector):
                 (vname('temporal_scale_of_calibration_validation'), self.temporal_scale_of_calibration_validation),
                 (vname('criteria_for_evaluation'), self.criteria_for_evaluation)
             ])
-        ]
+        ] + generic
 
 
 class BiomesForests(BaseSector):
@@ -704,8 +732,9 @@ class BiomesForests(BaseSector):
     )
     pfts_comments = models.TextField(null=True, blank=True, default='', verbose_name='Comments')
 
-    def values_to_tuples(self) -> list:
+    def values_to_tuples(self):
         vname = self._get_verbose_field_name
+        generic = super(BiomesForests, self).values_to_tuples()
         return [
             ('Model output specifications', [
                 (vname('output'), self.output),
@@ -751,7 +780,7 @@ class BiomesForests(BaseSector):
                 (vname('list_of_pfts'), self.list_of_pfts),
                 (vname('pfts_comments'), self.pfts_comments),
             ])
-        ]
+        ] + generic
 
     class Meta:
         abstract = True
@@ -796,8 +825,9 @@ class Energy(BaseSector):
     bioenergy_supply_costs = models.TextField(null=True, blank=True, default='', verbose_name='Bioenergy supply costs', help_text='Include information on the functional forms and the data sources for deriving the supply curves')
     socioeconomic_input = models.TextField(null=True, blank=True, default='', verbose_name='Socio-economic input', help_text='Are SSP storylines implemented, or just GDP and population scenarios?')
 
-    def values_to_tuples(self) -> list:
+    def values_to_tuples(self):
         vname = self._get_verbose_field_name
+        generic = super(Energy, self).values_to_tuples()
         return [
             ('Model & method characteristics', [
                 (vname('model_type'), self.model_type),
@@ -829,7 +859,7 @@ class Energy(BaseSector):
                 (vname('bioenergy_supply_costs'), self.bioenergy_supply_costs),
                 (vname('socioeconomic_input'), self.socioeconomic_input),
             ])
-        ]
+        ] + generic
 
 
 class MarineEcosystems(BaseSector):
@@ -844,8 +874,9 @@ class MarineEcosystems(BaseSector):
     fishbase_used_for_mass_length_conversion = models.TextField(
         null=True, blank=True, default='', verbose_name='Is FishBase used for mass-length conversion?')
 
-    def values_to_tuples(self) -> list:
+    def values_to_tuples(self):
         vname = self._get_verbose_field_name
+        generic = super(MarineEcosystems, self).values_to_tuples()
         return [
             ('Information specific to marine ecosystems & fisheries', [
                 (vname('defining_features'), self.defining_features),
@@ -906,8 +937,9 @@ class Water(BaseSector):
     methods_evapotranspiration = models.TextField(null=True, blank=True, default='', verbose_name='Potential evapotranspiration')
     methods_snowmelt = models.TextField(null=True, blank=True, default='', verbose_name='Snow melt')
 
-    def values_to_tuples(self) -> list:
+    def values_to_tuples(self):
         vname = self._get_verbose_field_name
+        generic = super(Water, self).values_to_tuples()
         return [
             ('Technological Progress', [
                 (vname('technological_progress'), self.technological_progress),

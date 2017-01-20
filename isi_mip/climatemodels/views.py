@@ -233,7 +233,7 @@ def impact_model_edit(page, request, id, current_step):
         target_url = page.url + page.reverse_subpage(next_step, args=(impact_model.id,))
 
     if current_step == STEP_BASE:
-        return impact_model_detail_edit(page, request, context, impact_model.base_model, current_step, next_step, target_url)
+        return impact_model_base_edit(page, request, context, impact_model.base_model, current_step, next_step, target_url)
     elif current_step == STEP_SECTOR:
         return impact_model_sector_edit(page, request, context, impact_model, target_url)
     else:
@@ -245,10 +245,10 @@ def impact_model_edit(page, request, id, current_step):
             instance = impact_model.inputdatainformation
         elif current_step == STEP_OTHER:
             instance = impact_model.otherinformation
-        return impact_model_base_edit(page, request, context, form, instance, current_step, next_step, target_url)
+        return impact_model_detail_edit(page, request, context, form, instance, current_step, next_step, target_url)
 
 
-def impact_model_base_edit(page, request, context, form, instance, current_step, next_step, target_url):
+def impact_model_detail_edit(page, request, context, form, instance, current_step, next_step, target_url):
     if request.method == 'POST':
         form = form(request.POST, instance=instance)
         if form.is_valid():
@@ -266,7 +266,7 @@ def impact_model_base_edit(page, request, context, form, instance, current_step,
     return render(request, template, context)
 
 
-def impact_model_detail_edit(page, request, context, base_impact_model, current_step, next_step, target_url):
+def impact_model_base_edit(page, request, context, base_impact_model, current_step, next_step, target_url):
     if request.method == 'POST':
         form = BaseImpactModelForm(request.POST, instance=base_impact_model)
         contactform = ContactPersonFormset(request.POST, instance=base_impact_model)

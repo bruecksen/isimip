@@ -171,7 +171,51 @@ class OtherInformationModelForm(forms.ModelForm):
 
 
 # SEKTOREN ############################################################
-class AgricultureForm(forms.ModelForm):
+class BaseSectorForm(forms.ModelForm):
+    generic_fields = []
+
+    class Meta:
+        model = GenericSector
+        exclude = ('impact_model', 'data')
+        abstract = True
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', None)
+        super(BaseSectorForm, self).__init__(*args, **kwargs)
+        if instance:
+            sector = instance.impact_model.base_model.sector
+            self.generic_groups = []
+            for group in SectorInformationGroup.objects.filter(sector=sector):
+                fields = []
+                for field in group.fields.all():
+                    fields.append(field.unique_identifier)
+                    self.generic_fields.append(field.unique_identifier)
+                    self.fields[field.unique_identifier] = forms.CharField(widget=MyTextInput(textarea=True), label=field.name, help_text=field.help_text, required=False, initial='')
+                    if instance.data:
+                        field_initial = instance.data[field.unique_identifier]
+                        if field_initial:
+                            self.fields[field.unique_identifier].initial = field_initial
+                self.generic_groups.append({'name': group.name, 'fields': fields, 'description': group.description})
+
+    def clean(self):
+        cleaned_data_generic = {}
+        cleaned_data = super(BaseSectorForm, self).clean()
+        for k in list(cleaned_data.keys()):
+            if k in self.generic_fields:
+                cleaned_data_generic[k] = cleaned_data[k]
+                del cleaned_data[k]
+        cleaned_data['data'] = cleaned_data_generic
+        return cleaned_data
+
+    def save(self, commit=True):
+        instance = super(BaseSectorForm, self).save(commit=False)
+        instance.data = self.cleaned_data['data']
+        if commit:
+            instance.save()
+        return instance
+
+
+class AgricultureForm(BaseSectorForm):
     template = 'edit_agriculture.html'
 
     class Meta:
@@ -212,7 +256,7 @@ class AgricultureForm(forms.ModelForm):
         }
 
 
-class BiomesForestsForm(forms.ModelForm):
+class BiomesForestsForm(BaseSectorForm):
     template = 'edit_biomes.html'
 
     class Meta:
@@ -256,7 +300,7 @@ class BiomesForestsForm(forms.ModelForm):
         }
 
 
-class EnergyForm(forms.ModelForm):
+class EnergyForm(BaseSectorForm):
     template = 'edit_energy.html'
 
     class Meta:
@@ -287,7 +331,7 @@ class EnergyForm(forms.ModelForm):
         }
 
 
-class MarineEcosystemsForm(forms.ModelForm):
+class MarineEcosystemsForm(BaseSectorForm):
     template = 'edit.html'
 
     class Meta:
@@ -306,7 +350,7 @@ class MarineEcosystemsForm(forms.ModelForm):
         }
 
 
-class WaterForm(forms.ModelForm):
+class WaterForm(BaseSectorForm):
     template = 'edit_water.html'
 
     class Meta:
@@ -332,26 +376,12 @@ class WaterForm(forms.ModelForm):
         }
 
 
-class GenericSectorForm(forms.ModelForm):
+class GenericSectorForm(BaseSectorForm):
     template = 'edit_generic_sector.html'
 
     class Meta:
         model = GenericSector
         exclude = ('impact_model', 'data')
-
-    def __init__(self, *args, **kwargs):
-        instance = kwargs.pop('instance', None)
-        super(GenericSectorForm, self).__init__(*args, **kwargs)
-        if instance:
-            sector = instance.impact_model.base_model.sector
-            self.groups = []
-            for group in SectorInformationGroup.objects.filter(sector=sector):
-                fields = []
-                for field in group.fields.all():
-                    fields.append(field.name)
-                    self.fields[field.name] = forms.CharField(widget=MyTextInput(textarea=True), help_text=field.help_text, required=False, initial='')
-                self.groups.append({'name': group.name, 'fields': fields, 'description': group.description})
-
 
 
 def get_sector_form(sector):
