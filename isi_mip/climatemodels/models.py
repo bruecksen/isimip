@@ -465,8 +465,6 @@ class InputDataInformation(models.Model):
                 (vname('climate_data_sets'), ', '.join([x.name for x in self.climate_data_sets.all()])),
                 (vname('climate_variables'), ', '.join([x.as_span() for x in self.climate_variables.all()])),
                 (vname('climate_variables_info'), self.climate_variables_info),
-                (vname('socioeconomic_input_variables'), ', '.join([x.name for x in self.socioeconomic_input_variables.all()])),
-                (vname('soil_dataset'), self.soil_dataset),
                 (vname('additional_input_data_sets'), self.additional_input_data_sets),
                 ])
 

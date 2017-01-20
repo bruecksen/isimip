@@ -136,14 +136,12 @@ class TechnicalInformationModelForm(forms.ModelForm):
 class InputDataInformationModelForm(forms.ModelForm):
     climate_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
     climate_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=ClimateVariable.objects)
-    socioeconomic_input_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=SocioEconomicInputVariables.objects)
 
     class Meta:
         model = InputDataInformation
         exclude = ('impact_model',)
         widgets = {
             'climate_variables_info': MyTextInput(textarea=True),
-            'soil_dataset': MyTextInput(),
             'additional_input_data_sets': MyTextInput(textarea=True),
         }
 
