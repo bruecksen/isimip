@@ -566,6 +566,8 @@ class BaseSector(models.Model):
         return ret
 
     def values_to_tuples(self):
+        if not self.data:
+            return []
         groups = []
         vname = self._get_generic_verbose_field_name
         for group in SectorInformationGroup.objects.filter(sector=self.impact_model.base_model.sector):
