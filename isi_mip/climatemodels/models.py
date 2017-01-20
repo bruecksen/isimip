@@ -287,8 +287,8 @@ class ImpactModel(models.Model):
         on_delete=models.SET_NULL)
     other_references = models.ManyToManyField(ReferencePaper, blank=True, verbose_name='Reference paper: other references',
                                               help_text='Other papers describing aspects of this model')
-    responsible_person = models.CharField(max_length=500, null=True, blank=True, verbose_name='Responsible person',
-                               help_text='Person responsible for the simulations in this simulation round if not the main contact person')
+    responsible_person = models.CharField(max_length=500, null=True, blank=True, verbose_name='Person responsible for model simulations in this simulation round',
+                               help_text='Contact information for person responsible for model simulations in this simulation round')
     public = models.BooleanField(default=True)
 
     class Meta:
