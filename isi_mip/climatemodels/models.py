@@ -341,13 +341,11 @@ class ImpactModel(models.Model):
         # Input Data
         old_climate_data_sets = old_input_data.climate_data_sets.all()
         old_climate_variables = old_input_data.climate_variables.all()
-        old_socioeconomic_input_variables = old_input_data.socioeconomic_input_variables.all()
         old_input_data.pk = None
         old_input_data.impact_model = duplicate
         old_input_data.save()
         old_input_data.climate_data_sets.set(old_climate_data_sets)
         old_input_data.climate_variables.set(old_climate_variables)
-        old_input_data.socioeconomic_input_variables.set(old_socioeconomic_input_variables)
         # OtherInformation
         old_other.pk = None
         old_other.impact_model = duplicate
