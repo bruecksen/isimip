@@ -3,6 +3,7 @@
 {% load keyvalue %}
 
 {% block form_content %}
+	{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
 	{% template_form form as nf %}
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Technological Progress' %}

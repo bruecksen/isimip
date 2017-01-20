@@ -4,6 +4,7 @@
 
 {% block form_content %}
 	{% template_form form as nf %}
+	{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Model & Method Characteristics' %}
 		{{ nf.model_type }}

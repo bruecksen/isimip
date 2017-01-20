@@ -240,7 +240,7 @@ class BaseImpactModel(models.Model):
     region = models.ManyToManyField(Region, help_text="Region for which model produces results")
     short_description = models.TextField(
         null=True, blank=True, default='', verbose_name="Short model description",
-        help_text="This short description should assist other researchers in briefly describing the model in a paper.")
+        help_text="This short description should assist other researchers in getting an understanding of your model, including the main differences between model versions used for different ISIMIP simulation rounds.")
     owners = models.ManyToManyField(User)
 
     class Meta:

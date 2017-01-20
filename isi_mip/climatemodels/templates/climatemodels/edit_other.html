@@ -5,6 +5,7 @@
 	{% template_form form as nf %}
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Other' %}
+		{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
 		{{ nf.exceptions_to_protocol}}
 		{{ nf.spin_up}}
 		{{ nf.spin_up_design}}

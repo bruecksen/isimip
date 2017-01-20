@@ -253,11 +253,11 @@ class ImpactModelsPage(RoutablePageWithDefault):
     def edit_base(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_BASE)
 
-    @route(r'edit/detail/(?P<id>[0-9]*)/$')
+    @route(r'edit/model-reference/(?P<id>[0-9]*)/$')
     def edit_detail(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_DETAIL)
 
-    @route(r'edit/technical-information/(?P<id>[0-9]*)/$')
+    @route(r'edit/resolution/(?P<id>[0-9]*)/$')
     def edit_technical_information(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_TECHNICAL_INFORMATION)
 
@@ -265,7 +265,7 @@ class ImpactModelsPage(RoutablePageWithDefault):
     def edit_input_data(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_INPUT_DATA)
 
-    @route(r'edit/other/(?P<id>[0-9]*)/$')
+    @route(r'edit/model-setup/(?P<id>[0-9]*)/$')
     def edit_other(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_OTHER)
 
@@ -347,11 +347,11 @@ class DashboardPage(Page):
         impage = ImpactModelsPage.objects.get()
         impage_details = lambda imid: "<span class='action'><a href='{0}' class=''>{{0}}</a></span>".format(
             impage.url + impage.reverse_subpage('details', args=(imid, )))
-        impage_edit = lambda imid: "<span class='action'><i class='fa fa-edit'></i> <a href='{0}' class=''>{{0}}</a></span>".format(
+        impage_edit = lambda imid: "<span class='action'><i class='fa fa-edit'></i> <a href='{0}' class=''>Edit model information for {{0}}</a></span>".format(
             impage.url + impage.reverse_subpage('edit_base', args=(imid,)))
-        impage_create = lambda bmid, srid: "<span class='action'><i class='fa fa-file-o'></i> <a href='{0}' class=''>{{0}}</a></span>".format(
+        impage_create = lambda bmid, srid: "<span class='action'><i class='fa fa-file-o'></i> <a href='{0}' class=''>Enter ALL new model information for {{0}}</a></span>".format(
             impage.url + impage.reverse_subpage('create', args=(bmid, srid)))
-        impage_duplicate = lambda imid, srid: "<span class='action'><i class='fa fa-files-o'></i> <a href='{0}' class=''>{{0}}</a></span>".format(
+        impage_duplicate = lambda imid, srid: "<span class='action'><i class='fa fa-files-o'></i> <a href='{0}' class=''>Use model information for {{0}} as starting point for {{1}}</a></span>".format(
             impage.url + impage.reverse_subpage('duplicate', args=(imid, srid)))
         context['head'] = {
             'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Public'}, {'text': 'Action'}]
@@ -364,7 +364,7 @@ class DashboardPage(Page):
                     [impage_details(bims.id).format(bims.name)],
                     [imodel.simulation_round.name],
                     ['<i class="fa fa-{}" aria-hidden="true"></i>'.format('check' if imodel.public else 'times')],
-                    [impage_edit(imodel.id).format("Edit")],
+                    [impage_edit(imodel.id).format(imodel.simulation_round.name)],
                 ]
                 row = {
                     'cols': [{'texts': x} for x in values],
@@ -374,13 +374,13 @@ class DashboardPage(Page):
             for sr in bims.get_missing_simulation_rounds():
                 duplicate_model_text = ''
                 if duplicate_impact_model:
-                    duplicate_model_text = impage_duplicate(duplicate_impact_model.id, sr.id).format("Duplicate from %s" % duplicate_impact_model.simulation_round)
+                    duplicate_model_text = impage_duplicate(duplicate_impact_model.id, sr.id).format(duplicate_impact_model.simulation_round, sr.name)
                 values = [
                     [bims.name],
                     [sr.name],
                     [],
                     [
-                        impage_create(bims.id, sr.id).format("Start from scratch"),
+                        impage_create(bims.id, sr.id).format(sr.name),
                         duplicate_model_text
                     ],
                 ]

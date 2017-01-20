@@ -5,6 +5,7 @@
 	{% template_form form as nf %}
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Input data sets used' %}
+		{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
 		{{ nf.climate_data_sets}}
 		{{ nf.climate_variables}}
 		{{ nf.climate_variables_info}}

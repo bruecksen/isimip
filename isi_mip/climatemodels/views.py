@@ -30,12 +30,12 @@ STEP_OTHER = 'edit_other'
 STEP_SECTOR = 'edit_sector'
 
 FORM_STEPS = OrderedDict([
-    (STEP_BASE, {'form': BaseImpactModelForm, 'next': STEP_DETAIL, 'verbose_name': 'Base Information'}),
-    (STEP_DETAIL, {'form': ImpactModelForm, 'next': STEP_TECHNICAL_INFORMATION, 'verbose_name': 'Detail Information'}),
-    (STEP_TECHNICAL_INFORMATION, {'form': TechnicalInformationModelForm, 'next': STEP_INPUT_DATA, 'verbose_name': 'Technical Information'}),
-    (STEP_INPUT_DATA, {'form': InputDataInformationModelForm, 'next': STEP_OTHER, 'verbose_name': 'Input Data Information'}),
-    (STEP_OTHER, {'form': OtherInformationModelForm, 'next': STEP_SECTOR, 'verbose_name': 'Other Information'}),
-    (STEP_SECTOR, {'form': None, 'next': None, 'verbose_name': 'Sector specific Information'})
+    (STEP_BASE, {'form': BaseImpactModelForm, 'next': STEP_DETAIL, 'verbose_name': 'Basic'}),
+    (STEP_DETAIL, {'form': ImpactModelForm, 'next': STEP_TECHNICAL_INFORMATION, 'verbose_name': 'Model reference'}),
+    (STEP_TECHNICAL_INFORMATION, {'form': TechnicalInformationModelForm, 'next': STEP_INPUT_DATA, 'verbose_name': 'Resolution'}),
+    (STEP_INPUT_DATA, {'form': InputDataInformationModelForm, 'next': STEP_OTHER, 'verbose_name': 'Input data'}),
+    (STEP_OTHER, {'form': OtherInformationModelForm, 'next': STEP_SECTOR, 'verbose_name': 'Model setup'}),
+    (STEP_SECTOR, {'form': None, 'next': None, 'verbose_name': 'Sector-specific information'})
 ])
 
 
@@ -69,7 +69,7 @@ def impact_model_details(page, request, id):
             model_details[0]['opened'] = True
         edit_link = ''
         if can_edit_model:
-            edit_link = '<i class="fa fa-cog" aria-hidden="true"></i> <a href="{}">Edit simulation round {}</a>'.format(page.url + page.reverse_subpage(STEP_BASE, args=(im.id,)), im.simulation_round.name)
+            edit_link = '<i class="fa fa-cog" aria-hidden="true"></i> <a href="{}">Edit model information for simulation round {}</a>'.format(page.url + page.reverse_subpage(STEP_BASE, args=(im.id,)), im.simulation_round.name)
         model_simulation_rounds.append({
             'simulation_round': im.simulation_round.name,
             'simulation_round_slug': im.simulation_round.slug,
@@ -79,6 +79,7 @@ def impact_model_details(page, request, id):
         })
     context['description'] = urlize(base_model.short_description or '')
     context['model_simulation_rounds'] = model_simulation_rounds
+    context['model_name'] = base_model.name
     bm_values = base_model.values_to_tuples()
     for k, v in bm_values:
         if any((y for x, y in v)):
@@ -87,10 +88,6 @@ def impact_model_details(page, request, id):
                    'opened': True
                    }
     context['base_model'] = [res, ]
-    # raise Exception()
-
-    # if not impactmodel.public:
-    #     messages.warning(request, page.private_model_message)
 
     template = 'climatemodels/details.html'
     return render(request, template, context)
@@ -196,7 +193,8 @@ def duplicate_impact_model(page, request, impact_model_id, simulation_round_id):
         return HttpResponseRedirect(nexturl)
     duplicate = impact_model.duplicate(simulation_round)
     target_url = page.url + page.reverse_subpage(STEP_BASE, args=(duplicate.id,))
-    messages.success(request, 'The model has been duplicated successfully! Please make sure to go through every step to update or confirm the duplicated data.')
+    message = 'You have chosen to duplicate your model information from {0} for {1}. Please go through each step to make sure that new fields are filled out, and to make sure the information is accurate for the model version used in {1}.'
+    messages.success(request, message.format(impact_model.simulation_round.name, simulation_round.name))
     return HttpResponseRedirect(target_url)
 
 
@@ -254,7 +252,7 @@ def impact_model_detail_edit(page, request, context, form, instance, current_ste
         form = form(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            message = "All {} have been successfully saved.".format(FORM_STEPS[current_step]["verbose_name"])
+            message = "All data have been successfully saved."
             messages.success(request, message)
             return HttpResponseRedirect(target_url)
         else:
@@ -274,7 +272,7 @@ def impact_model_base_edit(page, request, context, base_impact_model, current_st
         if form.is_valid() and contactform.is_valid():
             form.save()
             contactform.save()
-            message = "All {} have been successfully saved.".format(FORM_STEPS[current_step]["verbose_name"])
+            message = "All data have been successfully saved."
             messages.success(request, message)
             return HttpResponseRedirect(target_url)
         else:

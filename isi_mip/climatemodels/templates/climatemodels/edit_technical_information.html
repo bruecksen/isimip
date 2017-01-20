@@ -5,6 +5,7 @@
 	{% template_form form as nf %}
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Technical Information' %}
+		{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
 		{{ nf.spatial_aggregation}}
 		{{ nf.spatial_resolution}}
 		{{ nf.spatial_resolution_info}}
