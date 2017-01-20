@@ -219,8 +219,6 @@ def impact_model_edit(page, request, id, current_step):
     }
     steps = [{'name': k, 'verbose_name': v['verbose_name'], 'is_active': k is current_step, 'is_next': k is next_step} for k, v in FORM_STEPS.items()]
     context = {'page': page, 'subpage': subpage, 'steps': steps}
-    if not impact_model.public:
-        messages.warning(request, page.private_model_message)
     next_parameter = request.POST.get("next")
     # define target url depending on se next param or logical next step
     if next_parameter:
@@ -232,7 +230,7 @@ def impact_model_edit(page, request, id, current_step):
         target_url = page.url + page.reverse_subpage(next_step, args=(impact_model.id,))
 
     if current_step == STEP_BASE:
-        return impact_model_base_edit(page, request, context, impact_model.base_model, current_step, next_step, target_url)
+        return impact_model_base_edit(page, request, context, impact_model, current_step, next_step, target_url)
     elif current_step == STEP_SECTOR:
         return impact_model_sector_edit(page, request, context, impact_model, target_url)
     else:
@@ -265,7 +263,8 @@ def impact_model_detail_edit(page, request, context, form, instance, current_ste
     return render(request, template, context)
 
 
-def impact_model_base_edit(page, request, context, base_impact_model, current_step, next_step, target_url):
+def impact_model_base_edit(page, request, context, impact_model, current_step, next_step, target_url):
+    base_impact_model = impact_model.base_model
     if request.method == 'POST':
         form = BaseImpactModelForm(request.POST, instance=base_impact_model)
         contactform = ContactPersonFormset(request.POST, instance=base_impact_model)
@@ -282,6 +281,8 @@ def impact_model_base_edit(page, request, context, base_impact_model, current_st
     else:
         form = BaseImpactModelForm(instance=base_impact_model)
         contactform = ContactPersonFormset(instance=base_impact_model)
+        if not impact_model.public:
+            messages.warning(request, page.private_model_message)
     context['form'] = form
     context['cform'] = contactform
     template = 'climatemodels/%s.html' % (current_step)
