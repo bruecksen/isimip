@@ -2,7 +2,7 @@
 {% load breadcrumb template_form %}
 {% block content_container %}
 	<div class="container scrollable-container">
-		<div data-spy="affix" data-offset-top="90" class="form-sidebar">
+		<div data-spy="affix" data-offset-top="90" class="form-sidebar hidden-xs">
 		<ul class="list-unstyled">
 			{% for step in steps %}
 				<li><a href="#{{ step.name }}" class="{% if step.is_active %}active{% elif step.is_next %}next{% endif %}">{% if step.is_active %}<i class="fa fa-chevron-left" aria-hidden="true"></i> {% endif %}{{ forloop.counter }}. {{ step.verbose_name }}</a></li>
