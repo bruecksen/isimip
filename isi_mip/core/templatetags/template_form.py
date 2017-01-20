@@ -39,6 +39,8 @@ def template_form(form, **kwargs):
     newform = SimpleStringForm()
     for field in form:
         value = field.value()
+        if value == 'None':
+            value = ''
         context = {'error': field.errors,
                    'help': field.help_text,
                    'id': field.name,
