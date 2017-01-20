@@ -447,11 +447,6 @@ class InputDataInformation(models.Model):
         help_text="Including variables that were derived from those provided in the ISIMIP input data set")
     climate_variables_info = models.TextField(blank=True, verbose_name='Additional climate variables information',
                                               help_text='Including how variables were derived that were not included in the ISIMIP input data')
-    socioeconomic_input_variables = models.ManyToManyField(
-        SocioEconomicInputVariables, blank=True, verbose_name="Socio-economic input variables",
-        help_text="Including resolution where relevant")
-    soil_dataset = models.TextField(null=True, blank=True, default='', verbose_name='Soil dataset',
-                                    help_text="HWSD or GSWP3 were provided")
     additional_input_data_sets = models.TextField(
         null=True, blank=True, verbose_name='Additional input data sets',
         help_text='Data sets used to drive the model that were not provided by ISIMIP'

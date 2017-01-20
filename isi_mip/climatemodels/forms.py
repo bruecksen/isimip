@@ -144,7 +144,7 @@ class InputDataInformationModelForm(forms.ModelForm):
         widgets = {
             'climate_variables_info': MyTextInput(textarea=True),
             'soil_dataset': MyTextInput(),
-            'additional_input_data_sets': MyTextInput(),
+            'additional_input_data_sets': MyTextInput(textarea=True),
         }
 
     def __init__(self, *args, **kwargs):
@@ -263,7 +263,7 @@ class BiomesForestsForm(BaseSectorForm):
         model = BiomesForests
         exclude = ('impact_model',)
         widgets = {
-            'output': MyTextInput(),
+            'output': MyTextInput(textarea=True),
             'output_per_pft': MyTextInput(),
             'considerations': MyTextInput(textarea=True),
             'dynamic_vegetation': MyTextInput(textarea=True),
