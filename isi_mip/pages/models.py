@@ -361,7 +361,7 @@ class DashboardPage(Page):
         for bims in base_impact_models:
             for imodel in bims.impact_model.all():
                 values = [
-                    [impage_details(imodel.id).format(bims.name)],
+                    [impage_details(bims.id).format(bims.name)],
                     [imodel.simulation_round.name],
                     ['<i class="fa fa-{}" aria-hidden="true"></i>'.format('check' if imodel.public else 'times')],
                     [impage_edit(imodel.id).format("Edit")],
