@@ -29,7 +29,7 @@ class UserAdmin(admin.ModelAdmin):
             base_models = BaseImpactModel.objects.filter(owners=obj)
         except:
             return '-'
-        return ', '.join([bm.sector for bm in base_models])
+        return ', '.join([bm.sector.name for bm in base_models])
     get_sector.admin_order_field = 'get_sector'
     get_sector.short_description = 'Sector'
     get_sector.allow_tags = True
