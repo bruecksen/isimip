@@ -123,7 +123,7 @@ class OutputDataBlock(StructBlock):
                 'cols': [
                     {'texts': [odat.sector]},
                     {'texts': [odat.model.base_model.name if odat.model else '']},
-                    {'texts': [odat.simulation_round]},
+                    {'texts': [sr.name for sr in odat.simulation_round.all()]},
                     {'texts': [odat.experiments]},
                     {'texts': drivers},
                     {'texts': [odat.date]}
