@@ -228,7 +228,8 @@ def impact_model_edit(page, request, id, current_step):
         target_url = '/dashboard/'
     else:
         target_url = page.url + page.reverse_subpage(next_step, args=(impact_model.id,))
-
+    if request.method == 'GET' and not impact_model.public:
+            messages.warning(request, page.private_model_message)
     if current_step == STEP_BASE:
         return impact_model_base_edit(page, request, context, impact_model, current_step, next_step, target_url)
     elif current_step == STEP_SECTOR:
@@ -281,8 +282,6 @@ def impact_model_base_edit(page, request, context, impact_model, current_step, n
     else:
         form = BaseImpactModelForm(instance=base_impact_model)
         contactform = ContactPersonFormset(instance=base_impact_model)
-        if not impact_model.public:
-            messages.warning(request, page.private_model_message)
     context['form'] = form
     context['cform'] = contactform
     template = 'climatemodels/%s.html' % (current_step)

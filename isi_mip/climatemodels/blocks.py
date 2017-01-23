@@ -101,6 +101,7 @@ class InputDataBlock(StructBlock):
         # template = 'blocks/input_data_block.html'
         template = 'widgets/table.html'
 
+
 class OutputDataBlock(StructBlock):
     rows_per_page = IntegerBlock(default=20, min_value=1, required=True)
 
@@ -108,27 +109,26 @@ class OutputDataBlock(StructBlock):
         context = super().get_context(value)
         context['title'] = 'Overview'
 
-        context['head'] = {'cols': [{'text': 'Sector'}, {'text': 'Model'}, {'text': 'Scenario'},
+        context['head'] = {'cols': [{'text': 'Sector'}, {'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Experiments'},
                                     {'text': 'Climate Driver'}, {'text': 'Date'}]}
         context['body'] = {
             'rows': [],
         }
 
-        outputdata = OutputData.objects.order_by('sector','model')
+        outputdata = OutputData.objects.order_by('sector', 'model')
         for i, odat in enumerate(outputdata):
             drivers = [x.name for x in odat.drivers.all()]
-            scenarios = ', '.join(x.name for x in odat.scenarios.all())
-            context['body']['rows'] += [
-                {
-                    'invisible': i >= value.get('rows_per_page'),
-                    'cols': [
+            context['body']['rows'] += [{
+                'invisible': i >= value.get('rows_per_page'),
+                'cols': [
                     {'texts': [odat.sector]},
-                    {'texts': [odat.model.name if odat.model else '']},
-                    {'texts': [scenarios]},
+                    {'texts': [odat.model.base_model.name if odat.model else '']},
+                    {'texts': [odat.simulation_round]},
+                    {'texts': [odat.experiments]},
                     {'texts': drivers},
-                    {'texts': [odat.date]}]
-                }
-            ]
+                    {'texts': [odat.date]}
+                ]
+            }]
         numpages = math.ceil(outputdata.count() / value.get('rows_per_page'))
         context['pagination'] = {
             'rowsperpage': (value.get('rows_per_page')),

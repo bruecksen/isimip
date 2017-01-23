@@ -77,7 +77,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
     sector_link.allow_tags = True
     sector_link.short_description = 'Sector settings'
     readonly_fields = ('sector_link',)
-    list_display = ('get_name', 'simulation_round', 'get_sector',)
+    list_display = ('get_name', 'simulation_round', 'get_sector', 'public')
     list_filter = ('public', 'base_model__sector',)
 
 

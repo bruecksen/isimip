@@ -296,7 +296,7 @@ class ImpactModel(models.Model):
         ordering = ('base_model', 'simulation_round')
 
     def __str__(self):
-        return "%s #%s (%s)" % (self.base_model.name, self.simulation_round, self.base_model.sector)
+        return "%s (%s)" % (self.base_model, self.simulation_round)
 
     @property
     def fk_sector_name(self):
@@ -1017,13 +1017,15 @@ class AgroEconomicModelling(BaseSector):
 class OutputData(models.Model):
     sector = models.ForeignKey(Sector)
     model = models.ForeignKey(ImpactModel, null=True, blank=True, on_delete=models.SET_NULL)
-    scenarios = models.ManyToManyField(Scenario)
+    simulation_round = models.ForeignKey(SimulationRound, null=True, blank=True, on_delete=models.SET_NULL)
+    scenarios = models.ManyToManyField(Scenario, blank=True)
+    experiments = models.CharField(max_length=500, null=True, blank=True)
     drivers = models.ManyToManyField(InputData)
     date = models.DateField()
 
     def __str__(self):
         if self.model:
-            return "%s : %s" % (self.sector, self.model.name)
+            return "%s : %s" % (self.sector, self.model.base_model.name)
         return self.sector
 
     class Meta:
