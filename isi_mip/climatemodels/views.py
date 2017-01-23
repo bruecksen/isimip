@@ -113,7 +113,10 @@ def impact_model_download(page, request):
 def input_data_details(page, request, id):
     data = InputData.objects.get(id=id)
     template = 'pages/input_data_details_page.html'
-    description = page.input_data_description or ''
+    if data.description:
+        description = urlize(linebreaks(data.description))
+    else:
+        description = page.input_data_description or ''
     if request.user.is_superuser:
         description += ' <a href="{}">admin edit</a>'.format(
             urlresolvers.reverse('admin:climatemodels_inputdata_change', args=(data.id,)))
@@ -128,13 +131,11 @@ def input_data_details(page, request, id):
                        'opened': True,
                        'definitions': [
                            {'text': 'Data Type: %s' % data.data_type},
-                           {'text': 'Scenarios: %s' % ', '.join((x.name for x in data.scenario.all()))},
                            {'text': 'Simulation rounds: %s' % ', '.join((x.name for x in data.simulation_round.all()))},
+                           {'text': 'Scenarios: %s' % ', '.join((x.name for x in data.scenario.all()))},
                            {'text': 'Variables: %s' % ', '.join((x.as_span() for x in data.variables.all()))},
                        ]
                    },
-                   {'notoggle': True, 'opened': True, 'term': 'Description',
-                    'definitions': [{'text': urlize(linebreaks(data.description))}]},
                    {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': [{'text': urlize(linebreaks(data.caveats))}]},
                    {'notoggle': True, 'opened': True, 'term': 'Download Instructions',
                     'definitions': [{'text': urlize(linebreaks(data.download_instructions))}]},

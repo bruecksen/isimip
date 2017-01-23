@@ -137,15 +137,18 @@ class InputData(models.Model):
     variables = models.ManyToManyField(ClimateVariable, blank=True)
     simulation_round = models.ManyToManyField(SimulationRound, blank=True, related_name='simulationrounds')
     description = models.TextField(null=True, blank=True, default='')
+    specification = models.TextField(null=True, blank=True, default='')
+    data_source = models.TextField(null=True, blank=True, default='')
     caveats = models.TextField(null=True, blank=True)
     download_instructions = models.TextField(null=True, blank=True, default='')
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name_plural = 'Input data'
-        ordering = ('name',)
+        ordering = ('-created', 'name',)
 
 
 class Sector(models.Model):

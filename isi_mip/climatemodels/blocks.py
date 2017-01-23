@@ -68,7 +68,7 @@ class InputDataBlock(StructBlock):
     def get_context(self, value):
         context = super().get_context(value)
 
-        context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Data Type'}, {'text': 'Description'}]}
+        context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Data Type'}, {'text': 'Simulation round'}, {'text': 'Description'}]}
         context['body'] = {'rows': []}
 
         inputdata = InputData.objects.all()
@@ -77,29 +77,27 @@ class InputDataBlock(StructBlock):
 
         for i, idata in enumerate(inputdata):
             link = "<a href='details/{0.id}'>{0.name}</a>".format(idata)
-            context['body']['rows'] += [
-                {'cols': [
+            context['body']['rows'] += [{
+                'cols': [
                     {'texts': [link]},
                     {'texts': [idata.data_type]},
-                    {'texts': [urlize(idata.description)]}],
-                    'invisible': i >= row_limit
-                }
-            ]
+                    {'texts': [sr.name for sr in idata.simulation_round.all()]},
+                    {'texts': [urlize(idata.description)]}], 'invisible': i >= row_limit
+            }]
         context['pagination'] = {
             'rowsperpage': row_limit,
             'numberofpages': numpages,  # number of pages with current filters
             'pagenumbers': [{'number': i + 1, 'invisible': False} for i in range(numpages)],
             'activepage': 1,  # set to something between 1 and numberofpages
         }
-        # if value.get('row_limit') < inputdata.count():
-        #     context['showalllink'] = {'buttontext': 'See all <i class="fa fa-chevron-down"></i>'}
-        print(context)
+        context['id'] = 'selectorable'
+        context['tableid'] = 'selectorable'
+        context['searchfield'] = {'value': ''}
         return context
 
     class Meta:
         icon = 'fa fa-database'
-        # template = 'blocks/input_data_block.html'
-        template = 'widgets/table.html'
+        template = 'blocks/input_data_block.html'
 
 
 class OutputDataBlock(StructBlock):
