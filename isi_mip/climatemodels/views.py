@@ -134,7 +134,7 @@ def input_data_details(page, request, id):
                            {'text': 'Simulation rounds: %s' % ', '.join((x.name for x in data.simulation_round.all()))},
                            {'text': 'Scenarios: %s' % ', '.join((x.name for x in data.scenario.all()))},
                            {'text': 'Variables: %s' % ', '.join((x.as_span() for x in data.variables.all()))},
-                           {'text': 'Specifications: %s' % data.specifications},
+                           {'text': 'Specifications: %s' % data.specification},
                            {'text': 'Data source: %s' % data.data_source},
                        ]
                    },
