@@ -134,10 +134,10 @@ def input_data_details(page, request, id):
                            {'text': 'Simulation rounds: %s' % ', '.join((x.name for x in data.simulation_round.all()))},
                            {'text': 'Scenarios: %s' % ', '.join((x.name for x in data.scenario.all()))},
                            {'text': 'Variables: %s' % ', '.join((x.as_span() for x in data.variables.all()))},
-                           {'text': 'Specifications: %s' % data.specification},
-                           {'text': 'Data source: %s' % data.data_source},
                        ]
                    },
+                   {'notoggle': True, 'opened': True, 'term': 'Specifications', 'definitions': [{'text': data.specification}]},
+                   {'notoggle': True, 'opened': True, 'term': 'Data source', 'definitions': [{'text': data.data_source}]},
                    {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': [{'text': urlize(linebreaks(data.caveats))}]},
                    {'notoggle': True, 'opened': True, 'term': 'Download Instructions',
                     'definitions': [{'text': urlize(linebreaks(data.download_instructions))}]},
