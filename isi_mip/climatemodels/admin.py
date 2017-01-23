@@ -25,6 +25,7 @@ class SimulationRoundAdmin(admin.ModelAdmin):
 
 class HideSectorAdmin(HideAdmin):
     readonly_fields = ('impact_model',)
+    exclude = ('data', )
 
 
 class ContactPersonAdmin(admin.TabularInline):
