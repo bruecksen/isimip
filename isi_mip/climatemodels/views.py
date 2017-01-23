@@ -94,19 +94,19 @@ def impact_model_details(page, request, id):
 
 
 def impact_model_download(page, request):
-    imodels = ImpactModel.objects.order_by('name')
+    impact_models = ImpactModel.objects.all()
     if 'sector' in request.GET:
-        imodels = imodels.filter(sector=request.GET['sector'])
-    if 'driver' in request.GET:
-        imodels = imodels.filter(climate_data_sets__name=request.GET['driver'])
+        impact_models = impact_models.filter(base_model__sector=request.GET['sector'])
+    if 'simulation_round' in request.GET:
+        impact_models = impact_models.filter(simulation_round__name=request.GET['simulation_round'])
     if 'searchvalue' in request.GET:
         q = request.GET['searchvalue']
-        query = Q(name__icontains=q) | Q(sector__icontains=q) | Q(climate_data_sets__name__icontains=q) \
-                | Q(contactperson__name__icontains=q) | Q(contactperson__email__icontains=q)
-        imodels = imodels.filter(query)
+        query = Q(base_model__name__icontains=q) | Q(base_model__sector__name__icontains=q) | Q(simulation_round__name__icontains=q) \
+            | Q(base_model__contactperson__name__icontains=q) | Q(base_model__contactperson__email__icontains=q)
+        impact_models = impact_models.filter(query)
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="ImpactModels {:%Y-%m-%d}.xlsx"'.format(datetime.now())
-    ImpactModelToXLSX(response, imodels)
+    ImpactModelToXLSX(response, impact_models)
     return response
 
 

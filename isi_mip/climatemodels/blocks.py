@@ -20,13 +20,12 @@ class ImpactModelsBlock(StructBlock):
         # Filter und Suchfelder
         context['tableid'] = 'selectortable'
         context['searchfield'] = {'value': ''}
-        sector_options = [{'value': x} for x in bims.values_list('sector', flat=True).distinct().order_by('sector')]
+        sector_options = [{'value': x} for x in bims.values_list('sector__name', flat=True).distinct().order_by('sector')]
         simulation_round_options = [{'value': x} for x in SimulationRound.objects.values_list('name', flat=True).distinct().order_by('-order')]
         context['selectors'] = [
             {'colnumber': '2', 'all_value': 'All Simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
             {'colnumber': '3', 'all_value': 'All Sectors', 'options': sector_options, 'name': 'sector'},
         ]
-
         # Tabelle
         context['id'] = 'selectortable'
         context['head'] = {

@@ -57,12 +57,12 @@ class ImpactModelAdmin(admin.ModelAdmin):
     model = ImpactModel
 
     def get_name(self, obj):
-        return obj.base_model.name
+        return obj.base_model and obj.base_model.name or obj.id
     get_name.admin_order_field = 'base_model__name'
     get_name.short_description = 'Name'
 
     def get_sector(self, obj):
-        return obj.base_model.sector
+        return obj.base_model and obj.base_model.sector or None
     get_sector.admin_order_field = 'sector__name'
     get_sector.short_description = 'Sector'
 
