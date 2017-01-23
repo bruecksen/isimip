@@ -1017,7 +1017,7 @@ class AgroEconomicModelling(BaseSector):
 class OutputData(models.Model):
     sector = models.ForeignKey(Sector)
     model = models.ForeignKey(ImpactModel, null=True, blank=True, on_delete=models.SET_NULL)
-    simulation_round = models.ForeignKey(SimulationRound, null=True, blank=True, on_delete=models.SET_NULL)
+    simulation_round = models.ManyToManyField(SimulationRound)
     scenarios = models.ManyToManyField(Scenario, blank=True)
     experiments = models.CharField(max_length=500, null=True, blank=True)
     drivers = models.ManyToManyField(InputData)
