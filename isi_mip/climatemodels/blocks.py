@@ -107,8 +107,8 @@ class OutputDataBlock(StructBlock):
         context = super().get_context(value)
         context['title'] = 'Overview'
 
-        context['head'] = {'cols': [{'text': 'Sector'}, {'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Experiments'},
-                                    {'text': 'Climate Driver'}, {'text': 'Date'}]}
+        context['head'] = {'cols': [{'text': 'Sector'}, {'text': 'Model'}, {'text': 'Simulation Rounds'}, {'text': 'Experiments'},
+                                    {'text': 'Climate Drivers'}, {'text': 'Date'}]}
         context['body'] = {
             'rows': [],
         }
