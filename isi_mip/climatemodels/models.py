@@ -553,7 +553,7 @@ class BaseSector(models.Model):
         abstract = True
 
     def __str__(self):
-        return type(self).__name__
+        return '%s (%s)' % (self.impact_model.base_model.name, type(self).__name__)
 
     def _get_verbose_field_name(self, field):
         fieldmeta = self._meta.get_field(field)
