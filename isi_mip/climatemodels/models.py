@@ -476,15 +476,15 @@ class InputDataInformation(models.Model):
                                                               help_text="The other human influences data sets used in this simulation round", related_name="other_human_influences_data_sets")
     other_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Other data sets used",
                                              help_text="Other data sets used in this simulation round", related_name="other_data_sets")
+    additional_input_data_sets = models.TextField(
+        null=True, blank=True, verbose_name='Additional input data sets',
+        help_text='Data sets used to drive the model that were not provided by ISIMIP'
+    )
     climate_variables = models.ManyToManyField(
         ClimateVariable, blank=True, verbose_name='Climate variables',
         help_text="Including variables that were derived from those provided in the ISIMIP input data set")
     climate_variables_info = models.TextField(blank=True, verbose_name='Additional climate variables information',
                                               help_text='Including how variables were derived that were not included in the ISIMIP input data')
-    additional_input_data_sets = models.TextField(
-        null=True, blank=True, verbose_name='Additional input data sets',
-        help_text='Data sets used to drive the model that were not provided by ISIMIP'
-    )
 
     def _get_verbose_field_name(self, field):
         fieldmeta = self._meta.get_field(field)
