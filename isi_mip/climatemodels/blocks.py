@@ -29,7 +29,7 @@ class ImpactModelsBlock(StructBlock):
         # Tabelle
         context['id'] = 'selectortable'
         context['head'] = {
-            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Contact'}]
+            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Name'}, {'text': 'Email'}]
         }
         rows_per_page = value.get('rows_per_page')
         numpages = math.ceil(bims.count() / rows_per_page)
@@ -43,11 +43,10 @@ class ImpactModelsBlock(StructBlock):
 
         context['body'] = {'rows': []}
         for i, bmodel in enumerate(bims):
-            cpeople = ["{0.name}<br/><a href='mailto:{0.email}'>{0.email}</a>".format(x) for x in
-                       bmodel.contactperson_set.all()]
             simulation_rounds = bmodel.impact_model.all().values_list('simulation_round__name', flat=True)
             values = [["<a href='details/{0.id}/'>{0.name}</a>".format(bmodel, bmodel)], simulation_rounds, [bmodel.sector]]
-            values += [["<br/>".join(cpeople)]]
+            values += [["{0.name}<br/>".format(x) for x in bmodel.contactperson_set.all()]]
+            values += [["<a href='mailto:{0.email}'>{0.email}</a><br/>".format(x) for x in bmodel.contactperson_set.all()]]
             row = {
                 'invisible': i >= rows_per_page,
                 'cols': [{'texts': x} for x in values],
