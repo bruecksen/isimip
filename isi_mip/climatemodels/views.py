@@ -222,7 +222,7 @@ def impact_model_edit(page, request, id, current_step):
     next_step = FORM_STEPS[current_step]["next"]
     form = FORM_STEPS[current_step]["form"]
     subpage = {
-        'title': 'Impact Model: %s (%s)' % (impact_model.base_model.name, impact_model.simulation_round.name),
+        'title': 'Impact Model: %s (%s, %s)' % (impact_model.base_model.name, impact_model.base_model.sector.name, impact_model.simulation_round.name),
         'url': page.url + page.reverse_subpage('details', args=(impact_model.base_model.id,)),
         'subpage': {'title': 'Edit %s' % FORM_STEPS[current_step]['verbose_name'], 'url': ''}
     }
