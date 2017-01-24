@@ -28,18 +28,10 @@ class BaseImpactModelForm(forms.ModelForm):
 
     class Meta:
         model = BaseImpactModel
-        exclude = ('owners', 'public')
+        exclude = ('owners', 'public', 'sector', 'name')
         widgets = {
-            'name': MyTextInput(),
-            'sector': MyMultiSelect(),
             'short_description': MyTextInput(textarea=True),
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        instance = getattr(self, 'instance', None)
-        if instance and instance.pk:
-            self.fields['name'].widget.attrs['readonly'] = True
 
 
 class ImpactModelForm(forms.ModelForm):
