@@ -126,16 +126,16 @@ class TechnicalInformationModelForm(forms.ModelForm):
 
 
 class InputDataInformationModelForm(forms.ModelForm):
-    simulated_atmospheric_climate_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    observed_atmospheric_climate_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    simulated_ocean_climate_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    observed_ocean_climate_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    emissions_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    socio_economic_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    land_use_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    other_human_influences_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    other_data_sets = MyModelMultipleChoiceField(allowcustom=True, queryset=InputData.objects)
-    climate_variables = MyModelMultipleChoiceField(allowcustom=True, queryset=ClimateVariable.objects)
+    simulated_atmospheric_climate_data_sets = MyModelMultipleChoiceField(allowcustom=False, queryset=InputData.objects)
+    observed_atmospheric_climate_data_sets = MyModelMultipleChoiceField(allowcustom=False, queryset=InputData.objects)
+    simulated_ocean_climate_data_sets = MyModelMultipleChoiceField(allowcustom=False, queryset=InputData.objects)
+    observed_ocean_climate_data_sets = MyModelMultipleChoiceField(allowcustom=False, queryset=InputData.objects)
+    emissions_data_sets = MyModelMultipleChoiceField(allowcustom=False, queryset=InputData.objects)
+    socio_economic_data_sets = MyModelMultipleChoiceField(allowcustom=False, queryset=InputData.objects)
+    land_use_data_sets = MyModelMultipleChoiceField(allowcustom=False, queryset=InputData.objects)
+    other_human_influences_data_sets = MyModelMultipleChoiceField(allowcustom=False, queryset=InputData.objects)
+    other_data_sets = MyModelMultipleChoiceField(allowcustom=False, queryset=InputData.objects)
+    climate_variables = MyModelMultipleChoiceField(allowcustom=False, queryset=ClimateVariable.objects)
 
     class Meta:
         model = InputDataInformation

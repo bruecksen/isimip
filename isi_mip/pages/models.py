@@ -378,6 +378,7 @@ class DashboardPage(Page):
                     duplicate_model_text = impage_duplicate(duplicate_impact_model.id, sr.id).format(duplicate_impact_model.simulation_round, sr.name)
                 values = [
                     [bims.name],
+                    [bims.sector.name],
                     [sr.name],
                     [],
                     [
