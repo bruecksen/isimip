@@ -6,7 +6,15 @@
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Input data sets used' %}
 		{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
-		{{ nf.climate_data_sets}}
+		{{ nf.simulated_atmospheric_climate_data_sets }}
+		{{ nf.observed_atmospheric_climate_data_sets  }}
+		{{ nf.simulated_ocean_climate_data_sets }}
+		{{ nf.observed_ocean_climate_data_sets }}
+		{{ nf.emissions_data_sets }}
+		{{ nf.socio_economic_data_sets }}
+		{{ nf.land_use_data_sets }}
+		{{ nf.other_human_influences_data_sets }}
+		{{ nf.other_data_sets }}
 		{{ nf.climate_variables}}
 		{{ nf.climate_variables_info}}
 		{{ nf.socioeconomic_input_variables}}

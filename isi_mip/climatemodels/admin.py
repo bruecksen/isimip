@@ -142,11 +142,15 @@ class SectorInformationGroupAdmin(admin.ModelAdmin):
 
 class InputDataAdmin(admin.ModelAdmin):
     model = InputData
-    list_display = ('name', 'data_type', )
-    list_filter = ('data_type', )
+    list_display = ('name', 'data_type', 'get_simulation_round')
+    list_filter = ('data_type', 'simulation_round__name')
     formfield_overrides = {
         models.ManyToManyField: {'widget': CheckboxSelectMultiple},
     }
+    def get_simulation_round(self, obj):
+        return ', '.join([sr.name for sr in obj.simulation_round.all()])
+    get_simulation_round.admin_order_field = 'simulation_round__name'
+    get_simulation_round.short_description = 'Simulation rounds'
 
 
 class ClimateVariableAdmin(admin.ModelAdmin):

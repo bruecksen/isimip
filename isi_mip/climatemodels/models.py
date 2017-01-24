@@ -342,13 +342,29 @@ class ImpactModel(models.Model):
         old_technical_information.impact_model = duplicate
         old_technical_information.save()
         # Input Data
-        old_climate_data_sets = old_input_data.climate_data_sets.all()
         old_climate_variables = old_input_data.climate_variables.all()
+        old_simulated_atmospheric_climate_data_sets = old_input_data.simulated_atmospheric_climate_data_sets.all()
+        old_observed_atmospheric_climate_data_sets = old_input_data.observed_atmospheric_climate_data_sets.all()
+        old_simulated_ocean_climate_data_sets = old_input_data.simulated_ocean_climate_data_sets.all()
+        old_observed_ocean_climate_data_sets = old_input_data.observed_ocean_climate_data_sets.all()
+        old_emissions_data_sets = old_input_data.emissions_data_sets.all()
+        old_socio_economic_data_sets = old_input_data.socio_economic_data_sets.all()
+        old_land_use_data_sets = old_input_data.land_use_data_sets.all()
+        old_other_human_influences_data_sets = old_input_data.other_human_influences_data_sets.all()
+        old_other_data_sets = old_input_data.other_data_sets.all()
         old_input_data.pk = None
         old_input_data.impact_model = duplicate
         old_input_data.save()
-        old_input_data.climate_data_sets.set(old_climate_data_sets)
         old_input_data.climate_variables.set(old_climate_variables)
+        old_input_data.simulated_atmospheric_climate_data_sets.set(old_simulated_atmospheric_climate_data_sets)
+        old_input_data.observed_atmospheric_climate_data_sets.set(old_observed_atmospheric_climate_data_sets)
+        old_input_data.simulated_ocean_climate_data_sets.set(old_simulated_ocean_climate_data_sets)
+        old_input_data.observed_ocean_climate_data_sets.set(old_observed_ocean_climate_data_sets)
+        old_input_data.emissions_data_sets.set(old_emissions_data_sets)
+        old_input_data.socio_economic_data_sets.set(old_socio_economic_data_sets)
+        old_input_data.land_use_data_sets.set(old_land_use_data_sets)
+        old_input_data.other_human_influences_data_sets.set(old_other_human_influences_data_sets)
+        old_input_data.other_data_sets.set(old_other_data_sets)
         # OtherInformation
         old_other.pk = None
         old_other.impact_model = duplicate
@@ -441,8 +457,24 @@ class InputDataInformation(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Climate data sets used",
-                                               help_text="The climate-input data sets used in this simulation round")
+    simulated_atmospheric_climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Simulated atmospheric climate data sets used",
+                                                                     help_text="The simulated atmospheric climate data sets used in this simulation round", related_name="simulated_atmospheric_climate_data_sets")
+    observed_atmospheric_climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Observed atmospheric climate data sets used",
+                                                                    help_text="The observed atmospheric climate data sets used in this simulation round", related_name="observed_atmospheric_climate_data_sets")
+    simulated_ocean_climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Simulated ocean climate data sets used",
+                                                               help_text="The observed ocean climate data sets used in this simulation round", related_name="simulated_ocean_climate_data_sets")
+    observed_ocean_climate_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Observed ocean climate data sets used",
+                                                              help_text="The observed ocean climate data sets used in this simulation round", related_name="observed_ocean_climate_data_sets")
+    emissions_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Emissions data sets used",
+                                                 help_text="The emissions data sets used in this simulation round", related_name="emissions_data_sets")
+    socio_economic_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Socio-economic data sets used",
+                                                      help_text="The socio-economic data sets used in this simulation round", related_name="socio_economic_data_sets")
+    land_use_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Land use data sets used",
+                                                help_text="The Land use data sets used in this simulation round", related_name="land_use_data_sets")
+    other_human_influences_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Other human influences data sets used",
+                                                              help_text="The other human influences data sets used in this simulation round", related_name="other_human_influences_data_sets")
+    other_data_sets = models.ManyToManyField(InputData, blank=True, verbose_name="Other data sets used",
+                                             help_text="Other data sets used in this simulation round", related_name="other_data_sets")
     climate_variables = models.ManyToManyField(
         ClimateVariable, blank=True, verbose_name='Climate variables',
         help_text="Including variables that were derived from those provided in the ISIMIP input data set")
@@ -463,7 +495,15 @@ class InputDataInformation(models.Model):
     def values_to_tuples(self):
         vname = self._get_verbose_field_name
         return ('Input data sets used', [
-                (vname('climate_data_sets'), ', '.join([x.name for x in self.climate_data_sets.all()])),
+                (vname('simulated_atmospheric_climate_data_sets'), ', '.join([x.name for x in self.simulated_atmospheric_climate_data_sets.all()])),
+                (vname('observed_atmospheric_climate_data_sets'), ', '.join([x.name for x in self.observed_atmospheric_climate_data_sets.all()])),
+                (vname('simulated_ocean_climate_data_sets'), ', '.join([x.name for x in self.simulated_ocean_climate_data_sets.all()])),
+                (vname('observed_ocean_climate_data_sets'), ', '.join([x.name for x in self.observed_ocean_climate_data_sets.all()])),
+                (vname('emissions_data_sets'), ', '.join([x.name for x in self.emissions_data_sets.all()])),
+                (vname('socio_economic_data_sets'), ', '.join([x.name for x in self.socio_economic_data_sets.all()])),
+                (vname('land_use_data_sets'), ', '.join([x.name for x in self.land_use_data_sets.all()])),
+                (vname('other_human_influences_data_sets'), ', '.join([x.name for x in self.other_human_influences_data_sets.all()])),
+                (vname('other_data_sets'), ', '.join([x.name for x in self.other_data_sets.all()])),
                 (vname('climate_variables'), ', '.join([x.as_span() for x in self.climate_variables.all()])),
                 (vname('climate_variables_info'), self.climate_variables_info),
                 (vname('additional_input_data_sets'), self.additional_input_data_sets),

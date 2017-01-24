@@ -5,13 +5,26 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 
 
+FAST_TRACK_INPUT_DATA = ('MIRCA land-use data', 'Population & GDP (Fast Track)', 'GCM atmospheric climate data (Fast Track)')
+ISIMIP2A_INPUT_DATA = ('PGMFD v.2 (Princeton)', 'Historical observed climate data (ISIMIP2a)', 'GFDL-reanalysis (ocean)', 'GSWP3', 'WATCH (WFD)', 'WATCH+WFDEI')
+ISIMIP2B_INPUT_DATA = ('Gridded population (historical)', 'Historical land-use data (ISIMIP2b)', 'Nitrogen deposition', 'Pressure & wind fields (3-hourly)', 'Sea-level rise', '3D atmospheric climate fields (monthly)', 'Gross Domestic Product (GDP)', 'GRanD reservoirs', '3D wind fields (daily)', 'EWEMBI', 'Gridded population (future)', 'GCM atmospheric climate data (ISIMIP2b)', 'GFDL-ESM2M (ocean)', 'CO2 concentration', 'N-Fertilizer')
+
+
 def set_old_data(apps, schema_editor):
     InputDataModel = apps.get_model('climatemodels', 'InputData')
+    sr = apps.get_model('climatemodels', 'SimulationRound')
+    fast_track = sr.objects.get(name='Fast Track')
+    isimip2a = sr.objects.get(name='ISIMIP2a')
+    isimip2b = sr.objects.get(name='ISIMIP2b')
     for input_data in InputDataModel.objects.all():
         if input_data.old_scenario:
             input_data.scenario.add(input_data.old_scenario)
-        if input_data.old_simulation_round:
-            input_data.simulation_round.add(input_data.old_simulation_round)
+        if input_data.name in ISIMIP2A_INPUT_DATA:
+            input_data.simulation_round.add(isimip2a)
+        if input_data.name in ISIMIP2B_INPUT_DATA:
+            input_data.simulation_round.add(isimip2b)
+        if input_data.name in FAST_TRACK_INPUT_DATA:
+            input_data.simulation_round.add(fast_track)
         input_data.save()
 
 
