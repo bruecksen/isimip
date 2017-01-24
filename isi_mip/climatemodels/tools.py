@@ -61,6 +61,8 @@ class ImpactModelToXLSX:
             fields = []
             if sector.name in EMPTY_SECTORS:
                 continue
+            elif not sector.model.objects.filter(impact_model__in=self.qs).exists():
+                continue
             else:
                 fields = [field.name for field in sector.model._meta.fields if field.name not in ('id', 'data')]
 
