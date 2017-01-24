@@ -354,7 +354,7 @@ class DashboardPage(Page):
         impage_duplicate = lambda imid, srid: "<span class='action'><i class='fa fa-files-o'></i> <a href='{0}' class=''>Use model information for {{0}} as starting point for {{1}}</a></span>".format(
             impage.url + impage.reverse_subpage('duplicate', args=(imid, srid)))
         context['head'] = {
-            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Public'}, {'text': 'Action'}]
+            'cols': [{'text': 'Model'}, {'text': 'Sector'}, {'text': 'Simulation round'}, {'text': 'Public'}, {'text': 'Action'}]
         }
 
         bodyrows = []
@@ -362,6 +362,7 @@ class DashboardPage(Page):
             for imodel in bims.impact_model.all():
                 values = [
                     [impage_details(bims.id).format(bims.name)],
+                    [bims.sector.name],
                     [imodel.simulation_round.name],
                     ['<i class="fa fa-{}" aria-hidden="true"></i>'.format('check' if imodel.public else 'times')],
                     [impage_edit(imodel.id).format(imodel.simulation_round.name)],
