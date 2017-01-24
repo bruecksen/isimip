@@ -118,7 +118,7 @@ class DataTypeAdmin(admin.ModelAdmin):
 
 class SectorAdmin(admin.ModelAdmin):
     model = Sector
-    list_display = ('name', 'class_name')
+    list_display = ('name', 'class_name', 'has_sector_specific_values')
     prepopulated_fields = {'slug': ('name',), }
 
 

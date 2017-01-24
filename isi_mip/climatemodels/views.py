@@ -227,7 +227,9 @@ def impact_model_edit(page, request, id, current_step):
         'subpage': {'title': 'Edit %s' % FORM_STEPS[current_step]['verbose_name'], 'url': ''}
     }
     steps = [{'name': k, 'verbose_name': v['verbose_name'], 'is_active': k is current_step, 'is_next': k is next_step} for k, v in FORM_STEPS.items()]
-    context = {'page': page, 'subpage': subpage, 'steps': steps}
+    if not impact_model.base_model.sector.has_sector_specific_values:
+        steps.pop()
+    context = {'page': page, 'subpage': subpage, 'steps': steps, 'has_sector_specific_values': impact_model.base_model.sector.has_sector_specific_values}
     next_parameter = request.POST.get("next")
     # define target url depending on se next param or logical next step
     if next_parameter:
@@ -298,11 +300,10 @@ def impact_model_base_edit(page, request, context, impact_model, current_step, n
 
 
 def impact_model_sector_edit(page, request, context, impact_model, target_url):
-    formular = get_sector_form(impact_model.base_model.sector)
-
-    if formular is None:
+    if not impact_model.base_model.sector.has_sector_specific_values:
         return HttpResponseRedirect(target_url)
 
+    formular = get_sector_form(impact_model.base_model.sector)
     if request.method == 'POST':
         form = formular(request.POST, instance=impact_model.fk_sector)
         if form.is_valid():

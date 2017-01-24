@@ -172,6 +172,7 @@ class Sector(models.Model):
         ('AgroEconomicModelling', 'Agro-Economic Modelling'),
     )
     class_name = models.CharField(max_length=500, choices=SECTOR_MAPPING, default='GenericSector')
+    has_sector_specific_values = models.BooleanField(default=True)
 
     @property
     def model(self):
