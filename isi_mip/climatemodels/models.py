@@ -483,7 +483,7 @@ class InputDataInformation(models.Model):
     climate_variables = models.ManyToManyField(
         ClimateVariable, blank=True, verbose_name='Climate variables',
         help_text="Including variables that were derived from those provided in the ISIMIP input data set")
-    climate_variables_info = models.TextField(blank=True, verbose_name='Additional climate variables information',
+    climate_variables_info = models.TextField(blank=True, verbose_name='Additional information about input variables',
                                               help_text='Including how variables were derived that were not included in the ISIMIP input data')
 
     def _get_verbose_field_name(self, field):
