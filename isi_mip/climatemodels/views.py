@@ -96,7 +96,7 @@ def impact_model_details(page, request, id):
 def impact_model_download(page, request):
     impact_models = ImpactModel.objects.all()
     if 'sector' in request.GET:
-        impact_models = impact_models.filter(base_model__sector=request.GET['sector'])
+        impact_models = impact_models.filter(base_model__sector__name=request.GET['sector'])
     if 'simulation_round' in request.GET:
         impact_models = impact_models.filter(simulation_round__name=request.GET['simulation_round'])
     if 'searchvalue' in request.GET:
