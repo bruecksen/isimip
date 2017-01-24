@@ -171,6 +171,9 @@ def create_new_impact_model(page, request, base_model_id, simulation_round_id):
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
 
+    if ImpactModel.objects.filter(base_model=base_impact_model, simulation_round=simulation_round).exists():
+        messages.warning(request, 'The impact model already exists in this simulation round. Please contact the ISIMIP team.')
+        return HttpResponseRedirect('/dashboard/')
     # Impact model
     impact_model = ImpactModel(
         base_model=base_impact_model,
@@ -194,6 +197,9 @@ def duplicate_impact_model(page, request, impact_model_id, simulation_round_id):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
+    if ImpactModel.objects.filter(base_model=impact_model.base_model, simulation_round=simulation_round).exists():
+        messages.warning(request, 'The impact model already exists in this simulation round. Please contact the ISIMIP team.')
+        return HttpResponseRedirect('/dashboard/')
     duplicate = impact_model.duplicate(simulation_round)
     target_url = page.url + page.reverse_subpage(STEP_BASE, args=(duplicate.id,))
     message = 'You have chosen to duplicate your model information from {0} for {1}. Please go through each step to make sure that new fields are filled out, and to make sure the information is accurate for the model version used in {1}.'
