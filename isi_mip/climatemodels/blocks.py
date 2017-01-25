@@ -29,7 +29,7 @@ class ImpactModelsBlock(StructBlock):
         # Tabelle
         context['id'] = 'selectortable'
         context['head'] = {
-            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Name'}, {'text': 'Email'}]
+            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Contact Person'}, {'text': 'Email'}]
         }
         rows_per_page = value.get('rows_per_page')
         numpages = math.ceil(bims.count() / rows_per_page)
