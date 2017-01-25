@@ -7,7 +7,7 @@ from isi_mip.climatemodels.models import BaseImpactModel, Sector
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'get_model', 'get_sector')
-    list_filter = ('is_staff', 'is_superuser')
+    list_filter = ('is_staff', 'is_superuser', 'baseimpactmodel__sector')
 
     def get_model(self, obj):
         try:
@@ -18,7 +18,7 @@ class UserAdmin(admin.ModelAdmin):
         results = []
         for bm in base_models:
             link = urlresolvers.reverse(adminurl, args=[bm.id])
-            results.append('<a href="%s">%s</a>' % (link, bm))
+            results.append('<a href="%s">%s</a>' % (link, bm.name))
         return ', '.join(results)
     get_model.admin_order_field = 'get_model'
     get_model.short_description = 'Impact Model'
