@@ -24,6 +24,12 @@ def move_data_to_base_impact_model(apps, schema_editor):
     )
     isimip2a.order = 2
     isimip2a.save()
+    isimip2b, created = SimulationRoundModel.objects.get_or_create(
+        name="ISIMIP2b",
+        defaults={'order': 3, }
+    )
+    isimip2b.order = 3
+    isimip2b.save()
     for impact_model in ImpactModel.objects.all():
         # do your data migration here
         base = BaseImpactModel.objects.create(
