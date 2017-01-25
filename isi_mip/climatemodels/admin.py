@@ -153,6 +153,29 @@ class InputDataAdmin(admin.ModelAdmin):
     get_simulation_round.short_description = 'Simulation rounds'
 
 
+class OutputDataAdmin(admin.ModelAdmin):
+    model = OutputData
+    list_display = ('get_sector', 'get_model', 'get_simulation_round')
+    list_filter = ('sector__name', 'simulation_round__name')
+    formfield_overrides = {
+        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
+    }
+    def get_simulation_round(self, obj):
+        return ', '.join([sr.name for sr in obj.simulation_round.all()])
+    get_simulation_round.admin_order_field = 'simulation_round__name'
+    get_simulation_round.short_description = 'Simulation rounds'
+
+    def get_sector(self, obj):
+        return obj.sector.name
+    get_sector.admin_order_field = 'sector__name'
+    get_sector.short_description = 'Sector'
+
+    def get_model(self, obj):
+        return obj.model and obj.model.base_model.name or obj.id
+    get_model.admin_order_field = 'model__name'
+    get_model.short_description = 'Impact Model'
+
+
 class ClimateVariableAdmin(admin.ModelAdmin):
     model = ClimateVariable
 
@@ -167,7 +190,7 @@ class ClimateVariableAdmin(admin.ModelAdmin):
 admin.site.register(BaseImpactModel, BaseImpactModelAdmin)
 admin.site.register(ImpactModel, ImpactModelAdmin)
 admin.site.register(InputData, InputDataAdmin)
-admin.site.register(OutputData)
+admin.site.register(OutputData, OutputDataAdmin)
 admin.site.register(Sector, SectorAdmin)
 admin.site.register(Agriculture, AgricultureAdmin)
 admin.site.register(Energy, HideSectorAdmin)
