@@ -5,24 +5,13 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
-def set_sectors(apps, schema_editor):
-    SectorModel = apps.get_model('climatemodels', 'Sector')
-    OutputDataModel = apps.get_model('climatemodels', 'OutputData')
-    for od in OutputDataModel.objects.all():
-        od.sector = SectorModel.objects.get(name=od.sector_old)
-        od.save()
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('climatemodels', '0055_outputdata_sector'),
+        ('climatemodels', '0056_2_set_data'),
     ]
 
     operations = [
-        migrations.RunPython(
-            set_sectors
-        ),
         migrations.RemoveField(
             model_name='outputdata',
             name='sector_old',
