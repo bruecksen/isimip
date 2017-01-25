@@ -6,14 +6,6 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
-def set_sectors(apps, schema_editor):
-    SectorModel = apps.get_model('climatemodels', 'Sector')
-    OutputDataModel = apps.get_model('climatemodels', 'OutputData')
-    for od in OutputDataModel.objects.all():
-        od.sector = SectorModel.objects.get(name=od.sector_old)
-        od.save()
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -26,8 +18,5 @@ class Migration(migrations.Migration):
             name='sector',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='climatemodels.Sector'),
             preserve_default=False,
-        ),
-        migrations.RunPython(
-            set_sectors
         ),
     ]
