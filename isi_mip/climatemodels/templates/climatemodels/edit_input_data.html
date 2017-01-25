@@ -6,6 +6,7 @@
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Input data sets used' %}
 		{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
+		<p>Which of these input data sets did you use to drive your model simulations?</p>
 		{{ nf.simulated_atmospheric_climate_data_sets }}
 		{{ nf.observed_atmospheric_climate_data_sets  }}
 		{{ nf.simulated_ocean_climate_data_sets }}
