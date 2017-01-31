@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
 from django.core import urlresolvers
 
-from isi_mip.climatemodels.models import BaseImpactModel, Sector
+from isi_mip.climatemodels.models import BaseImpactModel
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'get_model', 'get_sector')
     list_filter = ('is_staff', 'is_superuser', 'baseimpactmodel__sector')
 
