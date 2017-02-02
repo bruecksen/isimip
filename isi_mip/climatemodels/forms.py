@@ -341,7 +341,7 @@ class EnergyForm(BaseSectorForm):
 
 
 class MarineEcosystemsForm(BaseSectorForm):
-    template = 'edit.html'
+    template = 'edit_marine.html'
 
     class Meta:
         model = MarineEcosystems
