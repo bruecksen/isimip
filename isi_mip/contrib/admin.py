@@ -7,7 +7,7 @@ from isi_mip.climatemodels.models import BaseImpactModel
 
 
 class UserAdmin(UserAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'get_model', 'get_sector')
+    list_display = ('username', 'email', 'first_name', 'last_name', 'get_model', 'get_sector', 'is_active')
     list_filter = ('is_staff', 'is_superuser', 'baseimpactmodel__sector')
 
     def get_model(self, obj):
