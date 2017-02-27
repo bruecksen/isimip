@@ -645,7 +645,7 @@ class Agriculture(BaseSector):
     initial_soil_C_and_OM = models.TextField(null=True, blank=True, default='', verbose_name='Initial soil C and OM')
     initial_crop_residue = models.TextField(null=True, blank=True, default='', verbose_name='Initial crop residue')
     # Key model processes, help_text="Please specify methods for model calibration and validation"
-    lead_area_development = models.TextField(null=True, blank=True, default='', verbose_name='Lead area development', help_text='Methods for model calibration and validation')
+    lead_area_development = models.TextField(null=True, blank=True, default='', verbose_name='Leaf area development', help_text='Methods for model calibration and validation')
     light_interception = models.TextField(null=True, blank=True, default='', verbose_name='Light interception', help_text='Methods for model calibration and validation')
     light_utilization = models.TextField(null=True, blank=True, default='', verbose_name='Light utilization', help_text='Methods for model calibration and validation')
     yield_formation = models.TextField(null=True, blank=True, default='', verbose_name='Yield formation', help_text='Methods for model calibration and validation')
