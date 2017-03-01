@@ -1,4 +1,4 @@
-<h3{% if slug %} id="{{ slug }}"{% endif %} class="widget-heading3{% if widget_heading_sm_two_lines %} widget-heading-sm-two-lines{% endif %}">
+<h3{% if slug %} id="{{ slug }}"{% endif %} class="widget-heading3{% if widget_heading_sm_two_lines %} widget-heading-sm-two-lines{% endif %}{% if slug %} widget-heading3-slug{% endif %}">
 	{% if href %}<a href="{{ href }}">{% endif %}
 		{{ text }}
 	{% if href %}</a>{% endif %}
