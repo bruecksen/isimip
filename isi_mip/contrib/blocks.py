@@ -59,8 +59,8 @@ class BlogBlock(blocks.StructBlock):
         icon = 'image'
         template = 'blocks/blog_block.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(BlogBlock, self).get_context(value, parent_context=parent_context)
         blog_index = value.get('blog_index')
         title = value.get('title') or (blog_index.title if blog_index else 'Blog')
         entry_count = value.get('entry_count')
@@ -100,8 +100,8 @@ class HeadingBlock(CharBlock):
         icon = 'title'
         template = 'widgets/heading3.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(HeadingBlock, self).get_context(value, parent_context=parent_context)
         context['text'] = value
         context['slug'] = slugify(value, allow_unicode=True)
         return context
@@ -118,8 +118,8 @@ class ImageBlock(ImageChooserBlock):
         icon = 'image'
         template = 'widgets/image.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(ImageBlock, self).get_context(value, parent_context=parent_context)
         context['url'] = value.get_rendition('max-1200x1200').url
         context['name'] = value.title
         return context
@@ -130,7 +130,7 @@ class RichTextBlock(_RichTextBlock):
         icon = 'pilcrow'
         template = 'widgets/richtext-content.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(RichTextBlock, self).get_context(value, parent_context=parent_context)
         context['content'] = value
         return context

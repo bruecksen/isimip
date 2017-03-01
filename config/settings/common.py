@@ -31,6 +31,7 @@ CMS_APPS = (
     'wagtail.wagtailadmin',
     'wagtail.wagtailcore',
     'wagtail.contrib.settings',
+    'wagtail.contrib.table_block',
     # 'wagtail.contrib.wagtailstyleguide',
 
     'modelcluster',

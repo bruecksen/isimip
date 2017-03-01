@@ -12,8 +12,8 @@ class ImpactModelsBlock(StructBlock):
     description = RichTextBlock()
     rows_per_page = IntegerBlock(default=20, min_value=1, required=True)
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(ImpactModelsBlock, self).get_context(value, parent_context=parent_context)
 
         bims = BaseImpactModel.objects.order_by('name').filter(impact_model__public=True).distinct()
 
@@ -63,8 +63,8 @@ class ImpactModelsBlock(StructBlock):
 class InputDataBlock(StructBlock):
     row_limit = IntegerBlock(default=10, min_value=1, max_value=30, label='Input Data Row Limit')
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(InputDataBlock, self).get_context(value, parent_context=parent_context)
 
         context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Data Type'}, {'text': 'Simulation round'}, {'text': 'Description'}]}
         context['body'] = {'rows': []}
@@ -101,8 +101,8 @@ class InputDataBlock(StructBlock):
 class OutputDataBlock(StructBlock):
     rows_per_page = IntegerBlock(default=20, min_value=1, required=True)
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(OutputDataBlock, self).get_context(value, parent_context=parent_context)
         context['title'] = 'Overview'
 
         context['head'] = {'cols': [{'text': 'Sector'}, {'text': 'Model'}, {'text': 'Simulation Rounds'}, {'text': 'Experiments'},

@@ -4,6 +4,7 @@ from wagtail.wagtailcore.blocks import CharBlock, StructBlock, TextBlock, Stream
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.contrib.table_block.blocks import TableBlock
 
 from isi_mip.contrib.blocks import EmailBlock, IntegerBlock, HeadingBlock, HRBlock, ImageBlock, RichTextBlock
 from isi_mip.twitter import TwitterTimeline
@@ -21,6 +22,7 @@ BASE_BLOCKS = [
     ('horizontal_ruler', HRBlock()),
     ('embed', EmbedBlock()),
     ('image', ImageBlock()),
+    ('table', TableBlock()),
 ]
 
 
@@ -34,8 +36,8 @@ class SmallTeaserBlock(StructBlock):
         icon = 'fa fa-list-alt'
         template = 'blocks/small_teaser_block.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(SmallTeaserBlock, self).get_context(value, parent_context=parent_context)
         context['title'] = value.get('title')
         image = value.get('picture')
         rendition = image.get_rendition('fill-640x360-c100')
@@ -65,8 +67,8 @@ class BigTeaserBlock(StructBlock):
         super().__init__(local_blocks=local_blocks, **kwargs)
         self.wideimage = wideimage
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(BigTeaserBlock, self).get_context(value, parent_context=parent_context)
         context['super_title'] = value.get('title')
 
         image = value.get('picture')
@@ -120,8 +122,8 @@ class TwitterBlock(StructBlock):
     # widget_id = CharBlock(required=True)
     # tweet_limit = CharBlock(required=True, max_length=2)
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(TwitterBlock, self).get_context(value, parent_context=parent_context)
         twitte = TwitterTimeline(count=(value.get('count')))
         context['timeline'] = twitte.get_timeline(value.get('username'))
         context['username'] = value.get('username') #context['timeline'][0]['screen_name']
@@ -143,8 +145,8 @@ class PaperBlock(StructBlock):
         icon = 'fa fa-file-text'
         template = 'widgets/page-teaser.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(PaperBlock, self).get_context(value, parent_context=parent_context)
         c_update = {
             'author': value.get('author'),
             'title': value.get('title'),
@@ -187,8 +189,8 @@ class LinkBlock(StructBlock):
         icon = 'fa fa-external-link'
         template = 'widgets/page-teaser-wide.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(LinkBlock, self).get_context(value, parent_context=parent_context)
         context['arrow_right_link'] = True
         context['title'] = value.get('title')
         context['description'] = value.get('text')
@@ -216,8 +218,8 @@ class FAQsBlock(StructBlock):
         icon = 'fa fa-medkit'
         template = 'blocks/faq_block.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(FAQsBlock, self).get_context(value, parent_context=parent_context)
         context['titel'] = value.get('title')
         context['list'] = []
         for faq in value.get('faqs'):
@@ -249,8 +251,8 @@ class ContactsBlock(StructBlock):
         icon = 'fa fa-male'
         template = 'blocks/contacts_block.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(ContactsBlock, self).get_context(value, parent_context=parent_context)
         context['sectors'] = []
         for sector in value.get('sectors'):
             sector_dict = {'name': sector.get('name'),
@@ -277,13 +279,16 @@ class SupporterBlock(StructBlock):
     image = ImageBlock(required=False)
     content = RichTextBlock()
 
+
 class SupportersBlock(StructBlock):
     supporters = ListBlock(SupporterBlock)
+
     class Meta:
         icon = 'fa fa-male'
         template = 'blocks/supporters_block.html'
-    def get_context(self, value):
-        context = super().get_context(value)
+
+    def get_context(self, value, parent_context=None):
+        context = super(SupportersBlock, self).get_context(value, parent_context=parent_context)
         context['supporters'] = []
         for supporter in value.get('supporters'):
             supp_dict = {'name': supporter.get('name'),
@@ -304,12 +309,13 @@ class SupportersBlock(StructBlock):
             context['supporters'] += [supp_dict]
         return context
 
+
 class PDFBlock(StructBlock):
     file = DocumentChooserBlock()
     description = CharBlock()
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(PDFBlock, self).get_context(value, parent_context=parent_context)
         context['button'] = {
             'text': 'Download',
             'href': value.get('file').url
@@ -340,8 +346,8 @@ class ProtocolBlock(StructBlock):
         icon = 'fa fa-newspaper-o'
         template = 'blocks/protocol_block.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(ProtocolBlock, self).get_context(value, parent_context=parent_context)
         context['links'] = []
         for pdf in value.get('pdfs'):
             context['links'] += [{
@@ -371,8 +377,8 @@ class ColumnsBlock(StructBlock):
     left_column = StreamBlock(_COLUMNS_BLOCKS)
     right_column = StreamBlock(_COLUMNS_BLOCKS)  # , form_classname='pull-right')
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(ColumnsBlock, self).get_context(value, parent_context=parent_context)
         context['left_column'] = value.get('left_column')
         context['right_column'] = value.get('right_column')
         return context
@@ -425,8 +431,8 @@ class Columns1To1To1To1Block(StructBlock):
         label = 'Columns 1:1:1:1'
         template = 'widgets/columns-1-1-1-1.html'
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super(Columns1To1To1To1Block, self).get_context(value, parent_context=parent_context)
         context['first_column'] = value.get('first_column')
         context['second_column'] = value.get('second_column')
         context['third_column'] = value.get('third_column')
