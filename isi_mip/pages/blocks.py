@@ -6,7 +6,7 @@ from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
 
-from isi_mip.contrib.blocks import EmailBlock, IntegerBlock, HeadingBlock, HRBlock, ImageBlock, RichTextBlock
+from isi_mip.contrib.blocks import EmailBlock, IntegerBlock, HeadingBlock, HRBlock, ImageBlock, RichTextBlock, MonospaceTextBlock
 from isi_mip.twitter import TwitterTimeline
 
 
@@ -23,6 +23,7 @@ BASE_BLOCKS = [
     ('embed', EmbedBlock()),
     ('image', ImageBlock()),
     ('table', TableBlock()),
+    ('monospace_text', MonospaceTextBlock())
 ]
 
 

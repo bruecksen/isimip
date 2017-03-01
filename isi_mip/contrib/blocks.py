@@ -5,7 +5,7 @@ from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 from django.utils.text import slugify
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, \
+from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, TextBlock, \
     RichTextBlock as _RichTextBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 
@@ -122,6 +122,17 @@ class ImageBlock(ImageChooserBlock):
         context = super(ImageBlock, self).get_context(value, parent_context=parent_context)
         context['url'] = value.get_rendition('max-1200x1200').url
         context['name'] = value.title
+        return context
+
+
+class MonospaceTextBlock(TextBlock):
+    class Meta:
+        icon = 'code'
+        template = 'widgets/monospace-text.html'
+
+    def get_context(self, value, parent_context=None):
+        context = super(MonospaceTextBlock, self).get_context(value, parent_context=parent_context)
+        context['content'] = value
         return context
 
 
