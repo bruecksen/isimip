@@ -111,7 +111,7 @@ class OutputDataBlock(StructBlock):
             'rows': [],
         }
 
-        outputdata = OutputData.objects.order_by('sector', 'model')
+        outputdata = OutputData.objects.order_by('-date', 'sector', 'model')
         for i, odat in enumerate(outputdata):
             drivers = [x.name for x in odat.drivers.all()]
             context['body']['rows'] += [{
