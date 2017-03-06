@@ -11,7 +11,7 @@ def header(context, **kwargs):
     settings = HeaderLinks.for_site(request.site)
 
     page = context.get('page')
-    current_parent_page = page.get_parent()
+    current_parent_page = page and page.get_parent() or None
     links = []
     for link in settings.header_links.all():
         name = link.name
