@@ -385,13 +385,31 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 
 .widget-header {
 
-// ################ Use Hamburger for SM START ####################
 	@media (min-width: 768px) {
 		.navbar-collapse {
 			width: auto;
 			border-top: 1px solid transparent;
 			-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
 			box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
+			.dropdown.open {
+				a {
+					background-color: transparent;
+				}
+				.dropdown-menu {
+					position: static;
+					float: none;
+					width: auto;
+					margin-top: 0;
+					background-color: transparent;
+					border: 0;
+					-webkit-box-shadow: none;
+					box-shadow: none;
+					margin-top: -15px;
+					li a {
+						text-align: center;
+					}
+				}
+			}
 		}
 		.navbar-collapse.collapse {
 			display: none !important;
@@ -514,8 +532,10 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 		.navbar > .container-fluid .navbar-brand {
 			margin-left: -15px;
 		}
+		ul.nav li.dropdown:hover > ul.dropdown-menu {
+			display: block;
+		}
 	}
-// ################ Use Hamburger for SM END ####################
 
 
 	.navbar.navbar-default {

@@ -18,13 +18,13 @@
 			<div class="collapse navbar-collapse" id="widget-header-{{ id }}">
 				<ul class="nav navbar-nav">
 					{% for link in links %}
-						<li{% if link.active %} class="active"{% endif %}>
-							<a href="{{ link.url }}">{{ link.text }}</a>
-							{% if link.sublinks %}
-								<ul>
-								{% for sublink in link.sublinks %}
-									<li{% if sublink.active %} class="active"{% endif %}>
-										<a href="{{ sublink.url }}">{{ sublink.text }}</a>
+						<li class="{% if link.active %}active{% endif %}{% if link.children %} dropdown{% endif %}">
+							<a href="{{ link.url }}"{% if link.children %} class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"{% endif %}>{{ link.text }}{% if link.children %} <span class="caret"></span>{% endif %}</a>
+							{% if link.children %}
+								<ul class="dropdown-menu">
+								{% for child in link.children %}
+									<li{% if child.active %} class="active"{% endif %}>
+										<a href="{{ child.url }}">{{ child.text }}</a>
 									</li>
 								{% endfor %}
 								</ul>

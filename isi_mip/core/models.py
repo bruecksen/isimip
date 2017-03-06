@@ -3,10 +3,10 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel
-from wagtail.wagtailcore.models import Page, Orderable
-
-from isi_mip.climatemodels.models import ImpactModel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
+from wagtail.wagtailcore.models import Orderable
+from wagtail.wagtailcore import blocks
+from wagtail.wagtailcore.fields import StreamField
 
 
 @register_setting(icon='list-ul')
@@ -16,16 +16,48 @@ class HeaderLinks(ClusterableModel, BaseSetting):
     ]
 
 
+class BaseLinkBlock(blocks.StructBlock):
+    """
+    Base StructBlock class used to prevent DRY code.
+    """
+    name = blocks.CharBlock()
+
+
+class JumpLinkBlock(BaseLinkBlock):
+    """
+    Block that holds a link to any URL.
+    """
+    link = blocks.CharBlock()
+
+    class Meta:
+        icon = 'fa fa-link'
+
+
+class PageLinkBlock(BaseLinkBlock):
+    """
+    Block that holds a page.
+    """
+    page = blocks.PageChooserBlock()
+
+    class Meta:
+        icon = 'fa fa-file-o'
+
+
 class HeaderLink(Orderable, models.Model):
     header = ParentalKey(HeaderLinks, related_name='header_links')
     target = models.ForeignKey('wagtailcore.Page')
     _name = models.CharField(max_length=255, null=True, blank=True, verbose_name='Alt. name',
                              help_text='If left empty, the target\'s title will be used.')
     name = property(lambda self: self._name or self.target.title)
+    menu_items = StreamField([
+        ('jump_link', JumpLinkBlock()),
+        ('page_link', PageLinkBlock()),
+    ], null=True, blank=True)
 
     panels = [
         PageChooserPanel('target'),
         FieldPanel('_name'),
+        StreamFieldPanel('menu_items'),
     ]
 
 
