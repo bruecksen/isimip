@@ -1,9 +1,15 @@
 {% extends "pages/default_page.html" %}
 {% load wagtailcore_tags %}
 {% block content %}
-	{% url 'logout' as logouturl %}
-	{% include 'widgets/read-more-link.html' with align='right' text='Logout' url=logouturl %}
-	{% include 'widgets/richtext-content.html' with content=page.impact_models_description %}
+	<p class="dashboard-action"><a href="{{ update_contact }}"><i class="fa fa-user" aria-hidden="true"></i> Update contact information</a><a href="{{ update_password }}"><i class="fa fa-lock" aria-hidden="true"></i> Change password</a><a href="{{ logout }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></p>
+	<div style="clear:both">
+		{{ page.impact_models_description|safe }}
+	</div>
 	{% include 'widgets/heading3.html' with text='Your Impact Models' %}
 	{% include "widgets/table.html" %}
+	{% if participants %}
+		{% include 'widgets/heading3.html' with text='ISIMIP Participants' %}
+		{% include 'widgets/read-more-link.html' with align='right' text='Download all participants as .xlsx' url='download/' %}
+		{% include "widgets/table.html" with head=participants.head body=participants.body searchfield=participants.searchfield id=participants.tableid pagination=participants.pagination %}
+	{% endif %}
 {% endblock %}

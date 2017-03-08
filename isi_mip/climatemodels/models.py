@@ -268,7 +268,7 @@ class BaseImpactModel(models.Model):
 
     def values_to_tuples(self):
         vname = self._get_verbose_field_name
-        cpers = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.pretty() for x in self.contactperson_set.all()])
+        cpers = "<ul>%s</ul>" % "".join(["<li>%s</li>" % x.pretty() for x in self.impact_model_owner.all()])
         return [
             ('Common information', [
                 (vname('sector'), self.sector),

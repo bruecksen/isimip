@@ -28,14 +28,8 @@ class HideSectorAdmin(HideAdmin):
     exclude = ('data', )
 
 
-class ContactPersonAdmin(admin.TabularInline):
-    model = ContactPerson
-    extra = 1
-
-
 class BaseImpactModelAdmin(admin.ModelAdmin):
     model = BaseImpactModel
-    inlines = [ContactPersonAdmin, ]
     list_display = ('name', 'sector')
     list_filter = ('sector',)
 
@@ -212,6 +206,5 @@ admin.site.register(Author, HideAdmin)
 admin.site.register(Region)
 admin.site.register(Scenario)
 admin.site.register(SocioEconomicInputVariables)
-admin.site.register(ContactPerson)
 admin.site.register(SimulationRound, SimulationRoundAdmin)
 admin.site.register(SpatialAggregation)

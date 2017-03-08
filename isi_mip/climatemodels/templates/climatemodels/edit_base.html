@@ -19,26 +19,16 @@
 				{% block form_content %}
 					{% include 'widgets/heading3.html' with text='Base Information' %}
 					{% include 'widgets/richtext-content.html' with content=page.common_attributes_text %}
-					{{ cform.management_form }}
 					{% template_form form as nf %}
 					{{ nf.name }}
 					{{ nf.sector }}
 					{{ nf.region }}
-					<div id="div_id_cperson0" class="form-group">
-						<label class="control-label requiredField">
-							Contact person<span class="asteriskField">*</span>
-						</label>
-						<div class="controls">
-							<span class="major-tom-rapper">{{ cform.0 }}</span>
-						</div>
-					</div>
-					<div id="div_id_cperson0" class="form-group">
-						<label class="control-label requiredField">
-							Optional second contact person
-						</label>
-						<div class="controls">
-							<span class="major-tom-rapper">{{ cform.1 }}</span>
-						</div>
+					<div class="form-group">
+						<label class="control-label requiredField">Contact persons</label>
+						<p class="help-block">Please notice, you can only update your personal contact information by <a href="/dashboard/user">editing your user profile</a> in the dashboard. If you want to add a new contact person please <a href="mailto:info@isimip.org">write us</a>.</p>
+						{% for contact_person in contact_persons %}
+						<p><strong>Name</strong>: {{contact_person.name}}, <strong>Email</strong>: {{contact_person.email}}, <strong>Institute</strong>: {{contact_person.institute}}</p>
+						{% endfor %}
 					</div>
 					{{ nf.short_description }}
 				{% endblock %}

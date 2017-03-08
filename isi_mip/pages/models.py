@@ -1,6 +1,7 @@
 from blog.models import BlogIndexPage as _BlogIndexPage
 from blog.models import BlogPage as _BlogPage
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.http.response import HttpResponseRedirect
@@ -14,10 +15,12 @@ from wagtail.wagtailcore.models import Page
 from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
-from isi_mip.climatemodels.models import ImpactModel, BaseImpactModel
-from isi_mip.climatemodels.views import impact_model_details, impact_model_edit, input_data_details, \
-    impact_model_download, impact_model_sector_edit, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION, STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR, \
-    duplicate_impact_model, create_new_impact_model
+from isi_mip.climatemodels.models import Sector, SimulationRound
+from isi_mip.climatemodels.views import (
+    impact_model_details, impact_model_edit, input_data_details,
+    impact_model_download, participant_download, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION,
+    STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR,
+    duplicate_impact_model, create_new_impact_model)
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
 
@@ -335,7 +338,7 @@ class LinkListPage(TOCPage):
     ]
 
 
-class DashboardPage(Page):
+class DashboardPage(RoutablePageWithDefault):
     impact_models_description = RichTextField(null=True, blank=True)
     content_panels = Page.content_panels + [
         RichTextFieldPanel('impact_models_description'),
@@ -343,7 +346,7 @@ class DashboardPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        base_impact_models = BaseImpactModel.objects.filter(owners=request.user).order_by('name')
+        base_impact_models = request.user.userprofile.owner.all().order_by('name')
         impage = ImpactModelsPage.objects.get()
         impage_details = lambda imid: "<span class='action'><a href='{0}' class=''>{{0}}</a></span>".format(
             impage.url + impage.reverse_subpage('details', args=(imid, )))
@@ -391,18 +394,60 @@ class DashboardPage(Page):
                 }
                 bodyrows.append(row)
         context['body'] = {'rows': bodyrows}
+        if request.user.groups.filter(name='ISIMIP-Team').exists():
+            # user has the right to view the participants list
+            participants = User.objects.filter(is_active=True, is_superuser=False, is_staff=False).distinct()
+            participants = participants.filter(userprofile__sector__in=request.user.userprofile.sector.all())
+            participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector').order_by('last_name')
+            result = {'head': {}, 'body': {}}
+            result['head'] = {
+                'cols': [{'text': 'Name'}, {'text': 'Email'}, {'text': 'Model'}, {'text': 'Sector'}, {'text': 'Simulation round'}]
+            }
+            bodyrows = []
+            result['body'] = {'rows': bodyrows}
+            # Filter und Suchfelder
+            result['tableid'] = 'participantstable'
+            result['searchfield'] = {'value': ''}
+            # Tabelle
+            rows_per_page = 50
+            for i, participant in enumerate(participants):
+                simulation_rounds = participant.userprofile.owner.all().values_list('impact_model__simulation_round__name', flat=True).distinct().order_by()
+                # simulation_rounds = ImpactModel.objects.filter(base_model__impact_model_owner__user=participant).values_list('simulation_round__name', flat=True).distinct().order_by()
+                values = [["{0.name}".format(participant.userprofile)]]
+                values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]
+                values += [["<a href='details/{0.id}/'>{0.name}</a><br>".format(model) for model in participant.userprofile.owner.all()]]
+                values += [["{0.name}<br>".format(sector) for sector in participant.userprofile.sector.all()]]
+                values += [["{0}<br>".format(simulation_round) for simulation_round in simulation_rounds]]
+                bodyrows.append({
+                    'invisible': i >= rows_per_page,
+                    'cols': [{'texts': x} for x in values],
+                })
+            numpages = math.ceil(participants.count() / rows_per_page)
+            result['pagination'] = {
+                'rowsperpage': (rows_per_page),
+                'numberofpages': numpages,  # number of pages with current filters
+                'pagenumbers': [{'number': i + 1, 'invisible': False} for i in range(numpages)],
+                'activepage': 1,  # set to something between 1 and numberofpages
+            }
+            context['participants'] = result
+
         return context
 
-    def serve(self, request, *args, **kwargs):
-        request.is_preview = getattr(request, 'is_preview', False)
+    @route(r'^$')
+    def base(self, request):
         if not request.user.is_authenticated():
             messages.info(request, 'This is a restricted area. To proceed you need to log in.')
             return HttpResponseRedirect(reverse('login'))
 
-        context = self.get_context(request, *args, **kwargs)
-        template = self.get_template(request, *args, **kwargs)
+        return TemplateResponse(
+            request,
+            self.get_template(request),
+            self.get_context(request)
+        )
 
-        return TemplateResponse(request, template, context)
+    @route(r'download/$')
+    def download(self, request):
+        return participant_download(self, request)
 
 
 class FormField(AbstractFormField):

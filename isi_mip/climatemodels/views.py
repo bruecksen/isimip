@@ -17,7 +17,7 @@ from django.template import Template, Context
 from isi_mip.climatemodels.forms import ImpactModelStartForm, ContactPersonFormset, get_sector_form, \
     BaseImpactModelForm, ImpactModelForm, TechnicalInformationModelForm, InputDataInformationModelForm, OtherInformationModelForm
 from isi_mip.climatemodels.models import ImpactModel, InputData, BaseImpactModel, SimulationRound
-from isi_mip.climatemodels.tools import ImpactModelToXLSX
+from isi_mip.climatemodels.tools import ImpactModelToXLSX, ParticpantModelToXLSX
 from isi_mip.invitation.views import InvitationView
 from isi_mip.core.models import Invitation
 
@@ -49,7 +49,7 @@ def impact_model_details(page, request, id):
     subpage = {'title': title, 'url': ''}
     context = {'page': page, 'subpage': subpage, 'headline': ''}
     can_edit_model = False
-    if request.user in base_model.owners.all() or request.user.is_superuser:
+    if base_model in request.user.userprofile.owner.all() or request.user.is_superuser:
         can_edit_model = True
 
     # context['editlink'] += ' | <a href="{}">admin edit</a>'.format(
@@ -110,6 +110,16 @@ def impact_model_download(page, request):
     return response
 
 
+def participant_download(page, request):
+    participants = User.objects.filter(is_active=True, is_superuser=False, is_staff=False).distinct()
+    participants = participants.filter(userprofile__sector__in=request.user.userprofile.sector.all())
+    participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector').order_by('last_name')
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="Participants {:%Y-%m-%d}.xlsx"'.format(datetime.now())
+    ParticpantModelToXLSX(response, participants)
+    return response
+
+
 def input_data_details(page, request, id):
     data = InputData.objects.get(id=id)
     template = 'pages/input_data_details_page.html'
@@ -166,7 +176,7 @@ def create_new_impact_model(page, request, base_model_id, simulation_round_id):
         return HttpResponseRedirect(nexturl)
     base_impact_model = BaseImpactModel.objects.get(id=base_model_id)
     simulation_round = SimulationRound.objects.get(id=simulation_round_id)
-    if not (request.user in base_impact_model.owners.all() or request.user.is_superuser):
+    if not (base_impact_model in request.user.userprofile.owner.all() or request.user.is_superuser):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
@@ -193,7 +203,7 @@ def duplicate_impact_model(page, request, impact_model_id, simulation_round_id):
         return HttpResponseRedirect(nexturl)
     impact_model = ImpactModel.objects.get(id=impact_model_id)
     simulation_round = SimulationRound.objects.get(id=simulation_round_id)
-    if not (request.user in impact_model.base_model.owners.all() or request.user.is_superuser):
+    if not (impact_model.base_model in request.user.userprofile.owner.all() or request.user.is_superuser):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
@@ -214,7 +224,7 @@ def impact_model_edit(page, request, id, current_step):
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
     impact_model = ImpactModel.objects.get(id=id)
-    if not (request.user in impact_model.base_model.owners.all() or request.user.is_superuser):
+    if not (impact_model.base_model in request.user.userprofile.owner.all() or request.user.is_superuser):
         messages.info(request, 'You need to be logged in to perform this action.')
         nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
         return HttpResponseRedirect(nexturl)
@@ -279,22 +289,25 @@ def impact_model_base_edit(page, request, context, impact_model, current_step, n
     base_impact_model = impact_model.base_model
     if request.method == 'POST':
         form = BaseImpactModelForm(request.POST, instance=base_impact_model)
-        contactform = ContactPersonFormset(request.POST, instance=base_impact_model)
-        if form.is_valid() and contactform.is_valid():
+        if form.is_valid():
             form.save()
-            contactform.save()
             message = "All data have been successfully saved."
             messages.success(request, message)
             return HttpResponseRedirect(target_url)
         else:
             messages.error(request, 'Your form has errors.')
             messages.warning(request, form.errors)
-            messages.warning(request, contactform.errors)
     else:
         form = BaseImpactModelForm(instance=base_impact_model)
-        contactform = ContactPersonFormset(instance=base_impact_model)
+        contact_persons = []
+        for contact_person in base_impact_model.impact_model_owner.all():
+            contact_persons.append({
+                'name': contact_person.name,
+                'email': contact_person.email,
+                'institute': contact_person.institute,
+            })
+        context['contact_persons'] = contact_persons
     context['form'] = form
-    context['cform'] = contactform
     template = 'climatemodels/%s.html' % (current_step)
     return render(request, template, context)
 
@@ -320,7 +333,7 @@ def impact_model_sector_edit(page, request, context, impact_model, target_url):
     template = 'climatemodels/{}'.format(formular.template)
     return render(request, template, context)
 
-
+#TODO FIXME Owner to profile
 def impact_model_assign(request, username=None):
     if not request.user.is_superuser:
         messages.info(request, 'You need to be logged in to perform this action.')

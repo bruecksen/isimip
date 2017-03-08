@@ -15,7 +15,8 @@ class ImpactModelsBlock(StructBlock):
     def get_context(self, value, parent_context=None):
         context = super(ImpactModelsBlock, self).get_context(value, parent_context=parent_context)
 
-        bims = BaseImpactModel.objects.order_by('name').filter(impact_model__public=True).distinct()
+        bims = BaseImpactModel.objects.select_related('sector').prefetch_related('impact_model', 'impact_model_owner', 'impact_model_owner__user')
+        bims = bims.filter(impact_model__public=True).distinct().order_by('name')
 
         # Filter und Suchfelder
         context['tableid'] = 'selectortable'
@@ -45,8 +46,8 @@ class ImpactModelsBlock(StructBlock):
         for i, bmodel in enumerate(bims):
             simulation_rounds = bmodel.impact_model.all().values_list('simulation_round__name', flat=True)
             values = [["<a href='details/{0.id}/'>{0.name}</a>".format(bmodel, bmodel)], simulation_rounds, [bmodel.sector]]
-            values += [["{0.name}<br/>".format(x) for x in bmodel.contactperson_set.all()]]
-            values += [["<a href='mailto:{0.email}'>{0.email}</a><br/>".format(x) for x in bmodel.contactperson_set.all()]]
+            values += [["{0.name}<br/>".format(x) for x in bmodel.impact_model_owner.all()]]
+            values += [["<a href='mailto:{0.email}'>{0.email}</a><br/>".format(x) for x in bmodel.impact_model_owner.all()]]
             row = {
                 'invisible': i >= rows_per_page,
                 'cols': [{'texts': x} for x in values],
