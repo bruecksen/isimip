@@ -412,3 +412,9 @@ def get_sector_form(sector):
         'genericsector': GenericSectorForm,
     }
     return mapping[sector.class_name.lower()]
+
+
+class ContactInformationForm(forms.Form):
+    name = forms.CharField(label='Your name', max_length=60, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}), help_text='If you want to change the contact person or add a new contact person, please contact info@isimip.org')
+    email = forms.EmailField(label='Your email adress', required=True)
+    institute = forms.CharField(max_length=500, required=False)

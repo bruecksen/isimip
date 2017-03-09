@@ -22,6 +22,10 @@ class UserProfile(models.Model):
         return "%s %s" % (self.user.first_name, self.user.last_name)
 
     @property
+    def participating_models(self):
+        return self.owner.all() | self.involved.all()
+
+    @property
     def email(self):
         return self.user.email
 

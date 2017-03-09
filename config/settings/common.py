@@ -32,6 +32,7 @@ CMS_APPS = (
     'wagtail.wagtailcore',
     'wagtail.contrib.settings',
     'wagtail.contrib.table_block',
+    'wagtail.contrib.wagtailroutablepage',
     # 'wagtail.contrib.wagtailstyleguide',
 
     'modelcluster',
@@ -203,7 +204,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 ADMIN_URL = env('DJANGO_ADMIN_URL', default='admin')
 
-LOGIN_URL='/auth/login/'
+LOGIN_URL='/dashboard/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 
 INVITATION_VALID_DAYS = 7

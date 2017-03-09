@@ -99,10 +99,10 @@ class ParticpantModelToXLSX:
         for i, participant in enumerate(self.qs):
             general.write(i + 1, 0, participant.userprofile.name)
             general.write(i + 1, 1, participant.email)
-            models = [model.name for model in participant.userprofile.owner.all()]
+            models = [model.name for model in participant.userprofile.participating_models.distinct()]
             general.write(i + 1, 2, ", ".join(models))
             sectors = [sector.name for sector in participant.userprofile.sector.all()]
             general.write(i + 1, 3, ", ".join(sectors))
-            simulation_rounds = participant.userprofile.owner.all().values_list('impact_model__simulation_round__name', flat=True).distinct().order_by()
+            simulation_rounds = participant.userprofile.participating_models.distinct().values_list('impact_model__simulation_round__name', flat=True).distinct().order_by()
             general.write(i + 1, 4, ", ".join(simulation_rounds))
         self.workbook.close()

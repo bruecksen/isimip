@@ -1,10 +1,12 @@
-{% extends "base.html" %}
-{% load template_form %}
-{% block content %}
+{% extends 'pages/default_page.html' %}
+{% load breadcrumb template_form %}
+{% block content_container %}
 	<div class="container scrollable-container">
-		{% include 'widgets/heading1.html' with text='Login' %}
-
-		{% if form.errors %}
+		<br>
+		{% breadcrumb %}
+		{% include 'widgets/heading1.html' with text=subpage.title %}
+		{% block content %}
+			{% if form.errors %}
 			<p>Your username and password didn't match. Please try again.</p>
 		{% endif %}
 
@@ -31,6 +33,6 @@
 
 		<br>
 		<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-
+		{% endblock %}
 	</div>
 {% endblock %}

@@ -2,6 +2,7 @@ from blog.models import BlogIndexPage as _BlogIndexPage
 from blog.models import BlogPage as _BlogPage
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.auth.views import login, logout, password_change
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.http.response import HttpResponseRedirect
@@ -20,7 +21,7 @@ from isi_mip.climatemodels.views import (
     impact_model_details, impact_model_edit, input_data_details,
     impact_model_download, participant_download, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION,
     STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR,
-    duplicate_impact_model, create_new_impact_model)
+    duplicate_impact_model, create_new_impact_model, update_contact_information_view)
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
 
@@ -411,11 +412,11 @@ class DashboardPage(RoutablePageWithDefault):
             # Tabelle
             rows_per_page = 50
             for i, participant in enumerate(participants):
-                simulation_rounds = participant.userprofile.owner.all().values_list('impact_model__simulation_round__name', flat=True).distinct().order_by()
+                simulation_rounds = participant.userprofile.participating_models.distinct().values_list('impact_model__simulation_round__name', flat=True).distinct().order_by()
                 # simulation_rounds = ImpactModel.objects.filter(base_model__impact_model_owner__user=participant).values_list('simulation_round__name', flat=True).distinct().order_by()
                 values = [["{0.name}".format(participant.userprofile)]]
                 values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]
-                values += [["<a href='details/{0.id}/'>{0.name}</a><br>".format(model) for model in participant.userprofile.owner.all()]]
+                values += [["<a href='details/{0.id}/'>{0.name}</a><br>".format(model) for model in participant.userprofile.participating_models.distinct()]]
                 values += [["{0.name}<br>".format(sector) for sector in participant.userprofile.sector.all()]]
                 values += [["{0}<br>".format(simulation_round) for simulation_round in simulation_rounds]]
                 bodyrows.append({
@@ -437,7 +438,7 @@ class DashboardPage(RoutablePageWithDefault):
     def base(self, request):
         if not request.user.is_authenticated():
             messages.info(request, 'This is a restricted area. To proceed you need to log in.')
-            return HttpResponseRedirect(reverse('login'))
+            return HttpResponseRedirect(self.reverse_subpage('login'))
 
         return TemplateResponse(
             request,
@@ -448,6 +449,30 @@ class DashboardPage(RoutablePageWithDefault):
     @route(r'download/$')
     def download(self, request):
         return participant_download(self, request)
+
+    @route(r'logout/$')
+    def logout(self, request):
+        subpage = {'title': 'Logout', 'url': ''}
+        context = {'page': self, 'subpage': subpage, 'headline': ''}
+        return logout(request, extra_context=context)
+
+    @route(r'login/$')
+    def login(self, request):
+        subpage = {'title': 'Login', 'url': ''}
+        context = {'page': self, 'subpage': subpage, 'headline': ''}
+        return login(request, extra_context=context)
+
+    @route(r'change-password/$')
+    def change_password(self, request):
+        subpage = {'title': 'Change password', 'url': ''}
+        context = {'page': self, 'subpage': subpage, 'headline': ''}
+        return password_change(request, extra_context=context)
+
+    @route(r'update-contact-information/$')
+    def update_contact_information(self, request):
+        subpage = {'title': 'Update contact information', 'url': ''}
+        context = {'page': self, 'subpage': subpage, 'headline': ''}
+        return update_contact_information_view(request, self, extra_context=context)
 
 
 class FormField(AbstractFormField):

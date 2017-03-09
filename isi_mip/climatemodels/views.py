@@ -5,17 +5,18 @@ import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.contrib.auth import logout, login, authenticate
 from django.core import urlresolvers
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.html import urlize, linebreaks
-from django.template import Template, Context
+from django.template import Template, Context, RequestContext
 
 from isi_mip.climatemodels.forms import ImpactModelStartForm, ContactPersonFormset, get_sector_form, \
-    BaseImpactModelForm, ImpactModelForm, TechnicalInformationModelForm, InputDataInformationModelForm, OtherInformationModelForm
+    BaseImpactModelForm, ImpactModelForm, TechnicalInformationModelForm, InputDataInformationModelForm, OtherInformationModelForm, ContactInformationForm
 from isi_mip.climatemodels.models import ImpactModel, InputData, BaseImpactModel, SimulationRound
 from isi_mip.climatemodels.tools import ImpactModelToXLSX, ParticpantModelToXLSX
 from isi_mip.invitation.views import InvitationView
@@ -391,3 +392,33 @@ def send_email(request, user, bimodel):
     template = Template(invitation.body)
     message = template.render(Context(context))
     user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+
+
+def update_contact_information_view(request, page, extra_context):
+    user = request.user
+    if request.method == 'POST':
+        form = ContactInformationForm(request.POST)
+        if form.is_valid():
+            user.email = form.cleaned_data['email'].lower()
+            user.userprofile.institute = form.cleaned_data['institute']
+            user.save()
+            user.userprofile.save()
+            message = "Your contact information has been successfully updated"
+            messages.success(request, message)
+            return HttpResponseRedirect('/dashboard/')
+        else:
+            messages.error(request, 'Your form has errors.')
+            messages.warning(request, form.errors)
+    else:
+        initial = {
+            'name': user.userprofile.name,
+            'email': user.email,
+            'institute': user.userprofile.institute,
+        }
+        form = ContactInformationForm(initial=initial)
+    context = {
+        'form': form
+    }
+    if extra_context is not None:
+        context.update(extra_context)
+    return render(request, 'climatemodels/update_contact_information.html', context)

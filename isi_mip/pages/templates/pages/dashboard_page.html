@@ -1,7 +1,7 @@
 {% extends "pages/default_page.html" %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailroutablepage_tags %}
 {% block content %}
-	<p class="dashboard-action"><a href="{{ update_contact }}"><i class="fa fa-user" aria-hidden="true"></i> Update contact information</a><a href="{{ update_password }}"><i class="fa fa-lock" aria-hidden="true"></i> Change password</a><a href="{{ logout }}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></p>
+	<p class="dashboard-action"><a href="{% routablepageurl page "update_contact_information" %}"><i class="fa fa-user" aria-hidden="true"></i> Update contact information</a><a href="{% routablepageurl page "change_password" %}"><i class="fa fa-lock" aria-hidden="true"></i> Change password</a><a href="{% routablepageurl page "logout" %}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></p>
 	<div style="clear:both">
 		{{ page.impact_models_description|safe }}
 	</div>

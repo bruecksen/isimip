@@ -1,0 +1,27 @@
+{% extends 'pages/default_page.html' %}
+{% load breadcrumb template_form wagtailroutablepage_tags %}
+{% block content_container %}
+	<div class="container scrollable-container">
+		<br>
+		{% breadcrumb %}
+		{% include 'widgets/heading1.html' with text=subpage.title %}
+		{% block content %}
+		<form method="post" action="{% routablepageurl page "update_contact_information" %}">
+			{% csrf_token %}
+			{% if form.errors %}
+				<p class="errornote">
+				{% if form.errors.items|length == 1 %}Please correct the error below.{% else %}Please correct the errors below.{% endif %}
+				</p>
+			{% endif %}
+			{% template_form form as nf %}
+			{{ nf.name }}
+			{{ nf.email }}
+			{{ nf.institute }}
+			<div class="form-actions">
+				<input type="submit" name="submit" value="Update Contact Information" class="btn btn-primary">
+			</div>
+
+		</form>
+		{% endblock %}
+	</div>
+{% endblock %}
