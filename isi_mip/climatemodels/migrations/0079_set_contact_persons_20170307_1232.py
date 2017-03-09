@@ -27,6 +27,7 @@ def set_contact_persons(apps, schema_editor):
         user.last_name = last_name
         user.userprofile.institute = contact_person.institute
         user.userprofile.owner.add(contact_person.base_impact_model)
+        user.userprofile.sector.add(contact_person.base_impact_model.sector)
         user.save()
         user.userprofile.save()
 
