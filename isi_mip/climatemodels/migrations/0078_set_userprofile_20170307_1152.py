@@ -20,6 +20,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('climatemodels', '0077_auto_20170301_1209'),
+        ('contrib', '0002_auto_20170307_1140'),
     ]
 
     operations = [
