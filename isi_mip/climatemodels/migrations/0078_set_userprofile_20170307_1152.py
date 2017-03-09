@@ -7,7 +7,7 @@ from django.db import migrations
 
 def set_user_profile(apps, schema_editor):
     BaseImpactModel = apps.get_model('climatemodels', 'BaseImpactModel')
-    UserProfile = apps.get_model('isi_mip.contrib', 'UserProfile')
+    UserProfile = apps.get_model('contrib', 'UserProfile')
     for base_impact_model in BaseImpactModel.objects.all():
         for owner in base_impact_model.owners.all():
             if not hasattr(owner, 'userprofile'):

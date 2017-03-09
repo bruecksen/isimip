@@ -8,7 +8,7 @@ from django.db import migrations
 def set_contact_persons(apps, schema_editor):
     ContactPerson = apps.get_model('climatemodels', 'ContactPerson')
     User = apps.get_model('auth', 'User')
-    UserProfile = apps.get_model('isi_mip.contrib', 'UserProfile')
+    UserProfile = apps.get_model('contrib', 'UserProfile')
     for contact_person in ContactPerson.objects.all():
         first_name = ''
         last_name = ''
