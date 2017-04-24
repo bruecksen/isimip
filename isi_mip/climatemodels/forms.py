@@ -286,6 +286,7 @@ class BiomesForestsForm(BaseSectorForm):
             'evapotranspiration_approach': MyTextInput(textarea=True),
             'rooting_depth_differences': MyTextInput(textarea=True),
             'root_distribution': MyTextInput(textarea=True),
+            'permafrost': MyTextInput(textarea=True),
             'closed_energy_balance': MyTextInput(textarea=True),
             'soil_moisture_surface_temperature_coupling': MyTextInput(textarea=True),
             'latent_heat': MyTextInput(textarea=True),

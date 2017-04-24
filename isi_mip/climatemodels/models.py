@@ -737,6 +737,7 @@ class BiomesForests(BaseSector):
     rooting_depth_differences = models.TextField(verbose_name='Differences in rooting depth', null=True, blank=True, default='',
                                                  help_text="Including how it changes")
     root_distribution = models.TextField(verbose_name='Root distribution over depth', null=True, blank=True, default='')
+    permafrost = models.TextField(null=True, blank=True, default='')
     closed_energy_balance = models.TextField(null=True, blank=True, default='')
     soil_moisture_surface_temperature_coupling = models.TextField(
         null=True, blank=True, default='', verbose_name='Coupling/feedback between soil moisture and surface temperature')
@@ -789,6 +790,7 @@ class BiomesForests(BaseSector):
                 (vname('evapotranspiration_approach'), self.evapotranspiration_approach),
                 (vname('rooting_depth_differences'), self.rooting_depth_differences),
                 (vname('root_distribution'), self.root_distribution),
+                (vname('permafrost'), self.permafrost),
                 (vname('closed_energy_balance'), self.closed_energy_balance),
                 (vname('soil_moisture_surface_temperature_coupling'), self.soil_moisture_surface_temperature_coupling),
                 (vname('latent_heat'), self.latent_heat),
