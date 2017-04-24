@@ -56,7 +56,7 @@ def impact_model_details(page, request, id):
     #     urlresolvers.reverse('admin:climatemodels_impactmodel_change', args=(impactmodel.id,)))
 
     model_simulation_rounds = []
-    for im in base_model.impact_model.all():
+    for im in base_model.impact_model.filter(public=True):
         im_values = im.values_to_tuples() + im.fk_sector.values_to_tuples()
         model_details = []
         for k, v in im_values:
