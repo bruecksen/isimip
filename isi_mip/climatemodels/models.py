@@ -579,7 +579,7 @@ class OtherInformation(models.Model):
             ('Management & Adaptation Measures', [
                 (vname('management'), self.management),
             ]),
-            ('Extreme Events', [
+            ('Extreme Events & Disturbances', [
                 (vname('extreme_events'), self.extreme_events),
                 (vname('anything_else'), self.anything_else),
             ])
@@ -737,7 +737,6 @@ class BiomesForests(BaseSector):
     rooting_depth_differences = models.TextField(verbose_name='Differences in rooting depth', null=True, blank=True, default='',
                                                  help_text="Including how it changes")
     root_distribution = models.TextField(verbose_name='Root distribution over depth', null=True, blank=True, default='')
-    permafrost = models.TextField(null=True, blank=True, default='')
     closed_energy_balance = models.TextField(null=True, blank=True, default='')
     soil_moisture_surface_temperature_coupling = models.TextField(
         null=True, blank=True, default='', verbose_name='Coupling/feedback between soil moisture and surface temperature')
@@ -762,9 +761,9 @@ class BiomesForests(BaseSector):
     )
     nbp_other = models.TextField(null=True, blank=True, default='', verbose_name='Other processes')
     nbp_comments = models.TextField(null=True, blank=True, default='', verbose_name='Comments')
-    # Plant Functional Types (PFTs)
+    # Species / Plant Functional Types (PFTs)
     list_of_pfts = models.TextField(
-        null=True, blank=True, default='', verbose_name='List of PFTs',
+        null=True, blank=True, default='', verbose_name='List of species / PFTs',
         help_text="Provide a list of PFTs using the folllowing format: [pft1_long_name] ([pft1_short_name]); [pft2_long_name] ([pft2_short_name]). Include long name in brackets if no short name is available."
     )
     pfts_comments = models.TextField(null=True, blank=True, default='', verbose_name='Comments')
@@ -790,7 +789,6 @@ class BiomesForests(BaseSector):
                 (vname('evapotranspiration_approach'), self.evapotranspiration_approach),
                 (vname('rooting_depth_differences'), self.rooting_depth_differences),
                 (vname('root_distribution'), self.root_distribution),
-                (vname('permafrost'), self.permafrost),
                 (vname('closed_energy_balance'), self.closed_energy_balance),
                 (vname('soil_moisture_surface_temperature_coupling'), self.soil_moisture_surface_temperature_coupling),
                 (vname('latent_heat'), self.latent_heat),
@@ -813,7 +811,7 @@ class BiomesForests(BaseSector):
                 (vname('nbp_other'), self.nbp_other),
                 (vname('nbp_comments'), self.nbp_comments),
             ]),
-            ('Plant Functional Types (PFTs)', [
+            ('Species / Plant Functional Types (PFTs)', [
                 (vname('list_of_pfts'), self.list_of_pfts),
                 (vname('pfts_comments'), self.pfts_comments),
             ])
