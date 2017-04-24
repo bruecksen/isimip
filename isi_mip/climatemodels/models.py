@@ -344,15 +344,15 @@ class ImpactModel(models.Model):
         old_technical_information.save()
         # Input Data
         old_climate_variables = old_input_data.climate_variables.all()
-        old_simulated_atmospheric_climate_data_sets = old_input_data.simulated_atmospheric_climate_data_sets.all()
-        old_observed_atmospheric_climate_data_sets = old_input_data.observed_atmospheric_climate_data_sets.all()
-        old_simulated_ocean_climate_data_sets = old_input_data.simulated_ocean_climate_data_sets.all()
-        old_observed_ocean_climate_data_sets = old_input_data.observed_ocean_climate_data_sets.all()
-        old_emissions_data_sets = old_input_data.emissions_data_sets.all()
-        old_socio_economic_data_sets = old_input_data.socio_economic_data_sets.all()
-        old_land_use_data_sets = old_input_data.land_use_data_sets.all()
-        old_other_human_influences_data_sets = old_input_data.other_human_influences_data_sets.all()
-        old_other_data_sets = old_input_data.other_data_sets.all()
+        old_simulated_atmospheric_climate_data_sets = old_input_data.simulated_atmospheric_climate_data_sets.filter(simulation_round=simulation_round)
+        old_observed_atmospheric_climate_data_sets = old_input_data.observed_atmospheric_climate_data_sets.filter(simulation_round=simulation_round)
+        old_simulated_ocean_climate_data_sets = old_input_data.simulated_ocean_climate_data_sets.filter(simulation_round=simulation_round)
+        old_observed_ocean_climate_data_sets = old_input_data.observed_ocean_climate_data_sets.filter(simulation_round=simulation_round)
+        old_emissions_data_sets = old_input_data.emissions_data_sets.filter(simulation_round=simulation_round)
+        old_socio_economic_data_sets = old_input_data.socio_economic_data_sets.filter(simulation_round=simulation_round)
+        old_land_use_data_sets = old_input_data.land_use_data_sets.filter(simulation_round=simulation_round)
+        old_other_human_influences_data_sets = old_input_data.other_human_influences_data_sets.filter(simulation_round=simulation_round)
+        old_other_data_sets = old_input_data.other_data_sets.filter(simulation_round=simulation_round)
         old_input_data.pk = None
         old_input_data.impact_model = duplicate
         old_input_data.save()
@@ -579,7 +579,7 @@ class OtherInformation(models.Model):
             ('Management & Adaptation Measures', [
                 (vname('management'), self.management),
             ]),
-            ('Extreme Events', [
+            ('Extreme Events & Disturbances', [
                 (vname('extreme_events'), self.extreme_events),
                 (vname('anything_else'), self.anything_else),
             ])
@@ -762,9 +762,9 @@ class BiomesForests(BaseSector):
     )
     nbp_other = models.TextField(null=True, blank=True, default='', verbose_name='Other processes')
     nbp_comments = models.TextField(null=True, blank=True, default='', verbose_name='Comments')
-    # Plant Functional Types (PFTs)
+    # Species / Plant Functional Types (PFTs)
     list_of_pfts = models.TextField(
-        null=True, blank=True, default='', verbose_name='List of PFTs',
+        null=True, blank=True, default='', verbose_name='List of species / PFTs',
         help_text="Provide a list of PFTs using the folllowing format: [pft1_long_name] ([pft1_short_name]); [pft2_long_name] ([pft2_short_name]). Include long name in brackets if no short name is available."
     )
     pfts_comments = models.TextField(null=True, blank=True, default='', verbose_name='Comments')
@@ -813,7 +813,7 @@ class BiomesForests(BaseSector):
                 (vname('nbp_other'), self.nbp_other),
                 (vname('nbp_comments'), self.nbp_comments),
             ]),
-            ('Plant Functional Types (PFTs)', [
+            ('Species / Plant Functional Types (PFTs)', [
                 (vname('list_of_pfts'), self.list_of_pfts),
                 (vname('pfts_comments'), self.pfts_comments),
             ])

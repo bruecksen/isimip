@@ -4,15 +4,19 @@
 {% block form_content %}
 	{% template_form form as nf %}
 	<fieldset>
-		{% include 'widgets/heading3.html' with text='Other' %}
 		{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
+		{% include 'widgets/heading3.html' with text='Exceptions to Protocol' %}
 		{{ nf.exceptions_to_protocol}}
+		{% include 'widgets/heading3.html' with text='Spin-up' %}
 		{{ nf.spin_up}}
 		{{ nf.spin_up_design}}
+		{% include 'widgets/heading3.html' with text='Natural Vegetation' %}
 		{{ nf.natural_vegetation_partition}}
 		{{ nf.natural_vegetation_dynamics}}
 		{{ nf.natural_vegetation_cover_dataset}}
+		{% include 'widgets/heading3.html' with text='Management & Adaptation Measures' %}
 		{{ nf.management}}
+		{% include 'widgets/heading3.html' with text='Extreme Events & Disturbances' %}
 		{{ nf.extreme_events}}
 		{{ nf.anything_else}}
 		{{ nf.comments}}

@@ -44,7 +44,7 @@ class ImpactModelsBlock(StructBlock):
 
         context['body'] = {'rows': []}
         for i, bmodel in enumerate(bims):
-            simulation_rounds = bmodel.impact_model.all().values_list('simulation_round__name', flat=True)
+            simulation_rounds = bmodel.impact_model.filter(public=True).values_list('simulation_round__name', flat=True)
             values = [["<a href='details/{0.id}/'>{0.name}</a>".format(bmodel, bmodel)], simulation_rounds, [bmodel.sector]]
             values += [["{0.name}<br/>".format(x) for x in bmodel.impact_model_owner.all()]]
             values += [["<a href='mailto:{0.email}'>{0.email}</a><br/>".format(x) for x in bmodel.impact_model_owner.all()]]
