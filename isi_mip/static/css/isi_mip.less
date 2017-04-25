@@ -391,12 +391,11 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 
 // new class for container that scrolls below the fixed header
 .scrollable-container {
-    margin-top:90px;
+	margin-top:90px;
 }
 
 .widget-header {
 
-	@media (min-width: 768px) {
 		.navbar-collapse {
 			width: auto;
 			border-top: 1px solid transparent;
@@ -491,7 +490,6 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 			width:100%;
 			z-index: 9999;
 		}
-	}
 
 	@media (min-width: 992px) {
 		.navbar-collapse {
@@ -499,35 +497,37 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 			border-top: 0;
 			-webkit-box-shadow: none;
 			box-shadow: none;
-			.dropdown-menu {
-				position: absolute;
-				top: 75%;
-				left: 0;
-				z-index: 1000;
-				display: none;
-				float: left;
-				min-width: 160px;
-				padding: 5px 0;
-				margin: 2px 0 0;
-				font-size: 14px;
-				text-align: left;
-				list-style: none;
-				background-color: #fff;
-				-webkit-background-clip: padding-box;
-				background-clip: padding-box;
-				border: 1px solid #ccc;
-				border: 1px solid rgba(0,0,0,.15);
-				border-top: none;
-				border-radius: 0;
-				-webkit-box-shadow: 0 6px 7px rgba(0,0,0,.175);
-				/* box-shadow: 0 6px 12px rgba(0,0,0,.175); */
-			}
-				li a {
-					text-align: left;
-				}
+			.dropdown,
 			.dropdown.open {
-				a {
-					background-color: transparent;
+				.dropdown-menu {
+					position: absolute;
+					top: 75%;
+					left: 0;
+					z-index: 1000;
+					display: none;
+					float: left;
+					min-width: 160px;
+					padding: 5px 0;
+					margin: 2px 0 0;
+					font-size: 14px;
+					text-align: left;
+					list-style: none;
+					background-color: #fff;
+					-webkit-background-clip: padding-box;
+					background-clip: padding-box;
+					border: 1px solid #ccc;
+					border: 1px solid rgba(0,0,0,.15);
+					border-top: none;
+					border-radius: 0;
+					-webkit-box-shadow: 0 6px 7px rgba(0,0,0,.175);
+					li a {
+						text-align: left;
+						background-color: transparent;
+						&:hover {
+							text-decoration: none;
+							background-color: #f5f5f5;
+						}
+					}
 				}
 			}
 		}
