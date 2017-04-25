@@ -24,6 +24,7 @@ from isi_mip.climatemodels.views import (
     duplicate_impact_model, create_new_impact_model, update_contact_information_view)
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
+from isi_mip.contrib.forms import AuthenticationForm
 
 
 class BlogPage(_BlogPage):
@@ -460,7 +461,7 @@ class DashboardPage(RoutablePageWithDefault):
     def login(self, request):
         subpage = {'title': 'Login', 'url': ''}
         context = {'page': self, 'subpage': subpage, 'headline': ''}
-        return login(request, extra_context=context)
+        return login(request, extra_context=context, authentication_form=AuthenticationForm)
 
     @route(r'change-password/$')
     def change_password(self, request):

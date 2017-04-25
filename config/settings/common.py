@@ -219,3 +219,8 @@ TWITTER_TIMELINE = {
     'access_token': TWITTER_CREDENTIALS[2],
     'access_token_secret': TWITTER_CREDENTIALS[3]
 }
+
+# https://pypi.python.org/pypi/django-dual-authentication/1.0.0
+AUTHENTICATION_BACKENDS = ['django-dual-authentication.backends.DualAuthentication']
+AUTHENTICATION_METHOD = 'both'
+AUTHENTICATION_CASE_SENSITIVE = 'both'

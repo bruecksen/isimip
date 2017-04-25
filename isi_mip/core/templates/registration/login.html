@@ -7,7 +7,7 @@
 		{% include 'widgets/heading1.html' with text=subpage.title %}
 		{% block content %}
 			{% if form.errors %}
-			<p>Your username and password didn't match. Please try again.</p>
+			<p>Your username/email and password didn't match. Please try again.</p>
 		{% endif %}
 
 		{% if next %}
