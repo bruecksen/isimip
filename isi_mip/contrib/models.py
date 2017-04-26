@@ -40,7 +40,7 @@ class UserProfile(models.Model):
         return "%s (%s) - %s" % (self.name, self.institute, self.email)
 
     def pretty(self):
-        return "{0.name} (<a href='mailto:{0.email}'>{0.email}</a>), {0.institute}".format(self)
+        return "{0.name} (<a href='mailto:{0.email}'>{0.email}</a>), {0.institute}{1}".format(self, self.country and " (%s)" % self.country.name or '')
 
     class Meta:
         ordering = ('user__last_name',)
