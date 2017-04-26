@@ -49,7 +49,7 @@ class SimulationRoundListFilter(admin.SimpleListFilter):
 
 class UserAdmin(UserAdmin):
     list_display = ('email', 'get_name', 'get_country', 'get_owner', 'get_involved', 'get_sector', 'is_active')
-    list_filter = ('userprofile__sector', SimulationRoundListFilter)
+    # list_filter = ('userprofile__sector', SimulationRoundListFilter)
     search_fields = ('email', 'username', 'first_name', 'last_name', 'userprofile__country__name', 'userprofile__institute', 'userprofile__owner__name', 'userprofile__involved__base_model__name', 'userprofile__sector__name', 'userprofile__owner__impact_model__simulation_round__name')
     inlines = (UserProfileInline, )
 
