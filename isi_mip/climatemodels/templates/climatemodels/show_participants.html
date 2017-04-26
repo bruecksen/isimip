@@ -1,0 +1,16 @@
+{% extends 'pages/default_page.html' %}
+{% load breadcrumb template_form wagtailroutablepage_tags %}
+{% block content_container %}
+	<div class="container scrollable-container">
+		<br>
+		{% breadcrumb %}
+		{% include 'widgets/heading1.html' with text=subpage.title %}
+		{% block content %}
+			{% if participants %}
+				{% include 'widgets/table-selector.html' with tableid=participants.tableid selectors=participants.selectors searchfield=participants.searchfield %}
+				{% include 'widgets/read-more-link.html' with align='right' text='Download all participants as .xlsx' url='download/' %}
+				{% include "widgets/table.html" with head=participants.head body=participants.body searchfield=participants.searchfield id=participants.tableid pagination=participants.pagination %}
+			{% endif %}
+		{% endblock %}
+	</div>
+{% endblock %}

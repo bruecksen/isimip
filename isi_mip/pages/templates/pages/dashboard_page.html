@@ -1,16 +1,10 @@
 {% extends "pages/default_page.html" %}
 {% load wagtailcore_tags wagtailroutablepage_tags %}
 {% block content %}
-	<p class="dashboard-action"><a href="{% routablepageurl page "update_contact_information" %}"><i class="fa fa-user" aria-hidden="true"></i>Update contact information</a>|<a href="{% routablepageurl page "change_password" %}"><i class="fa fa-lock" aria-hidden="true"></i>Change password</a>|<a href="{% routablepageurl page "logout" %}"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></p>
+	<p class="dashboard-action">{% if show_participants_link %}<a href="{% routablepageurl page "participants" %}"><i class="fa fa-group" aria-hidden="true"></i>Show participants</a>|{% endif %}<a href="{% routablepageurl page "update_contact_information" %}"><i class="fa fa-user" aria-hidden="true"></i>Update contact information</a>|<a href="{% routablepageurl page "change_password" %}"><i class="fa fa-lock" aria-hidden="true"></i>Change password</a>|<a href="{% routablepageurl page "logout" %}"><i class="fa fa-sign-out" aria-hidden="true"></i>Logout</a></p>
 	<div style="clear:both">
 		{{ page.impact_models_description|safe }}
 	</div>
 	{% include 'widgets/heading3.html' with text='Your Impact Models' %}
 	{% include "widgets/table.html" %}
-	{% if participants %}
-		{% include 'widgets/heading3.html' with text='ISIMIP Participants' %}
-		{% include 'widgets/table-selector.html' with tableid=participants.tableid selectors=participants.selectors searchfield=participants.searchfield %}
-		{% include 'widgets/read-more-link.html' with align='right' text='Download all participants as .xlsx' url='download/' %}
-		{% include "widgets/table.html" with head=participants.head body=participants.body searchfield=participants.searchfield id=participants.tableid pagination=participants.pagination %}
-	{% endif %}
 {% endblock %}

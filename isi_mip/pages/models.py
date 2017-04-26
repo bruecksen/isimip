@@ -19,7 +19,7 @@ from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, Impact
 from isi_mip.climatemodels.models import Sector, SimulationRound
 from isi_mip.climatemodels.views import (
     impact_model_details, impact_model_edit, input_data_details,
-    impact_model_download, participant_download, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION,
+    impact_model_download, participant_download, show_participants, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION,
     STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR,
     duplicate_impact_model, create_new_impact_model, update_contact_information_view)
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
@@ -397,42 +397,7 @@ class DashboardPage(RoutablePageWithDefault):
                 bodyrows.append(row)
         context['body'] = {'rows': bodyrows}
         if request.user.groups.filter(name='ISIMIP-Team').exists():
-            # user has the right to view the participants list
-            participants = User.objects.filter(is_active=True, is_superuser=False, is_staff=False).distinct()
-            participants = participants.filter(userprofile__sector__in=request.user.userprofile.sector.all())
-            participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector').order_by('last_name')
-            result = {'head': {}, 'body': {}}
-            result['head'] = {
-                'cols': [{'text': 'Name'}, {'text': 'Email'}, {'text': 'Country'}, {'text': 'Model'}, {'text': 'Sector'}]
-            }
-            bodyrows = []
-            result['body'] = {'rows': bodyrows}
-            # Filter und Suchfelder
-            result['tableid'] = 'participantstable'
-            result['searchfield'] = {'value': ''}
-            result['selectors'] = []
-            # Tabelle
-            rows_per_page = 50
-            for i, participant in enumerate(participants):
-                country = participant.userprofile.country or ''
-                values = [["{0.name}".format(participant.userprofile)]]
-                values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]
-                values += [["{0}".format(country)]]
-                values += [["<a href='/impactmodels/details/{0.base_model.id}/'>{0.base_model.name} ({0.simulation_round.name})</a><br>".format(model) for model in participant.userprofile.involved.all()]]
-                values += [["{0.name}<br>".format(sector) for sector in participant.userprofile.sector.all()]]
-                bodyrows.append({
-                    'invisible': i >= rows_per_page,
-                    'cols': [{'texts': x} for x in values],
-                })
-            numpages = math.ceil(participants.count() / rows_per_page)
-            result['pagination'] = {
-                'rowsperpage': (rows_per_page),
-                'numberofpages': numpages,  # number of pages with current filters
-                'pagenumbers': [{'number': i + 1, 'invisible': False} for i in range(numpages)],
-                'activepage': 1,  # set to something between 1 and numberofpages
-            }
-            context['participants'] = result
-
+            context['show_participants_link'] = True
         return context
 
     @route(r'^$')
@@ -446,6 +411,14 @@ class DashboardPage(RoutablePageWithDefault):
             self.get_template(request),
             self.get_context(request)
         )
+
+
+    @route(r'participants/$')
+    def participants(self, request):
+        subpage = {'title': 'ISIMIP participants', 'url': ''}
+        context = {'page': self, 'subpage': subpage, 'headline': ''}
+        return show_participants(request, extra_context=context)
+
 
     @route(r'download/$')
     def download(self, request):

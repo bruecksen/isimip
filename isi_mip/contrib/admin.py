@@ -48,9 +48,9 @@ class SimulationRoundListFilter(admin.SimpleListFilter):
 
 
 class UserAdmin(UserAdmin):
-    list_display = ('email', 'get_name', 'get_country', 'get_owner', 'get_involved', 'get_sector', 'get_simulation_round', 'is_active')
+    list_display = ('email', 'get_name', 'get_country', 'get_owner', 'get_involved', 'get_sector', 'is_active')
     list_filter = ('userprofile__sector', SimulationRoundListFilter)
-    search_fields = ('email', 'username', 'first_name', 'last_name', 'userprofile__country__name', 'userprofile__owner__name', 'userprofile__involved__base_model__name', 'userprofile__sector__name', 'userprofile__owner__impact_model__simulation_round__name')
+    search_fields = ('email', 'username', 'first_name', 'last_name', 'userprofile__country__name', 'userprofile__institute', 'userprofile__owner__name', 'userprofile__involved__base_model__name', 'userprofile__sector__name', 'userprofile__owner__impact_model__simulation_round__name')
     inlines = (UserProfileInline, )
 
 # 708 in 1223
@@ -87,20 +87,23 @@ class UserAdmin(UserAdmin):
     get_sector.allow_tags = True
 
     def get_country(self, obj):
+        res = ""
+        if obj.userprofile.institute:
+            res = obj.userprofile.institute
         if obj.userprofile.country:
-            return obj.userprofile.country.name
-        return '-'
+            res = res + "(%s)" % obj.userprofile.country.name
+        return res
     get_country.admin_order_field = 'userprofile__country__name'
     get_country.short_description = 'Country'
 
-    def get_simulation_round(self, obj):
-        if obj.userprofile.owner.exists():
-            simulation_rounds = ImpactModel.objects.filter(base_model__impact_model_owner__user__email=obj.email).values_list('simulation_round__name', flat=True).distinct().order_by()
-            return ', '.join(simulation_rounds)
-        return '-'
-    get_simulation_round.admin_order_field = 'userprofile__owner__impact_model__simulation_round__name'
-    get_simulation_round.short_description = 'Simulation Round'
-    get_simulation_round.allow_tags = True
+    # def get_simulation_round(self, obj):
+    #     if obj.userprofile.owner.exists():
+    #         simulation_rounds = ImpactModel.objects.filter(base_model__impact_model_owner__user__email=obj.email).values_list('simulation_round__name', flat=True).distinct().order_by()
+    #         return ', '.join(simulation_rounds)
+    #     return '-'
+    # get_simulation_round.admin_order_field = 'userprofile__owner__impact_model__simulation_round__name'
+    # get_simulation_round.short_description = 'Simulation Round'
+    # get_simulation_round.allow_tags = True
 
 
 admin.site.unregister(User)

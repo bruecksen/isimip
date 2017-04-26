@@ -1,7 +1,8 @@
+import math
+import requests
 from datetime import datetime
 from collections import OrderedDict
 
-import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -424,3 +425,47 @@ def update_contact_information_view(request, page, extra_context):
     if extra_context is not None:
         context.update(extra_context)
     return render(request, 'climatemodels/update_contact_information.html', context)
+
+
+def show_participants(request, extra_context):
+    context = {}
+    if request.user.groups.filter(name='ISIMIP-Team').exists():
+        # user has the right to view the participants list
+        participants = User.objects.filter(is_active=True, is_superuser=False, is_staff=False).distinct()
+        participants = participants.filter(userprofile__sector__in=request.user.userprofile.sector.all())
+        participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector').order_by('last_name')
+        result = {'head': {}, 'body': {}}
+        result['head'] = {
+            'cols': [{'text': 'Name'}, {'text': 'Email'}, {'text': 'Country'}, {'text': 'Model'}, {'text': 'Sector'}]
+        }
+        bodyrows = []
+        result['body'] = {'rows': bodyrows}
+        # Filter und Suchfelder
+        result['tableid'] = 'participantstable'
+        result['searchfield'] = {'value': ''}
+        result['selectors'] = []
+        # Tabelle
+        rows_per_page = 50
+        for i, participant in enumerate(participants):
+            country = participant.userprofile.country and "(%s)" % participant.userprofile.country or ''
+            sectors = [im.base_model.sector for im in participant.userprofile.involved.all()] + list(participant.userprofile.sector.all())
+            values = [["{0.name}".format(participant.userprofile)]]
+            values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]
+            values += [["{0}{1}".format(participant.userprofile.institute, country)]]
+            values += [["<a href='/impactmodels/details/{0.base_model.id}/'>{0.base_model.name} ({0.simulation_round.name})</a><br>".format(model) for model in participant.userprofile.involved.all()]]
+            values += [["{0.name}<br>".format(sector) for sector in sectors]]
+            bodyrows.append({
+                'invisible': i >= rows_per_page,
+                'cols': [{'texts': x} for x in values],
+            })
+        numpages = math.ceil(participants.count() / rows_per_page)
+        result['pagination'] = {
+            'rowsperpage': (rows_per_page),
+            'numberofpages': numpages,  # number of pages with current filters
+            'pagenumbers': [{'number': i + 1, 'invisible': False} for i in range(numpages)],
+            'activepage': 1,  # set to something between 1 and numberofpages
+        }
+        context['participants'] = result
+    if extra_context is not None:
+        context.update(extra_context)
+    return render(request, 'climatemodels/show_participants.html', context)
