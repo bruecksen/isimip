@@ -9,6 +9,7 @@
 	{% include "widgets/table.html" %}
 	{% if participants %}
 		{% include 'widgets/heading3.html' with text='ISIMIP Participants' %}
+		{% include 'widgets/table-selector.html' with tableid=participants.tableid selectors=participants.selectors searchfield=participants.searchfield %}
 		{% include 'widgets/read-more-link.html' with align='right' text='Download all participants as .xlsx' url='download/' %}
 		{% include "widgets/table.html" with head=participants.head body=participants.body searchfield=participants.searchfield id=participants.tableid pagination=participants.pagination %}
 	{% endif %}

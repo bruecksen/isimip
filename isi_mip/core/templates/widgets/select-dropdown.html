@@ -1,0 +1,15 @@
+<div class="widget-select-dropdown form-group{% if error %} has-error{% endif %}{% if nullable %} widget-multiselect-nullable{% endif %}">
+{% if label %}
+<label class="control-label">{{ label }}{% if required %}<span class="asteriskField">*</span>{% endif %}</label>
+{% endif %}
+
+<select class="form-control form-control-small" name="{{ id }}">
+{% for option in options %}
+	<option value="{{ option.value }}" {% if option.checked %} selected{% endif %}>{{ option.label }}</option>
+{% endfor %}
+</select>
+
+{% if help %}
+	<p class="help-block">{{ help }}</p>
+{% endif %}
+</div><!-- widget-multiselect -->

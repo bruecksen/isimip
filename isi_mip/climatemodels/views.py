@@ -401,6 +401,7 @@ def update_contact_information_view(request, page, extra_context):
         if form.is_valid():
             user.email = form.cleaned_data['email'].lower()
             user.userprofile.institute = form.cleaned_data['institute']
+            user.userprofile.country = form.cleaned_data['country']
             user.save()
             user.userprofile.save()
             message = "Your contact information has been successfully updated"
@@ -414,6 +415,7 @@ def update_contact_information_view(request, page, extra_context):
             'name': user.userprofile.name,
             'email': user.email,
             'institute': user.userprofile.institute,
+            'country': user.userprofile.country,
         }
         form = ContactInformationForm(initial=initial)
     context = {

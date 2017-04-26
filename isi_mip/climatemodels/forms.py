@@ -6,6 +6,7 @@ from dateutil.parser import parse
 from isi_mip.climatemodels.fields import MyModelSingleChoiceField, MyModelMultipleChoiceField
 from isi_mip.climatemodels.models import *
 from isi_mip.climatemodels.widgets import MyMultiSelect, MyTextInput, MyBooleanSelect, RefPaperWidget
+from isi_mip.contrib.models import Country
 
 ContactPersonFormset = inlineformset_factory(BaseImpactModel, ContactPerson,
                                              extra=1, max_num=2, min_num=1, fields='__all__',
@@ -418,3 +419,4 @@ class ContactInformationForm(forms.Form):
     name = forms.CharField(label='Your name', max_length=60, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}), help_text='If you want to change the contact person or add a new contact person, please contact info@isimip.org')
     email = forms.EmailField(label='Your email adress', required=True)
     institute = forms.CharField(max_length=500, required=False)
+    country = forms.ModelChoiceField(queryset=Country.objects.all(), required=False, empty_label='-------')

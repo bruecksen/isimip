@@ -11,7 +11,7 @@ from isi_mip.contrib.models import Country, UserProfile
 
 SECTOR_MAPPING = {
     'Agriculture': ('Agriculture',),
-    'Agro-Economic': ('Modelling Agro-Economic Modelling',),
+    'Agro-Economic': ('Agro-Economic Modelling',),
     'Biodiversity': ('Biodiversity',),
     'Biomes/Forestry': ('Biomes', 'Forests'),
     'Computable General Equilibrium': ('Computable General Equilibrium Modelling',),
@@ -93,8 +93,8 @@ class Command(BaseCommand):
                         for model in models.split(','):
                             try:
                                 model = model.strip()
-                                model = BaseImpactModel.objects.get(name=model)
-                                user.userprofile.involved.add(model)
+                                base_model = BaseImpactModel.objects.get(name=model)
+                                user.userprofile.involved.add(*list(base_model.impact_model.all()))
                             except:
                                 print('Model not found: %s' % model)
                                 model_not_found_counter = model_not_found_counter + 1

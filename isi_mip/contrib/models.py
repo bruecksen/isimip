@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from isi_mip.climatemodels.models import Sector, BaseImpactModel
+from isi_mip.climatemodels.models import Sector, BaseImpactModel, ImpactModel
 
 
 class Role(models.Model):
@@ -26,15 +26,11 @@ class UserProfile(models.Model):
     role = models.ManyToManyField(Role, blank=True, related_name='user_roles')
     comment = models.TextField(blank=True, null=True)
     owner = models.ManyToManyField(BaseImpactModel, blank=True, related_name='impact_model_owner')
-    involved = models.ManyToManyField(BaseImpactModel, blank=True, related_name='impact_model_involved')
+    involved = models.ManyToManyField(ImpactModel, blank=True, related_name='impact_model_involved')
 
     @property
     def name(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
-
-    @property
-    def participating_models(self):
-        return self.owner.all() | self.involved.all()
 
     @property
     def email(self):
