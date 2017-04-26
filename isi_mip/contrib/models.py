@@ -8,9 +8,20 @@ class Role(models.Model):
     name = models.CharField(max_length=500, null=True, blank=True)
 
 
+class Country(models.Model):
+    name = models.CharField(max_length=500, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ('name',)
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     institute = models.CharField(max_length=500, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True)
     sector = models.ManyToManyField(Sector, blank=True, related_name='user_sectors')
     role = models.ManyToManyField(Role, blank=True, related_name='user_roles')
     comment = models.TextField(blank=True, null=True)
