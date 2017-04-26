@@ -432,8 +432,8 @@ def show_participants(request, extra_context):
     if request.user.groups.filter(name='ISIMIP-Team').exists():
         # user has the right to view the participants list
         participants = User.objects.filter(is_active=True, is_superuser=False, is_staff=False).distinct()
-        participants = participants.filter(userprofile__sector__in=request.user.userprofile.sector.all())
-        participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector').order_by('last_name')
+        # participants = participants.filter(Q(userprofile__sector__in=request.user.userprofile.sector.all()) | Q(userprofile__involved__base_model__sector__in=request.user.userprofile.sector.all()) )
+        participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector', 'userprofile__country').order_by('last_name')
         result = {'head': {}, 'body': {}}
         result['head'] = {
             'cols': [{'text': 'Name'}, {'text': 'Email'}, {'text': 'Country'}, {'text': 'Model'}, {'text': 'Sector'}]
@@ -447,7 +447,7 @@ def show_participants(request, extra_context):
         # Tabelle
         rows_per_page = 50
         for i, participant in enumerate(participants):
-            country = participant.userprofile.country and "(%s)" % participant.userprofile.country or ''
+            country = participant.userprofile.country and " (%s)" % participant.userprofile.country or ''
             sectors = [im.base_model.sector for im in participant.userprofile.involved.all()] + list(participant.userprofile.sector.all())
             values = [["{0.name}".format(participant.userprofile)]]
             values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]

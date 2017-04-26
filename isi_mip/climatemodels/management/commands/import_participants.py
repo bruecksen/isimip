@@ -87,8 +87,6 @@ class Command(BaseCommand):
                     if not user.userprofile.country:
                         user.userprofile.country, created = Country.objects.get_or_create(name=country)
                     user.userprofile.comment = comment
-                    if mapped_sectors:
-                        user.userprofile.sector.set(mapped_sectors)
                     if models:
                         for model in models.split(','):
                             try:
@@ -98,7 +96,17 @@ class Command(BaseCommand):
                             except:
                                 print('Model not found: %s' % model)
                                 model_not_found_counter = model_not_found_counter + 1
-
+                    if mapped_sectors and not models:
+                        user.userprofile.sector.set(mapped_sectors)
+                    elif mapped_sectors and models:
+                        cleaned_sectors = []
+                        for sector in mapped_sectors:
+                            for im in user.userprofile.involved.all():
+                                if im.base_model.sector == sector:
+                                    continue
+                                else:
+                                    cleaned_sectors.append(sector)
+                        user.userprofile.sector.set(cleaned_sectors)
                     user.save()
                     user.userprofile.save()
 
