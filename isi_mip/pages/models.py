@@ -416,7 +416,7 @@ class DashboardPage(RoutablePageWithDefault):
             for i, participant in enumerate(participants):
                 values = [["{0.name}".format(participant.userprofile)]]
                 values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]
-                values += [["{0.name}".format(participant.userprofile.country)]]
+                values += [["{0.country}".format(participant.userprofile)]]
                 values += [["<a href='/impactmodels/details/{0.base_model.id}/'>{0.base_model.name} ({0.simulation_round.name})</a><br>".format(model) for model in participant.userprofile.involved.all()]]
                 values += [["{0.name}<br>".format(sector) for sector in participant.userprofile.sector.all()]]
                 bodyrows.append({
