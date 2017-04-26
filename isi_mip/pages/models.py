@@ -403,7 +403,7 @@ class DashboardPage(RoutablePageWithDefault):
             participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector').order_by('last_name')
             result = {'head': {}, 'body': {}}
             result['head'] = {
-                'cols': [{'text': 'Name'}, {'text': 'Email'}, {'text': 'Model'}, {'text': 'Sector'}]
+                'cols': [{'text': 'Name'}, {'text': 'Email'}, {'text': 'Country'}, {'text': 'Model'}, {'text': 'Sector'}]
             }
             bodyrows = []
             result['body'] = {'rows': bodyrows}
@@ -416,7 +416,8 @@ class DashboardPage(RoutablePageWithDefault):
             for i, participant in enumerate(participants):
                 values = [["{0.name}".format(participant.userprofile)]]
                 values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]
-                values += [["<a href='/impactmodels/details/{0.id}/'>{0.base_model.name} ({0.simulation_round.name})</a><br>".format(model) for model in participant.userprofile.involved.all()]]
+                values += [["{0.name}".format(participant.userprofile.country)]]
+                values += [["<a href='/impactmodels/details/{0.base_model.id}/'>{0.base_model.name} ({0.simulation_round.name})</a><br>".format(model) for model in participant.userprofile.involved.all()]]
                 values += [["{0.name}<br>".format(sector) for sector in participant.userprofile.sector.all()]]
                 bodyrows.append({
                     'invisible': i >= rows_per_page,
