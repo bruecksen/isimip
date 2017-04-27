@@ -9,6 +9,8 @@ from django.http.response import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
 from modelcluster.fields import ParentalKey
+
+from wagtail.wagtailsearch import index
 from wagtail.contrib.wagtailroutablepage.models import route, RoutablePageMixin
 from wagtail.wagtailadmin.edit_handlers import *
 from wagtail.wagtailcore.fields import RichTextField, StreamField
@@ -23,6 +25,7 @@ from isi_mip.climatemodels.views import (
     STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR,
     duplicate_impact_model, create_new_impact_model, update_contact_information_view)
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
+from isi_mip.core.views import search
 from isi_mip.pages.blocks import *
 from isi_mip.contrib.forms import AuthenticationForm
 
@@ -51,6 +54,10 @@ class BlogIndexPage(_BlogIndexPage):
     ]
     settings_panels = Page.settings_panels + [
         FieldPanel('flat'),
+    ]
+
+    search_fields = Page.search_fields + [
+        index.SearchField('description'),
     ]
 
     def get_context(self, request, *args, **kwargs):
@@ -126,8 +133,12 @@ class GenericPage(TOCPage):
         StreamFieldPanel('content'),
     ]
 
+    search_fields = Page.search_fields + [
+        index.SearchField('content'),
+    ]
 
-class HomePage(Page):
+
+class HomePage(RoutablePageWithDefault):
     parent_page_types = ['wagtailcore.Page']
 
     teaser_title = models.CharField(max_length=500)
@@ -168,6 +179,12 @@ class HomePage(Page):
         StreamFieldPanel('content'),
     ]
 
+    search_fields = Page.search_fields + [
+        index.SearchField('teaser_text'),
+        index.SearchField('teaser_title'),
+        index.SearchField('content'),
+    ]
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         if self.teaser_link_internal:
@@ -186,6 +203,12 @@ class HomePage(Page):
         context['noborder'] = True
         return context
 
+    @route(r'search/$')
+    def search(self, request):
+        subpage = {'title': 'Search', 'url': ''}
+        context = {'page': self, 'subpage': subpage, 'headline': ''}
+        return search(request, extra_context=context)
+
 
 class AboutPage(TOCPage):
     template = 'pages/default_page.html'
@@ -197,6 +220,10 @@ class AboutPage(TOCPage):
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content')
+    ]
+
+    search_fields = Page.search_fields + [
+        index.SearchField('content'),
     ]
 
 
@@ -225,6 +252,9 @@ class GettingStartedPage(RoutablePageWithDefault):
         ObjectList(RoutablePageWithDefault.promote_panels, heading='Promote'),
         ObjectList(RoutablePageWithDefault.settings_panels, heading='Settings', classname="settings"),
     ])
+    search_fields = Page.search_fields + [
+        index.SearchField('content'),
+    ]
 
     @route(r'^details/(?P<id>\d+)/$')
     def details(self, request, id):
@@ -248,6 +278,9 @@ class ImpactModelsPage(RoutablePageWithDefault):
     settings_panels = RoutablePageWithDefault.settings_panels + [
         FieldPanel('private_model_message'),
         FieldPanel('common_attributes_text'),
+    ]
+    search_fields = Page.search_fields + [
+        index.SearchField('content'),
     ]
 
     @route(r'^details/(?P<id>\d+)/$')
@@ -302,6 +335,9 @@ class OutputDataPage(TOCPage):
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
+    search_fields = Page.search_fields + [
+        index.SearchField('content'),
+    ]
 
 
 class OutcomesPage(TOCPage):
@@ -312,6 +348,9 @@ class OutcomesPage(TOCPage):
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
+    ]
+    search_fields = Page.search_fields + [
+        index.SearchField('content'),
     ]
 
 
@@ -325,6 +364,9 @@ class FAQPage(TOCPage):
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
     ]
+    search_fields = Page.search_fields + [
+        index.SearchField('content'),
+    ]
 
 
 class LinkListPage(TOCPage):
@@ -337,6 +379,9 @@ class LinkListPage(TOCPage):
 
     content_panels = Page.content_panels + [
         StreamFieldPanel('content'),
+    ]
+    search_fields = Page.search_fields + [
+        index.SearchField('content'),
     ]
 
 
@@ -476,6 +521,10 @@ class FormPage(AbstractEmailForm):
             FieldPanel('from_address', classname="full"),
             FieldPanel('subject', classname="full"),
         ], "Email"),
+    ]
+    search_fields = Page.search_fields + [
+        index.SearchField('top_content'),
+        index.SearchField('bottom_content'),
     ]
 
     edit_handler = TabbedInterface([

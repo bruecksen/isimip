@@ -224,3 +224,14 @@ TWITTER_TIMELINE = {
 AUTHENTICATION_BACKENDS = ['django-dual-authentication.backends.DualAuthentication']
 AUTHENTICATION_METHOD = 'both'
 AUTHENTICATION_CASE_SENSITIVE = 'both'
+
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.wagtailsearch.backends.elasticsearch2',
+        'URLS': ['http://localhost:9200'],
+        'INDEX': 'wagtail',
+        'TIMEOUT': 5,
+        'OPTIONS': {},
+        'INDEX_SETTINGS': {},
+    }
+}

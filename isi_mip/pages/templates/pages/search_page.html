@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static header footer breadcrumb wagtailcore_tags %}
+
+{% block header %}
+	{% header %}
+
+{% endblock %}
+
+{% block content_container %}
+	<div class="container scrollable-container search-results-page">
+		<br>
+		{% breadcrumb %}
+		{% if search_query %}
+			<h1>Search results for: {{ search_query }}</h1>
+		{% else %}
+			<h1>No search term</h1>
+		{% endif %}
+		<div class="search-input">
+			<form action="/search/" method="get">
+				<div class="input-group large">
+					<input type="text" class="form-control" name="query" {% if search_query %} value="{{ search_query }}"{% endif%} placeholder="Search">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+					</span>
+				</div><!-- /input-group -->
+			</form>
+		</div>
+		<br>
+		{% block content %}
+			{% if search_results %}
+				<ul class="search-results">
+					{% for result in search_results %}
+						<li>
+							<h4><a href="{% pageurl result %}?query={{ search_query }}">{{ result }} <span class="badge">{{ result.score|floatformat }}</span></a></h4>
+						</li>
+					{% endfor %}
+				</ul>
+			{% elif search_query %}
+				<h4>No results found</h4>
+			{% endif %}
+		{% endblock %}
+	</div>
+{% endblock %}
+
+{% block footer %}
+	{% footer %}
+{% endblock %}

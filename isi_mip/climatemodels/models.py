@@ -5,6 +5,8 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.text import slugify
 
+from wagtail.wagtailsearch import index
+
 from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
 from isi_mip.sciencepaper.models import Paper
 
@@ -222,7 +224,7 @@ class SectorInformationField(models.Model):
         return '%s-%s' % (self.information_group.identifier, self.identifier)
 
 
-class BaseImpactModel(models.Model):
+class BaseImpactModel(index.Indexed, models.Model):
     name = models.CharField(max_length=500)
     SECTOR_CHOICES = (
         ('Agriculture', 'Agriculture'),
@@ -247,11 +249,29 @@ class BaseImpactModel(models.Model):
         help_text="This short description should assist other researchers in getting an understanding of your model, including the main differences between model versions used for different ISIMIP simulation rounds.")
     owners = models.ManyToManyField(User)
 
+    search_fields = [
+        index.SearchField('name', partial_match=True, boost=10),
+        index.RelatedFields('sector', [
+            index.SearchField('name'),
+        ]),
+        index.RelatedFields('impact_model_owner', [
+            index.SearchField('name'),
+            index.SearchField('email'),
+            index.SearchField('institute'),
+        ]),
+        index.SearchField('short_description'),
+    ]
+
     class Meta:
         ordering = ('name', 'sector')
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
+
+    def relative_url(self, current_site):
+        # hard coded url, since no better solution at the moment
+        # https://groups.google.com/forum/#!topic/wagtail/51FD2E4Odmc
+        return "/impactmodels/details/%s/" % self.pk
 
     def get_missing_simulation_rounds(self):
         return SimulationRound.objects.exclude(id__in=self.impact_model.all().values_list('simulation_round', flat=True))

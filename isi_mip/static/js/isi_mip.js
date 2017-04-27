@@ -672,3 +672,34 @@ $(function() {
 		}
 	});
 });
+
+function getParameterByName(name, url) {
+	if (!url) url = window.location.href;
+	name = name.replace(/[\[\]]/g, "\\$&");
+	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+		results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return '';
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+$(function() {
+	// search query highlighting
+	var hasJumped = false;
+	var options = {
+		"each": function(node){
+			if(hasJumped == false){
+				console.log("offset: " + $(node).offset().top);
+				hasJumped = true;
+				$('html, body').stop().animate({
+					scrollTop: $(node).offset().top - 120
+				}, 600);
+			}
+		}
+	};
+	if (location.search != undefined && location.search != "" && location.search.indexOf('query') != -1) {
+		var query = getParameterByName("query");
+		console.log("query: " + query);
+		$("div.container.scrollable-container").not(".search-results-page").mark(query, options);
+	}
+});

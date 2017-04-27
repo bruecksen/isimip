@@ -20,3 +20,4 @@ wagtail==1.9
 wagtail-blog==1.6.9
 
 html5lib==0.9999999
+elasticsearch>=2.0.0,<3.0.0
