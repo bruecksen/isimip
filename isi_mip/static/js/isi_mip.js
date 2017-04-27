@@ -654,15 +654,18 @@ $(function() {
 
 $(function() {
 	$('.dropdown').hover(function() {
-	        $(this).addClass('open');
-	    },
-	    function() {
-	        $(this).removeClass('open');
+			$(this).addClass('open');
+		},
+		function() {
+			$(this).removeClass('open');
 	});
-	$('li.dropdown').on('click', function() {
+
+	$('li.dropdown').on('click', function(event) {
+		event.stopPropagation();
 		var $el = $(this);
-		if ($el.hasClass('open')) {
+		if ($el.hasClass('open') && event.target == this) {
 			var $a = $el.children('a.dropdown-toggle');
+			console.log($el.children('a.dropdown-toggle'));
 			if ($a.length && $a.attr('href')) {
 				location.href = $a.attr('href');
 			}
