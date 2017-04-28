@@ -34,10 +34,10 @@
 				{% for result in page_results %}
 					<li>
 						<h4><a href="{% pageurl result %}?query={{ search_query }}">{{ result }}</a></h4>
-						<small><i class="fa fa-folder-o" aria-hidden="true"></i> {{ result.get_parent }}&nbsp;&nbsp;&nbsp;<i class="fa fa-calendar" aria-hidden="true"></i> {{ result.latest_revision_created_at|date:"Y-m-d" }}</small>
 						{% if result.search_description %}
 							<p>{{ result.search_description|safe }}</p>
 						{% endif %}
+						<small><i class="fa fa-folder-o" aria-hidden="true"></i> {{ result.get_parent }}&nbsp;&nbsp;&nbsp;<i class="fa fa-calendar" aria-hidden="true"></i> {{ result.latest_revision_created_at|date:"Y-m-d" }}</small>
 					</li>
 				{% empty %}
 					<p>Sorry, no pages found.</p>
