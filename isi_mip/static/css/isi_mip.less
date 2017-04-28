@@ -269,23 +269,25 @@ mark {
 
 .search-results {
 	clear:both;
+	h4 {
+		margin-bottom: 2px;
+		margin-top: 10px;
+	}
 }
 .search-input {
 	display: inline-block;
-	float: left;
 	.input-group {
-		max-width: 150px;
+		max-width: 140px;
 		padding: 27px 0 27px 15px;
 		&.large {
-			max-width: 500px;
+			max-width: 300px;
 			padding: 0;
 			margin-bottom: 20px;
 			margin-top: 10px;
-			margin-left: 40px;
 		}
 		.btn {
 			display: inline-block;
-			padding: 6px 12px;
+			padding: 6px 8px;
 			margin-bottom: 0;
 			font-size: 14px;
 			font-weight: 400;
@@ -323,15 +325,16 @@ mark {
 			background-image: none;
 			border: 1px solid #a4a4a4;
 			border-radius: 0;
-			&::-webkit-input-placeholder { 
-				color: black;
-				font-weight: 700;
-				text-transform: uppercase;
-			}
-			&:-moz-placeholder { color: black; }
-			&::-moz-placeholder { color: black; }
-			&:-ms-input-placeholder { color: black; }
 		}
+	}
+	@media (max-width: 992px) {
+		border-top: 1px solid #a4a4a4;
+		.input-group {
+			margin: 0 auto;
+			max-width: 250px;
+			padding: 15px 0 15px 0;
+		}
+
 	}
 }
 

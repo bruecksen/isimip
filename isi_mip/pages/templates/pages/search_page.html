@@ -13,7 +13,8 @@
 		{% if search_query %}
 			<h1>Search results for: {{ search_query }}</h1>
 		{% else %}
-			<h1>No search term</h1>
+			<h1>No search query</h1>
+			<p>Please type something into the search box:</p>
 		{% endif %}
 		<div class="search-input">
 			<form action="/search/" method="get">
@@ -27,17 +28,33 @@
 		</div>
 		<br>
 		{% block content %}
-			{% if search_results %}
-				<ul class="search-results">
-					{% for result in search_results %}
-						<li>
-							<h4><a href="{% pageurl result %}?query={{ search_query }}">{{ result }} <span class="badge">{{ result.score|floatformat }}</span></a></h4>
-						</li>
-					{% endfor %}
+		{% if search_query %}
+			<h3>Pages <small>({{ page_results|length }})</small></h3>
+			<ul class="search-results">
+				{% for result in page_results %}
+					<li>
+						<h4><a href="{% pageurl result %}?query={{ search_query }}">{{ result }}</a></h4>
+						<small><i class="fa fa-folder-o" aria-hidden="true"></i> {{ result.get_parent }}&nbsp;&nbsp;&nbsp;<i class="fa fa-calendar" aria-hidden="true"></i> {{ result.latest_revision_created_at|date:"Y-m-d" }}</small>
+						{% if result.search_description %}
+							<p>{{ result.search_description|safe }}</p>
+						{% endif %}
+					</li>
+				{% empty %}
+					<p>Sorry, no pages found.</p>
+				{% endfor %}
+			</ul>
+			<h3>Impact models <small>({{ model_results|length }})</small></h3>
+			<ul class="search-results">
+				{% for result in model_results %}
+					<li>
+						<h4><a href="{% pageurl result %}?query={{ search_query }}">{{ result }}</a></h4>
+						{% if result.short_description %}<p>{{ result.short_description|truncatewords:60 }}</p>{% endif %}
+					</li>
+				{% empty %}
+					<p>Sorry, no impact models found.</p>
+				{% endfor %}
 				</ul>
-			{% elif search_query %}
-				<h4>No results found</h4>
-			{% endif %}
+		{% endif %}
 		{% endblock %}
 	</div>
 {% endblock %}

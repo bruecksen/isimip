@@ -254,11 +254,7 @@ class BaseImpactModel(index.Indexed, models.Model):
         index.RelatedFields('sector', [
             index.SearchField('name'),
         ]),
-        index.RelatedFields('impact_model_owner', [
-            index.SearchField('name'),
-            index.SearchField('email'),
-            index.SearchField('institute'),
-        ]),
+        index.SearchField('get_related_contact_persons'),
         index.SearchField('short_description'),
     ]
 
@@ -268,13 +264,16 @@ class BaseImpactModel(index.Indexed, models.Model):
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
 
-    def relative_url(self, current_site):
+    def relative_url(self, site):
         # hard coded url, since no better solution at the moment
         # https://groups.google.com/forum/#!topic/wagtail/51FD2E4Odmc
         return "/impactmodels/details/%s/" % self.pk
 
     def get_missing_simulation_rounds(self):
         return SimulationRound.objects.exclude(id__in=self.impact_model.all().values_list('simulation_round', flat=True))
+
+    def get_related_contact_persons(self):
+        return '\n'.join(['%s %s %s' % (owner.name, owner.email, owner.institute) for owner in self.impact_model_owner.all()])
 
     def can_duplicate_from(self):
         return self.impact_model.order_by('simulation_round').first()

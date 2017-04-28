@@ -12,24 +12,26 @@ def search(request, extra_context):
     # Search
     search_query = request.GET.get('query', None)
     if search_query:
-        page_results = Page.objects.live().search(search_query).annotate_score("score")
+        page_results = Page.objects.live().search(search_query)
 
         # Log the query so Wagtail can suggest promoted results
         Query.get(search_query).add_hit()
 
         # Also query non-wagtail models
         s = get_search_backend()
-        models_results = s.search(search_query, BaseImpactModel).annotate_score("score")
+        model_results = s.search(search_query, BaseImpactModel)
 
-
-        search_results = list(chain(models_results, page_results))
     else:
-        search_results = Page.objects.none()
+        page_results = []
+        model_results = []
 
     context = {
         'search_query': search_query,
-        'search_results': search_results,
+        'page_results': page_results,
+        'model_results': model_results,
     }
+    # raise Exception(dir(model_results[0]))
+
     if extra_context is not None:
         context.update(extra_context)
 
