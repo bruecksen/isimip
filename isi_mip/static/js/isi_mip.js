@@ -701,7 +701,7 @@ $(function() {
 				}, 600);
 			}
 		},
-		"separateWordSearch": false,
+		// "separateWordSearch": false,
 	};
 	if (location.search != undefined && location.search != "" && location.search.indexOf('query') != -1) {
 		var query = getParameterByName("query");
