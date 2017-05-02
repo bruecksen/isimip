@@ -671,6 +671,11 @@ $(function() {
 			}
 		}
 	});
+	// close dropdown menu if anchor link is clicked
+	$('li.dropdown .dropdown-menu a').on('click', function(event) {
+		console.log('clicked');
+		$(this).parents('.dropdown.open').find('.dropdown-toggle').dropdown('toggle');
+	});
 });
 
 function getParameterByName(name, url) {
@@ -695,7 +700,8 @@ $(function() {
 					scrollTop: $(node).offset().top - 120
 				}, 600);
 			}
-		}
+		},
+		"separateWordSearch": false,
 	};
 	if (location.search != undefined && location.search != "" && location.search.indexOf('query') != -1) {
 		var query = getParameterByName("query");
