@@ -2,7 +2,7 @@ Name;Institute;Country;Role;Email;Model (focus: sectors for this person);Sector;
 Kris Ebi;ClimAdapt, LLC;USA;Scientific Advisory Board , Sectoral Coordinator Health;krisebi@essllc.org;;Health;;Fast-Track Analysis 2015, ISIMIP2a 2016,
 Erwan Monier;Massachusetts Institute of Technology;USA;;emonier@mit.edu;;Agriculture;;
 Elodie Blanc;Massachusetts Institute of Technology;USA;;eblanc@mit.edu;;Agriculture;;
-Johanna Ramarohetra;L'Institut de recherche pour le developpement;France;;johanna.ramarohetra@locean-ipsl.upmc.fr;;Agriculture;;
+Johanna Ramarohetra;L'Institut de recherche pour le developpement;France;;j.ramarohetra@ecoclimasol.com;;Agriculture;;
 Thomas Schinko;University of Graz;Austria;;thomas.schinko@uni-graz.at;;Energy supply and demand;;
 Gabriel Bachner;University of Graz;Austria;;gabriel.bachner@uni-graz.at;;Energy supply and demand;;
 Robin Newmark;National Renewable Energy Laboratory;USA;;robin.newmark@nrel.gov;;Energy supply and demand;;
@@ -195,6 +195,7 @@ Jochen Hinkel;Global Climate Forum;Germany;Sectoral Coordinator Infrastructure;h
 Daniel Lincke;Global Climate Forum;Germany;;daniel.lincke@globalclimateforum.org;DIVA;Infrastructure;;
 Hanqin Tian;Auburn University;USA;;tianhan@auburn.edu;DLEM;Biomes/Forestry;;Paper-writing Workshop 2015,
 Wei Ren;University of Kentucky;USA;;wei.ren@uky.edu;DLEM;Biomes/Forestry;;
+Jia Yang;Auburn University;USA;;jzy0010@tigermail.auburn.edu;DLEM;Agriculture , Biomes/Forestry;;
 Gerrit Hoogenboom;Washington State University;USA;;gerrit.hoogenboom@wsu.edu;DSSAT;Agriculture;;
 James Rising;International Research Institute for Climate and Society;USA;;jarising@gmail.com;AquaCrop-IRI , DSSAT-IRI;Agriculture;;
 Alexander Gelfan;Water Problems Institute;Russia;;hydrowpi@mail.ru;ECOMAG;Water (regional);;Fast-Track Analysis 2015, Paper-writing Workshop 2015,
@@ -270,7 +271,7 @@ Tyler Davis;Imperial College London;UK;;Tyler.Davis@ars.usda.gov;GePiSaT;Biomes/
 Reg Watson;University of Tasmania;Australia;;ecomarres@gmail.com;Global catch and effort database;Marine ecosystems & Fisheries;;
 Naota Hanasaki;Institute for Environmental Studies;Japan;;hanasaki@nies.go.jp;AIM , H08;Water (global) , Energy supply and demand;;ISIMIP2a 2016,
 Yoshimitsu Masaki;Hirosaki University;Japan;;ymasaki.tskb.ibrk.305@gmail.com;H08;Water (global);;Fast-Track Analysis 2015, Paper-writing Workshop 2015, ISIMIP2a 2016,
-Lutz Breuer;University Giessen;Germany;;Lutz.Breuer@agrar.uni-giessen.de;HBV-IWW , LASCAM;Water (regional);;
+Lutz Breuer;University Giessen;Germany;;lutz.breuer@umwelt.uni-giessen.de;HBV-IWW , LASCAM;Water (regional);;
 Su Buda;China Meteorological Administration;China;;subd@cma.gov.cn;HBV-IWW , VIC;Water (regional);;ISIMIP2a 2016,
 Jeff Exbrayat;University of New South Wales;Australia;;j.exbrayat@ed.ac.uk;HBV-IWW , LASCAM;Water (regional);;
 Tao Yang;Hohai University;China;;yang.tao@ms.xjb.ac.cn;HBV-IWW;Water (regional);;
@@ -313,7 +314,7 @@ Paul Watkiss;Environmental Change Institute;UK;;paul_watkiss@btinternet.com;Clim
 James McFarland;US Environment Protection Agency;USA;;mcfarland.james@epa.gov;GCAM-USA , IPM , ReEDS;Energy supply and demand;;
 Atul Jain;University of Illinois at Urbana-Champaign;USA;;Jain1@illinois.edu;ISAM;Agriculture;;
 Joan Ballester;;;;joanballester.isglobal@gmail.com;ISGLOBAL;;;
-Altug Ekici;Stockholm University;Sweden;;altug.ekici@itm.su.se;JSBACH;Biomes/Forestry;;
+Altug Ekici;Stockholm University;Sweden;;altug.ekici@uni.no;JSBACH;Biomes/Forestry;;
 Stefan Hagemann;Max-Planck-Institute for Meteorology;Germany;;stefan.hagemann@mpimet.mpg.de;JSBACH , MPI-HM;Agriculture , Biomes/Forestry , Permafrost , Water (global);;
 Tobias Stacke;Max-Planck-Institute for Meteorology;Germany;;tobias.stacke@mpimet.mpg.de;JSBACH , MPI-HM;Agriculture , Biomes/Forestry , Permafrost , Water (global);;Fast-Track Analysis 2015,
 Eleanor Burke;University of Exeter;UK;Sectoral Coordinator Permafrost;eleanor.burke@metoffice.gov.uk;JULES;Permafrost;;
@@ -342,7 +343,7 @@ Axel Kleidon;Max-Planck-Institut für Biogeochemie;Germany;;akleidon@bgc-jena.mp
 Ryan Pavlick;Jet Propulsion Laboratory;USA;;rpavlick@jpl.nasa.gov;JeDi;Biomes/Forestry;;
 Kirsten Sickel;Max-Planck-Institut für Biogeochemie;Germany;;ksickel@bgc-jena.mpg.de;JeDi;Biomes/Forestry;;
 Stefan Voegele;Forschungszentrum Jülich;Germany;;s.voegele@fz-juelich.de;KASIM;Energy supply and demand;;Fast-Track Analysis 2015,
-Lutz Breuer;University Giessen;Germany;;Lutz.Breuer@agrar.uni-giessen.de;HBV-IWW , LASCAM;Water (regional);;
+Lutz Breuer;University Giessen;Germany;;lutz.breuer@umwelt.uni-giessen.de;HBV-IWW , LASCAM;Water (regional);;
 Jeff Exbrayat;University of New South Wales;Australia;;j.exbrayat@ed.ac.uk;HBV-IWW , LASCAM;Water (regional);;
 Michalis Vousdoukas;Joint Research Center;Italy;;michalis.vousdoukas@jrc.ec.europa.eu;LISCoAsT;Infrastructure;;
 Ad de Roo;Joint Research Center;Italy;;ad.de-roo@jrc.ec.europa.eu;LISFLOOD;Water (regional);;Fast-Track Analysis 2015,
@@ -407,7 +408,7 @@ Rachel Warren;University of East Anglia;UK;;r.warren@uea.ac.uk;Mac-PDM.09 , PE
 Nick Mount;University of Nottingham;UK;;nick.mount@nottingham.ac.uk;Mac-PDM.09;Water (global);;Fast-Track Analysis 2015,
 Jamal Zaherpour;University of Nottingham;UK;Special issue lead author;lgxjz1@nottingham.ac.uk;Mac-PDM.09;Water (global);;Fast-Track Analysis 2015, ISIMIP2a 2016,
 Ben Lloyd-Hughes;University Reading;UK;;b.lloydhughes@reading.ac.uk;Mac-PDM.09;Water (global);;
-Simon Jennings;Centre for Environment, Fisheries and Aquaculture Science;UK;;simon.jennings@cefas.co.uk;Macroecological model;Marine ecosystems & Fisheries;;
+Simon Jennings;Centre for Environment, Fisheries and Aquaculture Science;UK;;simon.jennings@uea.ac.uk;Macroecological model;Marine ecosystems & Fisheries;;
 Tiago Silva;Centre for Environment, Fisheries and Aquaculture Science;UK;;tiago.silva@cefas.co.uk;Macroecological model;Marine ecosystems & Fisheries;;
 Derek Tittensor;Dalhousie University;Canada;Sectoral Coordinator Fisheries;derekt@mathstat.dal.ca;Madingley;Marine ecosystems & Fisheries;;Fast-Track Analysis 2015, ISIMIP2a 2016,
 Philip Underwood;UNEP-WCMC;UK;;philip.underwood@unep-wcmc.org;Madingley;Marine ecosystems & Fisheries;;
