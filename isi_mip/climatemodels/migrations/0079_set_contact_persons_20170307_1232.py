@@ -18,8 +18,8 @@ def set_contact_persons(apps, schema_editor):
         if len(first_last_name) > 1:
             last_name = first_last_name[1]
         user, created = User.objects.get_or_create(
-            email__iexact=contact_person.email.lower(),
-            defaults={'username': contact_person.email.lower()},
+            email__iexact=contact_person.email,
+            defaults={'username': contact_person.email},
         )
         if created or not hasattr(user, 'userprofile'):
             UserProfile.objects.create(user=user)
