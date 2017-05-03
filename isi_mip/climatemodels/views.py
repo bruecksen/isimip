@@ -51,7 +51,7 @@ def impact_model_details(page, request, id):
     subpage = {'title': title, 'url': ''}
     context = {'page': page, 'subpage': subpage, 'headline': ''}
     can_edit_model = False
-    if base_model in request.user.userprofile.owner.all() or request.user.is_superuser:
+    if request.user.is_authenticated() and (base_model in request.user.userprofile.owner.all() or request.user.is_superuser):
         can_edit_model = True
 
     # context['editlink'] += ' | <a href="{}">admin edit</a>'.format(
