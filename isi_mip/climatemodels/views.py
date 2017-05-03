@@ -436,7 +436,7 @@ def show_participants(request, extra_context):
         participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector', 'userprofile__country').order_by('last_name')
         result = {'head': {}, 'body': {}}
         result['head'] = {
-            'cols': [{'text': 'Name'}, {'text': 'Email'}, {'text': 'Country'}, {'text': 'Model'}, {'text': 'Sector'}]
+            'cols': [{'text': 'Name'}, {'text': 'Email'}, {'text': 'Institute(Country)'}, {'text': 'Model'}, {'text': 'Sector'}]
         }
         bodyrows = []
         result['body'] = {'rows': bodyrows}
@@ -448,10 +448,11 @@ def show_participants(request, extra_context):
         rows_per_page = 50
         for i, participant in enumerate(participants):
             country = participant.userprofile.country and " (%s)" % participant.userprofile.country or ''
+            institute = participant.userprofile.institute or ""
             sectors = [im.base_model.sector for im in participant.userprofile.involved.all()] + list(participant.userprofile.sector.all())
             values = [["{0.name}".format(participant.userprofile)]]
             values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]
-            values += [["{0}{1}".format(participant.userprofile.institute, country)]]
+            values += [["{0}{1}".format(institute, country)]]
             values += [["<a href='/impactmodels/details/{0.base_model.id}/'>{0.base_model.name} ({0.simulation_round.name})</a><br>".format(model) for model in participant.userprofile.involved.all()]]
             values += [["{0.name}<br>".format(sector) for sector in sectors]]
             bodyrows.append({
