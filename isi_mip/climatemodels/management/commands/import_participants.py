@@ -55,7 +55,7 @@ class Command(BaseCommand):
                 if email:
                     user = None
                     try:
-                        user = UserModel.objects.get(email=email)
+                        user = UserModel.objects.get(email__iexact=email)
                         user_found_counter = user_found_counter + 1
                         # print('User found: (%s)' % ', '.join(row))
                     except:
