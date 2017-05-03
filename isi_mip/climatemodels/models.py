@@ -253,6 +253,7 @@ class BaseImpactModel(index.Indexed, models.Model):
         index.RelatedFields('sector', [
             index.SearchField('name'),
         ]),
+        index.FilterField('public'),
         index.SearchField('get_related_contact_persons'),
         index.SearchField('short_description'),
     ]
@@ -270,6 +271,9 @@ class BaseImpactModel(index.Indexed, models.Model):
 
     def get_missing_simulation_rounds(self):
         return SimulationRound.objects.exclude(id__in=self.impact_model.all().values_list('simulation_round', flat=True))
+
+    def public(self):
+        return self.impact_model.filter(public=True).exists()
 
     def get_related_contact_persons(self):
         return '\n'.join(['%s %s %s' % (owner.name, owner.email, owner.institute) for owner in self.impact_model_owner.all()])
