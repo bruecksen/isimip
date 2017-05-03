@@ -73,8 +73,8 @@ class Command(BaseCommand):
                         user = UserModel.objects.create(
                             first_name = name[0],
                             last_name = len(name) > 1 and ' '.join(name[1:]) or '',
-                            email = email,
-                            username = email,
+                            email = email.lower(),
+                            username = email.lower(),
                             is_active = False,
                             is_staff = False,
                             is_superuser = False,
@@ -91,7 +91,7 @@ class Command(BaseCommand):
                         for model in models.split(','):
                             try:
                                 model = model.strip()
-                                base_model = BaseImpactModel.objects.get(name=model)
+                                base_model = BaseImpactModel.objects.get(name__iexact=model)
                                 user.userprofile.involved.add(*list(base_model.impact_model.all()))
                             except:
                                 print('Model not found: %s' % model)
