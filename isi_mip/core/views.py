@@ -19,7 +19,7 @@ def search(request, extra_context):
 
         # Also query non-wagtail models
         s = get_search_backend()
-        model_results = s.search(search_query, BaseImpactModel)
+        model_results = s.search(search_query, BaseImpactModel.objects.filter(is_public=True))
 
     else:
         page_results = []
