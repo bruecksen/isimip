@@ -247,7 +247,6 @@ class BaseImpactModel(index.Indexed, models.Model):
     short_description = models.TextField(
         null=True, blank=True, default='', verbose_name="Short model description",
         help_text="This short description should assist other researchers in getting an understanding of your model, including the main differences between model versions used for different ISIMIP simulation rounds.")
-    owners = models.ManyToManyField(User)
 
     search_fields = [
         index.SearchField('name', partial_match=True, boost=10),

@@ -8,12 +8,16 @@ from django.db import migrations
 def set_user_profile(apps, schema_editor):
     BaseImpactModel = apps.get_model('climatemodels', 'BaseImpactModel')
     UserProfile = apps.get_model('contrib', 'UserProfile')
+    User = apps.get_model('auth', 'User')
     for base_impact_model in BaseImpactModel.objects.all():
         for owner in base_impact_model.owners.all():
             if not hasattr(owner, 'userprofile'):
                 UserProfile.objects.create(user=owner)
             owner.userprofile.owner.add(base_impact_model)
             owner.save()
+    for user in User.objects.all():
+        if not hasattr(user, 'userprofile'):
+            UserProfile.objects.create(user=user)
 
 
 class Migration(migrations.Migration):
