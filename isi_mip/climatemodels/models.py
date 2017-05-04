@@ -322,7 +322,7 @@ class ImpactModel(models.Model):
         ordering = ('base_model', 'simulation_round')
 
     def __str__(self):
-        return "%s (%s)" % (self.base_model and self.base_model.name or self.id, self.simulation_round)
+        return "%s (%s, %s)" % (self.base_model and self.base_model.name or self.id, self.base_model and self.base_model.sector or '', self.simulation_round)
 
     @property
     def fk_sector_name(self):
