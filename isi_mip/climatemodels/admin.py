@@ -32,6 +32,7 @@ class BaseImpactModelAdmin(admin.ModelAdmin):
     model = BaseImpactModel
     list_display = ('name', 'sector')
     list_filter = ('sector',)
+    search_fields = ('name', 'sector__name')
 
 
 class TechnicalInformationAdmin(admin.StackedInline):
@@ -49,6 +50,7 @@ class OtherInformationAdmin(admin.StackedInline):
 class ImpactModelAdmin(admin.ModelAdmin):
     inlines = [TechnicalInformationAdmin, InputDataInformationAdmin, OtherInformationAdmin]
     model = ImpactModel
+    search_fields = ('base_model__name', 'base_model__sector__name', 'simulation_round')
 
     def get_name(self, obj):
         return obj.base_model and obj.base_model.name or obj.id
