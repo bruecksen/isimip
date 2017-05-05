@@ -217,6 +217,7 @@ class AboutPage(TOCPage):
         ('pdf', PDFBlock()),
         ('paper', PaperBlock(template='widgets/page-teaser-wide.html')),
         ('bigteaser', BigTeaserBlock()),
+        ('contact', ContactsBlock()),
     ])
     content_panels = Page.content_panels + [
         StreamFieldPanel('content')
