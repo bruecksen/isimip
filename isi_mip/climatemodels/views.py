@@ -431,7 +431,7 @@ def show_participants(request, extra_context):
     context = {}
     if request.user.groups.filter(name='ISIMIP-Team').exists():
         # user has the right to view the participants list
-        participants = User.objects.filter(is_superuser=False, is_staff=False).distinct()
+        participants = User.objects.filter(is_superuser=False, is_staff=False)
         # participants = participants.filter(Q(userprofile__sector__in=request.user.userprofile.sector.all()) | Q(userprofile__involved__base_model__sector__in=request.user.userprofile.sector.all()) )
         participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector', 'userprofile__country').order_by('last_name')
         result = {'head': {}, 'body': {}}
@@ -449,7 +449,7 @@ def show_participants(request, extra_context):
         for i, participant in enumerate(participants):
             country = participant.userprofile.country and " (%s)" % participant.userprofile.country or ''
             institute = participant.userprofile.institute or ""
-            sectors = [im.base_model.sector for im in participant.userprofile.involved.all()] | list(participant.userprofile.sector.all())
+            sectors = set([im.base_model.sector for im in participant.userprofile.involved.all()] + list(participant.userprofile.sector.all()))
             values = [["{0.name}".format(participant.userprofile)]]
             values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]
             values += [["{0}{1}".format(institute, country)]]
