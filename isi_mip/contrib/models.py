@@ -27,6 +27,7 @@ class UserProfile(models.Model):
     comment = models.TextField(blank=True, null=True)
     owner = models.ManyToManyField(BaseImpactModel, blank=True, related_name='impact_model_owner')
     involved = models.ManyToManyField(ImpactModel, blank=True, related_name='impact_model_involved')
+    show_in_participant_list = models.BooleanField(default=True)
 
     @property
     def name(self):
