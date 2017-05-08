@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 from isi_mip.climatemodels.models import Sector, BaseImpactModel, ImpactModel
 
@@ -23,7 +24,6 @@ class UserProfile(models.Model):
     institute = models.CharField(max_length=500, null=True, blank=True)
     country = models.ForeignKey(Country, null=True, blank=True)
     sector = models.ManyToManyField(Sector, blank=True, related_name='user_sectors')
-    role = models.ManyToManyField(Role, blank=True, related_name='user_roles')
     comment = models.TextField(blank=True, null=True)
     owner = models.ManyToManyField(BaseImpactModel, blank=True, related_name='impact_model_owner')
     involved = models.ManyToManyField(ImpactModel, blank=True, related_name='impact_model_involved')
@@ -44,3 +44,13 @@ class UserProfile(models.Model):
 
     class Meta:
         ordering = ('user__last_name',)
+
+
+def create_profile(sender, **kwargs):
+    user = kwargs["instance"]
+    if kwargs["created"]:
+        user_profile = UserProfile(user=user)
+        user_profile.save()
+
+
+post_save.connect(create_profile, sender=User)
