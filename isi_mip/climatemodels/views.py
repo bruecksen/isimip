@@ -113,9 +113,8 @@ def impact_model_download(page, request):
 
 
 def participant_download(page, request):
-    participants = User.objects.filter(is_active=True, is_superuser=False, is_staff=False).distinct()
-    participants = participants.filter(userprofile__sector__in=request.user.userprofile.sector.all())
-    participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector').order_by('last_name')
+    participants = User.objects.filter(userprofile__show_in_participant_list=True).order_by('last_name')
+    participants = participants.select_related('userprofile').prefetch_related('userprofile__involved__simulation_round', 'userprofile__involved__base_model__sector', 'userprofile__sector', 'userprofile__country')
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="Participants {:%Y-%m-%d}.xlsx"'.format(datetime.now())
     ParticpantModelToXLSX(response, participants)
@@ -432,7 +431,6 @@ def show_participants(request, extra_context):
     if request.user.groups.filter(name='ISIMIP-Team').exists():
         # user has the right to view the participants list
         participants = User.objects.filter(userprofile__show_in_participant_list=True).order_by('last_name')
-        # participants = participants.filter(Q(userprofile__sector__in=request.user.userprofile.sector.all()) | Q(userprofile__involved__base_model__sector__in=request.user.userprofile.sector.all()) )
         participants = participants.select_related('userprofile').prefetch_related('userprofile__involved__simulation_round', 'userprofile__involved__base_model__sector', 'userprofile__sector', 'userprofile__country')
         result = {'head': {}, 'body': {}}
         result['head'] = {
