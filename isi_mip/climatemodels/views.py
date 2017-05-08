@@ -431,9 +431,9 @@ def show_participants(request, extra_context):
     context = {}
     if request.user.groups.filter(name='ISIMIP-Team').exists():
         # user has the right to view the participants list
-        participants = User.objects.filter(is_superuser=False, is_staff=False)
+        participants = User.objects.filter(is_superuser=False, is_staff=False).order_by('last_name')
         # participants = participants.filter(Q(userprofile__sector__in=request.user.userprofile.sector.all()) | Q(userprofile__involved__base_model__sector__in=request.user.userprofile.sector.all()) )
-        participants = participants.select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector', 'userprofile__country').order_by('last_name')
+        participants = participants.select_related('userprofile').prefetch_related('userprofile__involved__simulation_round', 'userprofile__involved__base_model__sector', 'userprofile__sector', 'userprofile__country')
         result = {'head': {}, 'body': {}}
         result['head'] = {
             'cols': [{'text': 'Name'}, {'text': 'Email'}, {'text': 'Institute(Country)'}, {'text': 'Model'}, {'text': 'Sector'}]
