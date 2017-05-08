@@ -449,7 +449,7 @@ def show_participants(request, extra_context):
         for i, participant in enumerate(participants):
             country = participant.userprofile.country and " (%s)" % participant.userprofile.country or ''
             institute = participant.userprofile.institute or ""
-            sectors = [im.base_model.sector for im in participant.userprofile.involved.all()] + list(participant.userprofile.sector.all())
+            sectors = [im.base_model.sector for im in participant.userprofile.involved.all()] | list(participant.userprofile.sector.all())
             values = [["{0.name}".format(participant.userprofile)]]
             values += [["<a href='mailto:{0.email}'>{0.email}</a>".format(participant)]]
             values += [["{0}{1}".format(institute, country)]]
