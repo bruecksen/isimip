@@ -50,7 +50,7 @@ class OtherInformationAdmin(admin.StackedInline):
 class ImpactModelAdmin(admin.ModelAdmin):
     inlines = [TechnicalInformationAdmin, InputDataInformationAdmin, OtherInformationAdmin]
     model = ImpactModel
-    search_fields = ('base_model__name', 'base_model__sector__name', 'simulation_round')
+    search_fields = ('base_model__name', 'base_model__sector__name', 'simulation_round__name')
 
     def get_name(self, obj):
         return obj.base_model and obj.base_model.name or obj.id
