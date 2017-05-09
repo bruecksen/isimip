@@ -49,7 +49,7 @@ class UserProfile(models.Model):
 
 def create_profile(sender, **kwargs):
     user = kwargs["instance"]
-    if kwargs["created"]:
+    if kwargs["created"] and not user.userprofile:
         user_profile = UserProfile(user=user)
         user_profile.save()
 
