@@ -334,7 +334,7 @@ def impact_model_sector_edit(page, request, context, impact_model, target_url):
     template = 'climatemodels/{}'.format(formular.template)
     return render(request, template, context)
 
-#TODO FIXME Owner to profile
+
 def impact_model_assign(request, username=None):
     if not request.user.is_superuser:
         messages.info(request, 'You need to be logged in to perform this action.')
@@ -350,13 +350,13 @@ def impact_model_assign(request, username=None):
             bimodel = form.cleaned_data['model']
             send_invitation_email = form.cleaned_data.pop('send_invitation_email')
             if bimodel:
-                bimodel.owners.add(user)
-                bimodel.save()
+                user.userprofile.owner.add(bimodel)
+                user.userprofile.involved.add(*list(bimodel.impact_model.all()))
                 messages.success(request, "{} has been added to the list of owners for \"{}\"".format(user, bimodel))
             else:
                 del (form.cleaned_data['model'])
                 bimodel = BaseImpactModel.objects.create(**form.cleaned_data)
-                bimodel.owners.add(user)
+                user.userprofile.owner.add(bimodel)
                 bimodel.public = False
                 bimodel.save()
                 messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(bimodel, user))
