@@ -351,11 +351,13 @@ def impact_model_assign(request, username=None):
             if bimodel:
                 user.userprofile.owner.add(bimodel)
                 user.userprofile.involved.add(*list(bimodel.impact_model.all()))
+                user.userprofile.sector = bimodel.sector
                 messages.success(request, "{} has been added to the list of owners for \"{}\"".format(user, bimodel))
             else:
                 del (form.cleaned_data['model'])
                 bimodel = BaseImpactModel.objects.create(**form.cleaned_data)
                 user.userprofile.owner.add(bimodel)
+                user.userprofile.sector = bimodel.sector
                 bimodel.public = False
                 bimodel.save()
                 messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(bimodel, user))
