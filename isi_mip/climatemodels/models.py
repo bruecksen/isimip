@@ -146,7 +146,7 @@ class InputData(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '%s (%s)' % (self.name, ", ".join(self.simulation_round.all()))
+        return '%s (%s)' % (self.name, ", ".join(self.simulation_round.values_list('name', flat=True)))
 
     class Meta:
         verbose_name_plural = 'Input data'
@@ -1092,7 +1092,7 @@ class OutputData(models.Model):
     def __str__(self):
         if self.model:
             return "%s : %s" % (self.sector, self.model.base_model.name)
-        return self.sector
+        return self.sector.name
 
     class Meta:
         verbose_name = verbose_name_plural = 'Output data'
