@@ -18,7 +18,7 @@ from wagtail.wagtailcore.models import Page
 from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
-from isi_mip.climatemodels.models import Sector, SimulationRound
+from isi_mip.climatemodels.models import BaseImpactModel
 from isi_mip.climatemodels.views import (
     impact_model_details, impact_model_edit, input_data_details,
     impact_model_download, participant_download, show_participants, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION,
@@ -395,6 +395,8 @@ class DashboardPage(RoutablePageWithDefault):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         base_impact_models = request.user.userprofile.owner.all().order_by('name')
+        if request.user.is_authenticated() and request.user.is_superuser:
+            base_impact_models = BaseImpactModel.objects.all()
         impage = ImpactModelsPage.objects.get()
         impage_details = lambda imid: "<span class='action'><a href='{0}' class=''>{{0}}</a></span>".format(
             impage.url + impage.reverse_subpage('details', args=(imid, )))

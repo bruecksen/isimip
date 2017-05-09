@@ -218,7 +218,6 @@ def duplicate_impact_model(page, request, impact_model_id, simulation_round_id):
     return HttpResponseRedirect(target_url)
 
 
-# authentication required.. #########################################################
 def impact_model_edit(page, request, id, current_step):
     if not request.user.is_authenticated():
         messages.info(request, 'You need to be logged in to perform this action.')
