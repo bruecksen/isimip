@@ -10,13 +10,13 @@ $(function() {
 
 
 		// set all rows to show and then apply filters, search and pagination
-		table.find('tbody tr').addClass('widget-table-show');
+		table.find('tbody tr').show();
 
 
 		// disable rows by filter
 		// iterate filters
 		$.each(filter, function(colnumber, value) {
-			// console.log('apply filer for colnumber', colnumber, 'and value', value);
+			console.log('apply filer for colnumber', colnumber, 'and value', value);
 			// iterate rows
 			table.find('tbody tr').each(function() {
 				// hide rows not matching filter
@@ -26,48 +26,33 @@ $(function() {
 				row.find('td:nth-child(' + colnumber + ')').find('.widget-table-col-line').each(function() {
 					var colline = $(this);
 					var collinetext = colline.text();
-					// console.log($.trim(collinetext), $.trim(value));
+					console.log($.trim(collinetext), $.trim(value));
 					if ( $.trim(collinetext) == $.trim(value) ) {
 						showcolline = true;
 					}
 				});
 
 				if (!showcolline) {
-					row.removeClass('widget-table-show');
+					$(row).hide();
+					console.log(row);
 				}
 			});
 		});
 
-
-		// disable rows by search string
-		var searchwords = searchvalue.match(/\S+/g);
-		if (searchwords) {
-			// iterate rows
-			table.find('tbody tr').each(function() {
-				// hide rows not matching filter
-				var row = $(this);
-				var hit = true; // if all words are somewhere in the row
-
-				// iterate search words
-				$.each(searchwords, function(i, searchword) {
-					var wordhit = false; // if this word is somewhere in the row
-					searchword = searchword.toLowerCase();
-
-					row.find('td').each(function() {
-						// does any column contain the word?
-						if ($(this).text().toLowerCase().indexOf(searchword) > -1) wordhit = true;
-					});
-
-					if (!wordhit) hit = false; // fail
-				});
-
-				if (!hit) row.removeClass('widget-table-show');
-			});
+		if (searchvalue) {
+			var $rows = $('tbody tr');
+			var val = '^(?=.*\\b' + $.trim(searchvalue).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+				reg = RegExp(val, 'i'),
+				text;
+			$rows.show().filter(function() {
+				text = $(this).text().replace(/\s+/g, ' ');
+				return !reg.test(text);
+			}).hide();
 		}
 
 
 		// Pagination
-		var rowsintable = table.find('tbody tr.widget-table-show').length; // rows in the table, all pages
+		var rowsintable = table.find('tbody tr:visible').length; // rows in the table, all pages
 
 		// show or hide message that no rows to show
 		if (rowsintable) {
@@ -81,9 +66,9 @@ $(function() {
 		table.data('numberofpages', numberofpages);
 
 		// hide rows in other pages
-		table.find('tbody tr.widget-table-show').each(function(rownumber) {
+		table.find('tbody tr:visible').each(function(rownumber) {
 			if ((rowsperpage * (activepage-1) > rownumber) || (rowsperpage * activepage <= rownumber)) {
-				$(this).removeClass('widget-table-show');
+				$(this).hide();
 			}
 		});
 
@@ -97,8 +82,8 @@ $(function() {
 		});
 
 
-		table.find('tbody tr:not(.widget-table-show)').hide();
-		table.find('tbody tr.widget-table-show').show().removeClass('widget-table-show');
+		// table.find('tbody tr:not(.widget-table-show)').hide();
+		// table.find('tbody tr.widget-table-show').show().removeClass('widget-table-show');
 
 		table.find('.widget-pagination-pagelink:not([data-pagenumber='+ activepage +'])').removeClass('widget-pagination-pagelink-active');
 		table.find('.widget-pagination-pagelink[data-pagenumber='+ activepage +']').addClass('widget-pagination-pagelink-active');
@@ -169,7 +154,7 @@ $(function() {
 		if (!searchvalue) table.data('searchvalue', '');
 
 
-		table.find('.widget-table-showmore-button').click(function() {
+		table.find('row:visible more-button').click(function() {
 			table.find('tbody tr').show();
 			$(this).remove();
 		});
@@ -233,7 +218,7 @@ $(function() {
 
 		table.data('filternames', filternames);
 
-		$(this).find('.widget-table-selector-search').on('keyup change paste input', function() {
+		$(this).find('.widget-table-selector-search').on('input', function() {
 			// Show first page after filter change
 			table.data('activepage', 1);
 
