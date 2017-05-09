@@ -146,7 +146,7 @@ class InputData(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '%s (%s)' % (self.name, self.simulation_round)
+        return '%s (%s)' % (self.name, ", ".join(self.simulation_round.all()))
 
     class Meta:
         verbose_name_plural = 'Input data'
