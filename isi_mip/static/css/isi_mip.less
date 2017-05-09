@@ -283,7 +283,7 @@ mark {
 .search-input {
 	display: inline-block;
 	.input-group {
-		max-width: 140px;
+		max-width: 128px;
 		padding: 27px 0 27px 15px;
 		&.large {
 			max-width: 300px;
@@ -333,7 +333,7 @@ mark {
 			border-radius: 0;
 		}
 	}
-	@media (max-width: 992px) {
+	@media (max-width: 991px) {
 		border-top: 1px solid #a4a4a4;
 		.input-group {
 			margin: 0 auto;
@@ -691,6 +691,10 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 
 				@media(min-width:992px) {
 					padding-top: 20px;
+					margin-right: 20px;
+				}
+				@media(min-width:1200px) {
+					padding-top: 20px;
 					margin-right: 60px;
 				}
 				-webkit-transition: opacity 0.5s;
@@ -747,6 +751,9 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 						font-weight: 700;
 						padding: 15px 15px 15px 15px;
 						@media(min-width:992px) {
+							padding: 35px 12px 35px 12px;
+						}
+						@media(min-width:1200px) {
 							padding: 35px 15px 35px 15px;
 						}
 
