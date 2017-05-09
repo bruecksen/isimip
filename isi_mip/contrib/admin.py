@@ -59,7 +59,7 @@ class UserAdmin(UserAdmin):
 
     def get_involved(self, obj):
         if obj.userprofile.involved.exists():
-            return ', '.join(['%s(%s)' % (involved.base_model.name, involved.base_model.simulation_round) for involved in obj.userprofile.involved.all()])
+            return ', '.join(['%s(%s)' % (involved.base_model.name, involved.simulation_round) for involved in obj.userprofile.involved.all()])
         return '-'
     get_involved.admin_order_field = 'userprofile__involved__base_model__name'
     get_involved.short_description = 'Involved'
