@@ -192,6 +192,9 @@ def create_new_impact_model(page, request, base_model_id, simulation_round_id):
         public=True,
     )
     impact_model.save()
+    # make all owners involved to the new model
+    for owner in impact_model.base_model.impact_model_owner.all():
+        owner.involved.add(impact_model)
     target_url = page.url + page.reverse_subpage(STEP_BASE, args=(impact_model.id,))
     messages.success(request, 'The model has been successfully created! Please make sure to go through every step to insert the data.')
     return HttpResponseRedirect(target_url)
@@ -212,6 +215,9 @@ def duplicate_impact_model(page, request, impact_model_id, simulation_round_id):
         messages.warning(request, 'The impact model already exists in this simulation round. Please contact the ISIMIP team.')
         return HttpResponseRedirect('/dashboard/')
     duplicate = impact_model.duplicate(simulation_round)
+    # make all owners involved in the duplicated model
+    for owner in impact_model.base_model.impact_model_owner.all():
+        owner.involved.add(duplicate)
     target_url = page.url + page.reverse_subpage(STEP_BASE, args=(duplicate.id,))
     message = 'You have chosen to duplicate your model information from {0} for {1}. Please go through each step to make sure that new fields are filled out, and to make sure the information is accurate for the model version used in {1}.'
     messages.success(request, message.format(impact_model.simulation_round.name, simulation_round.name))
@@ -350,8 +356,10 @@ def impact_model_assign(request, username=None):
             send_invitation_email = form.cleaned_data.pop('send_invitation_email')
             if bimodel:
                 user.userprofile.owner.add(bimodel)
-                user.userprofile.involved.add(*list(bimodel.impact_model.all()))
-                user.userprofile.sector = bimodel.sector
+                impact_models = bimodel.impact_model.all().order_by('simulation_round')
+                if impact_models:
+                    user.userprofile.involved.add(impact_models[0])
+                user.userprofile.sector.add(bimodel.sector)
                 messages.success(request, "{} has been added to the list of owners for \"{}\"".format(user, bimodel))
             else:
                 del (form.cleaned_data['model'])
