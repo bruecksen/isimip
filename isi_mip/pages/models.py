@@ -57,7 +57,8 @@ class BlogIndexPage(_BlogIndexPage):
     ]
 
     search_fields = Page.search_fields + [
-        index.SearchField('description'),
+        index.SearchField('title', partial_match=True, boost=1),
+        index.SearchField('description', boost=1),
     ]
 
     def get_context(self, request, *args, **kwargs):
