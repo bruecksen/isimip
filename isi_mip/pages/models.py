@@ -134,7 +134,8 @@ class GenericPage(TOCPage):
     ]
 
     search_fields = Page.search_fields + [
-        index.SearchField('content'),
+        index.SearchField('title', partial_match=True, boost=6),
+        index.SearchField('content', boost=4),
     ]
 
 
@@ -180,9 +181,10 @@ class HomePage(RoutablePageWithDefault):
     ]
 
     search_fields = Page.search_fields + [
-        index.SearchField('teaser_text'),
-        index.SearchField('teaser_title'),
-        index.SearchField('content'),
+        index.SearchField('teaser_text', boost=4),
+        index.SearchField('teaser_title', partial_match=True, boost=6),
+        index.SearchField('title', partial_match=True, boost=6),
+        index.SearchField('content', boost=4),
     ]
 
     def get_context(self, request, *args, **kwargs):
@@ -224,7 +226,8 @@ class AboutPage(TOCPage):
     ]
 
     search_fields = Page.search_fields + [
-        index.SearchField('content'),
+        index.SearchField('title', partial_match=True, boost=6),
+        index.SearchField('content', boost=4),
     ]
 
 
@@ -254,7 +257,8 @@ class GettingStartedPage(RoutablePageWithDefault):
         ObjectList(RoutablePageWithDefault.settings_panels, heading='Settings', classname="settings"),
     ])
     search_fields = Page.search_fields + [
-        index.SearchField('content'),
+        index.SearchField('title', partial_match=True, boost=6),
+        index.SearchField('content', boost=4),
     ]
 
     @route(r'^details/(?P<id>\d+)/$')
@@ -337,7 +341,8 @@ class OutputDataPage(TOCPage):
         StreamFieldPanel('content'),
     ]
     search_fields = Page.search_fields + [
-        index.SearchField('content'),
+        index.SearchField('title', partial_match=True, boost=6),
+        index.SearchField('content', boost=4),
     ]
 
 
@@ -351,7 +356,8 @@ class OutcomesPage(TOCPage):
         StreamFieldPanel('content'),
     ]
     search_fields = Page.search_fields + [
-        index.SearchField('content'),
+        index.SearchField('title', partial_match=True, boost=6),
+        index.SearchField('content', boost=4),
     ]
 
 
@@ -366,7 +372,8 @@ class FAQPage(TOCPage):
         StreamFieldPanel('content'),
     ]
     search_fields = Page.search_fields + [
-        index.SearchField('content'),
+        index.SearchField('title', partial_match=True, boost=6),
+        index.SearchField('content', boost=4),
     ]
 
 
@@ -536,8 +543,9 @@ class FormPage(AbstractEmailForm):
         ], "Email"),
     ]
     search_fields = Page.search_fields + [
-        index.SearchField('top_content'),
-        index.SearchField('bottom_content'),
+        index.SearchField('title', partial_match=True, boost=6),
+        index.SearchField('top_content', boost=4),
+        index.SearchField('bottom_content', boost=4),
     ]
 
     edit_handler = TabbedInterface([
@@ -552,15 +560,3 @@ class FormPage(AbstractEmailForm):
         message = {'tags': 'success', 'text': self.confirmation_text}
         context['confirmation_messages'] = [message]
         return context
-
-    # @route(r'^ical/$')
-    # def ical(self, request):
-    #     filename = "event.ics"
-    #     from datetime import datetime
-    #     event = Event()
-    #     event.add('summary', 'Python meeting about calendaring')
-    #     event.add('dtstart', datetime(2005, 4, 4, 10, 0, 0))
-    #     event['location'] = vText('Odense, Denmark')
-    #     response = HttpResponse(event.to_ical(), content_type='text/calendar')
-    #     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-    #     return response

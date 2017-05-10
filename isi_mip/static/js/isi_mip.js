@@ -41,7 +41,6 @@ $(function() {
 			var val = '^(?=.*' + $.trim(searchvalue).split(/\s+/).join(')(?=.*') + ').*$',
 				reg = RegExp(val, 'i'),
 				text;
-			console.log(val);
 			$rows.show().filter(function() {
 				text = $(this).text().replace(/\s+/g, ' ');
 				return !reg.test(text);
