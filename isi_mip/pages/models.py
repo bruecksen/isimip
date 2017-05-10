@@ -460,16 +460,20 @@ class DashboardPage(RoutablePageWithDefault):
             self.get_context(request)
         )
 
-
     @route(r'participants/$')
     def participants(self, request):
+        if not request.user.is_authenticated():
+            messages.info(request, 'This is a restricted area. To proceed you need to log in.')
+            return HttpResponseRedirect(self.reverse_subpage('login'))
         subpage = {'title': 'ISIMIP participants', 'url': ''}
         context = {'page': self, 'subpage': subpage, 'headline': ''}
         return show_participants(request, extra_context=context)
 
-
     @route(r'download/$')
     def download(self, request):
+        if not request.user.is_authenticated():
+            messages.info(request, 'This is a restricted area. To proceed you need to log in.')
+            return HttpResponseRedirect(self.reverse_subpage('login'))
         return participant_download(self, request)
 
     @route(r'logout/$')
@@ -486,12 +490,18 @@ class DashboardPage(RoutablePageWithDefault):
 
     @route(r'change-password/$')
     def change_password(self, request):
+        if not request.user.is_authenticated():
+            messages.info(request, 'This is a restricted area. To proceed you need to log in.')
+            return HttpResponseRedirect(self.reverse_subpage('login'))
         subpage = {'title': 'Change password', 'url': ''}
         context = {'page': self, 'subpage': subpage, 'headline': ''}
         return password_change(request, extra_context=context)
 
     @route(r'update-contact-information/$')
     def update_contact_information(self, request):
+        if not request.user.is_authenticated():
+            messages.info(request, 'This is a restricted area. To proceed you need to log in.')
+            return HttpResponseRedirect(self.reverse_subpage('login'))
         subpage = {'title': 'Update contact information', 'url': ''}
         context = {'page': self, 'subpage': subpage, 'headline': ''}
         return update_contact_information_view(request, self, extra_context=context)
