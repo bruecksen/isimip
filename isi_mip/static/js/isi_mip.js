@@ -38,10 +38,13 @@ $(function() {
 
 		if (searchvalue) {
 			var $rows = $('tbody tr');
-			var val = $.trim(searchvalue).replace(/ +/g, ' ').toLowerCase();
+			var val = '^(?=.*' + $.trim(searchvalue).split(/\s+/).join(')(?=.*') + ').*$',
+				reg = RegExp(val, 'i'),
+				text;
+			console.log(val);
 			$rows.show().filter(function() {
-				var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
-				return !~text.indexOf(val);
+				text = $(this).text().replace(/\s+/g, ' ');
+				return !reg.test(text);
 			}).hide();
 		}
 
