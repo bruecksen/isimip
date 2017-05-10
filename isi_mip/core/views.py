@@ -12,7 +12,7 @@ def search(request, extra_context):
     # Search
     search_query = request.GET.get('query', None)
     if search_query:
-        page_results = Page.objects.live().search(search_query)
+        page_results = Page.objects.live().search(search_query).annotate_score("score")
 
         # Log the query so Wagtail can suggest promoted results
         Query.get(search_query).add_hit()

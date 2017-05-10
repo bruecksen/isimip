@@ -33,6 +33,10 @@ from isi_mip.contrib.forms import AuthenticationForm
 class BlogPage(_BlogPage):
     parent_page_types = ['pages.BlogIndexPage']
 
+    search_fields = _BlogPage.search_fields + [
+        index.SearchField('body')
+    ]
+
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context['blog'] = self
@@ -57,8 +61,7 @@ class BlogIndexPage(_BlogIndexPage):
     ]
 
     search_fields = Page.search_fields + [
-        index.SearchField('title', partial_match=True, boost=1),
-        index.SearchField('description', boost=1),
+        index.SearchField('description'),
     ]
 
     def get_context(self, request, *args, **kwargs):
@@ -135,8 +138,7 @@ class GenericPage(TOCPage):
     ]
 
     search_fields = Page.search_fields + [
-        index.SearchField('title', partial_match=True, boost=6),
-        index.SearchField('content', boost=4),
+        index.SearchField('content'),
     ]
 
 
@@ -182,10 +184,9 @@ class HomePage(RoutablePageWithDefault):
     ]
 
     search_fields = Page.search_fields + [
-        index.SearchField('teaser_text', boost=4),
-        index.SearchField('teaser_title', partial_match=True, boost=6),
-        index.SearchField('title', partial_match=True, boost=6),
-        index.SearchField('content', boost=4),
+        index.SearchField('teaser_text'),
+        index.SearchField('teaser_title', partial_match=True),
+        index.SearchField('content'),
     ]
 
     def get_context(self, request, *args, **kwargs):
@@ -227,8 +228,7 @@ class AboutPage(TOCPage):
     ]
 
     search_fields = Page.search_fields + [
-        index.SearchField('title', partial_match=True, boost=6),
-        index.SearchField('content', boost=4),
+        index.SearchField('content'),
     ]
 
 
@@ -258,8 +258,7 @@ class GettingStartedPage(RoutablePageWithDefault):
         ObjectList(RoutablePageWithDefault.settings_panels, heading='Settings', classname="settings"),
     ])
     search_fields = Page.search_fields + [
-        index.SearchField('title', partial_match=True, boost=6),
-        index.SearchField('content', boost=4),
+        index.SearchField('content'),
     ]
 
     @route(r'^details/(?P<id>\d+)/$')
@@ -342,8 +341,7 @@ class OutputDataPage(TOCPage):
         StreamFieldPanel('content'),
     ]
     search_fields = Page.search_fields + [
-        index.SearchField('title', partial_match=True, boost=6),
-        index.SearchField('content', boost=4),
+        index.SearchField('content'),
     ]
 
 
@@ -357,8 +355,7 @@ class OutcomesPage(TOCPage):
         StreamFieldPanel('content'),
     ]
     search_fields = Page.search_fields + [
-        index.SearchField('title', partial_match=True, boost=6),
-        index.SearchField('content', boost=4),
+        index.SearchField('content'),
     ]
 
 
@@ -373,8 +370,7 @@ class FAQPage(TOCPage):
         StreamFieldPanel('content'),
     ]
     search_fields = Page.search_fields + [
-        index.SearchField('title', partial_match=True, boost=6),
-        index.SearchField('content', boost=4),
+        index.SearchField('content'),
     ]
 
 
@@ -544,9 +540,8 @@ class FormPage(AbstractEmailForm):
         ], "Email"),
     ]
     search_fields = Page.search_fields + [
-        index.SearchField('title', partial_match=True, boost=6),
-        index.SearchField('top_content', boost=4),
-        index.SearchField('bottom_content', boost=4),
+        index.SearchField('top_content'),
+        index.SearchField('bottom_content'),
     ]
 
     edit_handler = TabbedInterface([
