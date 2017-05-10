@@ -16,7 +16,6 @@ $(function() {
 		// disable rows by filter
 		// iterate filters
 		$.each(filter, function(colnumber, value) {
-			console.log('apply filer for colnumber', colnumber, 'and value', value);
 			// iterate rows
 			table.find('tbody tr').each(function() {
 				// hide rows not matching filter
@@ -26,7 +25,6 @@ $(function() {
 				row.find('td:nth-child(' + colnumber + ')').find('.widget-table-col-line').each(function() {
 					var colline = $(this);
 					var collinetext = colline.text();
-					console.log($.trim(collinetext), $.trim(value));
 					if ( $.trim(collinetext) == $.trim(value) ) {
 						showcolline = true;
 					}
@@ -34,7 +32,6 @@ $(function() {
 
 				if (!showcolline) {
 					$(row).hide();
-					console.log(row);
 				}
 			});
 		});
@@ -128,7 +125,7 @@ $(function() {
 		});
 
 
-		console.log('Table updated. activepage:',activepage,'filter:',filter,'rowsperpage:',rowsperpage,'rowsintable:',rowsintable,'numberofpages:',numberofpages, 'searchvalue:', searchvalue);
+		// console.log('Table updated. activepage:',activepage,'filter:',filter,'rowsperpage:',rowsperpage,'rowsintable:',rowsintable,'numberofpages:',numberofpages, 'searchvalue:', searchvalue);
 
 		$(window).trigger('colsreordered');
 
@@ -397,7 +394,7 @@ $(function() {
 			});
 		});
 
-		console.log('Table Colums set to max 50% width.');
+		// console.log('Table Colums set to max 50% width.');
 	}
 
 	$(window).on('resize colsreordered', function() {
@@ -648,7 +645,6 @@ $(function() {
 		var $el = $(this);
 		if ($el.hasClass('open') && event.target == this) {
 			var $a = $el.children('a.dropdown-toggle');
-			console.log($el.children('a.dropdown-toggle'));
 			if ($a.length && $a.attr('href')) {
 				location.href = $a.attr('href');
 			}
@@ -656,7 +652,6 @@ $(function() {
 	});
 	// close dropdown menu if anchor link is clicked
 	$('li.dropdown .dropdown-menu a').on('click', function(event) {
-		console.log('clicked');
 		$(this).parents('.dropdown.open').find('.dropdown-toggle').dropdown('toggle');
 	});
 });
@@ -677,7 +672,6 @@ $(function() {
 	var options = {
 		"each": function(node){
 			if(hasJumped == false){
-				console.log("offset: " + $(node).offset().top);
 				hasJumped = true;
 				$('html, body').stop().animate({
 					scrollTop: $(node).offset().top - 120
@@ -688,7 +682,6 @@ $(function() {
 	};
 	if (location.search != undefined && location.search != "" && location.search.indexOf('query') != -1) {
 		var query = getParameterByName("query");
-		console.log("query: " + query);
 		$("div.container.scrollable-container").not(".search-results-page").mark(query, options);
 	}
 });
