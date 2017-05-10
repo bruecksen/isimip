@@ -151,7 +151,7 @@ class InputDataAdmin(admin.ModelAdmin):
 
 class OutputDataAdmin(admin.ModelAdmin):
     model = OutputData
-    list_display = ('get_sector', 'get_model', 'get_simulation_round')
+    list_display = ('get_sector', 'get_model', 'get_simulation_round', 'get_drivers', 'experiments')
     list_filter = ('sector__name', 'simulation_round__name')
     formfield_overrides = {
         models.ManyToManyField: {'widget': CheckboxSelectMultiple},
@@ -170,6 +170,11 @@ class OutputDataAdmin(admin.ModelAdmin):
         return obj.model and obj.model.base_model.name or obj.id
     get_model.admin_order_field = 'model__name'
     get_model.short_description = 'Impact Model'
+
+    def get_drivers(self, obj):
+        return ", ".join([driver.name for driver in obj.drivers.all()])
+    get_drivers.admin_order_field = 'drivers__name'
+    get_drivers.short_description = 'Input data'
 
 
 class ClimateVariableAdmin(admin.ModelAdmin):
