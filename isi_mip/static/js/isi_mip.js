@@ -41,12 +41,10 @@ $(function() {
 
 		if (searchvalue) {
 			var $rows = $('tbody tr');
-			var val = '^(?=.*\\b' + $.trim(searchvalue).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
-				reg = RegExp(val, 'i'),
-				text;
+			var val = $.trim(searchvalue).replace(/ +/g, ' ').toLowerCase();
 			$rows.show().filter(function() {
-				text = $(this).text().replace(/\s+/g, ' ');
-				return !reg.test(text);
+				var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+				return !~text.indexOf(val);
 			}).hide();
 		}
 
