@@ -298,6 +298,15 @@ class BaseImpactModel(index.Indexed, models.Model):
                 ('Contact Person', cpers),
             ])]
 
+    def save(self, *args, **kwargs):
+        is_creation = self.pk is None
+        super().save(*args, **kwargs)
+        if not is_creation:
+            # make sure if sector changes that sector specific objects exists for every impact model
+            for impact_model in ImpactModel.objects.filter(base_model=self):
+                if not hasattr(impact_model, impact_model.fk_sector_name):
+                    self.sector.model.objects.get_or_create(impact_model=impact_model)
+
 
 class ImpactModel(models.Model):
     base_model = models.ForeignKey(BaseImpactModel, null=True, blank=True, related_name='impact_model', on_delete=models.SET_NULL)
