@@ -309,7 +309,7 @@ class BaseImpactModel(index.Indexed, models.Model):
 
 
 class ImpactModel(models.Model):
-    base_model = models.ForeignKey(BaseImpactModel, null=True, blank=True, related_name='impact_model', on_delete=models.SET_NULL)
+    base_model = models.ForeignKey(BaseImpactModel, null=True, blank=True, related_name='impact_model', on_delete=models.CASCADE)
     simulation_round = models.ForeignKey(
         SimulationRound, blank=True, null=True, on_delete=models.SET_NULL,
         help_text="The ISIMIP simulation round for which these model details are relevant"
