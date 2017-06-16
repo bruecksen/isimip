@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from django import template
 from django.forms import BaseForm, TextInput, Textarea
-from django.forms.widgets import Select
+from django.forms.widgets import Select, CheckboxInput, CheckboxSelectMultiple, RadioSelect
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
@@ -84,6 +84,36 @@ def template_form(form, **kwargs):
                 context['options'] += [{'checked': True, 'label': value, 'value': value}]
 
             template = 'widgets/multiselect.html'
+        elif isinstance(field.field.widget, RadioSelect):
+            context.update({
+                'nullable': not field.field.required,
+                'options': []
+            })
+            for k, v in field.field.choices:
+                if isinstance(value, list):
+                    checked = str(k) in [str(x) for x in value]
+                else:
+                    checked = k == value
+                if v == '---------' and not k:
+                    continue
+                context['options'] += [{'checked': checked, 'label': v, 'value': k}]
+
+            template = 'widgets/select-radio.html'
+        elif isinstance(field.field.widget, CheckboxSelectMultiple):
+            context.update({
+                'nullable': not field.field.required,
+                'options': []
+            })
+            for k, v in field.field.choices:
+                if isinstance(value, list):
+                    checked = str(k) in [str(x) for x in value]
+                else:
+                    checked = k == value
+                if v == '---------' and not k:
+                    continue
+                context['options'] += [{'checked': checked, 'label': v, 'value': k}]
+
+            template = 'widgets/multiselect.html'
         elif isinstance(field.field.widget, Select):
             context.update({
                 'nullable': not field.field.required,
@@ -99,8 +129,6 @@ def template_form(form, **kwargs):
                     continue
                 context['options'] += [{'checked': checked, 'label': v, 'value': k}]
 
-            if not any(opt['checked'] for opt in context['options']) and value:
-                context['options'] += [{'checked': True, 'label': value, 'value': value}]
             template = 'widgets/select-dropdown.html'
         elif isinstance(field.field.widget, RefPaperWidget):
             context['papers'] = []
