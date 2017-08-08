@@ -1,5 +1,5 @@
-from fabric.api import cd, run, env
-from fabvenv import virtualenv
+from __future__ import with_statement
+from fabric.api import *
 
 
 def staging():
@@ -37,20 +37,19 @@ def reload_webserver():
 
 
 def migrate():
-    with virtualenv(env.virtualenv_path):
+    with prefix("source %(virtualenv_path)s/bin/activate" % env):
         run("%(path)s/manage.py migrate --settings=config.settings.production" % env)
 
 
 def ping():
-    run(
-        "echo %(after_deploy_url)s returned:  \>\>\>  $(curl --write-out %%{http_code} --silent --output /dev/null %(after_deploy_url)s)" % env)
+    run("echo %(after_deploy_url)s returned:  \>\>\>  $(curl --write-out %%{http_code} --silent --output /dev/null %(after_deploy_url)s)" % env)
 
 
 def deploy():
     with cd(env.path):
         run("git pull %(push_remote)s %(push_branch)s" % env)
-        with virtualenv(env.virtualenv_path):
-            run("pip install -Ur requirements/production.txt")
+        with prefix("source %(virtualenv_path)s/bin/activate" % env):
+            run("pip install -r requirements/production.txt")
             run("./manage.py collectstatic --noinput --settings=config.settings.production")
 
     migrate()
