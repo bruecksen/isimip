@@ -22,7 +22,7 @@ class UserProfileInline(admin.StackedInline):
     can_delete = False
     verbose_name_plural = 'user profiles'
     filter_vertical = ('owner', 'involved')
-    filter_horizontal = ('sector')
+    filter_horizontal = ('sector', )
 
     class Media:
         css = {
