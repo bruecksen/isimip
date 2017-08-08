@@ -21,7 +21,8 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name_plural = 'user profiles'
-    filter_vertical = ('owner', 'involved', 'sector')
+    filter_vertical = ('owner', 'involved')
+    filter_horizontal = ('sector')
 
     class Media:
         css = {

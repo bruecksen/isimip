@@ -1,20 +1,16 @@
 .field-owner .stacked .selector-available,
 .field-involved .stacked .selector-available,
-.field-sector .stacked .selector-available,
 .field-owner .stacked .selector-chosen,
-.field-involved .stacked .selector-chosen,
-.field-sector .stacked .selector-chosen {
+.field-involved .stacked .selector-chosen {
     width: 780px;
 }
 
 .field-owner .selector select,
-.field-involved .selector select,
-.field-sector .selector select {
+.field-involved .selector select {
     width: 780px;
 }
 
 .field-owner .selector,
-.field-involved .selector,
-.field-sector .selector {
+.field-involved .selector {
     width: 780px;
 }
