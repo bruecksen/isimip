@@ -21,10 +21,12 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
     verbose_name_plural = 'user profiles'
-    filter_horizontal = ('owner', 'involved', 'sector')
-    # formfield_overrides = {
-    #     models.ManyToManyField: {'widget': CheckboxSelectMultiple},
-    # }
+    filter_vertical = ('owner', 'involved', 'sector')
+
+    class Media:
+        css = {
+            'all': ('css/resize-widget.css',),
+        }
 
 
 class SimulationRoundListFilter(admin.SimpleListFilter):

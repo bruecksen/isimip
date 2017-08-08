@@ -1,0 +1,12 @@
+.stacked .selector-available,
+.stacked .selector-chosen {
+    width: 780px;
+}
+
+.selector select {
+    width: 780px;
+}
+
+.selector {
+    width: 780px;
+}
