@@ -70,7 +70,7 @@ class BlogBlock(blocks.StructBlock):
         # context['teaser_template'] = 'widgets/page-teaser.html'
         context['count'] = entry_count
         context['title'] = title
-        context['slug'] = blog_index.slug if blog_index else ''
+        context['slug'] = blog_index.url if blog_index else ''
         context['outter_col'] = int(3 * entry_count)
         context['inner_col'] = int(12 / entry_count)
 
