@@ -357,7 +357,7 @@ class ImpactModel(models.Model):
             for owner in self.base_model.impact_model_owner.all():
                 owner.involved.add(self)
         # make sure if sector changes that sector specific objects exists for the impact model
-        if not hasattr(self, self.fk_sector_name):
+        if not is_duplication and not hasattr(self, self.fk_sector_name):
             self.base_model.sector.model.objects.get_or_create(impact_model=self)
 
     def duplicate(self, simulation_round):
