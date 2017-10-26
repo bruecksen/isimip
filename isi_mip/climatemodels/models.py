@@ -352,6 +352,11 @@ class ImpactModel(models.Model):
             InputDataInformation.objects.get_or_create(impact_model=self)
             OtherInformation.objects.get_or_create(impact_model=self)
 
+        # make all owners involved in the duplicated model
+        if is_creation and self.base_model:
+            for owner in self.base_model.impact_model_owner.all():
+                owner.involved.add(self)
+
     def duplicate(self, simulation_round):
         # save old references
         old_technical_information = self.technicalinformation
