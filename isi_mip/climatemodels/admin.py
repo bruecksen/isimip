@@ -181,10 +181,16 @@ class ClimateVariableAdmin(admin.ModelAdmin):
     model = ClimateVariable
 
     def get_type(self, obj):
-        return ','.join(set([input_data.data_type.name for input_data in obj.inputdata_set.all().distinct()]))
+        return ','.join(set(filter(None, [input_data.data_type and input_data.data_type.name for input_data in obj.inputdata_set.all().distinct()])))
     get_type.admin_order_field = 'sector__name'
     get_type.short_description = 'Data type'
-    list_display = ('name', 'abbreviation', 'get_type')
+
+    def get_inputdata(self, obj):
+        return ','.join(set(filter(None, [input_data.name for input_data in obj.inputdata_set.all().distinct()])))
+    get_inputdata.admin_order_field = 'sector__name'
+    get_inputdata.short_description = 'Input Data'
+
+    list_display = ('name', 'abbreviation', 'get_type', 'get_inputdata')
     list_filter = ('inputdata__data_type__name',)
 
 

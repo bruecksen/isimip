@@ -374,7 +374,7 @@ class ImpactModel(models.Model):
         old_technical_information.impact_model = duplicate
         old_technical_information.save()
         # Input Data
-        old_climate_variables = old_input_data.climate_variables.all()
+        old_climate_variables = old_input_data.climate_variables.filter(inputdata__simulation_round=simulation_round)
         old_simulated_atmospheric_climate_data_sets = old_input_data.simulated_atmospheric_climate_data_sets.filter(simulation_round=simulation_round)
         old_observed_atmospheric_climate_data_sets = old_input_data.observed_atmospheric_climate_data_sets.filter(simulation_round=simulation_round)
         old_simulated_ocean_climate_data_sets = old_input_data.simulated_ocean_climate_data_sets.filter(simulation_round=simulation_round)
