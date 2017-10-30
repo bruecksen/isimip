@@ -1,3 +1,21 @@
+function getParameterByName(name, url) {
+	if (!url) url = window.location.href;
+	name = name.replace(/[\[\]]/g, "\\$&");
+	var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+		results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return '';
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+$(function() {
+	// Javascript to enable link to tab
+	var tab = getParameterByName("tab")
+	if (tab) {
+		$('#impact-model-tabs a[href="#'+tab+'"]').tab('show');
+	}
+});
+
 $(function() {
 	// Die Tabllen im widget-table haben spezielle Funktionen wie Paginierung, 
 

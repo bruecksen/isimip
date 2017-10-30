@@ -119,7 +119,7 @@ class OutputDataBlock(StructBlock):
                 'invisible': i >= value.get('rows_per_page'),
                 'cols': [
                     {'texts': [odat.sector]},
-                    {'texts': ["<a href='/impactmodels/details/%s/'>%s</a>" % (odat.model.base_model.id, odat.model.base_model.name) if odat.model else '']},
+                    {'texts': ["<a href='/impactmodels/details/%s/?tab=%s'>%s</a>" % (odat.model.base_model.id, odat.model.simulation_round.slug, odat.model.base_model.name) if odat.model else '']},
                     {'texts': [sr.name for sr in odat.simulation_round.all()]},
                     {'texts': [odat.experiments]},
                     {'texts': drivers},
