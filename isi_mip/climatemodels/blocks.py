@@ -2,7 +2,6 @@ import math
 
 from django.utils.html import urlize
 from wagtail.wagtailcore.blocks import StructBlock
-from wagtail.wagtailcore.blocks.field_block import TextBlock
 
 from isi_mip.climatemodels.models import InputData, OutputData, BaseImpactModel, SimulationRound
 from isi_mip.contrib.blocks import IntegerBlock, RichTextBlock
@@ -111,7 +110,6 @@ class OutputDataBlock(StructBlock):
         context['body'] = {
             'rows': [],
         }
-
         outputdata = OutputData.objects.order_by('-date', 'sector', 'model')
         for i, odat in enumerate(outputdata):
             drivers = [x.name for x in odat.drivers.all()]
@@ -119,7 +117,7 @@ class OutputDataBlock(StructBlock):
                 'invisible': i >= value.get('rows_per_page'),
                 'cols': [
                     {'texts': [odat.sector]},
-                    {'texts': [odat.model.base_model.name if odat.model else '']},
+                    {'texts': ["<a href='/impactmodels/details/%s/'>%s</a>" % (odat.model.base_model.id, odat.model.base_model.name) if odat.model else '']},
                     {'texts': [sr.name for sr in odat.simulation_round.all()]},
                     {'texts': [odat.experiments]},
                     {'texts': drivers},
