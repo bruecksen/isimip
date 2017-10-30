@@ -110,6 +110,8 @@ class OutputDataBlock(StructBlock):
         context['body'] = {
             'rows': [],
         }
+        # The linking of the impact model should be refactored using the reverse_subpage of the page model.
+        # This is not possible at the moment because of circular import issues.
         outputdata = OutputData.objects.order_by('-date', 'sector', 'model')
         for i, odat in enumerate(outputdata):
             drivers = [x.name for x in odat.drivers.all()]

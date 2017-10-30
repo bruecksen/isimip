@@ -30,16 +30,22 @@ class ImpactModelToXLSX:
         all_field_titles = []
         for model in models:
             fields = model._meta.fields
-            filtered_fields = [field for field in fields if field.name not in ('id', 'owners', 'base_model', 'public', 'impact_model')]
+            filtered_fields = [field for field in fields if field.name not in ('id', 'base_model', 'public', 'impact_model')]
             model_fields[model.__name__] = {
                 'class': model,
                 'fields': [f.name for f in filtered_fields],
             }
             all_field_titles.extend([x.verbose_name for x in filtered_fields])
+            if model == BaseImpactModel:
+                all_field_titles.append('Contact persons')
+        model_fields['BaseImpactModel']['fields'].append('contact_persons')
         general.write_row(0, 0, data=all_field_titles, cell_format=bold)
         for i, impact_model in enumerate(self.qs):
             for j, field in enumerate(model_fields['BaseImpactModel']['fields']):
-                data = getattr(impact_model.base_model, field) or ''
+                if field == 'contact_persons':
+                    data = ', '.join(['%s %s' % (owner.name, owner.email) for owner in impact_model.base_model.impact_model_owner.all()])
+                else:
+                    data = getattr(impact_model.base_model, field) or ''
                 general.write(i + 1, j, str(data))
             for j, field in enumerate(model_fields['ImpactModel']['fields'], start=j+1):
                 data = getattr(impact_model, field) or ''
