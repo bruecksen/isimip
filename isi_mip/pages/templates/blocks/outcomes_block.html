@@ -1,8 +1,9 @@
+{% load wagtailcore_tags %}
 <div class="seeallblock">
 	<div class="row">
 		{% for paper in value.papers %}
 			<div class="col-sm-3" {% if forloop.counter > value.see_all_offset %} style="display:none;"{% endif %}>
-				{{ paper }}
+				{% include_block paper %}
 			</div>
 			{% cycle '' '' '' '</div><div class="row">' %}
 		{% endfor %}

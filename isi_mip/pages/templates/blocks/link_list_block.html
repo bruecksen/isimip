@@ -1,4 +1,5 @@
+{% load wagtailcore_tags %}
 {% for link in value %}
-    {{ link }}
+    {% include_block link %}
     {% include 'widgets/horizontal-ruler.html' %}
 {% endfor %}
