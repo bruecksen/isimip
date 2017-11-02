@@ -13,33 +13,6 @@ EMPTY_SECTORS = [
     'Permafrost',
 ]
 
-SKIP_FIELDS = [
-    'id',
-    'base_model',
-    'public',
-    'impact_model',
-    'technicalinformation',
-    'inputdatainformation',
-    'otherinformation',
-    'genericsector',
-    'agriculture',
-    'biomes',
-    'forests',
-    'energy',
-    'marineecosystemsglobal',
-    'marineecosystemsregional',
-    'waterglobal',
-    'waterregional',
-    'biodiversity',
-    'health',
-    'coastalinfrastructure',
-    'permafrost',
-    'computablegeneralequilibriummodelling',
-    'agroeconomicmodelling',
-    'outputdata',
-
-]
-
 
 class ImpactModelToXLSX:
     # https://xlsxwriter.readthedocs.org/en/latest/
@@ -56,23 +29,17 @@ class ImpactModelToXLSX:
         model_fields = OrderedDict()
         all_field_titles = []
         for model in models:
-            fields = model._meta.get_fields()
-            filtered_fields = [field for field in fields if field.name not in (SKIP_FIELDS)]
+            fields = model._meta.fields
+            filtered_fields = [field for field in fields if field.name not in ('id', 'base_model', 'public', 'impact_model')]
             model_fields[model.__name__] = {
                 'class': model,
                 'fields': [f.name for f in filtered_fields],
             }
-            for field in filtered_fields:
-                if hasattr(field, 'verbose_name'):
-                    all_field_titles.append(field.verbose_name.capitalize())
-                else:
-                    name = field.name.replace("_", " ").capitalize()
-                    all_field_titles.append(name)
+            all_field_titles.extend([x.verbose_name for x in filtered_fields])
             if model == BaseImpactModel:
                 all_field_titles.append('Contact persons')
         model_fields['BaseImpactModel']['fields'].append('contact_persons')
         general.write_row(0, 0, data=all_field_titles, cell_format=bold)
-        raise Exception(all_field_titles)
         for i, impact_model in enumerate(self.qs):
             for j, field in enumerate(model_fields['BaseImpactModel']['fields']):
                 if field == 'contact_persons':
