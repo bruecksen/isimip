@@ -111,6 +111,7 @@ class HRBlock(StreamBlock):
     class Meta:
         icon = 'horizontalrule'
         template = 'widgets/horizontal-ruler.html'
+        required = False
 
 
 class ImageBlock(ImageChooserBlock):
