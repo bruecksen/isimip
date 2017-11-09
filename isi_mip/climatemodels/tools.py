@@ -1,6 +1,8 @@
 from collections import OrderedDict
 import xlsxwriter
 
+from django.db.models import ManyToOneRel, ManyToManyRel, ManyToManyRel, ManyToManyField, ForeignKey
+
 from isi_mip.climatemodels.models import BaseImpactModel, ImpactModel, Sector, TechnicalInformation, \
     InputDataInformation, OtherInformation, SectorInformationField
 
@@ -13,6 +15,40 @@ EMPTY_SECTORS = [
     'Permafrost',
 ]
 
+SKIP_FIELDS = [
+    'id',
+    'base_model',
+    'public',
+    'impact_model',
+    'impact_model_owner',
+    'impact_model_involved',
+    'technicalinformation',
+    'inputdatainformation',
+    'otherinformation',
+    'genericsector',
+    'agriculture',
+    'biomes',
+    'forests',
+    'energy',
+    'marineecosystemsglobal',
+    'marineecosystemsregional',
+    'waterglobal',
+    'waterregional',
+    'biodiversity',
+    'health',
+    'coastalinfrastructure',
+    'permafrost',
+    'computablegeneralequilibriummodelling',
+    'agroeconomicmodelling',
+    'outputdata',
+]
+
+SORT_ORDER = {
+    "contactperson": 1,
+    "main_reference_paper": 1,
+    "other_references": 2,
+}
+
 
 class ImpactModelToXLSX:
     # https://xlsxwriter.readthedocs.org/en/latest/
@@ -20,6 +56,16 @@ class ImpactModelToXLSX:
         self.workbook = xlsxwriter.Workbook(res, {'in_memory': True})
         self.qs = qs
         self.xlsxdings()
+
+    def get_field_data(self, model, field_name):
+        field = model._meta.get_field(field_name)
+        if isinstance(field, ManyToManyField):
+            data = ", ".join(["%s" % i for i in getattr(model, field_name).all()])
+        elif isinstance(field, ManyToOneRel) or isinstance(field, ManyToManyRel):
+            data = ", ".join(["%s" % i for i in getattr(model, "%s_set" % field_name).all()])
+        else:
+            data = getattr(model, field_name) or ''
+        return data
 
     def xlsxdings(self):
         general = self.workbook.add_worksheet('General Information')
@@ -29,38 +75,38 @@ class ImpactModelToXLSX:
         model_fields = OrderedDict()
         all_field_titles = []
         for model in models:
-            fields = model._meta.fields
-            filtered_fields = [field for field in fields if field.name not in ('id', 'base_model', 'public', 'impact_model')]
+            fields = model._meta.get_fields()
+            filtered_fields = [field for field in fields if field.name not in (SKIP_FIELDS)]
+            filtered_fields.sort(key=lambda val: SORT_ORDER[val.name] if val.name in SORT_ORDER else 0)
             model_fields[model.__name__] = {
                 'class': model,
                 'fields': [f.name for f in filtered_fields],
             }
-            all_field_titles.extend([x.verbose_name for x in filtered_fields])
-            if model == BaseImpactModel:
-                all_field_titles.append('Contact persons')
-        model_fields['BaseImpactModel']['fields'].append('contact_persons')
+            for field in filtered_fields:
+                if hasattr(field, 'verbose_name'):
+                    all_field_titles.append(field.verbose_name.capitalize())
+                else:
+                    name = field.name.replace("_", " ").capitalize()
+                    all_field_titles.append(name)
         general.write_row(0, 0, data=all_field_titles, cell_format=bold)
         for i, impact_model in enumerate(self.qs):
             for j, field in enumerate(model_fields['BaseImpactModel']['fields']):
-                if field == 'contact_persons':
-                    data = ', '.join(['%s %s' % (owner.name, owner.email) for owner in impact_model.base_model.impact_model_owner.all()])
-                else:
-                    data = getattr(impact_model.base_model, field) or ''
+                data = self.get_field_data(impact_model.base_model, field)
                 general.write(i + 1, j, str(data))
-            for j, field in enumerate(model_fields['ImpactModel']['fields'], start=j+1):
-                data = getattr(impact_model, field) or ''
+            for j, field in enumerate(model_fields['ImpactModel']['fields'], start=j + 1):
+                data = self.get_field_data(impact_model, field)
                 general.write(i + 1, j, str(data))
-            for j, field in enumerate(model_fields['TechnicalInformation']['fields'], start=j+1):
+            for j, field in enumerate(model_fields['TechnicalInformation']['fields'], start=j + 1):
                 instance = impact_model.technicalinformation
                 data = getattr(instance, field) or ''
                 general.write(i + 1, j, str(data))
-            for j, field in enumerate(model_fields['InputDataInformation']['fields'], start=j+1):
+            for j, field in enumerate(model_fields['InputDataInformation']['fields'], start=j + 1):
                 instance = impact_model.inputdatainformation
-                data = getattr(instance, field) or ''
+                data = self.get_field_data(instance, field)
                 general.write(i + 1, j, str(data))
-            for j, field in enumerate(model_fields['OtherInformation']['fields'], start=j+1):
+            for j, field in enumerate(model_fields['OtherInformation']['fields'], start=j + 1):
                 instance = impact_model.otherinformation
-                data = getattr(instance, field) or ''
+                data = self.get_field_data(instance, field)
                 general.write(i + 1, j, str(data))
 
         for sector in Sector.objects.all():

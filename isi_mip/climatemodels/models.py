@@ -123,7 +123,7 @@ class ContactPerson(models.Model):
     base_impact_model = models.ForeignKey('BaseImpactModel', null=True, blank=True)
 
     def __str__(self):
-        return "%s (%s) - %s" % (self.name, self.institute, self.email)
+        return "%s%s %s" % (self.name, self.institute and " (%s)" % self.institute or "", self.email)
 
     def pretty(self):
         return "{0.name} (<a href='mailto:{0.email}'>{0.email}</a>), {0.institute}".format(self)
