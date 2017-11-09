@@ -32,7 +32,8 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
 
 
 class SpecificPageChooserBlock(PageChooserBlock):
-    target_model = BlogIndexPage
+    class Meta:
+        target_model = BlogIndexPage
 
 
 class IntegerBlock(FieldBlock):
@@ -49,8 +50,9 @@ class EmailBlock(FieldBlock):
 
 
 class BlogBlock(blocks.StructBlock):
-    blog_index = SpecificPageChooserBlock(required=False, help_text='Select blog index page.')
+    blog_index = PageChooserBlock(required=False, target_model=BlogIndexPage, help_text='Select blog index page.')
     title = CharBlock(required=False, help_text='Per default, the title of the blog index will be used.')
+    jump_link_id = CharBlock(required=False, help_text='Per default, the slug of the title will be used.')
     entry_count = IntegerBlock(required=True, min_value=1, max_value=5, default=4,
                                help_text='How many blog entries should be displayed?')
 
@@ -70,7 +72,12 @@ class BlogBlock(blocks.StructBlock):
         # context['teaser_template'] = 'widgets/page-teaser.html'
         context['count'] = entry_count
         context['title'] = title
-        context['slug'] = slugify(title, allow_unicode=True) if title else ''
+        jump_link_id = value.get('jump_link_id')
+        if jump_link_id:
+            context['slug'] = jump_link_id
+        else:
+            context['slug'] = slugify(title, allow_unicode=True)
+        context['blog_page_url'] = blog_index.url
         context['outter_col'] = int(3 * entry_count)
         context['inner_col'] = int(12 / entry_count)
 
