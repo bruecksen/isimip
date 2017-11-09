@@ -201,7 +201,7 @@ class BaseSectorForm(forms.ModelForm):
                     fields.append(field.unique_identifier)
                     self.generic_fields.append(field.unique_identifier)
                     self.fields[field.unique_identifier] = forms.CharField(widget=MyTextInput(textarea=True), label=field.name, help_text=field.help_text, required=False, initial='')
-                    if instance.data:
+                    if instance.data and field.unique_identifier in instance.data:
                         field_initial = instance.data[field.unique_identifier]
                         if field_initial:
                             self.fields[field.unique_identifier].initial = field_initial
