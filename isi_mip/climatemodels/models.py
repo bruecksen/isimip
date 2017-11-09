@@ -1098,7 +1098,6 @@ class AgroEconomicModelling(BaseSector):
 
 
 class OutputData(models.Model):
-    sector = models.ForeignKey(Sector)
     model = models.ForeignKey(ImpactModel, null=True, blank=True, on_delete=models.SET_NULL)
     simulation_round = models.ManyToManyField(SimulationRound)
     scenarios = models.ManyToManyField(Scenario, blank=True)
@@ -1108,8 +1107,8 @@ class OutputData(models.Model):
 
     def __str__(self):
         if self.model:
-            return "%s : %s" % (self.sector, self.model.base_model.name)
-        return self.sector.name
+            return "%s : %s" % (self.model.base_model.sector, self.model.base_model.name)
+        return self.model.base_model.sector.name
 
     class Meta:
         verbose_name = verbose_name_plural = 'Output data'

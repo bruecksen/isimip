@@ -152,7 +152,7 @@ class InputDataAdmin(admin.ModelAdmin):
 class OutputDataAdmin(admin.ModelAdmin):
     model = OutputData
     list_display = ('get_sector', 'get_model', 'get_simulation_round', 'get_drivers', 'experiments')
-    list_filter = ('sector__name', 'simulation_round__name')
+    list_filter = ('model__base_model__sector__name', 'simulation_round__name')
     formfield_overrides = {
         models.ManyToManyField: {'widget': CheckboxSelectMultiple},
     }
@@ -162,8 +162,8 @@ class OutputDataAdmin(admin.ModelAdmin):
     get_simulation_round.short_description = 'Simulation rounds'
 
     def get_sector(self, obj):
-        return obj.sector.name
-    get_sector.admin_order_field = 'sector__name'
+        return obj.model and obj.model.base_model.sector.name or ''
+    get_sector.admin_order_field = 'model__base_model__sector__name'
     get_sector.short_description = 'Sector'
 
     def get_model(self, obj):
