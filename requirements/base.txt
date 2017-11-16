@@ -6,6 +6,7 @@ python-dateutil==2.5.3
 pyexcel==0.2.1
 pyexcel-xlsx==0.1.0
 xlsxwriter==0.8.6
+unicodecsv==0.14.1
 
 requests==2.10.0
 tweepy==3.5.0

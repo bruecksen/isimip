@@ -1,12 +1,14 @@
-from django import forms
+import unicodecsv
+
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericTabularInline
 from django.core import urlresolvers
 from django.core.urlresolvers import NoReverseMatch
 from django.forms import CheckboxSelectMultiple
+from django.http import HttpResponse
 
 from isi_mip.sciencepaper.models import Author
 from .models import *
+from isi_mip.contrib.models import UserProfile
 
 
 class HideAdmin(admin.ModelAdmin):
@@ -17,10 +19,24 @@ class HideAdmin(admin.ModelAdmin):
         return {}
 
 
+def get_contact_emails(modeladmin, request, queryset):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=contact-persons.csv'
+    writer = unicodecsv.writer(response, encoding='utf-8')
+    writer.writerow(['Simulation Round', 'Email', 'Name', 'Institute', 'Country'])
+    for sr in queryset.all():
+        contacts = UserProfile.objects.filter(owner__impact_model__simulation_round=sr).distinct()
+        for contact in contacts:
+            writer.writerow([sr.name, contact.email, contact.name, contact.institute, contact.country])
+    return response
+get_contact_emails.short_description = "Get contact persons of selected Simulation Round"
+
+
 class SimulationRoundAdmin(admin.ModelAdmin):
     model = SimulationRound
     prepopulated_fields = {'slug': ('name',), }
     list_display = ('name', 'order')
+    actions = [get_contact_emails]
 
 
 class HideSectorAdmin(HideAdmin):
