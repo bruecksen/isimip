@@ -120,7 +120,7 @@ class OutputDataBlock(StructBlock):
                 'cols': [
                     {'texts': [odat.model.base_model.sector]},
                     {'texts': ["<a href='/impactmodels/details/%s/?tab=%s'>%s</a>" % (odat.model.base_model.id, odat.model.simulation_round.slug, odat.model.base_model.name) if odat.model else '']},
-                    {'texts': [sr.name for sr in odat.simulation_round.all()]},
+                    {'texts': [odat.model.simulation_round]},
                     {'texts': [odat.experiments]},
                     {'texts': drivers},
                     {'texts': [odat.date]}
