@@ -158,11 +158,11 @@ def input_data_details(page, request, id):
                            {'text': 'Variables: %s' % ', '.join((x.as_span() for x in data.variables.all()))},
                        ]
                    },
-                   {'notoggle': True, 'opened': True, 'term': 'Specifications', 'definitions': [{'text': data.specification}]},
-                   {'notoggle': True, 'opened': True, 'term': 'Data source', 'definitions': [{'text': data.data_source}]},
-                   {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': [{'text': urlize(linebreaks(data.caveats))}]},
+                   {'notoggle': True, 'opened': True, 'term': 'Specifications', 'definitions': data.specification and [{'text': urlize(linebreaks(data.specification))}]},
+                   {'notoggle': True, 'opened': True, 'term': 'Data source', 'definitions': data.data_source and [{'text': urlize(linebreaks(data.data_source))}]},
+                   {'notoggle': True, 'opened': True, 'term': 'Caveats', 'definitions': data.caveats and [{'text': urlize(linebreaks(data.caveats))}]},
                    {'notoggle': True, 'opened': True, 'term': 'Download Instructions',
-                    'definitions': [{'text': urlize(linebreaks(data.download_instructions))}]},
+                    'definitions': data.download_instructions and [{'text': urlize(linebreaks(data.download_instructions))}]},
                ]
                }
     return render(request, template, context)
