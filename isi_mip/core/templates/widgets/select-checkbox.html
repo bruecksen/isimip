@@ -1,0 +1,12 @@
+<div class="widget-select-radio form-group{% if error %} has-error{% endif %}{% if nullable %} widget-multiselect-nullable{% endif %}">
+{% if label %}
+<label class="control-label">{{ label }}{% if required %}<span class="asteriskField">*</span>{% endif %}</label>
+{% endif %}
+<fieldset>
+<input id="{{ option.label|slugify }}" name="{{ id }}" type="checkbox" value="true" {% if required %}required{% endif %}/>
+</fieldset>
+
+{% if help %}
+	<p class="help-block">{{ help }}</p>
+{% endif %}
+</div><!-- widget-multiselect -->

@@ -1,13 +1,16 @@
+import json
+
 from blog.models import BlogIndexPage as _BlogIndexPage
 from blog.models import BlogPage as _BlogPage
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.contrib.auth.views import login, logout, password_change
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.http.response import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
+from django.shortcuts import render
+from django.core.serializers.json import DjangoJSONEncoder
+from django.forms.widgets import EmailInput
 from modelcluster.fields import ParentalKey
 
 from wagtail.wagtailsearch import index
@@ -16,6 +19,7 @@ from wagtail.wagtailadmin.edit_handlers import *
 from wagtail.wagtailcore.fields import RichTextField, StreamField
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
+from wagtail.wagtailadmin.utils import send_mail
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
 from isi_mip.climatemodels.models import BaseImpactModel
@@ -521,6 +525,9 @@ class FormPage(AbstractEmailForm):
 
     top_content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
     confirmation_text = models.TextField(default='Your registration was submitted')
+    send_confirmation_email = models.BooleanField(default=False, verbose_name='Send confirmation email?')
+    confirmation_email_subject = models.CharField(default='ISIMIP Form submission confirmation.', max_length=500, verbose_name='Email subject', null=True, blank=True)
+    confirmation_email_text = models.TextField(default='The form was submitted successfully. We will get back to you soon.', verbose_name='Email text', null=True, blank=True)
     bottom_content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
 
     button_name = models.CharField(max_length=500, verbose_name='Button name', default='Submit')
@@ -533,6 +540,11 @@ class FormPage(AbstractEmailForm):
         InlinePanel('form_fields', label="Form fields"),
         FieldPanel('button_name'),
         FieldPanel('confirmation_text', classname="full"),
+        MultiFieldPanel([
+            FieldPanel('send_confirmation_email'),
+            FieldPanel('confirmation_email_subject'),
+            FieldPanel('confirmation_email_text', classname="full"),
+        ], "Confirmation email"),
         MultiFieldPanel([
             FieldPanel('to_address', classname="full"),
             FieldPanel('from_address', classname="full"),
@@ -556,3 +568,54 @@ class FormPage(AbstractEmailForm):
         message = {'tags': 'success', 'text': self.confirmation_text}
         context['confirmation_messages'] = [message]
         return context
+
+    def serve(self, request, *args, **kwargs):
+        context = self.get_context(request)
+        if request.method == 'POST':
+            form = self.get_form(request.POST, page=self, user=request.user)
+
+            if form.is_valid():
+                self.process_form_submission(form)
+
+                # render the landing_page
+                # TODO: It is much better to redirect to it
+                return render(
+                    request,
+                    self.get_landing_page_template(request),
+                    self.get_context(request)
+                )
+            else:
+                context['form_error'] = 'One of the fields below has not been filled out correctly. Please correct and resubmit.'
+        else:
+            form = self.get_form(page=self, user=request.user)
+
+        context['form'] = form
+        return render(
+            request,
+            self.get_template(request),
+            context
+        )
+
+    def process_form_submission(self, form):
+        self.get_submission_class().objects.create(
+            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder), page=self
+        )
+        if self.to_address:
+            self.send_mail(form)
+        if self.send_confirmation_email:
+            # quick hack sending a confirmation email to the user
+            confirmation_email_address = None
+            # check for confirmation email address and filter headings
+            for field in form:
+                if isinstance(field.field.widget, EmailInput):
+                    confirmation_email_address = field.value()
+                    break
+            if confirmation_email_address:
+                extra_content = ['', ]
+                for field in form:
+                    value = field.value()
+                    if isinstance(value, list):
+                        value = ', '.join(value)
+                    extra_content.append('{}: {}'.format(field.label, value))
+                extra_content = '\n'.join(extra_content)
+                send_mail(self.confirmation_email_subject, self.confirmation_email_text + extra_content, [confirmation_email_address, ], self.from_address,)

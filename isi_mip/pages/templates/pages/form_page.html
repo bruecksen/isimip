@@ -5,8 +5,12 @@
     <div class="form-page-bottom-content">{{ page.top_content }}</div>
 	<br>
     <div class="form-page-form">
+        {% if form_error %}
+            <div class="alert alert-danger" role="alert">{{ form.errors }}</div>
+        {% endif %}
         <form action="{% pageurl page %}" method="POST">
             {% csrf_token %}
+
             {% template_form form as nf %}
 	        {{ nf }}
 	        <br>

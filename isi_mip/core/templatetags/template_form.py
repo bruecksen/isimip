@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from django import template
 from django.forms import BaseForm, TextInput, Textarea
-from django.forms.widgets import Select, CheckboxInput, CheckboxSelectMultiple, RadioSelect
+from django.forms.widgets import Select, CheckboxSelectMultiple, CheckboxInput, RadioSelect
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
@@ -99,6 +99,17 @@ def template_form(form, **kwargs):
                 context['options'] += [{'checked': checked, 'label': v, 'value': k}]
 
             template = 'widgets/select-radio.html'
+        elif isinstance(field.field.widget, CheckboxInput):
+            context.update({
+                'nullable': not field.field.required,
+                'options': []
+            })
+            checked = k == value
+            if v == '---------' and not k:
+                continue
+            context['options'] += [{'checked': checked, 'label': v, 'value': k}]
+
+            template = 'widgets/select-checkbox.html'
         elif isinstance(field.field.widget, CheckboxSelectMultiple):
             context.update({
                 'nullable': not field.field.required,
