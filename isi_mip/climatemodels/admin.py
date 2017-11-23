@@ -85,15 +85,18 @@ class ImpactModelAdmin(admin.ModelAdmin):
         elif queryset.count() == 1:
             impact_model = queryset.first()
             simulation_rounds = impact_model.base_model.get_missing_simulation_rounds()
-            opts = self.model._meta
-            app_label = opts.app_label
-            context = {
-                "simulation_rounds": simulation_rounds,
-                "impact_model": impact_model,
-                "opts": opts,
-                "app_label": app_label,
-            }
-            return render(request, 'admin/duplicate_intermediate.html', context=context)
+            if not simulation_rounds.exists():
+                self.message_user(request, "This Impact Model already exists in every Simulation Round", messages.ERROR)
+            else:
+                opts = self.model._meta
+                app_label = opts.app_label
+                context = {
+                    "simulation_rounds": simulation_rounds,
+                    "impact_model": impact_model,
+                    "opts": opts,
+                    "app_label": app_label,
+                }
+                return render(request, 'admin/duplicate_intermediate.html', context=context)
     duplicate_impact_model.short_description = "Duplicate Impact Model"
 
     def get_name(self, obj):
