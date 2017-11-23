@@ -1,0 +1,26 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+        &rsaquo; <a href="{% url 'admin:app_list' app_label=app_label %}">{{ app_label|capfirst|escape }}</a>
+        &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+        &rsaquo; {% trans 'Duplicate Impact Model' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<form action="" method="post">  
+  {% csrf_token %}
+    <p>what is the target simulation round for the duplication?</p>
+    <select name="simulation_round">
+        {% for sr in simulation_rounds %}
+            <option value="{{sr.id}}">{{ sr.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="hidden" name="_selected_action" value="{{ impact_model.pk }}" />
+    <input type="hidden" name="action" value="duplicate_impact_model" />
+    <input type="submit" name="apply" value="Duplicate"/>
+</form>  
+{% endblock %}

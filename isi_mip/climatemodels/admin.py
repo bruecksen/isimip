@@ -1,10 +1,13 @@
 import unicodecsv
 
 from django.contrib import admin
+from django.contrib import messages
 from django.core import urlresolvers
 from django.core.urlresolvers import NoReverseMatch
 from django.forms import CheckboxSelectMultiple
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 
 from isi_mip.sciencepaper.models import Author
 from .models import *
@@ -67,6 +70,31 @@ class ImpactModelAdmin(admin.ModelAdmin):
     inlines = [TechnicalInformationAdmin, InputDataInformationAdmin, OtherInformationAdmin]
     model = ImpactModel
     search_fields = ('base_model__name', 'base_model__sector__name', 'simulation_round__name')
+    actions = ["duplicate_impact_model"]
+
+    def duplicate_impact_model(self, request, queryset):
+        if 'apply' in request.POST:
+            impact_model = queryset.first()
+            simulation_round_id = request.POST["simulation_round"]
+            simulation_round = SimulationRound.objects.get(id=simulation_round_id)
+            duplicate = impact_model.duplicate(simulation_round)
+            self.message_user(request, "The Impact Model was successfully duplicated")
+            return HttpResponseRedirect(reverse("admin:%s_%s_change" % (duplicate._meta.app_label, duplicate._meta.model_name), args=(duplicate.id,)))
+        if queryset.count() > 1:
+            self.message_user(request, "You can only duplicate one model at a time. Please don't select more then one model.", messages.ERROR)
+        elif queryset.count() == 1:
+            impact_model = queryset.first()
+            simulation_rounds = impact_model.base_model.get_missing_simulation_rounds()
+            opts = self.model._meta
+            app_label = opts.app_label
+            context = {
+                "simulation_rounds": simulation_rounds,
+                "impact_model": impact_model,
+                "opts": opts,
+                "app_label": app_label,
+            }
+            return render(request, 'admin/duplicate_intermediate.html', context=context)
+    duplicate_impact_model.short_description = "Duplicate Impact Model"
 
     def get_name(self, obj):
         return obj.base_model and obj.base_model.name or obj.id
