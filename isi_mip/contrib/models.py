@@ -47,11 +47,8 @@ class UserProfile(models.Model):
         ordering = ('user__last_name',)
 
 
-def create_profile(sender, **kwargs):
-    user = kwargs["instance"]
-    if kwargs["created"] and not user.userprofile:
-        user_profile = UserProfile(user=user)
-        user_profile.save()
+def create_profile(sender, instance, **kwargs):
+    profile, created = UserProfile.objects.get_or_create(user=instance)
 
 
 post_save.connect(create_profile, sender=User)
