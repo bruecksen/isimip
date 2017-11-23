@@ -72,12 +72,23 @@ def impact_model_details(page, request, id):
         edit_link = ''
         if can_edit_model:
             edit_link = '<i class="fa fa-cog" aria-hidden="true"></i> <a href="{}">Edit model information for simulation round {}</a>'.format(page.url + page.reverse_subpage(STEP_BASE, args=(im.id,)), im.simulation_round.name)
+        output_data = []
+        for od in im.outputdata_set.all():
+            model_details.insert(1, {
+                'term': 'Output Data',
+                'definitions': (
+                    {'text': "Experiments: <i>%s</i>" % od.experiments},
+                    {'text': "Climate Drivers: <i>%s</i>" % ", ".join([d.name for d in od.drivers.all()])},
+                    {'text': "Date: <i>%s</i>" % od.date},
+                )
+            })
         model_simulation_rounds.append({
             'simulation_round': im.simulation_round.name,
             'simulation_round_slug': im.simulation_round.slug,
             'model_name': base_model.name,
             'edit_link': edit_link,
-            'details': model_details
+            'details': model_details,
+            'output_data': output_data,
         })
     context['description'] = urlize(base_model.short_description or '')
     context['model_simulation_rounds'] = model_simulation_rounds
