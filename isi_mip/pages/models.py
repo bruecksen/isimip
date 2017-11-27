@@ -523,12 +523,12 @@ class FormPage(AbstractEmailForm):
     landing_page_template = 'pages/form_page_confirmation.html'
     subpage_types = []
 
-    top_content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
+    top_content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS, blank=True)
     confirmation_text = models.TextField(default='Your registration was submitted')
     send_confirmation_email = models.BooleanField(default=False, verbose_name='Send confirmation email?')
     confirmation_email_subject = models.CharField(default='ISIMIP Form submission confirmation.', max_length=500, verbose_name='Email subject', null=True, blank=True)
     confirmation_email_text = models.TextField(default='The form was submitted successfully. We will get back to you soon.', verbose_name='Email text', null=True, blank=True)
-    bottom_content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS)
+    bottom_content = StreamField(BASE_BLOCKS + COLUMNS_BLOCKS, blank=True)
 
     button_name = models.CharField(max_length=500, verbose_name='Button name', default='Submit')
 
