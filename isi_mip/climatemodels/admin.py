@@ -26,11 +26,12 @@ def get_contact_emails(modeladmin, request, queryset):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=contact-persons.csv'
     writer = unicodecsv.writer(response, encoding='utf-8')
-    writer.writerow(['Simulation Round', 'Email', 'Name', 'Institute', 'Country'])
+    writer.writerow(['Simulation Round', 'Impact Model', 'Sector', 'Email', 'Name', 'Institute', 'Country'])
     for sr in queryset.all():
         contacts = UserProfile.objects.filter(owner__impact_model__simulation_round=sr).distinct()
         for contact in contacts:
-            writer.writerow([sr.name, contact.email, contact.name, contact.institute, contact.country])
+            for model in contact.owner.filter(impact_model__simulation_round=sr):
+                writer.writerow([sr.name, model.name, model.sector, contact.email, contact.name, contact.institute, contact.country])
     return response
 get_contact_emails.short_description = "Get contact persons of selected Simulation Round"
 
