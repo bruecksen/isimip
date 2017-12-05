@@ -29,6 +29,16 @@ class UserProfile(models.Model):
     involved = models.ManyToManyField(ImpactModel, blank=True, related_name='impact_model_involved')
     show_in_participant_list = models.BooleanField(default=True)
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            try:
+                p = UserProfile.objects.get(user=self.user)
+                self.pk = p.pk
+            except UserProfile.DoesNotExist:
+                pass
+
+        super(UserProfile, self).save(*args, **kwargs)
+
     @property
     def name(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
