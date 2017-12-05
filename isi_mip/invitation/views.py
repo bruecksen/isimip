@@ -35,7 +35,7 @@ class InvitationView(FormView):
         user = User.objects.create(
             username=form.data['username'],
             email=form.data['email'],
-            is_active=False)
+            is_active=True)
         self.invite = Invitation.objects.create(
             user=user,
             token=hashlib.sha1(os.urandom(128)).hexdigest(),
