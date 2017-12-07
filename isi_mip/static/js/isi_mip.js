@@ -397,7 +397,7 @@ $(function() {
 $(function() {
 	function aligncols() {
 		// Grow page teasers to row height
-		$('.widget-table').each(function() {
+		$('.widget-table.aligncols').each(function() {
 			var table = $(this);
 			var tableWidth = table.width();
 
