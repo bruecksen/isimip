@@ -186,8 +186,8 @@ class SectorInformationGroupAdmin(admin.ModelAdmin):
 
 class InputDataAdmin(admin.ModelAdmin):
     model = InputData
-    list_display = ('name', 'data_type', 'get_simulation_round')
-    list_filter = ('data_type', 'simulation_round__name')
+    list_display = ('name', 'protocol_relation', 'data_type', 'get_simulation_round')
+    list_filter = ('protocol_relation', 'data_type', 'simulation_round__name')
     formfield_overrides = {
         models.ManyToManyField: {'widget': CheckboxSelectMultiple},
     }

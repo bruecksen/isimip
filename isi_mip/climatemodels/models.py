@@ -133,8 +133,15 @@ class ContactPerson(models.Model):
 
 
 class InputData(models.Model):
+    PROTOCOL_DATA = 'P'
+    SUPPLEMENTARY_DATA = 'S'
+    PROTOCOL_RELATION_CHOICES = (
+        (PROTOCOL_DATA, 'Protocol data'),
+        (SUPPLEMENTARY_DATA, 'Supplementary data'),
+    )
     name = models.CharField(max_length=500, unique=True)
     data_type = models.ForeignKey(DataType, null=True, blank=True, on_delete=models.SET_NULL)
+    protocol_relation = models.CharField(max_length=1, choices=PROTOCOL_RELATION_CHOICES, default=PROTOCOL_DATA)
     scenario = models.ManyToManyField(Scenario, blank=True, related_name='scenarios')
     variables = models.ManyToManyField(ClimateVariable, blank=True)
     simulation_round = models.ManyToManyField(SimulationRound, blank=True, related_name='simulationrounds')

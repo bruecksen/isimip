@@ -66,7 +66,7 @@ class InputDataBlock(StructBlock):
     def get_context(self, value, parent_context=None):
         context = super(InputDataBlock, self).get_context(value, parent_context=parent_context)
 
-        context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Data Type'}, {'text': 'Simulation round'}, {'text': 'Description'}]}
+        context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Protocol Relation'}, {'text': 'Data Type'}, {'text': 'Simulation round'}, {'text': 'Description'}]}
         context['body'] = {'rows': []}
 
         inputdata = InputData.objects.all()
@@ -78,6 +78,7 @@ class InputDataBlock(StructBlock):
             context['body']['rows'] += [{
                 'cols': [
                     {'texts': [link]},
+                    {'texts': [idata.get_protocol_relation_display()]},
                     {'texts': [idata.data_type]},
                     {'texts': [sr.name for sr in idata.simulation_round.all()]},
                     {'texts': [urlize(idata.description)]}], 'invisible': i >= row_limit
@@ -91,6 +92,15 @@ class InputDataBlock(StructBlock):
         context['id'] = 'selectorable'
         context['tableid'] = 'selectorable'
         context['searchfield'] = {'value': ''}
+
+        data_type_options = [{'value': str(x)} for x in inputdata.values_list('data_type__name', flat=True).distinct().order_by('data_type__name')]
+        protocol_relation_options = [{'value': x[1]} for x in InputData.PROTOCOL_RELATION_CHOICES]
+        simulation_round_options = [{'value': x} for x in SimulationRound.objects.values_list('name', flat=True).distinct().order_by('-order')]
+        context['selectors'] = [
+            {'colnumber': '2', 'all_value': 'All protocol relations', 'options': protocol_relation_options, 'name': 'protocol_relation'},
+            {'colnumber': '3', 'all_value': 'All data types', 'options': data_type_options, 'name': 'data_type'},
+            {'colnumber': '4', 'all_value': 'All Simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
+        ]
         return context
 
     class Meta:

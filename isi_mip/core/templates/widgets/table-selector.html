@@ -1,4 +1,4 @@
-<div class="widget-table-selector" data-tableid="{{ tableid }}">
+<div class="widget-table-selector{% if selectors|length == 3 and searchfield %} quarter{% endif %}" data-tableid="{{ tableid }}">
 	{% for selector in selectors %}
 		<select data-colnumber="{{ selector.colnumber }}" class="form-control" autocomplete="off" name="{{ selector.name }}">
 			<option value="tableselectordefaultall"{% if not activeoption %} selected="true"{% endif %}>{{ selector.all_value }}</option>
