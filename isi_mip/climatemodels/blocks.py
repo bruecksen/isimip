@@ -23,7 +23,7 @@ class ImpactModelsBlock(StructBlock):
         sector_options = [{'value': x} for x in bims.values_list('sector__name', flat=True).distinct().order_by('sector')]
         simulation_round_options = [{'value': x} for x in bims.exclude(impact_model__simulation_round__isnull=True).values_list('impact_model__simulation_round__name', flat=True).distinct().order_by('impact_model__simulation_round')]
         context['selectors'] = [
-            {'colnumber': '2', 'all_value': 'All simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
+            {'colnumber': '2', 'all_value': 'All simulation rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
             {'colnumber': '3', 'all_value': 'All sectors', 'options': sector_options, 'name': 'sector'},
         ]
         # Tabelle
@@ -99,7 +99,7 @@ class InputDataBlock(StructBlock):
         context['selectors'] = [
             {'colnumber': '2', 'all_value': 'All protocol relations', 'options': protocol_relation_options, 'name': 'protocol_relation'},
             {'colnumber': '3', 'all_value': 'All data types', 'options': data_type_options, 'name': 'data_type'},
-            {'colnumber': '4', 'all_value': 'All simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
+            {'colnumber': '4', 'all_value': 'All simulation rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
         ]
         return context
 
