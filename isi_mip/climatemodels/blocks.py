@@ -21,10 +21,10 @@ class ImpactModelsBlock(StructBlock):
         context['tableid'] = 'selectortable'
         context['searchfield'] = {'value': ''}
         sector_options = [{'value': x} for x in bims.values_list('sector__name', flat=True).distinct().order_by('sector')]
-        simulation_round_options = [{'value': x} for x in SimulationRound.objects.values_list('name', flat=True).distinct().order_by('-order')]
+        simulation_round_options = [{'value': x} for x in bims.exclude(impact_model__simulation_round__isnull=True).values_list('impact_model__simulation_round__name', flat=True).distinct().order_by('impact_model__simulation_round')]
         context['selectors'] = [
-            {'colnumber': '2', 'all_value': 'All Simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
-            {'colnumber': '3', 'all_value': 'All Sectors', 'options': sector_options, 'name': 'sector'},
+            {'colnumber': '2', 'all_value': 'All simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
+            {'colnumber': '3', 'all_value': 'All sectors', 'options': sector_options, 'name': 'sector'},
         ]
         # Tabelle
         context['id'] = 'selectortable'
@@ -95,11 +95,11 @@ class InputDataBlock(StructBlock):
 
         data_type_options = [{'value': str(x)} for x in inputdata.values_list('data_type__name', flat=True).distinct().order_by('data_type__name')]
         protocol_relation_options = [{'value': x[1]} for x in InputData.PROTOCOL_RELATION_CHOICES]
-        simulation_round_options = [{'value': x} for x in SimulationRound.objects.values_list('name', flat=True).distinct().order_by('-order')]
+        simulation_round_options = [{'value': x} for x in inputdata.exclude(simulation_round__isnull=True).values_list('simulation_round__name', flat=True).distinct().order_by('simulation_round')]
         context['selectors'] = [
             {'colnumber': '2', 'all_value': 'All protocol relations', 'options': protocol_relation_options, 'name': 'protocol_relation'},
             {'colnumber': '3', 'all_value': 'All data types', 'options': data_type_options, 'name': 'data_type'},
-            {'colnumber': '4', 'all_value': 'All Simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
+            {'colnumber': '4', 'all_value': 'All simulation Rounds', 'options': simulation_round_options, 'name': 'simulation_round'},
         ]
         return context
 
