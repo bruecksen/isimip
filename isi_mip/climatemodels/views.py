@@ -77,19 +77,17 @@ def impact_model_details(page, request, id):
             text = "Experiments: <i>%s</i><br/>" % od.experiments
             text += "Climate Drivers: <i>%s</i><br/>" % ", ".join([d.name for d in od.drivers.all()])
             text += "Date: <i>%s</i>" % od.date
-            model_details.insert(1, {
-                'term': 'Output Data',
-                'definitions': (
-                    {'text': text},
-                )
-            })
+            output_data.append({'text': text})
+        model_details.insert(1, {
+            'term': 'Output Data',
+            'definitions': output_data,
+        })
         model_simulation_rounds.append({
             'simulation_round': im.simulation_round.name,
             'simulation_round_slug': im.simulation_round.slug,
             'model_name': base_model.name,
             'edit_link': edit_link,
             'details': model_details,
-            'output_data': output_data,
         })
     context['description'] = urlize(base_model.short_description or '')
     context['model_simulation_rounds'] = model_simulation_rounds
