@@ -29,7 +29,7 @@ class ImpactModelsBlock(StructBlock):
         # Tabelle
         context['id'] = 'selectortable'
         context['head'] = {
-            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Contact Person'}, {'text': 'Email'}]
+            'cols': [{'text': 'Model'}, {'text': 'Simulation round'}, {'text': 'Sector'}, {'text': 'Contact person'}, {'text': 'Email'}]
         }
         rows_per_page = value.get('rows_per_page')
         numpages = math.ceil(bims.count() / rows_per_page)
@@ -66,7 +66,7 @@ class InputDataBlock(StructBlock):
     def get_context(self, value, parent_context=None):
         context = super(InputDataBlock, self).get_context(value, parent_context=parent_context)
 
-        context['head'] = {'cols': [{'text': 'Data Set'}, {'text': 'Protocol Relation'}, {'text': 'Data Type'}, {'text': 'Simulation round'}, {'text': 'Description'}]}
+        context['head'] = {'cols': [{'text': 'Data set'}, {'text': 'Protocol relation'}, {'text': 'Data type'}, {'text': 'Simulation round'}, {'text': 'Description'}]}
         context['body'] = {'rows': []}
 
         inputdata = InputData.objects.all()
@@ -115,8 +115,8 @@ class OutputDataBlock(StructBlock):
         context = super(OutputDataBlock, self).get_context(value, parent_context=parent_context)
         context['title'] = 'Overview'
 
-        context['head'] = {'cols': [{'text': 'Sector'}, {'text': 'Model'}, {'text': 'Simulation Rounds'}, {'text': 'Experiments'},
-                                    {'text': 'Climate Drivers'}, {'text': 'Date'}]}
+        context['head'] = {'cols': [{'text': 'Sector'}, {'text': 'Model'}, {'text': 'Simulation rounds'}, {'text': 'Experiments'},
+                                    {'text': 'Climate drivers'}, {'text': 'Date'}]}
         context['body'] = {
             'rows': [],
         }

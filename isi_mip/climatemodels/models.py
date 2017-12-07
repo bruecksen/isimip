@@ -136,8 +136,8 @@ class InputData(models.Model):
     PROTOCOL_DATA = 'P'
     SUPPLEMENTARY_DATA = 'S'
     PROTOCOL_RELATION_CHOICES = (
-        (PROTOCOL_DATA, 'Protocol data'),
-        (SUPPLEMENTARY_DATA, 'Supplementary data'),
+        (PROTOCOL_DATA, 'Protocol'),
+        (SUPPLEMENTARY_DATA, 'Supplementary'),
     )
     name = models.CharField(max_length=500, unique=True)
     data_type = models.ForeignKey(DataType, null=True, blank=True, on_delete=models.SET_NULL)
