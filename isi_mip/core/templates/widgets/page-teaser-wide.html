@@ -1,16 +1,18 @@
 <div class="widget-page-teaser-wide">
 	{% if image %}
 		<div class="row">
-			<div class="col-sm-{% if wideimage %}6{% elif smallimage %}3{% else %}4{% endif %}">
+			<div class="col-sm-{% if full_width_picture %}12{% elif wideimage %}6{% elif smallimage %}3{% else %}4{% endif %}">
 				{% if href %}
 					{% include 'widgets/image.html' with url=image.url name=title href=href %}
 				{% else %}
 					{% include 'widgets/image.html' with url=image.url name=title %}
 				{% endif %}
 			</div>
-			<div class="col-sm-{% if wideimage %}6{% elif smallimage %}9{% else %}8{% endif %}">
-				{% include "widgets/page-teaser-text.html" %}
-			</div>
+			{% if not full_width_picture %}
+				<div class="col-sm-{% if wideimage %}6{% elif smallimage %}9{% else %}8{% endif %}">
+					{% include "widgets/page-teaser-text.html" %}
+				</div>
+			{% endif %}
 		</div>
 	{% else %}
 		{% include "widgets/page-teaser-text.html" %}

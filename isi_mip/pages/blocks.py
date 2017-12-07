@@ -1,6 +1,6 @@
 from django.utils import formats
 from wagtail.wagtailcore.blocks import CharBlock, StructBlock, TextBlock, StreamBlock, PageChooserBlock, \
-    URLBlock, DateBlock, ListBlock
+    URLBlock, DateBlock, ListBlock, BooleanBlock
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
@@ -52,8 +52,9 @@ class SmallTeaserBlock(StructBlock):
 class BigTeaserBlock(StructBlock):
     title = CharBlock(required=True)
     subtitle = CharBlock(required=False)
-    picture = ImageChooserBlock()
-    text = RichTextBlock()
+    picture = ImageChooserBlock(required=False)
+    full_width_picture = BooleanBlock(required=False, default=False)
+    text = RichTextBlock(required=False)
     external_link = URLBlock(required=False, help_text="Will be ignored if an internal link is provided")
     internal_link = PageChooserBlock(required=False, help_text='If set, this has precedence over the external link.')
 
@@ -73,8 +74,9 @@ class BigTeaserBlock(StructBlock):
         context['super_title'] = value.get('title')
 
         image = value.get('picture')
-        rendition = image.get_rendition('max-800x800')
-        context['image'] = {'url': rendition.url, 'name': image.title}
+        if image:
+            rendition = image.get_rendition('max-800x800')
+            context['image'] = {'url': rendition.url, 'name': image.title}
         if value.get('internal_link'):
             context['href'] = value.get('internal_link').url
         else:
@@ -88,6 +90,7 @@ class BigTeaserBlock(StructBlock):
             'description': value.get('text'),
             'divider': True,
             'calendaricon': True,
+            'full_width_picture': value.get('full_width_picture'),
         })
         if value.get('from_date') and value.get('to_date'):
             context['date'] = '"{} to {}"'.format(
