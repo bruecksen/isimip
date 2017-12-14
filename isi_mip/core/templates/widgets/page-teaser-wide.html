@@ -8,8 +8,8 @@
 					{% include 'widgets/image.html' with url=image.url name=title %}
 				{% endif %}
 			</div>
-			{% if not full_width_picture %}
-				<div class="col-sm-{% if wideimage %}6{% elif smallimage %}9{% else %}8{% endif %}">
+			{% if description %}
+				<div class="col-sm-{% if full_width_picture %}12{% elif wideimage %}6{% elif smallimage %}9{% else %}8{% endif %}">
 					{% include "widgets/page-teaser-text.html" %}
 				</div>
 			{% endif %}
