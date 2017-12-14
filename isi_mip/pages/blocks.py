@@ -88,7 +88,7 @@ class BigTeaserBlock(StructBlock):
         context.update({
             'title': value.get('subtitle'),
             'description': value.get('text'),
-            'divider': True,
+            'divider': value.get('subtitle') and value.get('text'),
             'calendaricon': True,
             'full_width_picture': value.get('full_width_picture'),
         })
