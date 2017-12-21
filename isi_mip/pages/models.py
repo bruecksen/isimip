@@ -37,10 +37,6 @@ from isi_mip.contrib.forms import AuthenticationForm
 class BlogPage(_BlogPage):
     parent_page_types = ['pages.BlogIndexPage']
 
-    search_fields = _BlogPage.search_fields + [
-        index.SearchField('body')
-    ]
-
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context['blog'] = self
@@ -62,10 +58,6 @@ class BlogIndexPage(_BlogIndexPage):
     ]
     settings_panels = Page.settings_panels + [
         FieldPanel('flat'),
-    ]
-
-    search_fields = Page.search_fields + [
-        index.SearchField('description'),
     ]
 
     def get_context(self, request, *args, **kwargs):
