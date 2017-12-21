@@ -224,7 +224,7 @@ h3, .h3 {
 	}
 	&.widget-heading3-slug {
 		&:before {
-		 	display: block;
+			display: block;
 			content: " ";
 			margin-top: -100px;
 			height: 100px;
@@ -290,12 +290,6 @@ mark {
 		@media (max-width: 1200px) {
 			max-width: 128px;
 		}
-		&.large {
-			max-width: 300px;
-			padding: 0;
-			margin-bottom: 20px;
-			margin-top: 10px;
-		}
 		.btn {
 			display: inline-block;
 			padding: 6px 8px;
@@ -337,6 +331,15 @@ mark {
 			border: 1px solid #a4a4a4;
 			border-radius: 0;
 		}
+	}
+	&.large {
+		.input-group {
+			max-width: 300px;
+			padding: 0;
+			margin-bottom: 20px;
+			margin-top: 10px;
+		}
+		position: static;
 	}
 	@media (max-width: 991px) {
 		position: static;
