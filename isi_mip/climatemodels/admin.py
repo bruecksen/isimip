@@ -25,7 +25,7 @@ class HideAdmin(admin.ModelAdmin):
 def get_contact_emails(modeladmin, request, queryset):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=contact-persons.csv'
-    writer = unicodecsv.writer(response, encoding='utf-8')
+    writer = unicodecsv.writer(response, dialect='excel', delimiter=";", encoding='utf-8')
     writer.writerow(['Simulation Round', 'Impact Model', 'Sector', 'Email', 'Name', 'Institute', 'Country'])
     for sr in queryset.all():
         contacts = UserProfile.objects.filter(owner__impact_model__simulation_round=sr).distinct()
