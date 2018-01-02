@@ -13,6 +13,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.widgets import EmailInput
 from modelcluster.fields import ParentalKey
 
+from wagtail.wagtailsearch.backends import get_search_backend
+from wagtail.wagtailsearch.models import Query
 from wagtail.wagtailsearch import index
 from wagtail.contrib.wagtailroutablepage.models import route, RoutablePageMixin
 from wagtail.wagtailadmin.edit_handlers import *
@@ -29,7 +31,6 @@ from isi_mip.climatemodels.views import (
     STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR,
     duplicate_impact_model, create_new_impact_model, update_contact_information_view)
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
-from isi_mip.core.views import search
 from isi_mip.pages.blocks import *
 from isi_mip.contrib.forms import AuthenticationForm
 
@@ -207,7 +208,32 @@ class HomePage(RoutablePageWithDefault):
     def search(self, request):
         subpage = {'title': 'Search', 'url': ''}
         context = {'page': self, 'subpage': subpage, 'headline': ''}
-        return search(request, extra_context=context)
+        # Search
+        search_query = request.GET.get('query', None)
+        if search_query:
+            page_results = Page.objects.live().not_type((BlogPage, BlogIndexPage)).search(search_query).annotate_score("score")
+
+            # Log the query so Wagtail can suggest promoted results
+            Query.get(search_query).add_hit()
+
+            # Also query non-wagtail models
+            s = get_search_backend()
+            model_results = s.search(search_query, BaseImpactModel.objects.filter(impact_model__public=True))
+
+        else:
+            page_results = []
+            model_results = []
+
+        context.update({
+            'search_query': search_query,
+            'page_results': page_results,
+            'model_results': model_results,
+        })
+        # raise Exception(dir(model_results[0]))
+        # raise Exception(search_results)
+
+        # Render template
+        return render(request, 'pages/search_page.html', context)
 
 
 class AboutPage(TOCPage):
