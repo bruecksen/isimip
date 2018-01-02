@@ -143,7 +143,7 @@ class InputData(models.Model):
     data_type = models.ForeignKey(DataType, null=True, blank=True, on_delete=models.SET_NULL)
     protocol_relation = models.CharField(max_length=1, choices=PROTOCOL_RELATION_CHOICES, default=PROTOCOL_DATA)
     scenario = models.ManyToManyField(Scenario, blank=True, related_name='scenarios')
-    variables = models.ManyToManyField(ClimateVariable, blank=True)
+    variables = models.ManyToManyField(ClimateVariable, blank=True, help_text="The variables are filtered based on the data type. To see variables of a different data type, please change and save data type first.")
     simulation_round = models.ManyToManyField(SimulationRound, blank=True, related_name='simulationrounds')
     description = models.TextField(null=True, blank=True, default='')
     specification = models.TextField(null=True, blank=True, default='')

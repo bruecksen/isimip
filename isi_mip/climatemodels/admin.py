@@ -191,10 +191,28 @@ class InputDataAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ManyToManyField: {'widget': CheckboxSelectMultiple},
     }
+
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'protocol_relation', 'data_type', 'variables', 'scenario', 'simulation_round', 'description', 'specification', 'data_source', 'caveats', 'download_instructions'),
+            'description': "The variables are filtered based on the data type. To see variables of a different data type, please change and save data type first."
+        }),
+    )
+
     def get_simulation_round(self, obj):
         return ', '.join([sr.name for sr in obj.simulation_round.all()])
     get_simulation_round.admin_order_field = 'simulation_round__name'
     get_simulation_round.short_description = 'Simulation rounds'
+
+    def get_form(self, request, obj=None, **kwargs):
+        # just save obj reference for future processing in Inline
+        request._obj_ = obj
+        return super(InputDataAdmin, self).get_form(request, obj, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if request._obj_ and db_field.name == "variables":
+            kwargs["queryset"] = ClimateVariable.objects.filter(pk__in=InputData.objects.filter(data_type=request._obj_.data_type).values_list("variables", flat=True))
+        return super(InputDataAdmin, self).formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class OutputDataAdmin(admin.ModelAdmin):
