@@ -271,7 +271,7 @@ class BaseImpactModel(index.Indexed, models.Model):
     def __str__(self):
         return "%s (%s)" % (self.name, self.sector)
 
-    def relative_url(self, site):
+    def relative_url(self, site, request):
         # hard coded url, since no better solution at the moment
         # https://groups.google.com/forum/#!topic/wagtail/51FD2E4Odmc
         return "/impactmodels/details/%s/" % self.pk
