@@ -120,6 +120,9 @@ class ImpactModelToXLSX:
 
             sector_name = 'M. E. and Fisheries (regional)' if sector.name == 'Marine Ecosystems and Fisheries (regional)' else sector.name
             sector_name = 'M. E. and Fisheries (global)' if sector.name == 'Marine Ecosystems and Fisheries (global)' else sector.name
+            for ch in ['[', ']', ':', '*', '?', '/', '\\']:
+                if ch in sector_name:
+                    sector_name = sector_name.replace(ch, '-')
             sectorsheet = self.workbook.add_worksheet(sector_name[0:31])
             generic_fields = SectorInformationField.objects.filter(information_group__sector=sector).order_by('information_group')
             sectorsheet.write_row(0, 0, data=[x.title() for x in fields], cell_format=bold)
