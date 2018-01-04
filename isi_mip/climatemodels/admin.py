@@ -72,6 +72,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
     model = ImpactModel
     search_fields = ('base_model__name', 'base_model__sector__name', 'simulation_round__name')
     actions = ["duplicate_impact_model"]
+    save_on_top = True
 
     def duplicate_impact_model(self, request, queryset):
         if 'apply' in request.POST:

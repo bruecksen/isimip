@@ -56,6 +56,7 @@ class UserAdmin(UserAdmin):
     list_filter = ()
     search_fields = ('email', 'username', 'first_name', 'last_name', 'userprofile__country__name', 'userprofile__institute', 'userprofile__owner__name', 'userprofile__involved__base_model__name', 'userprofile__sector__name', 'userprofile__involved__simulation_round__name')
     inlines = (UserProfileInline, )
+    save_on_top = True
 
     def get_queryset(self, request):
         return super(UserAdmin, self).get_queryset(request).select_related('userprofile').prefetch_related('userprofile__owner', 'userprofile__involved', 'userprofile__sector', 'userprofile__country')
