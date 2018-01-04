@@ -191,6 +191,7 @@ class InputDataAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ManyToManyField: {'widget': CheckboxSelectMultiple},
     }
+    save_on_top = True
 
     fieldsets = (
         (None, {
