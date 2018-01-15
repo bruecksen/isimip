@@ -1105,7 +1105,7 @@ class AgroEconomicModelling(BaseSector):
 
 
 class OutputData(models.Model):
-    model = models.ForeignKey(ImpactModel, null=True, blank=True, on_delete=models.SET_NULL)
+    model = models.ForeignKey(ImpactModel, null=True, blank=True, on_delete=models.CASCADE)
     scenarios = models.ManyToManyField(Scenario, blank=True)
     experiments = models.CharField(max_length=500, null=True, blank=True)
     drivers = models.ManyToManyField(InputData)
@@ -1114,7 +1114,7 @@ class OutputData(models.Model):
     def __str__(self):
         if self.model:
             return "%s : %s" % (self.model.base_model.sector, self.model.base_model.name)
-        return self.model.base_model.sector.name
+        return self.pk
 
     class Meta:
         verbose_name = verbose_name_plural = 'Output data'
