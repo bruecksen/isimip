@@ -1114,7 +1114,7 @@ class OutputData(models.Model):
     def __str__(self):
         if self.model:
             return "%s : %s" % (self.model.base_model.sector, self.model.base_model.name)
-        return self.pk
+        return "%s" % self.pk
 
     class Meta:
         verbose_name = verbose_name_plural = 'Output data'
