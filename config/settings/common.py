@@ -100,7 +100,7 @@ EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.s
 EMAIL_PORT = env.int('DJANGO_EMAIL_PORT', default=25)
 EMAIL_HOST = env('DJANGO_EMAIL_HOST', default='localhost')
 DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL', default='django@localhost')
-DATA_CONFIRMATION_EMAIL = 'isimip-data@pik-potsdam.de'
+DATA_CONFIRMATION_EMAIL = env('DJANGO_DATA_CONFIRMATION_EMAIL', default='isimip-data@pik-potsdam.de')
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
