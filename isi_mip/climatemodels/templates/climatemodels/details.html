@@ -29,7 +29,7 @@
 				<div class="tab-content">
 				{% for sr in model_simulation_rounds %}
 					<div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ sr.simulation_round_slug }}">
-						{% include "widgets/expandable.html" with list=sr.details editlink=sr.edit_link %}
+						{% include "widgets/expandable.html" with list=sr.details editlink=sr.edit_link confirmlink=sr.confirm_data_link %}
 					</div>
 				{% endfor %}
 				</div>

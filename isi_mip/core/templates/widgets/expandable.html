@@ -1,20 +1,28 @@
 <div class="widget-expandable">
 	{% if headline %}
 		<div class="widget-expandable-headline">
-			{% if editlink %}
+			{% if editlink or confirmlink %}
 				<div class="widget-expandable-editlink">
 					{{ editlink|safe }}
+					{% if editlink and confirmlink %}<br>{% endif %}
+					{% if confirmlink %}
+						{{ confirmlink|safe }}
+					{% endif %}
 				</div>
 			{% endif %}
 			{{ headline }}
 			<div class="clearfix"></div>
 		</div>
 	{% endif %}
-	{% if not headline and editlink %}
+	{% if not headline and editlink or confirmlink %}
 		<div class="widget-expandable-headline white">
-			{% if editlink %}
+			{% if editlink or confirmlink %}
 				<div class="widget-expandable-editlink">
 					{{ editlink|safe }}
+					{% if editlink and confirmlink %}<br>{% endif %}
+					{% if confirmlink %}
+						{{ confirmlink|safe }}
+					{% endif %}
 				</div>
 			{% endif %}
 			<div class="clearfix"></div>
