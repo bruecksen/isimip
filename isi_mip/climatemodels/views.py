@@ -167,6 +167,8 @@ def confirm_data(page, request, id):
         }
         confirm_body = Template(confirm_email.body)
         confirm_body = confirm_body.render(Context(context))
+        # add newlines to the end of body to split attachment from text
+        confirm_body += "\n\n"
         ccs = impact_model.base_model.impact_model_owner.exclude(pk=request.user.pk)
         pdf = render_impact_model_to_pdf(impact_model)
         email = EmailMessage(
