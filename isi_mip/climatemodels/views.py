@@ -167,7 +167,6 @@ def confirm_data(page, request, id):
         }
         confirm_body = Template(confirm_email.body)
         confirm_body = confirm_body.render(Context(context))
-        request.user.email_user(confirm_email.subject, confirm_body, settings.DATA_CONFIRMATION_EMAIL)
         ccs = impact_model.base_model.impact_model_owner.exclude(pk=request.user.pk)
         pdf = render_impact_model_to_pdf(impact_model)
         email = EmailMessage(
