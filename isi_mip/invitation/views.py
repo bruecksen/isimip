@@ -61,9 +61,6 @@ class RegistrationView(UpdateView):
         except User.DoesNotExist:
             messages.error(request, 'Invalid username')
             return HttpResponseRedirect(self.error_url)
-        if user.is_active:
-            messages.error(request, 'User is already activated')
-            return HttpResponseRedirect(self.error_url)
         try:
             invite = Invitation.objects.get(user_id=pk, token=token)
         except:
