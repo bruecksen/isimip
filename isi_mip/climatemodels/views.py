@@ -15,6 +15,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect, JsonRespons
 from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.html import urlize, linebreaks
+from django.utils.text import slugify
 from django.template import Template, Context, RequestContext
 
 from easy_pdf.rendering import render_to_pdf_response, render_to_pdf, make_response
@@ -178,7 +179,12 @@ def confirm_data(page, request, id):
             to=[settings.DATA_CONFIRMATION_EMAIL],
             cc=[cc.email for cc in ccs],
         )
-        email.attach("impact-model.pdf", pdf, "application/pdf")
+        filename = "DataConfirmation_[%s]_%s_%s.pdf" % (
+            impact_model.simulation_round.slug,
+            impact_model.base_model.sector.slug,
+            slugify(impact_model.base_model.name)
+        )
+        email.attach(filename, pdf, "application/pdf")
         email.send()
         # update confirmation state
         confirmation.is_confirmed = True
