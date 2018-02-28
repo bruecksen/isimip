@@ -369,7 +369,7 @@ def impact_model_assign(request, username=None):
                 del (form.cleaned_data['model'])
                 bimodel = BaseImpactModel.objects.create(**form.cleaned_data)
                 user.userprofile.owner.add(bimodel)
-                user.userprofile.sector = bimodel.sector
+                user.userprofile.sector.add(bimodel.sector)
                 bimodel.public = False
                 bimodel.save()
                 messages.success(request, "The new model \"{}\" has been successfully created and assigned to {}".format(bimodel, user))
