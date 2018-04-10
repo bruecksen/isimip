@@ -972,7 +972,7 @@ class MarineEcosystems(BaseSector):
                 (vname('spatial_dispersal_included'), self.spatial_dispersal_included),
                 (vname('fishbase_used_for_mass_length_conversion'), self.fishbase_used_for_mass_length_conversion),
             ])
-        ]
+        ] + generic
 
     class Meta:
         abstract = True
@@ -1058,7 +1058,7 @@ class Water(BaseSector):
                 (vname('methods_evapotranspiration'), self.methods_evapotranspiration),
                 (vname('methods_snowmelt'), self.methods_snowmelt),
             ])
-        ]
+        ] + generic
 
     class Meta:
         abstract = True
