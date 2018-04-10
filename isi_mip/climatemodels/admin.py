@@ -268,15 +268,23 @@ class ClimateVariableAdmin(admin.ModelAdmin):
 
 class DataPublicationConfirmationModelAdmin(admin.ModelAdmin):
     model = DataPublicationConfirmation
+    fields = ('impact_model', 'email_text', 'is_confirmed', 'confirmed_date', 'confirmed_license', 'confirmed_by',)
     list_display = ('impact_model', 'confirmed_date', 'confirmed_by', 'confirmed_license', 'is_confirmed')
-    readonly_fields = ('is_confirmed', 'confirmed_date', 'confirmed_license', 'confirmed_by',)
+    readonly_fields_edit = ('is_confirmed', 'confirmed_date', 'confirmed_license', 'confirmed_by',)
+    readonly_fields = ('impact_model', 'email_text', 'is_confirmed', 'confirmed_date', 'confirmed_license', 'confirmed_by',)
     list_filter = ('is_confirmed', 'confirmed_license')
     ordering = ('impact_model',)
 
+    def get_readonly_fields(self, request, obj=None):
+        if not obj:
+            return self.readonly_fields_edit
+        else:
+            return self.readonly_fields
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-            if db_field.name == "impact_model":
-                kwargs["queryset"] = ImpactModel.objects.filter(confirmation__isnull=True)
-            return super(DataPublicationConfirmationModelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == "impact_model":
+            kwargs["queryset"] = ImpactModel.objects.filter(confirmation__isnull=True)
+        return super(DataPublicationConfirmationModelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):
         super(DataPublicationConfirmationModelAdmin, self).save_model(request, obj, form, change)
@@ -285,8 +293,6 @@ class DataPublicationConfirmationModelAdmin(admin.ModelAdmin):
 
     def send_request_to_confirm(self, confirmation, request):
 
-        # invite = user.invitation_set.last()
-        # register_link = reverse('accounts:register', kwargs={'pk': user.id, 'token': invite.token})
         impage = ImpactModelsPage.objects.get()
         for owner in confirmation.impact_model.base_model.impact_model_owner.all():
             link = impage.full_url + impage.reverse_subpage('confirm_data', kwargs={'id': confirmation.impact_model.pk})
