@@ -142,6 +142,7 @@ def confirm_data(page, request, id):
             'sector': impact_model.base_model.sector,
             'impact_model_name': impact_model.base_model.name,
             'custom_text': confirmation.email_text,
+            'impact_model_url': '/impactmodels/details/%s/' % impact_model.base_model.pk,
         }
 
         template = 'climatemodels/confirm_data.html'

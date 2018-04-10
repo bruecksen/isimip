@@ -8,31 +8,24 @@
         {% block content %}
             <form class="confirm-data" method="POST">
                 {% csrf_token %}
-                <p>Hi {{ user.get_full_name }},</p>
+                <p>This agreement relates to the ISIMIP model simulations for the simulation round {{simulation_round}} for the model {{ impact_model_name }}. Data that have already passed the basic format check are now visible to all ISIMIP participants, in the relevant directory on the DKRZ server:</p>
 
-                <p>we have completed the basic quality check for the {{simulation_round}} simulation data you uploaded recently. You can find the quality-checked data, which is now visible to all ISIMIP participants, in the relevant directory on the DKRZ server:</p>
-                <p>/work/bb0820/ISIMIP/ISIMIP2b/OutputData/{{ sector }}/{{ impact_model_name }}/… The data correspond to the experiments:</p>
+                <p>/work/bb0820/ISIMIP/ISIMIP2b/OutputData/{{ sector }}/{{ impact_model_name }}/…</p>
 
                 <p>{{ custom_text|linebreaksbr|urlize }}</p>
 
-                <p>This means the data will be accessible to users byond the community of ISIMIP modelling groups. The conditions by which the data can be used are described in the ISIMIP <a href="/protocol/terms-of-use/" target="_blank">terms of use</a>.</p>
+                <p>The data are now ready to be transferred to the <a href="https://esg.pik-potsdam.de/projects/isimip/" target="_blank">ISIMIP node of the ESG server</a>, where they will be accessible to users byond the community of ISIMIP modelling groups. Only data that has passed the our formal format check will be published. The conditions by which the data can be used are described in the ISIMIP <a href="/protocol/terms-of-use/" target="_blank">terms of use</a>.</p>
+
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="terms" required> I can confirm I have read and agree to the ISIMIP <a href="/protocol/terms-of-use/" target="_blank">terms of use</a>.
+                        <input type="checkbox" name="terms" required> The uploaded simulation data for {{ simulation_round }} for {{ impact_model_name }}, and any further simulation data for the same model and simulation round can be published on the ISIMIP node of the ESGF server.
                     </label>
                 </div>
 
-                <p>By clicking on the confirm button below, you are agreeing to the publication of the already-uploaded simulation data from your model on the ESGF server, and any further simulation data you submit for the {{simulation_round}} simulation round, unless you specifically inform us otherwise. The same licence will be used for all data from your model in {{simulation_round}}. Only data that has passed our formal format check will be published.</p>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="publish" required> I confirm that the uploaded simulation data for {{simulation_round}} for {{impact_model_name}}, and any further simulation data for the same model and simulation round can be published on the ISIMIP node of the ESGF server.
-                    </label>
-                </div>
-
-                <p>Please select the appropriate licence. Note that we strongly suggest the CC 4.0-By licence:</p>
+                <p>Please select the appropriate licence. The same licence will be used for all data from your model in {{ simulation_round }}.</p>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="license" value="CC 4.0-By" required> CC 4.0-By
+                        <input type="radio" name="license" value="CC 4.0-By" required> CC 4.0-By (strongly recommended)
                     </label>
                 </div>
                 <div class="radio">
@@ -43,10 +36,10 @@
                 
                 </p>
 
-                <p>Before confirming the publication, you are responsible for ensuring that the description and details of your model in the ISIMIP impact model database is complete. This step is of particular importance to ensure that simulation data from your model is correctly interpreted. A snapshot of the database entry for your model will be stored along with the record of this confirmation.</p>
+                <p>Before confirming the publication, you are responsible for ensuring that the description and details of <a href="{{ impact_model_url }}" target="_blank">your model in the ISIMIP impact model database</a> is complete. This step is of particular importance to ensure that simulation data from your model is correctly interpreted. A snapshot of the database entry for your model will be stored along with the record of this confirmation.</p>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="correct"> The ISIMIP impact model database entry is correct and complete.
+                        <input type="checkbox" name="correct"> The <a href="{{ impact_model_url }}" target="_blank">ISIMIP impact model database</a> entry is correct and complete.
                     </label>
                 </div>
                 <button type="submit" class="btn btn-default">Send email confirmation of data publication</button>
