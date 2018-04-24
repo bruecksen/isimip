@@ -1118,3 +1118,14 @@ class OutputData(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = 'Output data'
+
+    def duplicate(self):
+        duplicate = OutputData(
+            model=self.model,
+            experiments=self.experiments,
+            date=self.date
+        )
+        duplicate.save()
+        duplicate.scenarios.set(self.scenarios.all())
+        duplicate.drivers.set(self.drivers.all())
+        return duplicate
