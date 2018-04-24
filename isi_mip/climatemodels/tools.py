@@ -41,6 +41,7 @@ SKIP_FIELDS = [
     'computablegeneralequilibriummodelling',
     'agroeconomicmodelling',
     'outputdata',
+    'confirmation',
 ]
 
 SORT_ORDER = {
