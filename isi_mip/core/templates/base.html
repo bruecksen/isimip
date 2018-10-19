@@ -1,4 +1,4 @@
-{% load compile_static static i18n messages wagtailuserbar header footer %}<!DOCTYPE html>
+{% load compile_static static i18n messages wagtailuserbar header footer cookielaw_tags %}<!DOCTYPE html>
 <html lang="de">
 <head>
 	<meta charset="utf-8">
@@ -67,6 +67,8 @@
 	<br>
 	<br>
 {% endblock %}
+
+{% cookielaw_banner %}
 
 {% block footer %}
 	{% footer %}

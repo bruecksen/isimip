@@ -1964,4 +1964,39 @@ dl.base-model {
 	outline: 0;
 }
 
-
+#CookielawBanner {
+    position: fixed;
+    bottom: 0;
+    background-color: @color-white;
+    border: none;
+    border-top: 1px solid @color-neutral-light;
+    font-size: 1.4rem;
+    padding-right: 12rem;
+    margin: 0;
+    border-radius: 0;
+    z-index: 99999;
+    .btn {
+        // opacity: 1;
+        // background-color: @color-primary;
+        // color: white;
+        // text-shadow: none;
+        // font-size: 1.8rem;
+        // border-radius: 3px;
+        padding: 10px 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 15px;
+        position: absolute;
+    }
+    @media (max-width: 575px) { 
+        padding-right: 0;
+        padding-bottom: 6rem;
+        .btn {
+            top: unset;
+            right: unset;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+}

@@ -38,6 +38,7 @@ CMS_APPS = (
     'modelcluster',
     'compressor',
     'taggit',
+    'cookielaw',
 
     'blog',
     'static_precompiler',
