@@ -23,7 +23,7 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
     max_length = len(text) if max_length == 0 else max_length
     c_index = text.rfind('.', min_length, max_length)
     if c_index != -1:
-        return text[:c_index + 1] + ' ...'
+        return text[:c_index] + ' ...'
     else:
         if len(text) > max_length:
             return text[:max_length - 3] + ' ...'
