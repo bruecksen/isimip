@@ -26,7 +26,7 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
         return text[:c_index + 1]
     else:
         if len(text) > max_length:
-            return text[:max_length - 2] + '..'
+            return text[:max_length - 2] + ' ...'
         else:
             return text
 

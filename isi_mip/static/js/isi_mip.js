@@ -13,6 +13,17 @@ $(function() {
 });
 
 $(function() {
+	$('.widget-page-teaser').click(function(event) {
+		if ($(event.target).is("a") || $(event.target).is("i")) {
+            return;
+        }
+        window.location = $(this).find(".widget-arrow-right-link a").attr("href");
+        return false;
+	});
+});
+
+
+$(function() {
 	// Die Tabllen im widget-table haben spezielle Funktionen wie Paginierung, 
 
 	function updateTable(table) {
