@@ -11,17 +11,21 @@ from django.utils.text import slugify
 from django.shortcuts import render
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.widgets import EmailInput
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
 
 from wagtail.search.backends import get_search_backend
 from wagtail.search.models import Query
 from wagtail.search import index
 from wagtail.contrib.routable_page.models import route, RoutablePageMixin
 from wagtail.admin.edit_handlers import *
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Page
 from wagtail.contrib.forms.models import AbstractFormField, AbstractEmailForm
 from wagtail.admin.utils import send_mail
+from wagtail.snippets.models import register_snippet
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
 from isi_mip.climatemodels.models import BaseImpactModel
@@ -136,6 +140,39 @@ class GenericPage(TOCPage):
 
     search_fields = Page.search_fields + [
         index.SearchField('content'),
+    ]
+
+
+class PaperOverviewPage(Page):
+    content = StreamField(BASE_BLOCKS, blank=True)
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('content'),
+    ]
+
+
+@register_snippet
+class PaperPageTag(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class PaperPage(Page):
+    picture = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL)
+    author = models.CharField(max_length=1000)
+    journal = models.CharField(max_length=1000)
+    link = models.URLField()
+    tags = ParentalManyToManyField('PaperPageTag', blank=True, related_name='paper_page')
+
+    parent_page_types = ['pages.PaperOverviewPage']
+
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('picture'),
+        FieldPanel('author'),
+        FieldPanel('journal'),
+        FieldPanel('link'),
+        FieldPanel('tags'),
     ]
 
 
