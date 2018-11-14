@@ -13,11 +13,11 @@ $(function() {
 });
 
 $(function() {
-	$('.widget-page-teaser').click(function(event) {
+	$('.widget-page-teaser .widget-page-teaser-withrightlink').click(function(event) {
 		if ($(event.target).is("a") || $(event.target).is("i")) {
             return;
-        }
-        window.location = $(this).find(".widget-arrow-right-link a, .widget-page-teaser-rightlink a").attr("href");
+		}
+		window.location = $(this).find(".widget-page-teaser-rightlink a, .widget-page-teaser-text-source a").attr("href");
         return false;
 	});
 });
