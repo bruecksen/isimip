@@ -11,7 +11,7 @@ unicodecsv==0.14.1
 requests==2.10.0
 tweepy==3.5.0
 
-Django==1.10.8
+Django>=1.11,<2.0
 django-environ==0.4.0
 django_compressor==2.0
 django-static-precompiler==1.4
