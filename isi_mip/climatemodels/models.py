@@ -5,7 +5,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.text import slugify
 
-from wagtail.wagtailsearch import index
+from wagtail.search import index
 
 from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
 from isi_mip.sciencepaper.models import Paper

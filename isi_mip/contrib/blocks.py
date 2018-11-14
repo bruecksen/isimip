@@ -4,10 +4,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 from django.utils.text import slugify
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, TextBlock, \
+from wagtail.core import blocks
+from wagtail.core.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, TextBlock, \
     RichTextBlock as _RichTextBlock
-from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.images.blocks import ImageChooserBlock
 
 
 def smart_truncate(text: str, min_length: int, max_length: int) -> str:

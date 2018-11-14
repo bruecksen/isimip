@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-import wagtail.wagtailcore.blocks
-import wagtail.wagtailcore.fields
+import wagtail.core.blocks
+import wagtail.core.fields
 
 
 class Migration(migrations.Migration):
@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='headerlink',
             name='menu_items',
-            field=wagtail.wagtailcore.fields.StreamField((('jump_link', wagtail.wagtailcore.blocks.StructBlock((('name', wagtail.wagtailcore.blocks.CharBlock()), ('link', wagtail.wagtailcore.blocks.CharBlock())))), ('page_link', wagtail.wagtailcore.blocks.StructBlock((('name', wagtail.wagtailcore.blocks.CharBlock()), ('page', wagtail.wagtailcore.blocks.PageChooserBlock()))))), blank=True, null=True),
+            field=wagtail.core.fields.StreamField((('jump_link', wagtail.core.blocks.StructBlock((('name', wagtail.core.blocks.CharBlock()), ('link', wagtail.core.blocks.CharBlock())))), ('page_link', wagtail.core.blocks.StructBlock((('name', wagtail.core.blocks.CharBlock()), ('page', wagtail.core.blocks.PageChooserBlock()))))), blank=True, null=True),
         ),
     ]

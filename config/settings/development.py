@@ -47,7 +47,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 # django-extensions
 # ------------------------------------------------------------------------------
-INSTALLED_APPS += ('django_extensions', 'wagtail.contrib.wagtailstyleguide',)
+INSTALLED_APPS += ('django_extensions', 'wagtail.contrib.styleguide',)
 
 # TESTING
 # ------------------------------------------------------------------------------

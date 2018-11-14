@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.utils.html import format_html_join, format_html
-from wagtail.wagtailcore import hooks
+from wagtail.core import hooks
 
 from isi_mip.climatemodels.models import ImpactModel, InputData, OutputData
 from django.utils.safestring import mark_safe
