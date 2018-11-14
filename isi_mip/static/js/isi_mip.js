@@ -13,7 +13,7 @@ $(function() {
 });
 
 $(function() {
-	$('.widget-page-teaser .widget-page-teaser-withrightlink').click(function(event) {
+	$('.widget-page-teaser.widget-page-teaser-withrightlink').click(function(event) {
 		if ($(event.target).is("a") || $(event.target).is("i")) {
             return;
 		}
