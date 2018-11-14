@@ -17,7 +17,7 @@ $(function() {
 		if ($(event.target).is("a") || $(event.target).is("i")) {
             return;
         }
-        window.location = $(this).find(".widget-arrow-right-link a").attr("href");
+        window.location = $(this).find(".widget-arrow-right-link a, .widget-page-teaser-rightlink a").attr("href");
         return false;
 	});
 });
