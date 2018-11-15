@@ -802,7 +802,7 @@ $(function() {
 		
 	})
     $grid.on( 'layoutComplete', function( event, laidOutItems ) {
-		equal_height_rows(laidOutItems);
+		// equal_height_rows(laidOutItems);
 		console.log('layoutComplete');
         if (laidOutItems.length == 0) {
            $('.no-items-found').show();
