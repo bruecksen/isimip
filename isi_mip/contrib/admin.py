@@ -51,7 +51,7 @@ class SimulationRoundListFilter(admin.SimpleListFilter):
 
 
 class UserAdmin(UserAdmin):
-    list_display = ('email', 'get_name', 'get_country', 'get_owner', 'get_involved', 'get_sector', 'is_active')
+    list_display = ('email', 'get_name', 'get_country', 'get_owner', 'get_involved', 'get_sector', 'is_active', 'userprofile__show_in_participant_list')
     # list_filter = ('userprofile__sector', SimulationRoundListFilter)
     list_display_links = ('email', 'get_name')
     list_filter = ()
