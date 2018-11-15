@@ -9,7 +9,7 @@ def staging():
     env.path = basepath % projectname
     env.virtualenv_path = basepath % (projectname+'env')
     env.backup_path = basepath % 'backups'
-    env.push_branch = 'django-update'
+    env.push_branch = 'publications'
     env.push_remote = 'origin'
     env.reload_cmd = 'supervisorctl restart {0}'.format(projectname)
     env.db_name = projectname

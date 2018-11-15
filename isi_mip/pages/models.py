@@ -152,7 +152,7 @@ class PaperOverviewPage(Page):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context['papers'] = PaperPage.objects.child_of(self).live()
-        context['tags'] = PaperPageTag.objects.filter(paper_page__in=context['papers']).distinct()
+        context['tags'] = PaperPageTag.objects.filter(paper_page__in=context['papers']).distinct().order_by('order')
         return context
         
 
@@ -161,6 +161,7 @@ class PaperOverviewPage(Page):
 @register_snippet
 class PaperPageTag(models.Model):
     name = models.CharField(max_length=255)
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name
