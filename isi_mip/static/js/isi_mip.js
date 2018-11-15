@@ -713,6 +713,35 @@ $(function() {
 	}
 });
 
+function equal_height_rows(elements) {
+	console.log(elements);
+	var max_height = 0;
+		var max_container_height = 0;
+		var start_index = 0;
+		elements.forEach(function(element, index){
+			// console.log(index % 4);
+			// console.log(element);
+			if (index > 0 && index % 4 == 0) {
+				console.log(start_index, max_height, max_container_height);
+				elements.slice(start_index, index).forEach(function(inner_element) {
+					inner_element.size.height = max_height;
+					console.log($(inner_element.element).find('.widget-page-teaser'));
+					$(inner_element.element).find('.widget-page-teaser').height(max_container_height + 'px');
+					// console.log(element.size);
+					// console.log(element.element);
+				});
+				max_height = 0;
+				max_container_height = 0;
+				start_index = index;
+			}
+			if (element.size.height > max_height) {
+				max_height = element.size.height;
+				max_container_height = $(element.element).find('.widget-page-teaser').height();
+			}
+			// console.log(index, element);
+		});
+}
+
 $(function() {
 
 	// store filter for each group
@@ -725,7 +754,9 @@ $(function() {
     var $grid = $('.papers-grid').isotope({
 		// options
 		itemSelector: '.paper',
+		layoutMode: 'fitRows',
 	});
+	$grid.isotope('layout');
 	$('.filter li:not(.show-all,.hide-all) a').on( 'click', function( event ) {
 
         $('.no-items-found').hide();
@@ -765,8 +796,14 @@ $(function() {
         $(this).hide();
         $('.filter li:not(.show-all,.hide-all) a.is-checked').removeClass('is-checked');
         $grid.isotope({ filter: '.xxxx' });
-    });
+	});
+	$grid.on( 'arrangeComplete', function( event, laidOutItems ) {
+		console.log('arrangeComplete', laidOutItems);
+		
+	})
     $grid.on( 'layoutComplete', function( event, laidOutItems ) {
+		equal_height_rows(laidOutItems);
+		console.log('layoutComplete');
         if (laidOutItems.length == 0) {
            $('.no-items-found').show();
 		   $('.items-found').hide();
