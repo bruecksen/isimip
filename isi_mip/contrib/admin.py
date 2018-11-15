@@ -74,6 +74,7 @@ class UserAdmin(UserAdmin):
         return obj.userprofile.show_in_participant_list
     get_show_in_participant_list.admin_order_field = 'userprofile__show_in_participant_list'
     get_show_in_participant_list.short_description = 'Show in participant list'
+    get_show_in_participant_list.boolean = True
 
     def get_name(self, obj):
         return '%s %s' % (obj.first_name, obj.last_name)
