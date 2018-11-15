@@ -51,7 +51,7 @@ class SimulationRoundListFilter(admin.SimpleListFilter):
 
 
 class UserAdmin(UserAdmin):
-    list_display = ('email', 'get_name', 'get_country', 'get_owner', 'get_involved', 'get_sector', 'is_active', 'userprofile__show_in_participant_list')
+    list_display = ('email', 'get_name', 'get_country', 'get_owner', 'get_involved', 'get_sector', 'is_active', 'get_show_in_participant_list')
     # list_filter = ('userprofile__sector', SimulationRoundListFilter)
     list_display_links = ('email', 'get_name')
     list_filter = ()
@@ -69,6 +69,11 @@ class UserAdmin(UserAdmin):
     get_involved.admin_order_field = 'userprofile__involved__base_model__name'
     get_involved.short_description = 'Involved'
     get_involved.allow_tags = True
+
+    def get_show_in_participant_list(self, obj):
+        return obj.userprofile.show_in_participant_list
+    get_show_in_participant_list.admin_order_field = 'userprofile__show_in_participant_list'
+    get_show_in_participant_list.short_description = 'Show in participant list'
 
     def get_name(self, obj):
         return '%s %s' % (obj.first_name, obj.last_name)
