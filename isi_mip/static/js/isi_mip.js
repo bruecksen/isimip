@@ -713,6 +713,72 @@ $(function() {
 	}
 });
 
+$(function() {
+
+	// store filter for each group
+    var filters = [];
+    $('.filter li a.is-checked').each(function(i, filter) {
+        filters.push($(filter).attr('data-filter'));
+    });
+    console.log(filters);
+	// init Isotope
+    var $grid = $('.papers-grid').isotope({
+		// options
+		itemSelector: '.paper',
+	});
+	$('.filter li:not(.show-all,.hide-all) a').on( 'click', function( event ) {
+
+        $('.no-items-found').hide();
+        var $button = $( event.currentTarget );
+		$button.toggleClass('is-checked');
+		$button.find('i.fa').toggleClass('fa-check-circle');
+		$button.find('i.fa').toggleClass('fa-circle');
+
+        var isChecked = $button.hasClass('is-checked');
+        var filter = $button.attr('data-filter');
+        if ( isChecked ) {
+            filters.push(filter);
+          } else {
+            filters.splice(filters.indexOf(filter), 1);
+        }
+        console.log(filters);
+        // combine filters
+        var filterValue;
+        if (filters.length == 0) {
+            filterValue = '.xxxx';
+        } else {
+            filterValue = filters.join(',');
+        }
+        // set filter for Isotope
+        console.log(filterValue);
+        $grid.isotope({ filter: filterValue });
+    });
+    $('.filter .show-all').on('click', function( event ) {
+        $('.no-items-found').hide();
+        $('.filter .hide-all').show();
+        $(this).hide();
+        $('.filter li:not(.show-all,.hide-all) a:not(.is-checked)').addClass('is-checked');
+        $grid.isotope({ filter: '*' });
+    });
+    $('.filter .hide-all').on('click', function( event ) {
+        $('.filter .show-all').show();
+        $(this).hide();
+        $('.filter li:not(.show-all,.hide-all) a.is-checked').removeClass('is-checked');
+        $grid.isotope({ filter: '.xxxx' });
+    });
+    $grid.on( 'layoutComplete', function( event, laidOutItems ) {
+        if (laidOutItems.length == 0) {
+           $('.no-items-found').show();
+		   $('.items-found').hide();
+        } else {
+			$('.no-items-found').hide();
+			$('.items-found').show();
+			$('.items-found span').html(laidOutItems.length);
+        }
+    });
+	
+});
+
 
 function createCookie(name, value, days) {
     var date = new Date(),

@@ -1361,7 +1361,7 @@ a:hover .widget-arrow-right-circle, a:focus .widget-arrow-right-circle {
 			background-color: @color-white;
 
 			td {
-				// Bootstrap stops wrapping table cells on XS. Undo this.
+				// d stops wrapping table cells on XS. Undo this.
 				white-space: normal !important;
 
 				*:first-child {
@@ -2003,4 +2003,52 @@ dl.base-model {
             transform: translateX(-50%);
         }
     }
+}
+
+.paper {
+}
+.filter {
+	margin-bottom: 2rem;
+	ul {
+		display: inline;
+		margin-left: 1rem;
+		li {
+			.badge {
+				font-size: 14px;
+				padding: 5px 10px;
+				border-radius: 2rem;
+				font-weight: 400;
+				background-color: @color-neutral;
+				&:hover {
+					background: darken(@color-neutral, 5%);
+				}
+				&.is-checked {
+					background-color: @color-primary;
+					&:hover {
+						background: darken(@color-primary, 5%);
+					}
+				}
+			}
+		}
+	}
+	.show-all,
+	.hide-all {
+		float: right;
+		margin-right: 0;
+		.badge {
+			width: 100px;
+			background-color: @color-secondary;
+			border-radius: 3px;
+			padding: 7px 14px;
+			&:hover {
+				background: darken(@color-secondary, 5%);
+			}
+		}
+	}
+	.show-all {
+		display: none;
+	}
+}
+.no-items-found {
+	display: none;
 }

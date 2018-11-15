@@ -149,6 +149,14 @@ class PaperOverviewPage(Page):
         StreamFieldPanel('content'),
     ]
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['papers'] = PaperPage.objects.child_of(self).live()
+        context['tags'] = PaperPageTag.objects.filter(paper_page__in=context['papers']).distinct()
+        return context
+        
+
+
 
 @register_snippet
 class PaperPageTag(models.Model):
@@ -174,6 +182,11 @@ class PaperPage(Page):
         FieldPanel('link'),
         FieldPanel('tags'),
     ]
+
+    def get_image(self):
+        if self.picture:
+            rendition = self.picture.get_rendition('fill-640x360-c100')
+            return {'url': rendition.url, 'name': self.picture.title }
 
 
 class HomePage(RoutablePageWithDefault):

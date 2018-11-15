@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static header footer breadcrumb i18n %}
+
+{% block header %}
+	{% header %}
+
+{% endblock %}
+
+{% block content_container %}
+	<div class="container scrollable-container">
+		<br>
+		{% breadcrumb %}
+		{% include 'widgets/heading1.html' with text=page.title %}
+		<br>
+		{% include 'blocks/toc_block.html' with toc=toc only %}
+		{% block content %}
+			{{ page.content }}
+			<div class="row">
+				<div class="col-lg-12 filter">
+					<span>{% trans "Filter by:" %} </span>
+					<ul class="list-unstyled list-inline button-group" data-filter-group="type">
+						{% for tag in tags %}
+							<li>
+								<a href="javascript:void(0)" class="badge badge-secondary is-checked" data-filter=".{{ tag.name|slugify }}"><i class="fa fa-check-circle"></i> {{ tag.name }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+					<ul class="list-unstyled list-inline button-group">
+						<li class="show-all"><a href="javascript:void(0)" class="badge badge-secondary">{% trans "Show all" %}</a></li>
+						<li class="hide-all"><a href="javascript:void(0)" class="badge badge-secondary">{% trans "Hide all" %}</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="row">
+				<p class="col-sm-12 no-items-found">{% trans "No publications found." %}</p>
+				<p class="col-sm-12 items-found"><span class="count">{{ papers.count }}</span>{% trans " publications found:" %}</p>
+			</div>
+			<div class="papers-grid row">
+				{% for paper in papers %}
+				<div class="col-sm-3 paper {% for tag in paper.tags.all %} {{ tag.name|slugify }}{% endfor %}">
+					{% include "widgets/page-teaser.html" with author=paper.author title=paper.title description=paper.journal image=paper.get_image href=paper.link external_link=True external_link_text='Link' magicgrow=False border=True %}
+				</div>
+				{% endfor %}
+			</div>
+		{% endblock %}
+	</div>
+{% endblock %}
+
+{% block footer %}
+	{% footer %}
+{% endblock %}
