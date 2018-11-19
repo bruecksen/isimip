@@ -1,7 +1,7 @@
 import math
 
 from django.utils.html import urlize
-from wagtail.wagtailcore.blocks import StructBlock
+from wagtail.core.blocks import StructBlock
 
 from isi_mip.climatemodels.models import InputData, OutputData, BaseImpactModel, SimulationRound
 from isi_mip.contrib.blocks import IntegerBlock, RichTextBlock

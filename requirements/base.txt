@@ -11,15 +11,15 @@ unicodecsv==0.14.1
 requests==2.10.0
 tweepy==3.5.0
 
-Django==1.10.8
+Django>=1.11,<2.0
 django-environ==0.4.0
 django_compressor==2.0
 django-static-precompiler==1.4
 django-dual-authentication==1.0.0
 django-cookie-law==2.0.1
 
-wagtail==1.13.4
-wagtail-blog==1.6.9
+wagtail>=2.3,<2.4
+wagtail-blog==2.0.2
 
 html5lib==0.9999999
 elasticsearch>=2.0.0,<3.0.0

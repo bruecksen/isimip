@@ -32,7 +32,8 @@ def header(context, **kwargs):
         if target.url:
             links.append({'url': target.url, 'text': name, 'active': active, 'children': children})
 
-    context['links'] = links
-    context.update(kwargs)
+    context = {
+        'links': links
+    }
     template = 'widgets/header.html'
     return render_to_string(template, context=context)

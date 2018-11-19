@@ -13,15 +13,15 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.widgets import EmailInput
 from modelcluster.fields import ParentalKey
 
-from wagtail.wagtailsearch.backends import get_search_backend
-from wagtail.wagtailsearch.models import Query
-from wagtail.wagtailsearch import index
-from wagtail.contrib.wagtailroutablepage.models import route, RoutablePageMixin
-from wagtail.wagtailadmin.edit_handlers import *
-from wagtail.wagtailcore.fields import RichTextField, StreamField
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
-from wagtail.wagtailadmin.utils import send_mail
+from wagtail.search.backends import get_search_backend
+from wagtail.search.models import Query
+from wagtail.search import index
+from wagtail.contrib.routable_page.models import route, RoutablePageMixin
+from wagtail.admin.edit_handlers import *
+from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.models import Page
+from wagtail.contrib.forms.models import AbstractFormField, AbstractEmailForm
+from wagtail.admin.utils import send_mail
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
 from isi_mip.climatemodels.models import BaseImpactModel
