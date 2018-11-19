@@ -104,7 +104,7 @@ class BigTeaserBlock(StructBlock):
 
 
 class _IsiNumberBlock(StructBlock):
-    number = CharBlock()
+    number = CharBlock(required=False)
     title = CharBlock()
     text = CharBlock()
 
@@ -116,6 +116,19 @@ class IsiNumbersBlock(StructBlock):
     class Meta:
         icon = 'form'
         template = 'blocks/isi_numbers_block.html'
+
+    def get_context(self, value, parent_context=None):
+        context = super(IsiNumbersBlock, self).get_context(value, parent_context=parent_context)
+        page = context['page']
+        if value.get('number1').get('number'):
+            context['number1'] = value.get('number1').get('number')
+        else:
+            context['number1'] = page.number1_imported_number
+        if value.get('number2').get('number'):
+            context['number2'] = value.get('number2').get('number')
+        else:
+            context['number2'] = page.number2_imported_number
+        return context
 
 
 class TwitterBlock(StructBlock):

@@ -156,6 +156,11 @@ class HomePage(RoutablePageWithDefault):
         related_name='+',
     )
 
+    number1_link = models.URLField(null=True, blank=True)
+    number1_imported_number = models.CharField(max_length=255, null=True, blank=True)
+    number2_link = models.URLField(null=True, blank=True)
+    number2_imported_number = models.CharField(max_length=255, null=True, blank=True)
+
     content = StreamField([
         ('row', RowBlock([
             ('teaser', SmallTeaserBlock()),
@@ -177,6 +182,14 @@ class HomePage(RoutablePageWithDefault):
 
             ]),
         ], heading='Teaser'),
+        MultiFieldPanel([
+            FieldPanel('number1_link'),
+            FieldPanel('number1_imported_number'),
+        ], heading='First import number', help_text='The manual number will be displayed in favor of the imported number.', classname="collapsible collapsed"),
+        MultiFieldPanel([
+            FieldPanel('number2_link'),
+            FieldPanel('number2_imported_number'),
+        ], heading='Second import number', help_text='The manual number will be displayed in favor of the imported number.', classname="collapsible collapsed"),
         StreamFieldPanel('content'),
     ]
 
