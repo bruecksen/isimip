@@ -21,6 +21,7 @@ class Command(BaseCommand):
             number = re.search(':(.*)', line).group(1)
             return number.strip()
         except Exception as e:
+            print("An error happend while importing from: %s" % url)
             print(e)
             return None
 
