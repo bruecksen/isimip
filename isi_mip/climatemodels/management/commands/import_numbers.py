@@ -31,13 +31,15 @@ class Command(BaseCommand):
             if home_page.number1_link:
                 number1 = self.get_number(home_page.number1_link)
                 if number1:
-                    logger.info('%s: imported number %s' % (home_page.number1_link, number1))
+                    print('%s: imported number %s' % (home_page.number1_link, number1))
                     home_page.number1_imported_number = number1
             if home_page.number2_link:
                 number2 = self.get_number(home_page.number2_link)
                 if number2:
-                    logger.info('%s: imported number %s' % (home_page.number2_link, number2))
+                    print('%s: imported number %s' % (home_page.number2_link, number2))
                     home_page.number2_imported_number = number2
             if number1 or number2:
                 home_page.save()
+            else:
+                print('nothing imported')
         
