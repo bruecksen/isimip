@@ -20,7 +20,8 @@ class Command(BaseCommand):
             line = lines[len(lines) - 2].decode('utf-8')
             number = re.search(':(.*)', line).group(1)
             return number.strip()
-        except:
+        except Exception as e:
+            print(e)
             return None
 
     def handle(self, *args, **options):
