@@ -104,7 +104,7 @@ class BigTeaserBlock(StructBlock):
 
 
 class _IsiNumberBlock(StructBlock):
-    number = CharBlock(required=False)
+    number = CharBlock(required=False, help_text="This number overwrites the imported number (look above) if set.")
     title = CharBlock()
     text = CharBlock()
 
