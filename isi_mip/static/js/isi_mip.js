@@ -845,15 +845,13 @@ $(function() {
 		if (e.hasOwnProperty('originalEvent')) {
 			// only filter if it was a real click
 			if ($(this).hasClass('sector')) {
-				if (this.value == 'all') {
-					filters['sectors'] = [];
-				} else {
+				filters['sectors'] = [];
+				if (this.value !== 'all') {
 					filters['sectors'].push(this.value);
 				}
 			} else {
-				if (this.value == 'all') {
-					filters['simulation_round'] = [];
-				} else {
+				filters['simulation_round'] = [];
+				if (this.value !== 'all') {
 					filters['simulation_round'].push(this.value);
 				}
 			}
