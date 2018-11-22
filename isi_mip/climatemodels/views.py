@@ -180,7 +180,7 @@ def confirm_data(page, request, id):
             to=[settings.DATA_CONFIRMATION_EMAIL],
             cc=[cc.email for cc in ccs],
         )
-        filename = "DataConfirmation_[%s]_%s_%s.pdf" % (
+        filename = "DataConfirmation_%s_%s_%s.pdf" % (
             impact_model.simulation_round.slug,
             impact_model.base_model.sector.slug,
             slugify(impact_model.base_model.name)
