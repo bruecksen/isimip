@@ -6,7 +6,7 @@
 				{{ link.text }}
 			</a>
 			{% else %}			
-				{{ link.text }}
+				{{ link.text|truncatechars:60 }}
 			{% endif %}
 		</li>
 	{% endfor %}
