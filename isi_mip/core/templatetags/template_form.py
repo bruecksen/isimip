@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 from django import template
-from django.forms import BaseForm, TextInput, Textarea
+from django.forms import BaseForm, TextInput, Textarea, PasswordInput, EmailInput
 from django.forms.widgets import Select, CheckboxSelectMultiple, CheckboxInput, RadioSelect
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
@@ -50,7 +50,7 @@ def template_form(form, **kwargs):
                    'required': field.field.required,
                    }
         context['readonly'] = 'readonly' in field.field.widget.attrs and field.field.widget.attrs['readonly']
-        if isinstance(field.field.widget, TextInput):
+        if isinstance(field.field.widget, TextInput) or isinstance(field.field.widget, PasswordInput) or isinstance(field.field.widget, EmailInput):
             context['type'] = field.field.widget.input_type if hasattr(field.field.widget, 'input_type') else 'text'
             context['small'] = True
             if hasattr(field.field.widget, 'textarea') and field.field.widget.textarea:
@@ -167,6 +167,7 @@ def template_form(form, **kwargs):
                 pass
             template = 'widgets/paper-editor.html'
         else:
+            raise Exception(field.field.widget)
             continue
 
         string = render_to_string(template, context)
