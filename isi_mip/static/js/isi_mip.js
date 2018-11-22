@@ -800,7 +800,7 @@ function filter_papers($grid, filters) {
 	$grid.isotope({ filter: filterValue });
 }
 
-$(function() {
+$(window).load(function() {
 
 	// store filter for each group
 	var filters = {};
