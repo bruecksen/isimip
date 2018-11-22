@@ -741,6 +741,16 @@ function equal_height_rows(elements) {
 				max_height = element.original_height;
 				max_container_height = element.original_container_height;
 			}
+			if (index == elements.length - 1) {
+				// console.log(start_index, max_height, max_container_height);
+				elements.slice(start_index, index + 1).forEach(function(inner_element) {
+					console.log(inner_element);
+					inner_element.size.height = max_height;
+					$(inner_element.element).find('.widget-page-teaser').height(max_container_height + 'px');
+					// console.log(element.size);
+					// console.log(element.element);
+				});
+			}
 			// console.log(index, element);
 		});
 }
