@@ -17,18 +17,33 @@
 			{{ page.content }}
 			<div class="row">
 				<div class="col-lg-12 filter">
-					<span>{% trans "Filter by:" %} </span>
-					<ul class="list-unstyled list-inline button-group" data-filter-group="type">
-						{% for tag in tags %}
-							<li>
-								<a href="javascript:void(0)" class="badge badge-secondary is-checked" data-filter=".{{ tag.name|slugify }}"><i class="fa fa-check-circle"></i> {{ tag.name }}</a>
-							</li>
+					<span>{% trans "Filter by: " %} </span>
+					<select class="simulation-round form-control" name="simulation_round">
+						<option value="all">All simulation rounds</option>
+						{% for sr in simulation_rounds %}
+						<option value=".{{ sr.name|slugify }}">{{ sr.name }}</option>
 						{% endfor %}
-					</ul>
+					</select>
+					<select class="sector form-control" name="sector">
+						<option value="all">All sectors</option>
+						{% for sector in sectors %}
+						<option value=".{{ sector.name|slugify }}">{{ sector.name }}</option>
+						{% endfor %}
+					</select>
 					<ul class="list-unstyled list-inline button-group">
 						<li class="show-all"><a href="javascript:void(0)" class="badge badge-secondary">{% trans "Show all" %}</a></li>
 						<li class="hide-all"><a href="javascript:void(0)" class="badge badge-secondary">{% trans "Hide all" %}</a></li>
 					</ul>
+					<div class="tags">
+						<span>{% trans "Tags: " %} </span>
+						<ul class="list-unstyled list-inline button-group" data-filter-group="type">
+							{% for tag in tags %}
+								<li>
+									<a href="javascript:void(0)" class="badge badge-secondary" data-filter=".{{ tag.name|slugify }}"><i class="fa fa-check-circle"></i> {{ tag.name }}</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
 				</div>
 			</div>
 			<div class="row">
@@ -37,7 +52,7 @@
 			</div>
 			<div class="papers-grid row">
 				{% for paper in papers %}
-				<div class="col-sm-3 paper {% for tag in paper.tags.all %} {{ tag.name|slugify }}{% endfor %}">
+				<div class="col-sm-3 paper {% for tag in paper.tags.all %} {{ tag.name|slugify }}{% endfor %}{% for sr in paper.simulation_rounds.all %} {{ sr.name|slugify }}{% endfor %}{% for sector in paper.sectors.all %} {{ sector.name|slugify }}{% endfor %}">
 					{% include "widgets/page-teaser.html" with author=paper.author title=paper.title description=paper.journal image=paper.get_image href=paper.link external_link=True external_link_text='Link' magicgrow=False border=True %}
 				</div>
 				{% endfor %}

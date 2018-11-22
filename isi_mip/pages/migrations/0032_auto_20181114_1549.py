@@ -10,6 +10,7 @@ from wagtail.core.models import Page
 from wagtail.images.models import Image
 
 from isi_mip.pages.models import PaperPageTag, PaperPage
+from isi_mip.climatemodels.models import SimulationRound
 
 
 def revert_nothing(apps, schema_editor):
@@ -23,11 +24,11 @@ def create_paper_pages(apps, schema_editor):
     for block in outcome_page.content.stream_data:
         if block['type'] == 'heading':
             if 'isimip2b' in block['value'].lower():
-                tag, created = PaperPageTag.objects.get_or_create(name='ISIMIP2b')
+                tag = SimulationRound.objects.get(name__iexact='ISIMIP2b')
             elif 'isimip2a' in block['value'].lower():
-                tag, created = PaperPageTag.objects.get_or_create(name='ISIMIP2a')
+                tag = SimulationRound.objects.get(name__iexact='ISIMIP2a')
             elif 'fast track' in block['value'].lower():
-                tag, created = PaperPageTag.objects.get_or_create(name='Fast Track')
+                tag = SimulationRound.objects.get(name__iexact='Fast Track')
         elif block['type'] == 'papers':
             for paper in block['value']['papers']:
                 image = None
@@ -43,7 +44,7 @@ def create_paper_pages(apps, schema_editor):
                         picture=image,
                     )
                     paper_overview_page.add_child(instance=paper_page)
-                    paper_page.tags.add(tag)
+                    paper_page.simulation_rounds.add(tag)
                     paper_page.save()
                 else:
                     paper_pages = PaperPage.objects.filter(title=paper['title'])
@@ -56,14 +57,14 @@ def create_paper_pages(apps, schema_editor):
                         picture=image,
                     )
                     for paper_page in paper_pages:
-                        paper_page.tags.add(tag)
+                        paper_page.simulation_rounds.add(tag)
                     paper_page.save()
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pages', '0029_auto_20181114_1549'),
+        ('pages', '0031_auto_20181122_1259'),
     ]
 
     operations = [

@@ -28,7 +28,7 @@ from wagtail.admin.utils import send_mail
 from wagtail.snippets.models import register_snippet
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
-from isi_mip.climatemodels.models import BaseImpactModel
+from isi_mip.climatemodels.models import BaseImpactModel, SimulationRound, Sector
 from isi_mip.climatemodels.views import (
     impact_model_details, impact_model_edit, input_data_details,
     impact_model_download, participant_download, show_participants, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION,
@@ -153,6 +153,8 @@ class PaperOverviewPage(Page):
         context = super().get_context(request, *args, **kwargs)
         context['papers'] = PaperPage.objects.child_of(self).live()
         context['tags'] = PaperPageTag.objects.filter(paper_page__in=context['papers']).distinct().order_by('order')
+        context['simulation_rounds'] = SimulationRound.objects.all()
+        context['sectors'] = Sector.objects.all()
         return context
         
 
@@ -173,6 +175,8 @@ class PaperPage(Page):
     journal = models.CharField(max_length=1000)
     link = models.URLField()
     tags = ParentalManyToManyField('PaperPageTag', blank=True, related_name='paper_page')
+    simulation_rounds = models.ManyToManyField(SimulationRound, blank=True)
+    sectors = models.ManyToManyField(Sector, blank=True)
 
     parent_page_types = ['pages.PaperOverviewPage']
 
@@ -181,7 +185,11 @@ class PaperPage(Page):
         FieldPanel('author'),
         FieldPanel('journal'),
         FieldPanel('link'),
-        FieldPanel('tags'),
+        MultiFieldPanel([
+            FieldPanel('simulation_rounds', widget=forms.CheckboxSelectMultiple),
+            FieldPanel('sectors', widget=forms.CheckboxSelectMultiple),
+            FieldPanel('tags', widget=forms.CheckboxSelectMultiple),
+        ], heading="Tags")
     ]
 
     def get_image(self):

@@ -2009,9 +2009,26 @@ dl.base-model {
 }
 .filter {
 	margin-bottom: 2rem;
+	span {
+		min-width: 65px;
+		display: inline-block;
+	}
+	.tags {
+		margin-top: 1.5rem;
+	}
+	select.form-control {
+		height: 25px;
+		font-weight: 400;
+		border: none;
+		&:focus {
+			border: none;
+		}
+		&.is-selected {
+			background-color: @color-primary;
+		}
+	}
 	ul {
 		display: inline;
-		margin-left: 1rem;
 		li {
 			.badge {
 				font-size: 14px;

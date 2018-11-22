@@ -722,10 +722,9 @@ function equal_height_rows(elements) {
 			// console.log(index % 4);
 			// console.log(element);
 			if (index > 0 && index % 4 == 0) {
-				console.log(start_index, max_height, max_container_height);
+				// console.log(start_index, max_height, max_container_height);
 				elements.slice(start_index, index).forEach(function(inner_element) {
 					inner_element.size.height = max_height;
-					console.log($(inner_element.element).find('.widget-page-teaser'));
 					$(inner_element.element).find('.widget-page-teaser').height(max_container_height + 'px');
 					// console.log(element.size);
 					// console.log(element.element);
@@ -734,20 +733,82 @@ function equal_height_rows(elements) {
 				max_container_height = 0;
 				start_index = index;
 			}
-			if (element.size.height > max_height) {
-				max_height = element.size.height;
-				max_container_height = $(element.element).find('.widget-page-teaser').height();
+			if (element.original_height === undefined || element.original_container_height === undefined) {
+				element.original_height =  element.size.height;
+				element.original_container_height =  $(element.element).find('.widget-page-teaser').height();;
+			}
+			if (element.original_height > max_height) {
+				max_height = element.original_height;
+				max_container_height = element.original_container_height;
 			}
 			// console.log(index, element);
 		});
 }
 
+// flatten object by concatting values
+function concatValues( obj ) {
+	var values = [];
+	var value = '';
+	for ( var prop in obj ) {
+		values = values.concat(obj[prop]);
+	}
+	return values.join(',');
+  }
+
+function getComboFilter( filters ) {
+	var i = 0;
+	var comboFilters = [];
+	var message = [];
+  
+	for ( var prop in filters ) {
+	  message.push( filters[ prop ].join(' ') );
+	  var filterGroup = filters[ prop ];
+	  // skip to next filter group if it doesn't have any values
+	  if ( !filterGroup.length ) {
+		continue;
+	  }
+	  if ( i === 0 ) {
+		// copy to new array
+		comboFilters = filterGroup.slice(0);
+	  } else {
+		var filterSelectors = [];
+		// copy to fresh array
+		var groupCombo = comboFilters.slice(0); // [ A, B ]
+		// merge filter Groups
+		for (var k=0, len3 = filterGroup.length; k < len3; k++) {
+		  for (var j=0, len2 = groupCombo.length; j < len2; j++) {
+			filterSelectors.push( groupCombo[j] + filterGroup[k] ); // [ 1, 2 ]
+		  }
+  
+		}
+		// apply filter selectors to combo filters for next group
+		comboFilters = filterSelectors;
+	  }
+	  i++;
+	}
+  
+	var comboFilter = comboFilters.join(', ');
+	return comboFilter;
+}
+
+function filter_papers($grid, filters) {
+	console.log('tags:', filters);
+	// combine filters
+	var filterValue = getComboFilter( filters );
+	// set filter for Isotope
+	console.log(filterValue);
+	$grid.isotope({ filter: filterValue });
+}
+
 $(function() {
 
 	// store filter for each group
-    var filters = [];
+	var filters = {};
+	filters['tags'] = [];
+	filters['sectors'] = [];
+	filters['simulation_round'] = [];
     $('.filter li a.is-checked').each(function(i, filter) {
-        filters.push($(filter).attr('data-filter'));
+        filters['tags'].push($(filter).attr('data-filter'));
     });
     console.log(filters);
 	// init Isotope
@@ -757,6 +818,7 @@ $(function() {
 		layoutMode: 'fitRows',
 	});
 	$grid.isotope('layout');
+	
 	$('.filter li:not(.show-all,.hide-all) a').on( 'click', function( event ) {
 
         $('.no-items-found').hide();
@@ -768,33 +830,50 @@ $(function() {
         var isChecked = $button.hasClass('is-checked');
         var filter = $button.attr('data-filter');
         if ( isChecked ) {
-            filters.push(filter);
+            filters['tags'].push(filter);
           } else {
-            filters.splice(filters.indexOf(filter), 1);
-        }
-        console.log(filters);
-        // combine filters
-        var filterValue;
-        if (filters.length == 0) {
-            filterValue = '.xxxx';
-        } else {
-            filterValue = filters.join(',');
-        }
-        // set filter for Isotope
-        console.log(filterValue);
-        $grid.isotope({ filter: filterValue });
+            filters['tags'].splice(filters['tags'].indexOf(filter), 1);
+		}
+		filter_papers($grid, filters);
     });
+	$('.filter select.simulation-round, .filter select.sector').change(function(){
+		if (this.value == 'all') {
+			$(this).removeClass('is-selected');
+		} else {
+			$(this).addClass('is-selected');
+		}
+		if ($(this).hasClass('sector')) {
+			if (this.value == 'all') {
+				filters['sectors'] = [];
+			} else {
+				filters['sectors'].push(this.value);
+			}
+		} else {
+			if (this.value == 'all') {
+				filters['simulation_round'] = [];
+			} else {
+				filters['simulation_round'].push(this.value);
+			}
+		}
+		filter_papers($grid, filters);
+	});
     $('.filter .show-all').on('click', function( event ) {
         $('.no-items-found').hide();
         $('.filter .hide-all').show();
         $(this).hide();
-        $('.filter li:not(.show-all,.hide-all) a:not(.is-checked)').addClass('is-checked');
+		$('.filter li:not(.show-all,.hide-all) a:not(.is-checked) i.fa').removeClass('fa-circle').addClass('fa-check-circle');
+		$('.filter li:not(.show-all,.hide-all) a:not(.is-checked)').addClass('is-checked');
+		$('.filter select.simulation-round').val('all').change();
+		$('.filter select.sector').val('all').change();
         $grid.isotope({ filter: '*' });
     });
     $('.filter .hide-all').on('click', function( event ) {
         $('.filter .show-all').show();
         $(this).hide();
-        $('.filter li:not(.show-all,.hide-all) a.is-checked').removeClass('is-checked');
+		$('.filter li:not(.show-all,.hide-all) a.is-checked i.fa').removeClass('fa-check-circle').addClass('fa-circle');
+		$('.filter li:not(.show-all,.hide-all) a.is-checked').removeClass('is-checked');
+		$('.filter select.simulation-round').val('all').change();
+		$('.filter select.sector').val('all').change();
         $grid.isotope({ filter: '.xxxx' });
 	});
 	$grid.on( 'arrangeComplete', function( event, laidOutItems ) {
@@ -802,7 +881,7 @@ $(function() {
 		
 	})
     $grid.on( 'layoutComplete', function( event, laidOutItems ) {
-		// equal_height_rows(laidOutItems);
+		equal_height_rows(laidOutItems);
 		console.log('layoutComplete');
         if (laidOutItems.length == 0) {
            $('.no-items-found').show();
