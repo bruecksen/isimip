@@ -714,7 +714,7 @@ $(function() {
 });
 
 function equal_height_rows(elements) {
-	console.log(elements);
+	// console.log(elements);
 	var max_height = 0;
 		var max_container_height = 0;
 		var start_index = 0;
@@ -792,7 +792,7 @@ function getComboFilter( filters ) {
 }
 
 function filter_papers($grid, filters) {
-	console.log('tags:', filters);
+	// console.log('tags:', filters);
 	// combine filters
 	var filterValue = getComboFilter( filters );
 	// set filter for Isotope
@@ -810,7 +810,7 @@ $(function() {
     $('.filter li a.is-checked').each(function(i, filter) {
         filters['tags'].push($(filter).attr('data-filter'));
     });
-    console.log(filters);
+    // console.log(filters);
 	// init Isotope
     var $grid = $('.papers-grid').isotope({
 		// options
@@ -836,35 +836,40 @@ $(function() {
 		}
 		filter_papers($grid, filters);
     });
-	$('.filter select.simulation-round, .filter select.sector').change(function(){
+	$('.filter select.simulation-round, .filter select.sector').change(function(e){
 		if (this.value == 'all') {
 			$(this).removeClass('is-selected');
 		} else {
 			$(this).addClass('is-selected');
 		}
-		if ($(this).hasClass('sector')) {
-			if (this.value == 'all') {
-				filters['sectors'] = [];
+		if (e.hasOwnProperty('originalEvent')) {
+			// only filter if it was a real click
+			if ($(this).hasClass('sector')) {
+				if (this.value == 'all') {
+					filters['sectors'] = [];
+				} else {
+					filters['sectors'].push(this.value);
+				}
 			} else {
-				filters['sectors'].push(this.value);
+				if (this.value == 'all') {
+					filters['simulation_round'] = [];
+				} else {
+					filters['simulation_round'].push(this.value);
+				}
 			}
-		} else {
-			if (this.value == 'all') {
-				filters['simulation_round'] = [];
-			} else {
-				filters['simulation_round'].push(this.value);
-			}
+			filter_papers($grid, filters);
 		}
-		filter_papers($grid, filters);
 	});
     $('.filter .show-all').on('click', function( event ) {
         $('.no-items-found').hide();
-        $('.filter .hide-all').show();
-        $(this).hide();
-		$('.filter li:not(.show-all,.hide-all) a:not(.is-checked) i.fa').removeClass('fa-circle').addClass('fa-check-circle');
-		$('.filter li:not(.show-all,.hide-all) a:not(.is-checked)').addClass('is-checked');
+		$('.filter li:not(.show-all,.hide-all) a').removeClass('is-checked');
+		$('.filter li:not(.show-all,.hide-all) a:not(.is-checked) i.fa').removeClass('fa-check-circle');
 		$('.filter select.simulation-round').val('all').change();
 		$('.filter select.sector').val('all').change();
+		var filters = {};
+		filters['tags'] = [];
+		filters['sectors'] = [];
+		filters['simulation_round'] = [];
         $grid.isotope({ filter: '*' });
     });
     $('.filter .hide-all').on('click', function( event ) {

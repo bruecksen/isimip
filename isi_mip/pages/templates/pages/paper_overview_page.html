@@ -31,15 +31,14 @@
 						{% endfor %}
 					</select>
 					<ul class="list-unstyled list-inline button-group">
-						<li class="show-all"><a href="javascript:void(0)" class="badge badge-secondary">{% trans "Show all" %}</a></li>
-						<li class="hide-all"><a href="javascript:void(0)" class="badge badge-secondary">{% trans "Hide all" %}</a></li>
+						<li class="show-all"><a href="javascript:void(0)" class="badge badge-secondary">{% trans "Reset filters" %}</a></li>
 					</ul>
 					<div class="tags">
 						<span>{% trans "Tags: " %} </span>
 						<ul class="list-unstyled list-inline button-group" data-filter-group="type">
 							{% for tag in tags %}
 								<li>
-									<a href="javascript:void(0)" class="badge badge-secondary" data-filter=".{{ tag.name|slugify }}"><i class="fa fa-check-circle"></i> {{ tag.name }}</a>
+									<a href="javascript:void(0)" class="badge badge-secondary" data-filter=".{{ tag.name|slugify }}"><i class="fa fa-circle"></i> {{ tag.name }}</a>
 								</li>
 							{% endfor %}
 						</ul>
