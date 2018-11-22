@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static header footer breadcrumb i18n %}
+
+{% block header %}
+	{% header %}
+
+{% endblock %}
+
+{% block content_container %}
+	<div class="container scrollable-container">
+		<br>
+		{% breadcrumb %}
+		{% include 'widgets/heading1.html' with text=page.title %}
+		<br>
+		{% include 'blocks/toc_block.html' with toc=toc only %}
+		{% block content %}
+			{{ page.content }}
+			<div class="row">
+				<div class="col-lg-12 filter">
+					<span>{% trans "Filter by: " %} </span>
+					<select class="simulation-round form-control" name="simulation_round">
+						<option value="all">All simulation rounds</option>
+						{% for sr in simulation_rounds %}
+						<option value=".{{ sr.name|slugify }}">{{ sr.name }}</option>
+						{% endfor %}
+					</select>
+					<select class="sector form-control" name="sector">
+						<option value="all">All sectors</option>
+						{% for sector in sectors %}
+						<option value=".{{ sector.name|slugify }}">{{ sector.name }}</option>
+						{% endfor %}
+					</select>
+					<ul class="list-unstyled list-inline button-group">
+						<li class="show-all"><a href="javascript:void(0)" class="badge badge-secondary">{% trans "Reset filters" %}</a></li>
+					</ul>
+					<div class="tags">
+						<span>{% trans "Tags: " %} </span>
+						<ul class="list-unstyled list-inline button-group" data-filter-group="type">
+							{% for tag in tags %}
+								<li>
+									<a href="javascript:void(0)" class="badge badge-secondary" data-filter=".{{ tag.name|slugify }}"><i class="fa fa-circle"></i> {{ tag.name }}</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<p class="col-sm-12 no-items-found">{% trans "No publications found." %}</p>
+				<p class="col-sm-12 items-found"><span class="count">{{ papers.count }}</span>{% trans " publications found:" %}</p>
+			</div>
+			<div class="papers-grid row">
+				{% for paper in papers %}
+				<div class="col-sm-3 paper {% for tag in paper.tags.all %} {{ tag.name|slugify }}{% endfor %}{% for sr in paper.simulation_rounds.all %} {{ sr.name|slugify }}{% endfor %}{% for sector in paper.sectors.all %} {{ sector.name|slugify }}{% endfor %}">
+					{% include "widgets/page-teaser.html" with author=paper.author title=paper.title description=paper.journal image=paper.get_image href=paper.link external_link=True external_link_text='Link' magicgrow=False border=True %}
+				</div>
+				{% endfor %}
+			</div>
+		{% endblock %}
+	</div>
+{% endblock %}
+
+{% block footer %}
+	{% footer %}
+{% endblock %}

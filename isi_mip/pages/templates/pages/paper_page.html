@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static header footer breadcrumb %}
+{% load wagtailimages_tags %}
+
+{% block header %}
+	{% header %}
+
+{% endblock %}
+
+{% block content_container %}
+	<div class="container scrollable-container">
+		<br>
+		{% breadcrumb %}
+		{% include 'widgets/heading1.html' with text=page.title %}
+		<br>
+		{% block content %}
+		<div class="row">
+			<div class="col-sm-8">
+				<p><em>{{ page.author }}</em></p>
+				<p>{{ page.journal }}</p>
+				<p><a href="{{ page.link }}" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> {{ page.link }}</a></p>
+			</div>
+			<div class="col-sm-4">
+				{% image page.picture width-400 %}
+			</div>
+		</div>
+		{% endblock %}
+	</div>
+{% endblock %}
+
+{% block footer %}
+	{% footer %}
+{% endblock %}

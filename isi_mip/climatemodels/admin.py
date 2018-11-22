@@ -228,6 +228,18 @@ class OutputDataAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ManyToManyField: {'widget': CheckboxSelectMultiple},
     }
+    actions = ["duplicate_output_data"]
+
+    def duplicate_output_data(self, request, queryset):
+        if queryset.count() > 1:
+            self.message_user(request, "You can only duplicate one output data set at a time. Please don't select more then one output data.", messages.ERROR)
+        elif queryset.count() == 1:
+            output_data = queryset.first()
+            duplicate = output_data.duplicate()
+            self.message_user(request, "The Output Data was successfully duplicated")
+            return HttpResponseRedirect(reverse("admin:%s_%s_change" % (duplicate._meta.app_label, duplicate._meta.model_name), args=(duplicate.id,)))
+    duplicate_output_data.short_description = "Duplicate Output Data"
+
     def get_simulation_round(self, obj):
         return obj.model and obj.model.simulation_round or ''
     get_simulation_round.admin_order_field = 'model__simulation_round'

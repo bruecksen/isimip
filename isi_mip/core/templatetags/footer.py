@@ -24,7 +24,8 @@ def footer(context, **kwargs):
         if target.url:
             links.append({'url': target.url + (link.anchor or ''), 'text': name, 'active': active})
 
-    context['links'] = links
-    context.update(kwargs)
+    context = {
+        'links': links
+    }
     template = 'widgets/footer.html'
     return render_to_string(template, context=context)

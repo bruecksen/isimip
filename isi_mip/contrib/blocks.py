@@ -4,10 +4,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 from django.utils.text import slugify
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, TextBlock, \
+from wagtail.core import blocks
+from wagtail.core.blocks import FieldBlock, PageChooserBlock, CharBlock, StreamBlock, TextBlock, \
     RichTextBlock as _RichTextBlock
-from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.images.blocks import ImageChooserBlock
 
 
 def smart_truncate(text: str, min_length: int, max_length: int) -> str:
@@ -23,10 +23,10 @@ def smart_truncate(text: str, min_length: int, max_length: int) -> str:
     max_length = len(text) if max_length == 0 else max_length
     c_index = text.rfind('.', min_length, max_length)
     if c_index != -1:
-        return text[:c_index + 1]
+        return text[:c_index] + ' ...'
     else:
         if len(text) > max_length:
-            return text[:max_length - 2] + '..'
+            return text[:max_length - 3] + ' ...'
         else:
             return text
 

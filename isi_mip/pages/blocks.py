@@ -1,9 +1,9 @@
 from django.utils import formats
-from wagtail.wagtailcore.blocks import CharBlock, StructBlock, TextBlock, StreamBlock, PageChooserBlock, \
+from wagtail.core.blocks import CharBlock, StructBlock, TextBlock, StreamBlock, PageChooserBlock, \
     URLBlock, DateBlock, ListBlock, BooleanBlock
-from wagtail.wagtaildocs.blocks import DocumentChooserBlock
-from wagtail.wagtailembeds.blocks import EmbedBlock
-from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.embeds.blocks import EmbedBlock
+from wagtail.images.blocks import ImageChooserBlock
 from wagtail.contrib.table_block.blocks import TableBlock
 
 from isi_mip.contrib.blocks import EmailBlock, IntegerBlock, HeadingBlock, HRBlock, ImageBlock, RichTextBlock, MonospaceTextBlock
@@ -104,7 +104,7 @@ class BigTeaserBlock(StructBlock):
 
 
 class _IsiNumberBlock(StructBlock):
-    number = CharBlock()
+    number = CharBlock(required=False, help_text="This number overwrites the imported number (look above) if set.")
     title = CharBlock()
     text = CharBlock()
 
@@ -116,6 +116,19 @@ class IsiNumbersBlock(StructBlock):
     class Meta:
         icon = 'form'
         template = 'blocks/isi_numbers_block.html'
+
+    def get_context(self, value, parent_context=None):
+        context = super(IsiNumbersBlock, self).get_context(value, parent_context=parent_context)
+        page = context['page']
+        if value.get('number1').get('number'):
+            context['number1'] = value.get('number1').get('number')
+        else:
+            context['number1'] = page.number1_imported_number
+        if value.get('number2').get('number'):
+            context['number2'] = value.get('number2').get('number')
+        else:
+            context['number2'] = page.number2_imported_number
+        return context
 
 
 class TwitterBlock(StructBlock):

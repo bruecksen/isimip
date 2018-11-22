@@ -20,7 +20,6 @@ SKIP_FIELDS = [
     'base_model',
     'public',
     'impact_model',
-    'impact_model_owner',
     'impact_model_involved',
     'technicalinformation',
     'inputdatainformation',
@@ -42,10 +41,11 @@ SKIP_FIELDS = [
     'agroeconomicmodelling',
     'outputdata',
     'confirmation',
+    'contactperson',
 ]
 
 SORT_ORDER = {
-    "contactperson": 1,
+    "impact_model_owner": 1,
     "main_reference_paper": 1,
     "other_references": 2,
 }
@@ -63,7 +63,11 @@ class ImpactModelToXLSX:
         if isinstance(field, ManyToManyField):
             data = ", ".join(["%s" % i for i in getattr(model, field_name).all()])
         elif isinstance(field, ManyToOneRel) or isinstance(field, ManyToManyRel):
-            data = ", ".join(["%s" % i for i in getattr(model, "%s_set" % field_name).all()])
+            try:
+                data = ", ".join(["%s" % i for i in getattr(model, "%s_set" % field_name).all()])
+            except AttributeError:
+                data = ", ".join(["%s" % i for i in getattr(model, "%s" % field_name).all()])
+
         else:
             data = getattr(model, field_name) or ''
         return data
@@ -87,8 +91,11 @@ class ImpactModelToXLSX:
                 if hasattr(field, 'verbose_name'):
                     all_field_titles.append(field.verbose_name.capitalize())
                 else:
-                    name = field.name.replace("_", " ").capitalize()
-                    all_field_titles.append(name)
+                    if field.name == 'impact_model_owner':
+                        all_field_titles.append('Contact person')
+                    else:
+                        name = field.name.replace("_", " ").capitalize()
+                        all_field_titles.append(name)
         general.write_row(0, 0, data=all_field_titles, cell_format=bold)
         for i, impact_model in enumerate(self.qs):
             for j, field in enumerate(model_fields['BaseImpactModel']['fields']):

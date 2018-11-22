@@ -5,7 +5,7 @@ from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.text import slugify
 
-from wagtail.wagtailsearch import index
+from wagtail.search import index
 
 from isi_mip.choiceorotherfield.models import ChoiceOrOtherField
 from isi_mip.sciencepaper.models import Paper
@@ -975,7 +975,7 @@ class MarineEcosystems(BaseSector):
                 (vname('spatial_dispersal_included'), self.spatial_dispersal_included),
                 (vname('fishbase_used_for_mass_length_conversion'), self.fishbase_used_for_mass_length_conversion),
             ])
-        ]
+        ] + generic
 
     class Meta:
         abstract = True
@@ -1061,7 +1061,7 @@ class Water(BaseSector):
                 (vname('methods_evapotranspiration'), self.methods_evapotranspiration),
                 (vname('methods_snowmelt'), self.methods_snowmelt),
             ])
-        ]
+        ] + generic
 
     class Meta:
         abstract = True
@@ -1116,6 +1116,18 @@ class OutputData(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = 'Output data'
+        verbose_name = verbose_name_plural = 'Output data'
+
+    def duplicate(self):
+        duplicate = OutputData(
+            model=self.model,
+            experiments=self.experiments,
+            date=self.date
+        )
+        duplicate.save()
+        duplicate.scenarios.set(self.scenarios.all())
+        duplicate.drivers.set(self.drivers.all())
+        return duplicate
 
     def __str__(self):
         if self.model:
@@ -1136,6 +1148,3 @@ class DataPublicationConfirmation(models.Model):
     class Meta:
         verbose_name = "Data publication confirmation"
         verbose_name_plural = "Data publication confirmations"
-
-    def __str__(self):
-        return "%s" % self.impact_model

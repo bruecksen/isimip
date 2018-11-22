@@ -11,20 +11,24 @@ from django.utils.text import slugify
 from django.shortcuts import render
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.widgets import EmailInput
-from modelcluster.fields import ParentalKey
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
 
-from wagtail.wagtailsearch.backends import get_search_backend
-from wagtail.wagtailsearch.models import Query
-from wagtail.wagtailsearch import index
-from wagtail.contrib.wagtailroutablepage.models import route, RoutablePageMixin
-from wagtail.wagtailadmin.edit_handlers import *
-from wagtail.wagtailcore.fields import RichTextField, StreamField
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailforms.models import AbstractFormField, AbstractEmailForm
-from wagtail.wagtailadmin.utils import send_mail
+from wagtail.search.backends import get_search_backend
+from wagtail.search.models import Query
+from wagtail.search import index
+from wagtail.contrib.routable_page.models import route, RoutablePageMixin
+from wagtail.admin.edit_handlers import *
+from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.models import Page
+from wagtail.contrib.forms.models import AbstractFormField, AbstractEmailForm
+from wagtail.admin.utils import send_mail
+from wagtail.snippets.models import register_snippet
 
 from isi_mip.climatemodels.blocks import InputDataBlock, OutputDataBlock, ImpactModelsBlock
-from isi_mip.climatemodels.models import BaseImpactModel
+from isi_mip.climatemodels.models import BaseImpactModel, SimulationRound, Sector
 from isi_mip.climatemodels.views import (
     impact_model_details, impact_model_edit, input_data_details,
     impact_model_download, participant_download, show_participants, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION,
@@ -139,6 +143,61 @@ class GenericPage(TOCPage):
     ]
 
 
+class PaperOverviewPage(Page):
+    content = StreamField(BASE_BLOCKS, blank=True)
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('content'),
+    ]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['papers'] = PaperPage.objects.child_of(self).live()
+        context['tags'] = PaperPageTag.objects.filter(paper_page__in=context['papers']).distinct().order_by('order')
+        context['simulation_rounds'] = SimulationRound.objects.all()
+        context['sectors'] = Sector.objects.all()
+        return context
+        
+
+
+
+@register_snippet
+class PaperPageTag(models.Model):
+    name = models.CharField(max_length=255)
+    order = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.name
+
+
+class PaperPage(Page):
+    picture = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL)
+    author = models.CharField(max_length=1000)
+    journal = models.CharField(max_length=1000)
+    link = models.URLField()
+    tags = ParentalManyToManyField('PaperPageTag', blank=True, related_name='paper_page')
+    simulation_rounds = models.ManyToManyField(SimulationRound, blank=True)
+    sectors = models.ManyToManyField(Sector, blank=True)
+
+    parent_page_types = ['pages.PaperOverviewPage']
+
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('picture'),
+        FieldPanel('author'),
+        FieldPanel('journal'),
+        FieldPanel('link'),
+        MultiFieldPanel([
+            FieldPanel('simulation_rounds', widget=forms.CheckboxSelectMultiple),
+            FieldPanel('sectors', widget=forms.CheckboxSelectMultiple),
+            FieldPanel('tags', widget=forms.CheckboxSelectMultiple),
+        ], heading="Tags")
+    ]
+
+    def get_image(self):
+        if self.picture:
+            rendition = self.picture.get_rendition('fill-640x360-c100')
+            return {'url': rendition.url, 'name': self.picture.title }
+
+
 class HomePage(RoutablePageWithDefault):
     parent_page_types = ['wagtailcore.Page']
 
@@ -155,6 +214,11 @@ class HomePage(RoutablePageWithDefault):
         on_delete=models.SET_NULL,
         related_name='+',
     )
+
+    number1_link = models.URLField(null=True, blank=True)
+    number1_imported_number = models.CharField(max_length=255, null=True, blank=True)
+    number2_link = models.URLField(null=True, blank=True)
+    number2_imported_number = models.CharField(max_length=255, null=True, blank=True)
 
     content = StreamField([
         ('row', RowBlock([
@@ -177,6 +241,14 @@ class HomePage(RoutablePageWithDefault):
 
             ]),
         ], heading='Teaser'),
+        MultiFieldPanel([
+            FieldPanel('number1_link'),
+            FieldPanel('number1_imported_number'),
+        ], heading='First import number', help_text='The manual number will be displayed in favor of the imported number.', classname="collapsible collapsed"),
+        MultiFieldPanel([
+            FieldPanel('number2_link'),
+            FieldPanel('number2_imported_number'),
+        ], heading='Second import number', help_text='The manual number will be displayed in favor of the imported number.', classname="collapsible collapsed"),
         StreamFieldPanel('content'),
     ]
 

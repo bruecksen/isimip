@@ -47,9 +47,15 @@ DEBUG_TOOLBAR_CONFIG = {
 
 # django-extensions
 # ------------------------------------------------------------------------------
-INSTALLED_APPS += ('django_extensions', 'wagtail.contrib.wagtailstyleguide',)
+INSTALLED_APPS += ('django_extensions', 'wagtail.contrib.styleguide',)
 
 # TESTING
 # ------------------------------------------------------------------------------
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+WAGTAILSEARCH_BACKENDS = {
+    'default': {
+        'BACKEND': 'wagtail.search.backends.db',
+    }
+}

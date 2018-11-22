@@ -3,10 +3,10 @@ from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.contrib.settings.models import BaseSetting
 from wagtail.contrib.settings.registry import register_setting
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
-from wagtail.wagtailcore.models import Orderable
-from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.fields import StreamField
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
+from wagtail.core.models import Orderable
+from wagtail.core import blocks
+from wagtail.core.fields import StreamField
 
 
 @register_setting(icon='list-ul')

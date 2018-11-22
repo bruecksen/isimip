@@ -1,5 +1,6 @@
 {% extends "pages/default_page.html" %}
 {% load breadcrumb static %}
+{% load wagtailcore_tags %}
 
 {% block content_container %}
 	<div class="background-container" style="background-image: url({% static 'images/mountain-range.jpg' %});">
@@ -9,7 +10,7 @@
 				<div class="content-container-inner">
 					{% block content %}
 						{% for row in page.content %}
-							{{ row }}
+							{% include_block row %}
 							<br>
 						{% endfor %}
 					{% endblock %}
