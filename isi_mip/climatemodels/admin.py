@@ -248,7 +248,7 @@ class OutputDataAdmin(admin.ModelAdmin):
 
     def get_model(self, obj):
         return obj.model and obj.model.base_model.name or obj.id
-    get_model.admin_order_field = 'model__name'
+    get_model.admin_order_field = 'model__base_model__name'
     get_model.short_description = 'Impact Model'
 
     def get_drivers(self, obj):
