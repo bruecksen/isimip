@@ -21,7 +21,9 @@
 					<select class="simulation-round form-control" name="simulation_round">
 						<option value="all">All simulation rounds</option>
 						{% for sr in simulation_rounds %}
+						{% if sr.name != 'Not yet active' %}
 						<option value=".{{ sr.name|slugify }}">{{ sr.name }}</option>
+						{% endif %}
 						{% endfor %}
 					</select>
 					<select class="sector form-control" name="sector">
@@ -52,7 +54,7 @@
 			<div class="papers-grid row">
 				{% for paper in papers %}
 				<div class="col-sm-3 paper {% for tag in paper.tags.all %} {{ tag.name|slugify }}{% endfor %}{% for sr in paper.simulation_rounds.all %} {{ sr.name|slugify }}{% endfor %}{% for sector in paper.sectors.all %} {{ sector.name|slugify }}{% endfor %}">
-					{% include "widgets/page-teaser.html" with author=paper.author title=paper.title description=paper.journal image=paper.get_image href=paper.link external_link=True external_link_text='Link' magicgrow=False border=True %}
+					{% include "widgets/page-teaser.html" with author=paper.author title=paper.title description=paper.journal image=paper.get_image href=paper.link external_link=True external_link_text='Link' open_new_tab=True magicgrow=False border=True %}
 				</div>
 				{% endfor %}
 			</div>

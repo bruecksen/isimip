@@ -13,7 +13,7 @@
 {% if title %}
 	<div class="h4">
 		{% if href %}
-			<a href="{{ href }}">
+			<a href="{{ href }}"{% if open_new_tab %} target="_blank"{% endif %}>
 				{{ title }}
 			</a>
 		{% else %}
@@ -40,7 +40,7 @@
 {% endif %}
 {% if source %}
 	<p class="widget-page-teaser-text-source">
-		<a href="{{ source.href }}">
+		<a href="{{ source.href }}"{% if open_new_tab %} target="_blank"{% endif %}>
 			<i class="fa fa-external-link"></i>
 			{{ source.description }}
 		</a>
@@ -53,13 +53,13 @@
 {% endif %}
 {% if text_right_link %}
 	<div class="widget-page-teaser-rightlink">
-		<a href="{{ href }}" class="btn btn-default pull-right">{{ text_right_link_text }}</a>
+		<a href="{{ href }}" class="btn btn-default pull-right"{% if open_new_tab %} target="_blank"{% endif %}>{{ text_right_link_text }}</a>
 		<div class="clearfix"></div>
 	</div>
 {% endif %}
 {% if external_link %}
 	<div class="widget-page-teaser-rightlink">
-		<a href="{{ href }}">
+		<a href="{{ href }}"{% if open_new_tab %} target="_blank"{% endif %}>
 			<i class="fa fa-external-link" aria-hidden="true"></i>
 			{{ external_link_text }}
 		</a>

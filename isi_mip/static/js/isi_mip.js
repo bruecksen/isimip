@@ -17,7 +17,14 @@ $(function() {
 		if ($(event.target).is("a") || $(event.target).is("i")) {
             return;
 		}
-		window.location = $(this).find(".widget-page-teaser-rightlink a, .widget-page-teaser-text-source a").attr("href");
+		var link = $(this).find(".widget-page-teaser-rightlink a, .widget-page-teaser-text-source a");
+		var target = link.attr('target');
+		if (target === '_blank') {
+			console.log('new tab');
+			$('<a href="' + link.attr('href') + '" target="blank"></a>')[0].click();  
+		} else {
+			$('<a href="' + link.attr('href') + '"></a>')[0].click();  
+		}
         return false;
 	});
 });
@@ -744,7 +751,7 @@ function equal_height_rows(elements) {
 			if (index == elements.length - 1) {
 				// console.log(start_index, max_height, max_container_height);
 				elements.slice(start_index, index + 1).forEach(function(inner_element) {
-					console.log(inner_element);
+					// console.log(inner_element);
 					inner_element.size.height = max_height;
 					$(inner_element.element).find('.widget-page-teaser').height(max_container_height + 'px');
 					// console.log(element.size);
@@ -874,7 +881,7 @@ $(window).load(function() {
 		$('.filter li:not(.show-all,.hide-all) a:not(.is-checked) i.fa').removeClass('fa-check-circle');
 		$('.filter select.simulation-round').val('all').change();
 		$('.filter select.sector').val('all').change();
-		var filters = {};
+		filters = {};
 		filters['tags'] = [];
 		filters['sectors'] = [];
 		filters['simulation_round'] = [];

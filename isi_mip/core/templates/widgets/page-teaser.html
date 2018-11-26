@@ -2,11 +2,11 @@
 	<div class="visible-xs widget-page-teaser-xs-detector"></div>
 	{% if image %}
 		{% if href %}
-			{% include 'widgets/image.html' with url=image.url name=title href=href %}
+			{% include 'widgets/image.html' with url=image.url name=title href=href open_new_tab=open_new_tab %}
 		{% else %}
 			{% include 'widgets/image.html' with url=image.url name=title %}
 		{% endif %}
 	{% endif %}
 
-	{% include "widgets/page-teaser-text.html" %}
+	{% include "widgets/page-teaser-text.html" with open_new_tab=open_new_tab %}
 </div>
