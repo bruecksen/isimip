@@ -878,7 +878,7 @@ $(window).load(function() {
     $('.filter .show-all').on('click', function( event ) {
         $('.no-items-found').hide();
 		$('.filter li:not(.show-all,.hide-all) a').removeClass('is-checked');
-		$('.filter li:not(.show-all,.hide-all) a:not(.is-checked) i.fa').removeClass('fa-check-circle');
+		$('.filter li:not(.show-all,.hide-all) a:not(.is-checked) i.fa').removeClass('fa-check-circle').addClass('fa-circle');
 		$('.filter select.simulation-round').val('all').change();
 		$('.filter select.sector').val('all').change();
 		filters = {};
