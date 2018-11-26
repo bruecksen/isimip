@@ -1,8 +1,8 @@
 from collections import OrderedDict
 
 from django import template
-from django.forms import BaseForm, TextInput, Textarea, PasswordInput, EmailInput
-from django.forms.widgets import Select, CheckboxSelectMultiple, CheckboxInput, RadioSelect
+from django.forms import BaseForm
+from django.forms.widgets import Select, CheckboxSelectMultiple, CheckboxInput, RadioSelect, Input
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 
