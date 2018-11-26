@@ -50,7 +50,7 @@ def template_form(form, **kwargs):
                    'required': field.field.required,
                    }
         context['readonly'] = 'readonly' in field.field.widget.attrs and field.field.widget.attrs['readonly']
-        if isinstance(field.field.widget, TextInput) or isinstance(field.field.widget, PasswordInput) or isinstance(field.field.widget, EmailInput):
+        if isinstance(field.field.widget, Input):
             context['type'] = field.field.widget.input_type if hasattr(field.field.widget, 'input_type') else 'text'
             context['small'] = True
             if hasattr(field.field.widget, 'textarea') and field.field.widget.textarea:
