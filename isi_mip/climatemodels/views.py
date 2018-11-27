@@ -151,7 +151,7 @@ def confirm_data(page, request, id):
         # raise Exception(request.POST)
         form = DataConfirmationForm(request.POST)
         if not form.is_valid():
-            if 'license' in form.clean_data:
+            if 'license' in form.cleaned_data:
                 messages.error(request, 'You need to confirm that your impact model is correct and complete!')
             else:
                 messages.error(request, 'You need to select a valid license!')
