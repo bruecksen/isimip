@@ -1138,7 +1138,7 @@ class OutputData(models.Model):
 class DataPublicationConfirmation(models.Model):
     impact_model = models.OneToOneField(ImpactModel, on_delete=models.PROTECT, related_name='confirmation')
     created = models.DateTimeField(auto_now_add=True)
-    email_text = models.TextField()
+    email_text = models.TextField(help_text="Please insert information on the experiments that are to be published here (required).")
 
     is_confirmed = models.BooleanField(default=False)
     confirmed_date = models.DateTimeField(null=True, blank=True)

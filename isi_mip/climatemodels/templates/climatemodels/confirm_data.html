@@ -14,18 +14,18 @@
 
                 <p>{{ custom_text|linebreaksbr|urlize }}</p>
 
-                <p>The data are now ready to be transferred to the <a href="https://esg.pik-potsdam.de/projects/isimip/" target="_blank">ISIMIP node of the ESG server</a>, where they will be accessible to users byond the community of ISIMIP modelling groups. Only data that has passed the our formal format check will be published. The conditions by which the data can be used are described in the ISIMIP <a href="/protocol/terms-of-use/" target="_blank">terms of use</a>.</p>
+                <p>The data are now ready to be transferred to the <a href="https://esg.pik-potsdam.de/projects/isimip/" target="_blank">ISIMIP ESG server</a>, where they will be accessible to users beyond the community of ISIMIP modelling groups. Only data that has passed the our formal format check will be published. The conditions by which the data can be used are described in the ISIMIP <a href="/protocol/terms-of-use/" target="_blank">terms of use</a>.</p>
 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="terms" required> The uploaded simulation data for {{ simulation_round }} for {{ impact_model_name }}, and any further simulation data for the same model and simulation round can be published on the ISIMIP node of the ESGF server.
+                        <input type="checkbox" name="terms" required> The uploaded simulation data for {{ simulation_round }} for {{ impact_model_name }}, and any further simulation data for the same model and simulation round can be published on the ISIMIP ESGF server.
                     </label>
                 </div>
 
                 <p>Please select the appropriate licence. The same licence will be used for all data from your model in {{ simulation_round }}.</p>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="license" value="CC 4.0-By" required> CC 4.0-By (strongly recommended)
+                        <input type="radio" name="license" value="CC 4.0" required> CC 4.0 (strongly recommended)
                     </label>
                 </div>
                 <div class="radio">

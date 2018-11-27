@@ -424,6 +424,6 @@ class ContactInformationForm(forms.Form):
 
 class DataConfirmationForm(forms.Form):
     terms = forms.BooleanField(required=True)
-    license = forms.ChoiceField(required=True, choices=(('CC 4.0-By', 'CC 4.0-By'), ('other', 'other')))
+    license = forms.ChoiceField(required=True, choices=(('CC 4.0', 'CC 4.0'), ('other', 'other')))
     other_license_name = forms.CharField(required=False)
     correct = forms.BooleanField(required=True)
