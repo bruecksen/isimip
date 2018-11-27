@@ -134,7 +134,6 @@ def confirm_data(page, request, id):
     if request.method == 'GET':
         title = 'Confirm data for : %s' % impact_model
         subpage = {'title': title, 'url': ''}
-        impage = ImpactModelsPage.objects.get()
         context = {
             'page': page,
             'subpage': subpage,
@@ -143,7 +142,7 @@ def confirm_data(page, request, id):
             'sector': impact_model.base_model.sector,
             'impact_model_name': impact_model.base_model.name,
             'custom_text': confirmation.email_text,
-            'impact_model_url': impage.url + impage.reverse_subpage('edit_base', args=(impact_model.id,)),
+            'impact_model_url': '/impactmodels/edit/%s/' % impact_model.pk,
         }
 
         template = 'climatemodels/confirm_data.html'
