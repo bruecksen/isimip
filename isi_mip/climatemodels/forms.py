@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, ClearableFileInput
 from dateutil.parser import parse
 
 from isi_mip.climatemodels.fields import MyModelSingleChoiceField, MyModelMultipleChoiceField
@@ -420,3 +420,17 @@ class ContactInformationForm(forms.Form):
     email = forms.EmailField(label='Your email adress', required=True)
     institute = forms.CharField(max_length=500, required=False)
     country = forms.ModelChoiceField(queryset=Country.objects.all(), required=False, empty_label='-------')
+
+
+class AttachmentModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Attachment
+        exclude = ('impact_model',)
+        widgets = {
+            'attachment1': ClearableFileInput,
+            'attachment2': ClearableFileInput,
+            'attachment3': ClearableFileInput,
+            'attachment4': ClearableFileInput,
+            'attachment5': ClearableFileInput,
+        }

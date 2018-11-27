@@ -1,9 +1,13 @@
+import os
+
+from django.core.validators import FileExtensionValidator
 from django.apps import apps
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.text import slugify
+from django.template.defaultfilters import filesizeformat
 
 from wagtail.search import index
 
@@ -1129,3 +1133,38 @@ class OutputData(models.Model):
         duplicate.scenarios.set(self.scenarios.all())
         duplicate.drivers.set(self.drivers.all())
         return duplicate
+
+
+def impact_model_path(instance, filename):
+    return 'impact_model_attachments/{0}-{1}'.format(instance.impact_model.id, filename)
+
+
+class Attachment(models.Model):
+    impact_model = models.OneToOneField(ImpactModel)
+    attachment1 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment2 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment3 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment4 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment5 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+
+    def _get_verbose_field_name(self, field):
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name.title()
+        if fieldmeta.help_text:
+            ret = generate_helptext(fieldmeta.help_text, ret)
+        return ret
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        tuples = []
+        if self.attachment1:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment1.url, os.path.basename(self.attachment1.name), filesizeformat(self.attachment1.size))))
+        if self.attachment2:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment2.url, os.path.basename(self.attachment2.name), filesizeformat(self.attachment2.size))))
+        if self.attachment3:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment3.url, os.path.basename(self.attachment3.name), filesizeformat(self.attachment3.size))))
+        if self.attachment4:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment4.url, os.path.basename(self.attachment4.name), filesizeformat(self.attachment4.size))))
+        if self.attachment5:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment5.url, os.path.basename(self.attachment5.name), filesizeformat(self.attachment5.size))))
+        return [('Attachments', tuples )]

@@ -42,6 +42,7 @@ CMS_APPS = (
 
     'blog',
     'static_precompiler',
+    'file_resubmit',
 )
 # Apps specific for this project go here.
 LOCAL_APPS = (

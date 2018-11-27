@@ -15,7 +15,7 @@
 			{% include 'widgets/heading2.html' with text='Edit '|add:subpage.title %}
 		{% endblock %}
 		{% block content %}
-			<form method="POST" id="edit-model-form">
+			<form method="POST" id="edit-model-form" enctype="multipart/form-data">
 				{% block form_content %}
 					{% include 'widgets/heading3.html' with text='Base Information' %}
 					{% include 'widgets/richtext-content.html' with content=page.common_attributes_text %}

@@ -1,0 +1,23 @@
+{% extends 'climatemodels/edit_base.html' %}
+{% load template_form %}
+
+{% block form_content %}
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Attachments' %}
+		{% include 'widgets/richtext-content.html' with content='You can upload any file of type PDF, TXT or CSV.' %}
+		{% for field in form %}
+		<div class="form-group file">
+			<label class="field-label" for="{{ field.id_for_label }}">{{ field.label }}:</label>
+			{{ field }}
+			{% if field.help_text %}
+			<p class="help-block">{{ field.help_text|safe }}</p>
+			{% endif %}
+		</div>
+		{% endfor %}
+	</fieldset>
+{% endblock %}
+{% block form_action %}
+	<div class="form-actions">
+		<input type="submit" name="submit-button" value="Save" class="btn btn-primary">
+	</div>
+{% endblock %}
