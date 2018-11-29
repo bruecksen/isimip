@@ -108,7 +108,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
 
     def get_sector(self, obj):
         return obj.base_model and obj.base_model.sector or None
-    get_sector.admin_order_field = 'sector__name'
+    get_sector.admin_order_field = 'base_model__sector__name'
     get_sector.short_description = 'Sector'
 
     def sector_link(self, obj):
