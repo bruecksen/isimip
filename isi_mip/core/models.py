@@ -88,3 +88,15 @@ class FooterLink(Orderable, models.Model):
 class Invitation(BaseSetting):
     subject = models.CharField(max_length=500, help_text='Invitation subject', default='[ISIMIP] Registration invitation for impact-model database')
     body = models.TextField()
+
+
+@register_setting(icon='mail')
+class DataPublicationRequest(BaseSetting):
+    subject = models.CharField(max_length=500, help_text='Data publication request subject', default="[ISIMIP] Data confirmation request")
+    body = models.TextField(help_text='You can use the following tokens in the email template: {{model_contact_person}}, {{simulation_round}}, {{sector}}, {{impact_model_name}}, {{data_confirmation_link}}, {{custom_text}}')
+
+
+@register_setting(icon='mail')
+class DataPublicationConfirmation(BaseSetting):
+    subject = models.CharField(max_length=500, help_text='Data publication confirmation subject', default="[ISIMIP] Data confirmation")
+    body = models.TextField(help_text='You can use the following tokens in the email template: {{model_contact_person}}, {{simulation_round}}, {{impact_model_name}}, {{custom_text}}, {{license}}')

@@ -448,6 +448,9 @@ class ImpactModel(models.Model):
             self.inputdatainformation.values_to_tuples(),
         ] + self.otherinformation.values_to_tuples()
 
+    def can_confirm_data(self):
+        return hasattr(self, 'confirmation') and not self.confirmation.is_confirmed
+
 
 class TechnicalInformation(models.Model):
     impact_model = models.OneToOneField(
@@ -1111,12 +1114,8 @@ class OutputData(models.Model):
     drivers = models.ManyToManyField(InputData)
     date = models.DateField()
 
-    def __str__(self):
-        if self.model:
-            return "%s : %s" % (self.model.base_model.sector, self.model.base_model.name)
-        return "%s" % self.pk
-
     class Meta:
+        verbose_name = verbose_name_plural = 'Output data'
         verbose_name = verbose_name_plural = 'Output data'
 
     def duplicate(self):
@@ -1129,3 +1128,23 @@ class OutputData(models.Model):
         duplicate.scenarios.set(self.scenarios.all())
         duplicate.drivers.set(self.drivers.all())
         return duplicate
+
+    def __str__(self):
+        if self.model:
+            return "%s : %s" % (self.model.base_model.sector, self.model.base_model.name)
+        return "%s" % self.pk
+
+
+class DataPublicationConfirmation(models.Model):
+    impact_model = models.OneToOneField(ImpactModel, on_delete=models.PROTECT, related_name='confirmation')
+    created = models.DateTimeField(auto_now_add=True)
+    email_text = models.TextField(help_text="Please insert information on the experiments that are to be published here (required).")
+
+    is_confirmed = models.BooleanField(default=False)
+    confirmed_date = models.DateTimeField(null=True, blank=True)
+    confirmed_by = models.ForeignKey(User, null=True, blank=True)
+    confirmed_license = models.CharField(max_length=500, blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Data publication confirmation"
+        verbose_name_plural = "Data publication confirmations"

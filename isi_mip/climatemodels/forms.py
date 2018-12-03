@@ -420,3 +420,10 @@ class ContactInformationForm(forms.Form):
     email = forms.EmailField(label='Your email adress', required=True)
     institute = forms.CharField(max_length=500, required=False)
     country = forms.ModelChoiceField(queryset=Country.objects.all(), required=False, empty_label='-------')
+
+
+class DataConfirmationForm(forms.Form):
+    terms = forms.BooleanField(required=True)
+    license = forms.ChoiceField(required=True, choices=(('CC 4.0', 'CC 4.0'), ('other', 'other')))
+    other_license_name = forms.CharField(required=False)
+    correct = forms.BooleanField(required=True)

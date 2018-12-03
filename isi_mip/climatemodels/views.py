@@ -9,19 +9,24 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout, login, authenticate
 from django.core import urlresolvers
 from django.core.urlresolvers import reverse
+from django.core.mail import EmailMessage
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, render_to_response
 from django.template.loader import render_to_string
 from django.utils.html import urlize, linebreaks
+from django.utils.text import slugify
 from django.template import Template, Context, RequestContext
 
+from easy_pdf.rendering import render_to_pdf_response, render_to_pdf, make_response
+
 from isi_mip.climatemodels.forms import ImpactModelStartForm, ContactPersonFormset, get_sector_form, \
-    BaseImpactModelForm, ImpactModelForm, TechnicalInformationModelForm, InputDataInformationModelForm, OtherInformationModelForm, ContactInformationForm
+    BaseImpactModelForm, ImpactModelForm, TechnicalInformationModelForm, InputDataInformationModelForm, \
+    OtherInformationModelForm, ContactInformationForm, DataConfirmationForm
 from isi_mip.climatemodels.models import ImpactModel, InputData, BaseImpactModel, SimulationRound
 from isi_mip.climatemodels.tools import ImpactModelToXLSX, ParticpantModelToXLSX
 from isi_mip.invitation.views import InvitationView
-from isi_mip.core.models import Invitation
+from isi_mip.core.models import Invitation, DataPublicationConfirmation
 
 STEP_SHOW_DETAILS = 'details'
 STEP_BASE = 'edit_base'
@@ -73,6 +78,9 @@ def impact_model_details(page, request, id):
         if can_edit_model:
             edit_link = '<i class="fa fa-cog" aria-hidden="true"></i> <a href="{}">Edit model information for simulation round {}</a>'.format(page.url + page.reverse_subpage(STEP_BASE, args=(im.id,)), im.simulation_round.name)
         output_data = []
+        confirm_data_link = ''
+        if im.can_confirm_data():
+            confirm_data_link = '<i class="fa fa-check-circle" aria-hidden="true"></i> <a href="{}">Confirm data for simulation round {}</a>'.format(page.url + page.reverse_subpage("confirm_data", args=(im.id,)), im.simulation_round.name)
         for od in im.outputdata_set.all():
             text = "Experiments: <i>%s</i><br/>" % od.experiments
             text += "Climate Drivers: <i>%s</i><br/>" % ", ".join([d.name for d in od.drivers.all()])
@@ -88,6 +96,7 @@ def impact_model_details(page, request, id):
             'model_name': base_model.name,
             'edit_link': edit_link,
             'details': model_details,
+            'confirm_data_link': confirm_data_link,
         })
     context['description'] = urlize(base_model.short_description or '')
     context['model_simulation_rounds'] = model_simulation_rounds
@@ -103,6 +112,120 @@ def impact_model_details(page, request, id):
 
     template = 'climatemodels/details.html'
     return render(request, template, context)
+
+
+def confirm_data(page, request, id):
+    if not request.user.is_authenticated():
+        messages.info(request, 'You need to be logged in to perform this action.')
+        return HttpResponseRedirect('/dashboard/login/')
+    try:
+        impact_model = ImpactModel.objects.get(id=id)
+    except ImpactModel.DoesNotExist:
+        messages.warning(request, 'Unknown model')
+        return HttpResponseRedirect('/impactmodels/')
+    if not (impact_model.base_model in request.user.userprofile.owner.all() or request.user.is_superuser):
+        messages.info(request, 'You need to be logged in to perform this action.')
+        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
+        return HttpResponseRedirect(nexturl)
+    if not impact_model.can_confirm_data():
+        messages.warning(request, 'Data confirmation for this model is not possible at the moment.')
+        return HttpResponseRedirect('/impactmodels/')
+    confirmation = impact_model.confirmation
+    if request.method == 'GET':
+        title = 'Confirm data for : %s' % impact_model
+        subpage = {'title': title, 'url': ''}
+        context = {
+            'page': page,
+            'subpage': subpage,
+            'user': request.user,
+            'simulation_round': impact_model.simulation_round,
+            'sector': impact_model.base_model.sector,
+            'impact_model_name': impact_model.base_model.name,
+            'custom_text': confirmation.email_text,
+            'impact_model_url': '/impactmodels/edit/%s/' % impact_model.pk,
+        }
+
+        template = 'climatemodels/confirm_data.html'
+        return render(request, template, context)
+    elif request.method == 'POST':
+        # raise Exception(request.POST)
+        form = DataConfirmationForm(request.POST)
+        if not form.is_valid():
+            if 'license' in form.cleaned_data:
+                messages.error(request, 'You need to confirm that your impact model is correct and complete!')
+            else:
+                messages.error(request, 'You need to select a valid license!')
+            return HttpResponseRedirect(request.path)
+        license = form.cleaned_data['license']
+        if license == 'other' and form.cleaned_data['other_license_name'] == '':
+            messages.error(request, 'If you choose the "Other" license you need to fill out the name!')
+            return HttpResponseRedirect(request.path)
+        # build and send confirm email
+        confirm_email = DataPublicationConfirmation.for_site(request.site)
+        license = license == 'other' and form.cleaned_data['other_license_name'] or license
+        context = {
+            'model_contact_person': request.user.get_full_name(),
+            'simulation_round': impact_model.simulation_round,
+            'impact_model_name': confirmation.impact_model.base_model.name,
+            'custom_text': confirmation.email_text,
+            'license': license,
+        }
+        confirm_body = Template(confirm_email.body)
+        confirm_body = confirm_body.render(Context(context))
+        # add newlines to the end of body to split attachment from text
+        confirm_body += "\n\n"
+        ccs = impact_model.base_model.impact_model_owner.exclude(pk=request.user.pk)
+        pdf = render_impact_model_to_pdf(impact_model)
+        email = EmailMessage(
+            subject=confirm_email.subject,
+            body=confirm_body,
+            from_email=request.user.email,
+            to=[settings.DATA_CONFIRMATION_EMAIL],
+            cc=[cc.email for cc in ccs],
+        )
+        filename = "DataConfirmation_%s_%s_%s.pdf" % (
+            impact_model.simulation_round.slug,
+            impact_model.base_model.sector.slug,
+            slugify(impact_model.base_model.name)
+        )
+        email.attach(filename, pdf, "application/pdf")
+        email.send()
+        # update confirmation state
+        confirmation.is_confirmed = True
+        confirmation.confirmed_by = request.user
+        confirmation.confirmed_date = datetime.now()
+        confirmation.confirmed_license = license
+        confirmation.save()
+        messages.success(request, 'The data confirmation email has been sent.')
+        return HttpResponseRedirect('/dashboard/')
+
+
+def impact_model_pdf(page, request, id):
+    try:
+        impact_model = ImpactModel.objects.get(id=id)
+    except ImpactModel.DoesNotExist:
+        messages.warning(request, 'Unknown model')
+        return HttpResponseRedirect('/impactmodels/')
+    pdf = render_impact_model_to_pdf(impact_model)
+    return make_response(pdf)
+    # return render_to_response('climatemodels/pdf.html', context)
+
+
+def render_impact_model_to_pdf(impact_model):
+    im_values = impact_model.values_to_tuples() + impact_model.fk_sector.values_to_tuples()
+    model_details = []
+    for k, v in im_values:
+        if any((y for x, y in v)):
+            res = {'term': k,
+                   'definitions': ({'text': "%s: <i>%s</i>" % (x, y), 'key': x, 'value': y} for x, y in v if y)
+                   }
+            model_details.append(res)
+    context = {
+        "impact_model_name": impact_model.base_model.name,
+        "simulation_round": impact_model.simulation_round,
+        "model_details": model_details,
+    }
+    return render_to_pdf("climatemodels/pdf.html", context)
 
 
 def impact_model_download(page, request):
@@ -183,14 +306,12 @@ def crossref_proxy(request):
 def create_new_impact_model(page, request, base_model_id, simulation_round_id):
     if not request.user.is_authenticated():
         messages.info(request, 'You need to be logged in to perform this action.')
-        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
-        return HttpResponseRedirect(nexturl)
+        return HttpResponseRedirect('/dashboard/login/')
     base_impact_model = BaseImpactModel.objects.get(id=base_model_id)
     simulation_round = SimulationRound.objects.get(id=simulation_round_id)
     if not (base_impact_model in request.user.userprofile.owner.all() or request.user.is_superuser):
-        messages.info(request, 'You need to be logged in to perform this action.')
-        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
-        return HttpResponseRedirect(nexturl)
+        messages.info(request, 'You need to have the permissions to perform this action.')
+        return HttpResponseRedirect('/dashboard/')
 
     if ImpactModel.objects.filter(base_model=base_impact_model, simulation_round=simulation_round).exists():
         messages.warning(request, 'The impact model already exists in this simulation round. Please contact the ISIMIP team.')
@@ -210,14 +331,12 @@ def create_new_impact_model(page, request, base_model_id, simulation_round_id):
 def duplicate_impact_model(page, request, impact_model_id, simulation_round_id):
     if not request.user.is_authenticated():
         messages.info(request, 'You need to be logged in to perform this action.')
-        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
-        return HttpResponseRedirect(nexturl)
+        return HttpResponseRedirect('/dashboard/login/')
     impact_model = ImpactModel.objects.get(id=impact_model_id)
     simulation_round = SimulationRound.objects.get(id=simulation_round_id)
     if not (impact_model.base_model in request.user.userprofile.owner.all() or request.user.is_superuser):
-        messages.info(request, 'You need to be logged in to perform this action.')
-        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
-        return HttpResponseRedirect(nexturl)
+        messages.info(request, 'You need to have the permissions to perform this action.')
+        return HttpResponseRedirect('/dashboard/')
     if ImpactModel.objects.filter(base_model=impact_model.base_model, simulation_round=simulation_round).exists():
         messages.warning(request, 'The impact model already exists in this simulation round. Please contact the ISIMIP team.')
         return HttpResponseRedirect('/dashboard/')
@@ -231,13 +350,11 @@ def duplicate_impact_model(page, request, impact_model_id, simulation_round_id):
 def impact_model_edit(page, request, id, current_step):
     if not request.user.is_authenticated():
         messages.info(request, 'You need to be logged in to perform this action.')
-        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
-        return HttpResponseRedirect(nexturl)
+        return HttpResponseRedirect('/dashboard/login/')
     impact_model = ImpactModel.objects.get(id=id)
     if not (impact_model.base_model in request.user.userprofile.owner.all() or request.user.is_superuser):
-        messages.info(request, 'You need to be logged in to perform this action.')
-        nexturl = reverse('wagtailadmin_login') + "?next={}".format(request.path)
-        return HttpResponseRedirect(nexturl)
+        messages.info(request, 'You need to have the permissions to perform this action.')
+        return HttpResponseRedirect('/dashboard/')
     # raise Exception(request.POST)
     next_step = FORM_STEPS[current_step]["next"]
     form = FORM_STEPS[current_step]["form"]
