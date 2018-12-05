@@ -434,3 +434,10 @@ class AttachmentModelForm(forms.ModelForm):
             'attachment4': ClearableFileInput,
             'attachment5': ClearableFileInput,
         }
+
+
+class DataConfirmationForm(forms.Form):
+    terms = forms.BooleanField(required=True)
+    license = forms.ChoiceField(required=True, choices=(('CC 4.0', 'CC 4.0'), ('other', 'other')))
+    other_license_name = forms.CharField(required=False)
+    correct = forms.BooleanField(required=True)

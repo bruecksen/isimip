@@ -33,7 +33,7 @@ from isi_mip.climatemodels.views import (
     impact_model_details, impact_model_edit, input_data_details,
     impact_model_download, participant_download, show_participants, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION,
     STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR, STEP_ATTACHMENT, 
-    duplicate_impact_model, create_new_impact_model, update_contact_information_view)
+    duplicate_impact_model, create_new_impact_model, update_contact_information_view, confirm_data, impact_model_pdf)
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
 from isi_mip.contrib.forms import AuthenticationForm
@@ -385,6 +385,14 @@ class ImpactModelsPage(RoutablePageWithDefault):
     @route(r'^details/(?P<id>\d+)/$')
     def details(self, request, id):
         return impact_model_details(self, request, id)
+
+    @route(r'^confirm-data/(?P<id>\d+)/$')
+    def confirm_data(self, request, id):
+        return confirm_data(self, request, id)
+
+    @route(r'^pdf/(?P<id>\d+)/$')
+    def pdf(self, request, id):
+        return impact_model_pdf(self, request, id)
 
     @route(r'edit/(?P<id>[0-9]*)/$')
     def edit_base(self, request, id=None):

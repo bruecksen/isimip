@@ -8,10 +8,14 @@ from django.forms import CheckboxSelectMultiple
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.template import Context, Template
+from django.conf import settings
 
 from isi_mip.sciencepaper.models import Author
 from .models import *
 from isi_mip.contrib.models import UserProfile
+from isi_mip.core.models import DataPublicationRequest
+from isi_mip.pages.models import ImpactModelsPage
 
 
 class HideAdmin(admin.ModelAdmin):
@@ -108,7 +112,7 @@ class ImpactModelAdmin(admin.ModelAdmin):
 
     def get_sector(self, obj):
         return obj.base_model and obj.base_model.sector or None
-    get_sector.admin_order_field = 'sector__name'
+    get_sector.admin_order_field = 'base_model__sector__name'
     get_sector.short_description = 'Sector'
 
     def sector_link(self, obj):
@@ -274,6 +278,54 @@ class ClimateVariableAdmin(admin.ModelAdmin):
     list_filter = ('inputdata__data_type__name',)
 
 
+class DataPublicationConfirmationModelAdmin(admin.ModelAdmin):
+    model = DataPublicationConfirmation
+    fields = ('impact_model', 'email_text', 'is_confirmed', 'confirmed_date', 'confirmed_license', 'confirmed_by',)
+    list_display = ('impact_model', 'confirmed_date', 'confirmed_by', 'confirmed_license', 'is_confirmed')
+    readonly_fields_edit = ('is_confirmed', 'confirmed_date', 'confirmed_license', 'confirmed_by',)
+    readonly_fields = ('impact_model', 'email_text', 'is_confirmed', 'confirmed_date', 'confirmed_license', 'confirmed_by',)
+    list_filter = ('is_confirmed', 'confirmed_license')
+    ordering = ('impact_model',)
+
+    def get_readonly_fields(self, request, obj=None):
+        if not obj:
+            return self.readonly_fields_edit
+        else:
+            return self.readonly_fields
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "impact_model":
+            kwargs["queryset"] = ImpactModel.objects.filter(confirmation__isnull=True)
+        return super(DataPublicationConfirmationModelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        super(DataPublicationConfirmationModelAdmin, self).save_model(request, obj, form, change)
+        if not change:
+            self.send_request_to_confirm(obj, request)
+
+    def send_request_to_confirm(self, confirmation, request):
+
+        impage = ImpactModelsPage.objects.get()
+        for owner in confirmation.impact_model.base_model.impact_model_owner.all():
+            link = impage.full_url + impage.reverse_subpage('confirm_data', kwargs={'id': confirmation.impact_model.pk})
+            context = {
+                'model_contact_person': owner.name,
+                'simulation_round': confirmation.impact_model.simulation_round,
+                'sector': confirmation.impact_model.base_model.sector,
+                'impact_model_name': confirmation.impact_model.base_model.name,
+                'data_confirmation_link': link,
+                'custom_text': confirmation.email_text,
+            }
+            confirm_email = DataPublicationRequest.for_site(request.site)
+            confirm_body = Template(confirm_email.body)
+            confirm_body = confirm_body.render(Context(context))
+            confirm_subject = confirm_email.subject
+            owner.user.email_user(confirm_subject, confirm_body, settings.DATA_CONFIRMATION_EMAIL)
+        messages.add_message(request, messages.INFO, 'Data confirmation request email have been sent to the owners.')
+
+
+
+
 admin.site.register(BaseImpactModel, BaseImpactModelAdmin)
 admin.site.register(ImpactModel, ImpactModelAdmin)
 admin.site.register(InputData, InputDataAdmin)
@@ -289,6 +341,7 @@ admin.site.register(MarineEcosystemsGlobal, HideSectorAdmin)
 admin.site.register(MarineEcosystemsRegional, HideSectorAdmin)
 admin.site.register(Biodiversity, HideSectorAdmin)
 admin.site.register(GenericSector, HideSectorAdmin)
+admin.site.register(DataPublicationConfirmation, DataPublicationConfirmationModelAdmin)
 
 admin.site.register(SectorInformationGroup, SectorInformationGroupAdmin)
 

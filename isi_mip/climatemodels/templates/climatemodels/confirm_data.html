@@ -1,0 +1,49 @@
+{% extends 'pages/default_page.html' %}
+{% load breadcrumb %}
+{% block content_container %}
+    <div class="container scrollable-container">
+        <br>
+        {% breadcrumb %}
+        {% include 'widgets/heading1.html' with text=subpage.title %}
+        {% block content %}
+            <form class="confirm-data" method="POST">
+                {% csrf_token %}
+                <p>This agreement relates to the ISIMIP model simulations for the simulation round {{simulation_round}} for the model {{ impact_model_name }}. Data that have already passed the basic format check are now visible to all ISIMIP participants, in the relevant directory on the DKRZ server:</p>
+
+                <p>/work/bb0820/ISIMIP/ISIMIP2b/OutputData/{{ sector }}/{{ impact_model_name }}/…</p>
+
+                <p>{{ custom_text|linebreaksbr|urlize }}</p>
+
+                <p>The data are now ready to be transferred to the <a href="https://esg.pik-potsdam.de/projects/isimip/" target="_blank">ISIMIP ESG server</a>, where they will be accessible to users beyond the community of ISIMIP modelling groups. Only data that has passed the our formal format check will be published. The conditions by which the data can be used are described in the ISIMIP <a href="/protocol/terms-of-use/" target="_blank">terms of use</a>.</p>
+
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="terms" required> The uploaded simulation data for {{ simulation_round }} for {{ impact_model_name }}, and any further simulation data for the same model and simulation round can be published on the ISIMIP ESGF server.
+                    </label>
+                </div>
+
+                <p>Please select the appropriate licence. The same licence will be used for all data from your model in {{ simulation_round }}.</p>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="license" value="CC 4.0" required> CC 4.0 (strongly recommended)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="license" value="other" required> Other: <input name="other_license_name" type="text">
+                    </label>
+                </div>
+                
+                </p>
+
+                <p>Before confirming the publication, you are responsible for ensuring that the description and details of <a href="{{ impact_model_url }}" target="_blank">your model in the ISIMIP impact model database</a> is complete. This step is of particular importance to ensure that simulation data from your model is correctly interpreted. A snapshot of the database entry for your model will be stored along with the record of this confirmation.</p>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="correct"> The <a href="{{ impact_model_url }}" target="_blank">ISIMIP impact model database</a> entry is correct and complete.
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-default">Send email confirmation of data publication</button>
+            </form>
+        {% endblock %}
+    </div>
+{% endblock %}
