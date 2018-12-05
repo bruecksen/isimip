@@ -173,6 +173,7 @@ class PaperPage(Page):
     picture = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL)
     author = models.CharField(max_length=1000)
     journal = models.CharField(max_length=1000)
+    year = models.CharField(max_length=1000)
     link = models.URLField()
     tags = ParentalManyToManyField('PaperPageTag', blank=True, related_name='paper_page')
     simulation_rounds = models.ManyToManyField(SimulationRound, blank=True)
@@ -184,6 +185,7 @@ class PaperPage(Page):
         ImageChooserPanel('picture'),
         FieldPanel('author'),
         FieldPanel('journal'),
+        FieldPanel('year'),
         FieldPanel('link'),
         MultiFieldPanel([
             FieldPanel('simulation_rounds', widget=forms.CheckboxSelectMultiple),
@@ -196,6 +198,13 @@ class PaperPage(Page):
         if self.picture:
             rendition = self.picture.get_rendition('fill-640x360-c100')
             return {'url': rendition.url, 'name': self.picture.title }
+
+    def get_journal_with_year(self):
+        if self.year and not self.year == '-':
+            return "%s (%s)" % (self.journal, self.year)
+        else:
+            return self.journal
+            
 
 
 class HomePage(RoutablePageWithDefault):
