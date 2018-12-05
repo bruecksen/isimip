@@ -829,7 +829,6 @@ $(window).load(function() {
     var $grid = $('.papers-grid').isotope({
 		// options
 		itemSelector: '.paper',
-		layoutMode: 'fitRows',
 	});
 	$grid.isotope('layout');
 
