@@ -839,7 +839,7 @@ $(window).load(function() {
 		placeholder: "Select a sector"
 	});
 	$(".filter select.tag").select2({
-		placeholder: "Select a tag"
+		placeholder: "Select further categories"
 	});
 	
 	$(".filter select.tag, .filter select.sector, .filter select.simulation-round").on('change', function(e){
