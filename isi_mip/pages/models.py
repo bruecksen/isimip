@@ -176,8 +176,8 @@ class PaperPage(Page):
     year = models.CharField(max_length=1000)
     link = models.URLField()
     tags = ParentalManyToManyField('PaperPageTag', blank=True, related_name='paper_page')
-    simulation_rounds = models.ManyToManyField(SimulationRound, blank=True)
-    sectors = models.ManyToManyField(Sector, blank=True)
+    simulation_rounds = ParentalManyToManyField(SimulationRound, blank=True)
+    sectors = ParentalManyToManyField(Sector, blank=True)
 
     parent_page_types = ['pages.PaperOverviewPage']
 
