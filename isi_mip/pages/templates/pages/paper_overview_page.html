@@ -49,7 +49,6 @@
 			<div class="papers-grid row">
 				{% for paper in papers %}
 				<div class="col-sm-12 paper {% for tag in paper.tags.all %} {{ tag.name|slugify }}{% endfor %}{% for sr in paper.simulation_rounds.all %} {{ sr.name|slugify }}{% endfor %}{% for sector in paper.sectors.all %} {{ sector.name|slugify }}{% endfor %}">
-					{{paper.first_published_at}} {{ paper.last_published_at}}
 					{% include "widgets/page-teaser.html" with author=paper.author title=paper.title description=paper.get_journal_with_year href=paper.link open_new_tab=True magicgrow=False border=False %}
 				</div>
 				{% endfor %}
