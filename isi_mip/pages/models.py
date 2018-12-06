@@ -11,6 +11,7 @@ from django.utils.text import slugify
 from django.shortcuts import render
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.widgets import EmailInput
+from django.db.models import F
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -151,7 +152,7 @@ class PaperOverviewPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        context['papers'] = PaperPage.objects.child_of(self).live()
+        context['papers'] = PaperPage.objects.child_of(self).live().order_by(F('first_published_at').desc(nulls_last=True))
         context['tags'] = PaperPageTag.objects.filter(paper_page__in=context['papers']).distinct().order_by('order')
         context['simulation_rounds'] = SimulationRound.objects.all()
         context['sectors'] = Sector.objects.all()
