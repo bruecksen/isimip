@@ -171,7 +171,6 @@ class PaperPageTag(models.Model):
 
 
 class PaperPage(Page):
-    picture = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL)
     author = models.CharField(max_length=1000)
     journal = models.CharField(max_length=1000)
     year = models.CharField(max_length=1000)
@@ -183,7 +182,6 @@ class PaperPage(Page):
     parent_page_types = ['pages.PaperOverviewPage']
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('picture'),
         FieldPanel('author'),
         FieldPanel('journal'),
         FieldPanel('year'),
@@ -194,11 +192,6 @@ class PaperPage(Page):
             FieldPanel('tags', widget=forms.CheckboxSelectMultiple),
         ], heading="Tags")
     ]
-
-    def get_image(self):
-        if self.picture:
-            rendition = self.picture.get_rendition('fill-640x360-c100')
-            return {'url': rendition.url, 'name': self.picture.title }
 
     def get_journal_with_year(self):
         if self.year and not self.year == '-':
