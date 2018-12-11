@@ -10,7 +10,7 @@ import isi_mip.climatemodels.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('climatemodels', '0088_attachment'),
+        ('climatemodels', '0089_auto_20181205_1624'),
     ]
 
     operations = [
