@@ -6,6 +6,20 @@
 	{% template_form form as nf %}
 	{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
 	<fieldset>
+		{% include 'widgets/heading3.html' with text='Model set-up specifications' %}
+		{{ nf.initialize_model }}
+		{{ nf.data_profound_db }}
+		{{ nf.management_implementation }}
+		{{ nf.harvesting_simulated }}
+		{{ nf.regenerate }}
+		{{ nf.unmanaged_simulations }}
+		{{ nf.noco2_scenario }}
+		{{ nf.leap_years }}
+		{{ nf.simulate_minor_tree }}
+		{{ nf.nitrogen_simulation }}
+		{{ nf.soil_depth }}
+	</fieldset>
+	<fieldset>
 		{% include 'widgets/heading3.html' with text='Key model processes' %}
 		<p>Please provide yes/no and a short description how the process is included</p>
 		{{ nf.dynamic_vegetation }}
@@ -53,8 +67,11 @@
 	</fieldset>
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Model output specifications' %}
+		{{ nf.initial_state }}
 		{{ nf.output }}
 		{{ nf.output_per_pft }}
+		{{ nf.total_calculation }}
+		{{ nf.output_dbh_class }}
 		{{ nf.considerations }}
 	</fieldset>
 	{% for group in form.generic_groups %}
