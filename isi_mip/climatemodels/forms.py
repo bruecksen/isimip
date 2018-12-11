@@ -266,11 +266,72 @@ class AgricultureForm(BaseSectorForm):
         }
 
 
-class BiomesForestsForm(BaseSectorForm):
+class ForestsForm(BaseSectorForm):
+    template = 'edit_forests.html'
+
+    class Meta:
+        model = Forests
+        exclude = ('impact_model',)
+        widgets = {
+            # Forest Model Set-up Specifications
+            'initialize_model': MyTextInput(textarea=True),
+            'data_profound_db': MyTextInput(textarea=True),
+            'management_implementation': MyTextInput(textarea=True),
+            'harvesting_simulated': MyTextInput(textarea=True),
+            'regenerate': MyTextInput(textarea=True),
+            'unmanaged_simulations': MyTextInput(textarea=True),
+            'noco2_scenario': MyTextInput(textarea=True),
+            'leap_years': MyTextInput(textarea=True),
+            'simulate_minor_tree': MyTextInput(textarea=True),
+            'nitrogen_simulation': MyTextInput(textarea=True),
+            'soil_depth': MyTextInput(textarea=True),
+            # Forest Model Output Specifications
+            'initial_state': MyTextInput(textarea=True),
+            'total_calculation': MyTextInput(textarea=True),
+            'output_dbh_class': MyTextInput(textarea=True),
+            'output': MyTextInput(textarea=True),
+            'output_per_pft': MyTextInput(),
+            'considerations': MyTextInput(textarea=True),
+            'dynamic_vegetation': MyTextInput(textarea=True),
+            'nitrogen_limitation': MyTextInput(textarea=True),
+            'co2_effects': MyTextInput(textarea=True),
+            'light_interception': MyTextInput(textarea=True),
+            'light_utilization': MyTextInput(textarea=True),
+            'phenology': MyTextInput(textarea=True),
+            'water_stress': MyTextInput(textarea=True),
+            'heat_stress': MyTextInput(textarea=True),
+            'evapotranspiration_approach': MyTextInput(textarea=True),
+            'rooting_depth_differences': MyTextInput(textarea=True),
+            'root_distribution': MyTextInput(textarea=True),
+            'permafrost': MyTextInput(textarea=True),
+            'closed_energy_balance': MyTextInput(textarea=True),
+            'soil_moisture_surface_temperature_coupling': MyTextInput(textarea=True),
+            'latent_heat': MyTextInput(textarea=True),
+            'sensible_heat': MyTextInput(textarea=True),
+            'mortality_age': MyTextInput(textarea=True),
+            'mortality_fire': MyTextInput(textarea=True),
+            'mortality_drought': MyTextInput(textarea=True),
+            'mortality_insects': MyTextInput(textarea=True),
+            'mortality_storm': MyTextInput(textarea=True),
+            'mortality_stochastic_random_disturbance': MyTextInput(textarea=True),
+            'mortality_other': MyTextInput(textarea=True),
+            'mortality_remarks': MyTextInput(textarea=True),
+            'nbp_fire': MyTextInput(textarea=True),
+            'nbp_landuse_change': MyTextInput(textarea=True),
+            'nbp_harvest': MyTextInput(textarea=True),
+            'nbp_other': MyTextInput(textarea=True),
+            'nbp_comments': MyTextInput(textarea=True),
+            'list_of_pfts': MyTextInput(textarea=True),
+            'pfts_comments': MyTextInput(textarea=True),
+        }
+
+
+
+class BiomesForm(BaseSectorForm):
     template = 'edit_biomes.html'
 
     class Meta:
-        model = BiomesForests
+        model = Biomes
         exclude = ('impact_model',)
         widgets = {
             'output': MyTextInput(textarea=True),
@@ -399,11 +460,11 @@ def get_sector_form(sector):
         'agriculture': AgricultureForm,
         'agroeconomicmodelling': GenericSectorForm,
         'biodiversity': GenericSectorForm,
-        'biomes': BiomesForestsForm,
+        'biomes': BiomesForm,
         'coastalinfrastructure': GenericSectorForm,
         'computablegeneralequilibriummodelling': GenericSectorForm,
         'energy': EnergyForm,
-        'forests': BiomesForestsForm,
+        'forests': ForestsForm,
         'health': GenericSectorForm,
         'marineecosystemsglobal': MarineEcosystemsForm,
         'marineecosystemsregional': MarineEcosystemsForm,

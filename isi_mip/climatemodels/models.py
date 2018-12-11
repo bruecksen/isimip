@@ -652,6 +652,13 @@ class BaseSector(models.Model):
             ret = generate_helptext(fieldmeta.help_text, ret)
         return ret
 
+    def _get_verbose_field_name_question(self, field):
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name
+        if fieldmeta.help_text:
+            ret = generate_helptext(fieldmeta.help_text, ret)
+        return ret
+
     def _get_generic_verbose_field_name(self, field):
         ret = field.name
         if field.help_text:
@@ -822,10 +829,101 @@ class BiomesForests(BaseSector):
         vname = self._get_verbose_field_name
         generic = super(BiomesForests, self).values_to_tuples()
         return [
+            ('Key model processes', [
+                (vname('dynamic_vegetation'), self.dynamic_vegetation),
+                (vname('nitrogen_limitation'), self.nitrogen_limitation),
+                (vname('co2_effects'), self.co2_effects),
+                (vname('light_interception'), self.light_interception),
+                (vname('light_utilization'), self.light_utilization),
+                (vname('phenology'), self.phenology),
+                (vname('water_stress'), self.water_stress),
+                (vname('heat_stress'), self.heat_stress),
+                (vname('evapotranspiration_approach'), self.evapotranspiration_approach),
+                (vname('rooting_depth_differences'), self.rooting_depth_differences),
+                (vname('root_distribution'), self.root_distribution),
+                (vname('permafrost'), self.permafrost),
+                (vname('closed_energy_balance'), self.closed_energy_balance),
+                (vname('soil_moisture_surface_temperature_coupling'), self.soil_moisture_surface_temperature_coupling),
+                (vname('latent_heat'), self.latent_heat),
+                (vname('sensible_heat'), self.sensible_heat),
+            ]),
+            ('Causes of mortality in vegetation models', [
+                (vname('mortality_age'), self.mortality_age),
+                (vname('mortality_fire'), self.mortality_fire),
+                (vname('mortality_drought'), self.mortality_drought),
+                (vname('mortality_insects'), self.mortality_insects),
+                (vname('mortality_storm'), self.mortality_storm),
+                (vname('mortality_stochastic_random_disturbance'), self.mortality_stochastic_random_disturbance),
+                (vname('mortality_other'), self.mortality_other),
+                (vname('mortality_remarks'), self.mortality_remarks),
+            ]),
+            ('NBP components', [
+                (vname('nbp_fire'), self.nbp_fire),
+                (vname('nbp_landuse_change'), self.nbp_landuse_change),
+                (vname('nbp_harvest'), self.nbp_harvest),
+                (vname('nbp_other'), self.nbp_other),
+                (vname('nbp_comments'), self.nbp_comments),
+            ]),
+            ('Species / Plant Functional Types (PFTs)', [
+                (vname('list_of_pfts'), self.list_of_pfts),
+                (vname('pfts_comments'), self.pfts_comments),
+            ]),
             ('Model output specifications', [
                 (vname('output'), self.output),
                 (vname('output_per_pft'), self.output_per_pft),
                 (vname('considerations'), self.considerations),
+            ]),
+        ] + generic
+
+    class Meta:
+        abstract = True
+
+
+class Biomes(BiomesForests):
+    class Meta:
+        verbose_name_plural = 'Biomes'
+        verbose_name = 'Biomes'
+
+
+class Forests(BiomesForests):
+    # Forest Model Set-up Specifications
+    initialize_model = models.TextField(null=True, blank=True, default='', verbose_name='How did you initialize your model, e.g. using Individual tree dbh and height or stand basal area?')
+    data_profound_db = models.TextField(null=True, blank=True, default='', verbose_name='Which data from PROFOUND DB did you use for initialisation (name of variable, which year)? From stand data or from individual tree data?')
+    management_implementation = models.TextField(null=True, blank=True, default='', verbose_name='How is management implemented? E.g. do you harvest biomass/basal area proportions or by tree numbers or dimensions (target dbh)?')
+    harvesting_simulated = models.TextField(null=True, blank=True, default='', verbose_name='When is harvesting simulated by your model (start/middle/end of the year, i.e., before or after the growing season)?')
+    regenerate = models.TextField(null=True, blank=True, default='', verbose_name='How do you regenerate? Do you plant seedlings one year after harvest or several years of gap and then plant larger saplings?')
+    unmanaged_simulations = models.TextField(null=True, blank=True, default='', verbose_name='How are the unmanaged simulations designed? Is there some kind of regrowth/regeneration or are the existing trees just growing older and older?')
+    noco2_scenario = models.TextField(null=True, blank=True, default='', verbose_name='How are models implementing the noco2 scenario? Please confirm that co2 is follwing the historical trend (based on PROFUND DB) until 2000 (for ISIMIPFT) or 2005 (for ISIMIP2b) and then fixed at 2000 or 2005 value respectively?')
+    leap_years = models.TextField(null=True, blank=True, default='', verbose_name='Does your model consider leap-years or a 365 calendar only? Or any other calendar?')
+    simulate_minor_tree = models.TextField(null=True, blank=True, default='', verbose_name='In hyytiälä and kroof, how did you simulate the "minor tree species"? e.g. in hyytiälä did you simulate only pine trees and removed the spruce trees or did you interpret spruce basal area as being pine basal area?')
+    nitrogen_simulation = models.TextField(null=True, blank=True, default='', verbose_name='How did you simulate nitrogen deposition from 2005 onwards in the 2b picontrol run? Please confirm you kept them constant at 2005-levels?')
+    soil_depth = models.TextField(null=True, blank=True, default='', verbose_name='What is the soil depth you assumed for each site and how many soil layers (including their depths) do you assume in each site? Please upload a list of the soil depth and soil layers your model assumes for each site.')
+    # Forest Model Output Specifications
+    initial_state = models.TextField(null=True, blank=True, default='', verbose_name='Do you provide the initial state in your simulation outputs (i.e., at year 0; before the simulation starts)?')
+    total_calculation = models.TextField(null=True, blank=True, default='', verbose_name='When you report a variable as "xxx-total" does it equal the (sum of) "xxx-species" value(s)? or are there confounding factors such as ground/herbaceous vegetation contributing to the "total" in your model?')
+    output_dbh_class = models.TextField(null=True, blank=True, default='', verbose_name='Did you report any output per dbh-class? if yes, which variables?')
+
+
+    class Meta:
+        verbose_name_plural = 'Forests'
+        verbose_name = 'Forests'
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name_question
+        generic = super(BiomesForests, self).values_to_tuples()
+        return [
+            ('Model set-up specifications', [
+                (vname('initialize_model'), self.initialize_model),
+                (vname('data_profound_db'), self.data_profound_db),
+                (vname('management_implementation'), self.management_implementation),
+                (vname('harvesting_simulated'), self.harvesting_simulated),
+                (vname('regenerate'), self.regenerate),
+                (vname('unmanaged_simulations'), self.unmanaged_simulations),
+                (vname('noco2_scenario'), self.noco2_scenario),
+                (vname('leap_years'), self.leap_years),
+                (vname('simulate_minor_tree'), self.simulate_minor_tree),
+                (vname('nitrogen_simulation'), self.nitrogen_simulation),
+                (vname('soil_depth'), self.soil_depth),
             ]),
             ('Key model processes', [
                 (vname('dynamic_vegetation'), self.dynamic_vegetation),
@@ -865,23 +963,16 @@ class BiomesForests(BaseSector):
             ('Species / Plant Functional Types (PFTs)', [
                 (vname('list_of_pfts'), self.list_of_pfts),
                 (vname('pfts_comments'), self.pfts_comments),
-            ])
+            ]),
+            ('Model output specifications', [
+                (vname('initial_state'), self.initial_state),
+                (vname('output'), self.output),
+                (vname('output_per_pft'), self.output_per_pft),
+                (vname('total_calculation'), self.total_calculation),
+                (vname('output_dbh_class'), self.output_dbh_class),
+                (vname('considerations'), self.considerations),
+            ]),
         ] + generic
-
-    class Meta:
-        abstract = True
-
-
-class Biomes(BiomesForests):
-    class Meta:
-        verbose_name_plural = 'Biomes'
-        verbose_name = 'Biomes'
-
-
-class Forests(BiomesForests):
-    class Meta:
-        verbose_name_plural = 'Forests'
-        verbose_name = 'Forests'
 
 
 class Energy(BaseSector):
