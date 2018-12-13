@@ -152,7 +152,7 @@ class PaperOverviewPage(Page):
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        context['papers'] = PaperPage.objects.child_of(self).live().order_by(F('first_published_at').desc(nulls_last=True))
+        context['papers'] = PaperPage.objects.child_of(self).live().order_by('-year', '-first_published_at')
         context['tags'] = PaperPageTag.objects.filter(paper_page__in=context['papers']).distinct().order_by('order')
         context['simulation_rounds'] = SimulationRound.objects.all()
         context['sectors'] = Sector.objects.all()
