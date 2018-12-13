@@ -331,7 +331,7 @@ class ImpactModel(models.Model):
                                               help_text='Other papers describing aspects of this model')
     responsible_person = models.CharField(max_length=500, null=True, blank=True, verbose_name='Person responsible for model simulations in this simulation round',
                                help_text='Contact information for person responsible for model simulations in this simulation round, if not the model contact person')
-    public = models.BooleanField(default=True)
+    public = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('base_model', 'simulation_round')
