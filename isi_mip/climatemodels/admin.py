@@ -320,7 +320,7 @@ class DataPublicationConfirmationModelAdmin(admin.ModelAdmin):
             confirm_body = Template(confirm_email.body)
             confirm_body = confirm_body.render(Context(context))
             confirm_subject = confirm_email.subject
-            owner.user.email_user(confirm_subject, confirm_body, settings.DATA_CONFIRMATION_EMAIL)
+            owner.user.email_user(confirm_subject, confirm_body, 'ISIMIP Data Confirmation <%s>' % settings.DATA_CONFIRMATION_EMAIL)
         messages.add_message(request, messages.INFO, 'Data confirmation request email have been sent to the owners.')
 
 
