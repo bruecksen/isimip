@@ -371,6 +371,28 @@ class BiomesForm(BaseSectorForm):
         }
 
 
+class BiodiversityForm(BaseSectorForm):
+    template = 'edit_biodiversity.html'
+
+    class Meta:
+        model = Biodiversity
+        exclude = ('impact_model',)
+        widgets = {
+            'model_algorithm': MyMultiSelect(allowcustom=False),
+            'explanatory_variables': MyTextInput(textarea=True),
+            'response_variable':  MyMultiSelect(allowcustom=False),
+            'additional_information_response_variable': MyTextInput(textarea=True),
+            'distribution_response_variable':  MyMultiSelect(allowcustom=False),
+            'parameters': MyTextInput(textarea=True),
+            'additional_info_parameters': MyTextInput(textarea=True),
+            'software_function':  MyMultiSelect(allowcustom=False),
+            'software_package': MyMultiSelect(allowcustom=False),
+            'software_program':  MyTextInput(textarea=True),
+            'model_output':  MyMultiSelect(allowcustom=False),
+            'additional_info_model_output': MyTextInput(textarea=True),
+        }
+
+
 class EnergyForm(BaseSectorForm):
     template = 'edit_energy.html'
 
@@ -459,7 +481,7 @@ def get_sector_form(sector):
     mapping = {
         'agriculture': AgricultureForm,
         'agroeconomicmodelling': GenericSectorForm,
-        'biodiversity': GenericSectorForm,
+        'biodiversity': BiodiversityForm,
         'biomes': BiomesForm,
         'coastalinfrastructure': GenericSectorForm,
         'computablegeneralequilibriummodelling': GenericSectorForm,

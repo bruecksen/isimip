@@ -1175,7 +1175,73 @@ class WaterRegional(Water):
 
 
 class Biodiversity(BaseSector):
-    pass
+    MODEL_ALGORITHM_CHOICES = (
+        ('GAM', 'Generalised Additive Model (GAM)'),
+        ('GBM', 'Generalized Boosted Models (GBM)'),
+        ('RF', 'Random Forest (RF)'),
+        ('MaxEnt', 'Maximum Entropy (MaxEnt)')
+    )
+    model_algorithm = models.CharField(null=True, blank=True, choices=MODEL_ALGORITHM_CHOICES, verbose_name='Model algorithm', max_length=255)
+    explanatory_variables = models.TextField(null=True, blank=True, default='', verbose_name='Explanatory variables')
+    RESPONSE_VARIABLE_CHOICES = (
+        ('absence/presence of species', 'absence/presence of species'),
+        ('species richness of taxon', 'species richness of taxon'),
+    )
+    response_variable = models.CharField(null=True, blank=True, choices=RESPONSE_VARIABLE_CHOICES, verbose_name='Response variable', max_length=255)
+    additional_information_response_variable = models.TextField(null=True, blank=True, default='', verbose_name='Additional information about response variable')
+    DISTRIBUTION_RESPONSE_CHOICES = (
+        ('Binomial', 'Binomial'),
+        ('Poisson', 'Poisson'),
+    )
+    distribution_response_variable = models.CharField(null=True, blank=True, choices=DISTRIBUTION_RESPONSE_CHOICES, verbose_name='Distribution of response variable', max_length=255)
+    parameters = models.TextField(null=True, blank=True, default='', verbose_name='Parameters')
+    additional_info_parameters = models.TextField(null=True, blank=True, default='', verbose_name='Additional Information about Parameters')
+    SOFTWARE_FUNCTION_CHOICES = (
+        ('gam()', 'gam()'),
+        ('gbm()', 'gbm()'),
+        ('randomForest()', 'randomForest()'),
+        ('maxent()', 'maxent()')
+    )
+    software_function = models.CharField(null=True, blank=True, choices=SOFTWARE_FUNCTION_CHOICES, verbose_name='Software function', max_length=255)
+    SOFTWARE_PACKAGE_CHOICES = (
+        ('mgcv', 'mgcv'),
+        ('gbm', 'gbm'),
+        ('dismo', 'dismo'),
+        ('randomForest', 'randomForest')
+    )
+    software_package = models.CharField(null=True, blank=True, choices=SOFTWARE_PACKAGE_CHOICES, verbose_name='Software package', max_length=255)
+    software_program = models.TextField(null=True, blank=True, default='', verbose_name='Software program')
+    MODEL_OUTPUT_CHOICES = (
+        ('probability of occurrence', 'probability of occurrence'),
+        ('relative probability of occurrence', 'relative probability of occurrence'),
+        ('summed probability of occurrence', 'summed probability of occurrence'),
+    )
+    model_output = models.CharField(null=True, blank=True, choices=MODEL_OUTPUT_CHOICES, verbose_name='Model output', max_length=255)
+    additional_info_model_output = models.TextField(null=True, blank=True, default='', verbose_name='Additional Information about Model output')
+
+    class Meta:
+        verbose_name = 'Biodiversity'
+        verbose_name_plural = 'Biodiversity'
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        generic = super(Biodiversity, self).values_to_tuples()
+        return [
+            ('Model specifications', [
+                (vname('model_algorithm'), self.model_algorithm),
+                (vname('explanatory_variables'), self.explanatory_variables),
+                (vname('response_variable'), self.response_variable),
+                (vname('additional_information_response_variable'), self.additional_information_response_variable),
+                (vname('distribution_response_variable'), self.distribution_response_variable),
+                (vname('parameters'), self.parameters),
+                (vname('additional_info_parameters'), self.additional_info_parameters),
+                (vname('software_function'), self.software_function),
+                (vname('software_package'), self.software_package),
+                (vname('software_program'), self.software_program),
+                (vname('model_output'), self.model_output),
+                (vname('additional_info_model_output'), self.additional_info_model_output),
+            ]),
+        ] + generic
 
 
 class Health(BaseSector):
