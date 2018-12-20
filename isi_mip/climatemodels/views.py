@@ -179,7 +179,7 @@ def confirm_data(page, request, id):
         email = EmailMessage(
             subject=confirm_email.subject,
             body=confirm_body,
-            reply_to=request.user.email,
+            reply_to=[request.user.email],
             from_email='ISIMIP Data Confirmation <%s>' % settings.DATA_CONFIRMATION_EMAIL,
             to=[settings.DATA_CONFIRMATION_EMAIL],
             cc=[cc.email for cc in ccs],
