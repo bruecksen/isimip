@@ -163,6 +163,7 @@ class InputData(models.Model):
 class Sector(models.Model):
     name = models.CharField(max_length=500, unique=True)
     slug = models.SlugField()
+    folder_name = models.CharField(max_length=500)
     SECTOR_MAPPING = (
         ('GenericSector', 'Generic Sector'),
         ('Agriculture', 'Agriculture'),

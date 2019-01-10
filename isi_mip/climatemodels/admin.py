@@ -312,6 +312,7 @@ class DataPublicationConfirmationModelAdmin(admin.ModelAdmin):
                 'model_contact_person': owner.name,
                 'simulation_round': confirmation.impact_model.simulation_round,
                 'sector': confirmation.impact_model.base_model.sector,
+                'sector_folder_name': confirmation.impact_model.base_model.folder_name,
                 'impact_model_name': confirmation.impact_model.base_model.name,
                 'data_confirmation_link': link,
                 'custom_text': confirmation.email_text,
