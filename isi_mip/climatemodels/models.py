@@ -163,7 +163,7 @@ class InputData(models.Model):
 class Sector(models.Model):
     name = models.CharField(max_length=500, unique=True)
     slug = models.SlugField()
-    folder_name = models.CharField(max_length=500)
+    drkz_folder_name = models.CharField(max_length=500, verbose_name="DKRZ folder name")
     SECTOR_MAPPING = (
         ('GenericSector', 'Generic Sector'),
         ('Agriculture', 'Agriculture'),
@@ -234,6 +234,7 @@ class SectorInformationField(models.Model):
 
 class BaseImpactModel(index.Indexed, models.Model):
     name = models.CharField(max_length=500)
+    drkz_folder_name = models.CharField(max_length=500, verbose_name="DKRZ folder name")
     SECTOR_CHOICES = (
         ('Agriculture', 'Agriculture'),
         ('Agro-Economic Modelling', 'Agro-Economic Modelling'),
