@@ -117,7 +117,7 @@ def impact_model_details(page, request, id):
 def confirm_data(page, request, id):
     if not request.user.is_authenticated():
         messages.info(request, 'You need to be logged in to perform this action.')
-        return HttpResponseRedirect('/dashboard/login/')
+        return HttpResponseRedirect('/dashboard/login/' + "?next={}".format(request.path))
     try:
         impact_model = ImpactModel.objects.get(id=id)
     except ImpactModel.DoesNotExist:
