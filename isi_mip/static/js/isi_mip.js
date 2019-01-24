@@ -12,22 +12,22 @@ $(function() {
 	});
 });
 
-$(function() {
-	$('.widget-page-teaser.widget-page-teaser-withrightlink').click(function(event) {
-		if ($(event.target).is("a") || $(event.target).is("i")) {
-            return;
-		}
-		var link = $(this).find(".widget-page-teaser-rightlink a, .widget-page-teaser-text-source a");
-		var target = link.attr('target');
-		if (target === '_blank') {
-			console.log('new tab');
-			$('<a href="' + link.attr('href') + '" target="blank"></a>')[0].click();  
-		} else {
-			$('<a href="' + link.attr('href') + '"></a>')[0].click();  
-		}
-        return false;
-	});
-});
+// $(function() {
+// 	$('.widget-page-teaser.widget-page-teaser-withrightlink').click(function(event) {
+// 		if ($(event.target).is("a") || $(event.target).is("i")) {
+//             return;
+// 		}
+// 		var link = $(this).find(".widget-page-teaser-rightlink a, .widget-page-teaser-text-source a");
+// 		var target = link.attr('target');
+// 		if (target === '_blank') {
+// 			console.log('new tab');
+// 			$('<a href="' + link.attr('href') + '" target="blank"></a>')[0].click();  
+// 		} else {
+// 			$('<a href="' + link.attr('href') + '"></a>')[0].click();  
+// 		}
+//         return false;
+// 	});
+// });
 
 
 $(function() {
