@@ -29,7 +29,7 @@ class BaseImpactModelForm(forms.ModelForm):
 
     class Meta:
         model = BaseImpactModel
-        exclude = ('owners', 'public', 'sector', 'name')
+        exclude = ('owners', 'public', 'sector', 'name', 'drkz_folder_name')
         widgets = {
             'short_description': MyTextInput(textarea=True),
         }
