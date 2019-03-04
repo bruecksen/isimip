@@ -38,6 +38,7 @@ class SimpleStringForm(template.Node):
 def template_form(form, **kwargs):
     assert isinstance(form, BaseForm)
     newform = SimpleStringForm()
+    # raise Exception([field.field.widget for field in form])
     for field in form:
         value = field.value()
         if value == 'None':
@@ -53,6 +54,8 @@ def template_form(form, **kwargs):
         if isinstance(field.field.widget, Input):
             context['type'] = field.field.widget.input_type if hasattr(field.field.widget, 'input_type') else 'text'
             context['small'] = True
+            if isinstance(field.field.widget, CheckboxInput) and not value:
+                context['value'] = True
             if hasattr(field.field.widget, 'textarea') and field.field.widget.textarea:
                 template = 'widgets/textarea.html'
             else:
@@ -99,17 +102,6 @@ def template_form(form, **kwargs):
                 context['options'] += [{'checked': checked, 'label': v, 'value': k}]
 
             template = 'widgets/select-radio.html'
-        elif isinstance(field.field.widget, CheckboxInput):
-            context.update({
-                'nullable': not field.field.required,
-                'options': []
-            })
-            checked = k == value
-            if v == '---------' and not k:
-                continue
-            context['options'] += [{'checked': checked, 'label': v, 'value': k}]
-
-            template = 'widgets/select-checkbox.html'
         elif isinstance(field.field.widget, CheckboxSelectMultiple):
             context.update({
                 'nullable': not field.field.required,
