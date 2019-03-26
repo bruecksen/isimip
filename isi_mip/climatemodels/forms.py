@@ -512,10 +512,15 @@ class AttachmentModelForm(forms.ModelForm):
         exclude = ('impact_model',)
         widgets = {
             'attachment1': ClearableFileInput,
+            'attachment1_description': MyTextInput(),
             'attachment2': ClearableFileInput,
+            'attachment2_description': MyTextInput(),
             'attachment3': ClearableFileInput,
+            'attachment3_description': MyTextInput(),
             'attachment4': ClearableFileInput,
+            'attachment4_description': MyTextInput(),
             'attachment5': ClearableFileInput,
+            'attachment5_description': MyTextInput(),
         }
 
 

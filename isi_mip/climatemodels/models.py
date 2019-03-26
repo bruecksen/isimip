@@ -1303,10 +1303,15 @@ def impact_model_path(instance, filename):
 class Attachment(models.Model):
     impact_model = models.OneToOneField(ImpactModel)
     attachment1 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment1_description = models.TextField(null=True, blank=True, verbose_name="Description")
     attachment2 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment2_description = models.TextField(null=True, blank=True, verbose_name="Description")
     attachment3 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment3_description = models.TextField(null=True, blank=True, verbose_name="Description")
     attachment4 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment4_description = models.TextField(null=True, blank=True, verbose_name="Description")
     attachment5 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment5_description = models.TextField(null=True, blank=True, verbose_name="Description")
 
     def _get_verbose_field_name(self, field):
         fieldmeta = self._meta.get_field(field)
@@ -1319,15 +1324,15 @@ class Attachment(models.Model):
         vname = self._get_verbose_field_name
         tuples = []
         if self.attachment1:
-            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment1.url, os.path.basename(self.attachment1.name), filesizeformat(self.attachment1.size))))
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment1.url, os.path.basename(self.attachment1.name), filesizeformat(self.attachment1.size), self.attachment1_description or '')))
         if self.attachment2:
-            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment2.url, os.path.basename(self.attachment2.name), filesizeformat(self.attachment2.size))))
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment2.url, os.path.basename(self.attachment2.name), filesizeformat(self.attachment2.size), self.attachment2_description or '')))
         if self.attachment3:
-            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment3.url, os.path.basename(self.attachment3.name), filesizeformat(self.attachment3.size))))
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment3.url, os.path.basename(self.attachment3.name), filesizeformat(self.attachment3.size), self.attachment3_description or '')))
         if self.attachment4:
-            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment4.url, os.path.basename(self.attachment4.name), filesizeformat(self.attachment4.size))))
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment4.url, os.path.basename(self.attachment4.name), filesizeformat(self.attachment4.size), self.attachment4_description or '')))
         if self.attachment5:
-            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a>' % (self.attachment5.url, os.path.basename(self.attachment5.name), filesizeformat(self.attachment5.size))))
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment5.url, os.path.basename(self.attachment5.name), filesizeformat(self.attachment5.size), self.attachment5_description or '')))
         return [('Attachments', tuples )]
 
 

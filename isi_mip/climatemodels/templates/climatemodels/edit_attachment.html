@@ -6,7 +6,7 @@
 		{% include 'widgets/heading3.html' with text='Attachments' %}
 		{% include 'widgets/richtext-content.html' with content='You can upload any file of type PDF, TXT or CSV.' %}
 		{% for field in form %}
-		<div class="form-group file">
+		<div class="form-group {{ field.field.widget.input_type }}">
 			<label class="field-label" for="{{ field.id_for_label }}">{{ field.label }}:</label>
 			{{ field }}
 			{% if field.help_text %}
