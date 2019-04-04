@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import inlineformset_factory, ClearableFileInput
+from django.utils.safestring import mark_safe
 from dateutil.parser import parse
 
 from isi_mip.climatemodels.fields import MyModelSingleChoiceField, MyModelMultipleChoiceField
@@ -268,6 +269,7 @@ class AgricultureForm(BaseSectorForm):
 
 class ForestsForm(BaseSectorForm):
     template = 'edit_forests.html'
+    upload_parameter_list = forms.CharField(required=False, label=mark_safe('Please upload a list of your parameters as an attachment (Section 7). The list should include species-specific parameters and other parameters not depending on initialization data including the following information: short name, long name, short explanation, unit, value, see here for an example (<a href="http://www.pik-potsdam.de/4c/web_4c/theory/parameter_table_0514.pdf" target="_blank">parameter_table_0514.pdf</a>)'))
 
     class Meta:
         model = Forests
@@ -285,6 +287,8 @@ class ForestsForm(BaseSectorForm):
             'simulate_minor_tree': MyTextInput(textarea=True),
             'nitrogen_simulation': MyTextInput(textarea=True),
             'soil_depth': MyTextInput(textarea=True),
+            'upload_parameter_list': MyTextInput(textarea=True),
+            'stochastic_element': MyTextInput(textarea=True),
             # Forest Model Output Specifications
             'initial_state': MyTextInput(textarea=True),
             'total_calculation': MyTextInput(textarea=True),
@@ -323,6 +327,13 @@ class ForestsForm(BaseSectorForm):
             'nbp_comments': MyTextInput(textarea=True),
             'list_of_pfts': MyTextInput(textarea=True),
             'pfts_comments': MyTextInput(textarea=True),
+            'assimilation': MyTextInput(textarea=True),
+            'respiration': MyTextInput(textarea=True),
+            'carbon_allocation': MyTextInput(textarea=True),
+            'regeneration_planting': MyTextInput(textarea=True),
+            'soil_water_balance': MyTextInput(textarea=True),
+            'carbon_nitrogen_balance': MyTextInput(textarea=True),
+            'feedbacks_considered': MyTextInput(textarea=True),
         }
 
 

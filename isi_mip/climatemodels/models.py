@@ -804,7 +804,7 @@ class BiomesForests(BaseSector):
     latent_heat = models.TextField(null=True, blank=True, default='')
     sensible_heat = models.TextField(null=True, blank=True, default='')
     # causes of mortality in vegetation models , help_text="Describe briefly how the process is described in this model and in which way it is climate dependent."
-    mortality_age = models.TextField(verbose_name='Age', null=True, blank=True, default='')
+    mortality_age = models.TextField(verbose_name='Age/Senescence', null=True, blank=True, default='')
     mortality_fire = models.TextField(verbose_name='Fire', null=True, blank=True, default='')
     mortality_drought = models.TextField(verbose_name='Drought', null=True, blank=True, default='')
     mortality_insects = models.TextField(verbose_name='Insects', null=True, blank=True, default='')
@@ -891,7 +891,7 @@ class Biomes(BiomesForests):
 
 class Forests(BiomesForests):
     # Forest Model Set-up Specifications
-    initialize_model = models.TextField(null=True, blank=True, default='', verbose_name='How did you initialize your model, e.g. using Individual tree dbh and height or stand basal area?')
+    initialize_model = models.TextField(null=True, blank=True, default='', verbose_name='How did you initialize your model, e.g. using Individual tree dbh and height or stand basal area? How do you initialize soil conditions?')
     data_profound_db = models.TextField(null=True, blank=True, default='', verbose_name='Which data from PROFOUND DB did you use for initialisation (name of variable, which year)? From stand data or from individual tree data?')
     management_implementation = models.TextField(null=True, blank=True, default='', verbose_name='How is management implemented? E.g. do you harvest biomass/basal area proportions or by tree numbers or dimensions (target dbh)?')
     harvesting_simulated = models.TextField(null=True, blank=True, default='', verbose_name='When is harvesting simulated by your model (start/middle/end of the year, i.e., before or after the growing season)?')
@@ -901,7 +901,17 @@ class Forests(BiomesForests):
     leap_years = models.TextField(null=True, blank=True, default='', verbose_name='Does your model consider leap-years or a 365 calendar only? Or any other calendar?')
     simulate_minor_tree = models.TextField(null=True, blank=True, default='', verbose_name='In hyytiälä and kroof, how did you simulate the "minor tree species"? e.g. in hyytiälä did you simulate only pine trees and removed the spruce trees or did you interpret spruce basal area as being pine basal area?')
     nitrogen_simulation = models.TextField(null=True, blank=True, default='', verbose_name='How did you simulate nitrogen deposition from 2005 onwards in the 2b picontrol run? Please confirm you kept them constant at 2005-levels?')
-    soil_depth = models.TextField(null=True, blank=True, default='', verbose_name='What is the soil depth you assumed for each site and how many soil layers (including their depths) do you assume in each site? Please upload a list of the soil depth and soil layers your model assumes for each site.')
+    soil_depth = models.TextField(null=True, blank=True, default='', verbose_name='What is the soil depth you assumed for each site and how many soil layers (including their depths) do you assume in each site? Please upload a list of the soil depth and soil layers your model assumes for each site as an attachment (Section 7).')
+    stochastic_element = models.TextField(null=True, blank=True, default='', verbose_name='Is there any stochastic element in your model (e.g. in the management or mortality submodel) that will lead to slightly different results if the model is re-run, even though all drivers etc. remain the same?')
+    upload_parameter_list = models.TextField(null=True, blank=True, default='', verbose_name='Please upload a list of your parameters as an attachment (Section 7). The list should include species-specific parameters and other parameters not depending on initialization data including the following information: short name, long name, short explanation, unit, value, see here for an example (http://www.pik-potsdam.de/4c/web_4c/theory/parameter_table_0514.pdf)')
+    # key model processes , help_text="Please provide yes/no and a short description how the process is included"
+    assimilation = models.TextField(null=True, blank=True, default='', verbose_name='Assimilation')
+    respiration = models.TextField(null=True, blank=True, default='', verbose_name='Respiration')
+    carbon_allocation = models.TextField(null=True, blank=True, default='', verbose_name='Carbon allocation')
+    regeneration_planting = models.TextField(null=True, blank=True, default='', verbose_name='Regeneration/planting')
+    soil_water_balance = models.TextField(null=True, blank=True, default='', verbose_name='Soil water balance')
+    carbon_nitrogen_balance = models.TextField(null=True, blank=True, default='', verbose_name='Carbon/Nitrogen balance')
+    feedbacks_considered = models.TextField(null=True, blank=True, default='', verbose_name='Are feedbacks considered that reflect the influence of changing carbon state variables on the other system components and driving data (i.e. Growth (leaf area), light, temperature, water availability, nutrient availability)?')
     # Forest Model Output Specifications
     initial_state = models.TextField(null=True, blank=True, default='', verbose_name='Do you provide the initial state in your simulation outputs (i.e., at year 0; before the simulation starts)?')
     total_calculation = models.TextField(null=True, blank=True, default='', verbose_name='When you report a variable as "xxx-total" does it equal the (sum of) "xxx-species" value(s)? or are there confounding factors such as ground/herbaceous vegetation contributing to the "total" in your model?')
@@ -928,6 +938,8 @@ class Forests(BiomesForests):
                 (vname('simulate_minor_tree'), self.simulate_minor_tree),
                 (vname('nitrogen_simulation'), self.nitrogen_simulation),
                 (vname('soil_depth'), self.soil_depth),
+                (vname('stochastic_element'), self.stochastic_element),
+                (vname('upload_parameter_list'), self.upload_parameter_list),
             ]),
             ('Key model processes', [
                 (vname('dynamic_vegetation'), self.dynamic_vegetation),
@@ -946,6 +958,13 @@ class Forests(BiomesForests):
                 (vname('soil_moisture_surface_temperature_coupling'), self.soil_moisture_surface_temperature_coupling),
                 (vname('latent_heat'), self.latent_heat),
                 (vname('sensible_heat'), self.sensible_heat),
+                (vname('assimilation'), self.assimilation),
+                (vname('respiration'), self.respiration),
+                (vname('carbon_allocation'), self.carbon_allocation),
+                (vname('regeneration_planting'), self.regeneration_planting),
+                (vname('soil_water_balance'), self.soil_water_balance),
+                (vname('carbon_nitrogen_balance'), self.carbon_nitrogen_balance),
+                (vname('feedbacks_considered'), self.feedbacks_considered),
             ]),
             ('Causes of mortality in vegetation models', [
                 (vname('mortality_age'), self.mortality_age),

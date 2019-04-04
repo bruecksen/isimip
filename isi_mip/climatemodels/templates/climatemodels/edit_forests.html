@@ -18,10 +18,12 @@
 		{{ nf.simulate_minor_tree }}
 		{{ nf.nitrogen_simulation }}
 		{{ nf.soil_depth }}
+		{{ nf.stochastic_element }}
+		{{ nf.upload_parameter_list }}
 	</fieldset>
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Key model processes' %}
-		<p>Please provide yes/no and a short description how the process is included</p>
+		<p>Please provide yes/no and a short description how the process is included and it depends on temperature, light, co2, nutrient supply, drought stress and other factors.</p>
 		{{ nf.dynamic_vegetation }}
 		{{ nf.nitrogen_limitation }}
 		{{ nf.co2_effects }}
@@ -37,6 +39,13 @@
 		{{ nf.soil_moisture_surface_temperature_coupling }}
 		{{ nf.latent_heat }}
 		{{ nf.sensible_heat }}
+		{{ nf.assimilation }}
+		{{ nf.respiration }}
+		{{ nf.carbon_allocation }}
+		{{ nf.regeneration_planting }}
+		{{ nf.soil_water_balance }}
+		{{ nf.carbon_nitrogen_balance }}
+		{{ nf.feedbacks_considered }}
 	</fieldset>
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Causes of mortality in vegetation models' %}
