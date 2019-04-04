@@ -176,8 +176,9 @@ def confirm_data(page, request, id):
         confirm_body += "\n\n"
         ccs = impact_model.base_model.impact_model_owner.exclude(pk=request.user.pk)
         pdf = render_impact_model_to_pdf(impact_model)
+        subject = "%s for %s" % (confirm_email.subject, confirmation.impact_model.base_model.name)
         email = EmailMessage(
-            subject=confirm_email.subject,
+            subject=subject,
             body=confirm_body,
             reply_to=[request.user.email],
             from_email='ISIMIP Data Confirmation <%s>' % settings.DATA_CONFIRMATION_EMAIL,
