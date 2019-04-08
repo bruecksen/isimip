@@ -43,6 +43,7 @@ CMS_APPS = (
 
     'blog',
     'static_precompiler',
+    'file_resubmit',
     'easy_pdf',
 )
 # Apps specific for this project go here.

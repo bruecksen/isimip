@@ -1,0 +1,34 @@
+{% extends 'climatemodels/edit_sector.html' %}
+{% load template_form %}
+{% load keyvalue %}
+
+{% block form_content %}
+	{% template_form form as nf %}
+	{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
+	<fieldset>
+		{% include 'widgets/heading3.html' with text='Model specifications' %}
+		{{ nf.model_algorithm }}
+		{{ nf.explanatory_variables }}
+		{{ nf.response_variable }}
+		{{ nf.additional_information_response_variable }}
+		{{ nf.distribution_response_variable }}
+		{{ nf.parameters }}
+		{{ nf.additional_info_parameters }}
+		{{ nf.software_function }}
+		{{ nf.software_package }}
+		{{ nf.software_program }}
+		{{ nf.model_output }}
+		{{ nf.additional_info_model_output }}
+	</fieldset>
+	{% for group in form.generic_groups %}
+		<fieldset>
+		{% include 'widgets/heading3.html' with text=group.name %}
+		{% if group.description %}
+			{% include 'widgets/richtext-content.html' with content=group.description %}
+		{% endif %}
+		{% for field in group.fields %}
+			{{ nf|keyvalue:field }}
+		{% endfor %}
+		</fieldset>
+	{% endfor %}
+{% endblock %}

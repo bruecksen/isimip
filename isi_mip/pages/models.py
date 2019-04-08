@@ -33,7 +33,7 @@ from isi_mip.climatemodels.models import BaseImpactModel, SimulationRound, Secto
 from isi_mip.climatemodels.views import (
     impact_model_details, impact_model_edit, input_data_details,
     impact_model_download, participant_download, show_participants, STEP_BASE, STEP_DETAIL, STEP_TECHNICAL_INFORMATION,
-    STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR,
+    STEP_INPUT_DATA, STEP_OTHER, STEP_SECTOR, STEP_ATTACHMENT, 
     duplicate_impact_model, create_new_impact_model, update_contact_information_view, confirm_data, impact_model_pdf)
 from isi_mip.contrib.blocks import BlogBlock, smart_truncate
 from isi_mip.pages.blocks import *
@@ -420,6 +420,10 @@ class ImpactModelsPage(RoutablePageWithDefault):
     @route(r'edit/sector/(?P<id>[0-9]*)/$')
     def edit_sector(self, request, id=None):
         return impact_model_edit(self, request, id, STEP_SECTOR)
+
+    @route(r'edit/attachment/(?P<id>[0-9]*)/$')
+    def edit_attachment(self, request, id=None):
+        return impact_model_edit(self, request, id, STEP_ATTACHMENT)
 
     @route(r'duplicate/(?P<impact_model_id>[0-9]*)/(?P<simulation_round_id>[0-9]*)/$')
     def duplicate(self, request, impact_model_id=None, simulation_round_id=None):

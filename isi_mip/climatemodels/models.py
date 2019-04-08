@@ -1,9 +1,13 @@
+import os
+
+from django.core.validators import FileExtensionValidator
 from django.apps import apps
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.text import slugify
+from django.template.defaultfilters import filesizeformat
 
 from wagtail.search import index
 
@@ -664,6 +668,13 @@ class BaseSector(models.Model):
             ret = generate_helptext(fieldmeta.help_text, ret)
         return ret
 
+    def _get_verbose_field_name_question(self, field):
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name
+        if fieldmeta.help_text:
+            ret = generate_helptext(fieldmeta.help_text, ret)
+        return ret
+
     def _get_generic_verbose_field_name(self, field):
         ret = field.name
         if field.help_text:
@@ -805,7 +816,7 @@ class BiomesForests(BaseSector):
     latent_heat = models.TextField(null=True, blank=True, default='')
     sensible_heat = models.TextField(null=True, blank=True, default='')
     # causes of mortality in vegetation models , help_text="Describe briefly how the process is described in this model and in which way it is climate dependent."
-    mortality_age = models.TextField(verbose_name='Age', null=True, blank=True, default='')
+    mortality_age = models.TextField(verbose_name='Age/Senescence', null=True, blank=True, default='')
     mortality_fire = models.TextField(verbose_name='Fire', null=True, blank=True, default='')
     mortality_drought = models.TextField(verbose_name='Drought', null=True, blank=True, default='')
     mortality_insects = models.TextField(verbose_name='Insects', null=True, blank=True, default='')
@@ -834,11 +845,6 @@ class BiomesForests(BaseSector):
         vname = self._get_verbose_field_name
         generic = super(BiomesForests, self).values_to_tuples()
         return [
-            ('Model output specifications', [
-                (vname('output'), self.output),
-                (vname('output_per_pft'), self.output_per_pft),
-                (vname('considerations'), self.considerations),
-            ]),
             ('Key model processes', [
                 (vname('dynamic_vegetation'), self.dynamic_vegetation),
                 (vname('nitrogen_limitation'), self.nitrogen_limitation),
@@ -877,7 +883,12 @@ class BiomesForests(BaseSector):
             ('Species / Plant Functional Types (PFTs)', [
                 (vname('list_of_pfts'), self.list_of_pfts),
                 (vname('pfts_comments'), self.pfts_comments),
-            ])
+            ]),
+            ('Model output specifications', [
+                (vname('output'), self.output),
+                (vname('output_per_pft'), self.output_per_pft),
+                (vname('considerations'), self.considerations),
+            ]),
         ] + generic
 
     class Meta:
@@ -885,15 +896,189 @@ class BiomesForests(BaseSector):
 
 
 class Biomes(BiomesForests):
+    # key model processes
+    compute_soil_carbon = models.TextField(null=True, blank=True, default='', verbose_name='How do you compute soil organic carbon during land use (do you mix the previous PFT SOC into agricultural SOC)?')
+    seperate_soil_carbon = models.TextField(null=True, blank=True, default='', verbose_name='Do you separate soil organic carbon in pasture from natural grass?')
+    harvest_npp_crops = models.TextField(null=True, blank=True, default='', verbose_name='Do you harvest NPP of crops? Do you including grazing? How does harvested NPP decay?')
+    treat_biofuel_npp = models.TextField(null=True, blank=True, default='', verbose_name='How do you to treat biofuel NPP and biofuel harvest?')
+    npp_litter_output = models.TextField(null=True, blank=True, default='', verbose_name='Does non-harvested crop NPP go to litter in your output?')
+    # model setup
+    simulate_bioenergy = models.TextField(null=True, blank=True, default='', verbose_name='How do you simulate bioenergy? I.e. What PFT do you simulate on bioenergy land?')
+    transition_cropland = models.TextField(null=True, blank=True, default='', verbose_name='How do you simulate the transition from cropland to bioenergy?')
+    simulate_pasture = models.TextField(null=True, blank=True, default='', verbose_name='How do you simulate pasture (which PFT)?')
+    
     class Meta:
         verbose_name_plural = 'Biomes'
         verbose_name = 'Biomes'
 
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        generic = super(BiomesForests, self).values_to_tuples()
+        return [
+            ('Model set-up specifications', [
+                (vname('simulate_bioenergy'), self.simulate_bioenergy),
+                (vname('transition_cropland'), self.transition_cropland),
+                (vname('simulate_pasture'), self.simulate_pasture),
+            ]),
+            ('Key model processes', [
+                (vname('dynamic_vegetation'), self.dynamic_vegetation),
+                (vname('nitrogen_limitation'), self.nitrogen_limitation),
+                (vname('co2_effects'), self.co2_effects),
+                (vname('light_interception'), self.light_interception),
+                (vname('light_utilization'), self.light_utilization),
+                (vname('phenology'), self.phenology),
+                (vname('water_stress'), self.water_stress),
+                (vname('heat_stress'), self.heat_stress),
+                (vname('evapotranspiration_approach'), self.evapotranspiration_approach),
+                (vname('rooting_depth_differences'), self.rooting_depth_differences),
+                (vname('root_distribution'), self.root_distribution),
+                (vname('permafrost'), self.permafrost),
+                (vname('closed_energy_balance'), self.closed_energy_balance),
+                (vname('soil_moisture_surface_temperature_coupling'), self.soil_moisture_surface_temperature_coupling),
+                (vname('latent_heat'), self.latent_heat),
+                (vname('sensible_heat'), self.sensible_heat),
+                (vname('compute_soil_carbon'), self.compute_soil_carbon),
+                (vname('seperate_soil_carbon'), self.seperate_soil_carbon),
+                (vname('harvest_npp_crops'), self.harvest_npp_crops),
+                (vname('treat_biofuel_npp'), self.treat_biofuel_npp),
+                (vname('npp_litter_output'), self.npp_litter_output),
+            ]),
+            ('Causes of mortality in vegetation models', [
+                (vname('mortality_age'), self.mortality_age),
+                (vname('mortality_fire'), self.mortality_fire),
+                (vname('mortality_drought'), self.mortality_drought),
+                (vname('mortality_insects'), self.mortality_insects),
+                (vname('mortality_storm'), self.mortality_storm),
+                (vname('mortality_stochastic_random_disturbance'), self.mortality_stochastic_random_disturbance),
+                (vname('mortality_other'), self.mortality_other),
+                (vname('mortality_remarks'), self.mortality_remarks),
+            ]),
+            ('NBP components', [
+                (vname('nbp_fire'), self.nbp_fire),
+                (vname('nbp_landuse_change'), self.nbp_landuse_change),
+                (vname('nbp_harvest'), self.nbp_harvest),
+                (vname('nbp_other'), self.nbp_other),
+                (vname('nbp_comments'), self.nbp_comments),
+            ]),
+            ('Species / Plant Functional Types (PFTs)', [
+                (vname('list_of_pfts'), self.list_of_pfts),
+                (vname('pfts_comments'), self.pfts_comments),
+            ]),
+            ('Model output specifications', [
+                (vname('output'), self.output),
+                (vname('output_per_pft'), self.output_per_pft),
+                (vname('considerations'), self.considerations),
+            ]),
+        ] + generic
+
 
 class Forests(BiomesForests):
+    # Forest Model Set-up Specifications
+    initialize_model = models.TextField(null=True, blank=True, default='', verbose_name='How did you initialize your model, e.g. using Individual tree dbh and height or stand basal area? How do you initialize soil conditions?')
+    data_profound_db = models.TextField(null=True, blank=True, default='', verbose_name='Which data from PROFOUND DB did you use for initialisation (name of variable, which year)? From stand data or from individual tree data?')
+    management_implementation = models.TextField(null=True, blank=True, default='', verbose_name='How is management implemented? E.g. do you harvest biomass/basal area proportions or by tree numbers or dimensions (target dbh)?')
+    harvesting_simulated = models.TextField(null=True, blank=True, default='', verbose_name='When is harvesting simulated by your model (start/middle/end of the year, i.e., before or after the growing season)?')
+    regenerate = models.TextField(null=True, blank=True, default='', verbose_name='How do you regenerate? Do you plant seedlings one year after harvest or several years of gap and then plant larger saplings?')
+    unmanaged_simulations = models.TextField(null=True, blank=True, default='', verbose_name='How are the unmanaged simulations designed? Is there some kind of regrowth/regeneration or are the existing trees just growing older and older?')
+    noco2_scenario = models.TextField(null=True, blank=True, default='', verbose_name='How are models implementing the noco2 scenario? Please confirm that co2 is follwing the historical trend (based on PROFUND DB) until 2000 (for ISIMIPFT) or 2005 (for ISIMIP2b) and then fixed at 2000 or 2005 value respectively?')
+    leap_years = models.TextField(null=True, blank=True, default='', verbose_name='Does your model consider leap-years or a 365 calendar only? Or any other calendar?')
+    simulate_minor_tree = models.TextField(null=True, blank=True, default='', verbose_name='In hyytiälä and kroof, how did you simulate the "minor tree species"? e.g. in hyytiälä did you simulate only pine trees and removed the spruce trees or did you interpret spruce basal area as being pine basal area?')
+    nitrogen_simulation = models.TextField(null=True, blank=True, default='', verbose_name='How did you simulate nitrogen deposition from 2005 onwards in the 2b picontrol run? Please confirm you kept them constant at 2005-levels?')
+    soil_depth = models.TextField(null=True, blank=True, default='', verbose_name='What is the soil depth you assumed for each site and how many soil layers (including their depths) do you assume in each site? Please upload a list of the soil depth and soil layers your model assumes for each site as an attachment (Section 7).')
+    stochastic_element = models.TextField(null=True, blank=True, default='', verbose_name='Is there any stochastic element in your model (e.g. in the management or mortality submodel) that will lead to slightly different results if the model is re-run, even though all drivers etc. remain the same?')
+    upload_parameter_list = models.TextField(null=True, blank=True, default='', verbose_name='Please upload a list of your parameters as an attachment (Section 7). The list should include species-specific parameters and other parameters not depending on initialization data including the following information: short name, long name, short explanation, unit, value, see here for an example (http://www.pik-potsdam.de/4c/web_4c/theory/parameter_table_0514.pdf)')
+    # key model processes , help_text="Please provide yes/no and a short description how the process is included"
+    assimilation = models.TextField(null=True, blank=True, default='', verbose_name='Assimilation')
+    respiration = models.TextField(null=True, blank=True, default='', verbose_name='Respiration')
+    carbon_allocation = models.TextField(null=True, blank=True, default='', verbose_name='Carbon allocation')
+    regeneration_planting = models.TextField(null=True, blank=True, default='', verbose_name='Regeneration/planting')
+    soil_water_balance = models.TextField(null=True, blank=True, default='', verbose_name='Soil water balance')
+    carbon_nitrogen_balance = models.TextField(null=True, blank=True, default='', verbose_name='Carbon/Nitrogen balance')
+    feedbacks_considered = models.TextField(null=True, blank=True, default='', verbose_name='Are feedbacks considered that reflect the influence of changing carbon state variables on the other system components and driving data (i.e. Growth (leaf area), light, temperature, water availability, nutrient availability)?')
+    # Forest Model Output Specifications
+    initial_state = models.TextField(null=True, blank=True, default='', verbose_name='Do you provide the initial state in your simulation outputs (i.e., at year 0; before the simulation starts)?')
+    total_calculation = models.TextField(null=True, blank=True, default='', verbose_name='When you report a variable as "xxx-total" does it equal the (sum of) "xxx-species" value(s)? or are there confounding factors such as ground/herbaceous vegetation contributing to the "total" in your model?')
+    output_dbh_class = models.TextField(null=True, blank=True, default='', verbose_name='Did you report any output per dbh-class? if yes, which variables?')
+
+
     class Meta:
         verbose_name_plural = 'Forests'
         verbose_name = 'Forests'
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name_question
+        generic = super(BiomesForests, self).values_to_tuples()
+        return [
+            ('Model set-up specifications', [
+                (vname('initialize_model'), self.initialize_model),
+                (vname('data_profound_db'), self.data_profound_db),
+                (vname('management_implementation'), self.management_implementation),
+                (vname('harvesting_simulated'), self.harvesting_simulated),
+                (vname('regenerate'), self.regenerate),
+                (vname('unmanaged_simulations'), self.unmanaged_simulations),
+                (vname('noco2_scenario'), self.noco2_scenario),
+                (vname('leap_years'), self.leap_years),
+                (vname('simulate_minor_tree'), self.simulate_minor_tree),
+                (vname('nitrogen_simulation'), self.nitrogen_simulation),
+                (vname('soil_depth'), self.soil_depth),
+                (vname('stochastic_element'), self.stochastic_element),
+                (vname('upload_parameter_list'), self.upload_parameter_list),
+            ]),
+            ('Key model processes', [
+                (vname('dynamic_vegetation'), self.dynamic_vegetation),
+                (vname('nitrogen_limitation'), self.nitrogen_limitation),
+                (vname('co2_effects'), self.co2_effects),
+                (vname('light_interception'), self.light_interception),
+                (vname('light_utilization'), self.light_utilization),
+                (vname('phenology'), self.phenology),
+                (vname('water_stress'), self.water_stress),
+                (vname('heat_stress'), self.heat_stress),
+                (vname('evapotranspiration_approach'), self.evapotranspiration_approach),
+                (vname('rooting_depth_differences'), self.rooting_depth_differences),
+                (vname('root_distribution'), self.root_distribution),
+                (vname('permafrost'), self.permafrost),
+                (vname('closed_energy_balance'), self.closed_energy_balance),
+                (vname('soil_moisture_surface_temperature_coupling'), self.soil_moisture_surface_temperature_coupling),
+                (vname('latent_heat'), self.latent_heat),
+                (vname('sensible_heat'), self.sensible_heat),
+                (vname('assimilation'), self.assimilation),
+                (vname('respiration'), self.respiration),
+                (vname('carbon_allocation'), self.carbon_allocation),
+                (vname('regeneration_planting'), self.regeneration_planting),
+                (vname('soil_water_balance'), self.soil_water_balance),
+                (vname('carbon_nitrogen_balance'), self.carbon_nitrogen_balance),
+                (vname('feedbacks_considered'), self.feedbacks_considered),
+            ]),
+            ('Causes of mortality in vegetation models', [
+                (vname('mortality_age'), self.mortality_age),
+                (vname('mortality_fire'), self.mortality_fire),
+                (vname('mortality_drought'), self.mortality_drought),
+                (vname('mortality_insects'), self.mortality_insects),
+                (vname('mortality_storm'), self.mortality_storm),
+                (vname('mortality_stochastic_random_disturbance'), self.mortality_stochastic_random_disturbance),
+                (vname('mortality_other'), self.mortality_other),
+                (vname('mortality_remarks'), self.mortality_remarks),
+            ]),
+            ('NBP components', [
+                (vname('nbp_fire'), self.nbp_fire),
+                (vname('nbp_landuse_change'), self.nbp_landuse_change),
+                (vname('nbp_harvest'), self.nbp_harvest),
+                (vname('nbp_other'), self.nbp_other),
+                (vname('nbp_comments'), self.nbp_comments),
+            ]),
+            ('Species / Plant Functional Types (PFTs)', [
+                (vname('list_of_pfts'), self.list_of_pfts),
+                (vname('pfts_comments'), self.pfts_comments),
+            ]),
+            ('Model output specifications', [
+                (vname('initial_state'), self.initial_state),
+                (vname('output'), self.output),
+                (vname('output_per_pft'), self.output_per_pft),
+                (vname('total_calculation'), self.total_calculation),
+                (vname('output_dbh_class'), self.output_dbh_class),
+                (vname('considerations'), self.considerations),
+            ]),
+        ] + generic
 
 
 class Energy(BaseSector):
@@ -1092,7 +1277,73 @@ class WaterRegional(Water):
 
 
 class Biodiversity(BaseSector):
-    pass
+    MODEL_ALGORITHM_CHOICES = (
+        ('GAM', 'Generalised Additive Model (GAM)'),
+        ('GBM', 'Generalized Boosted Models (GBM)'),
+        ('RF', 'Random Forest (RF)'),
+        ('MaxEnt', 'Maximum Entropy (MaxEnt)')
+    )
+    model_algorithm = models.CharField(null=True, blank=True, choices=MODEL_ALGORITHM_CHOICES, verbose_name='Model algorithm', max_length=255)
+    explanatory_variables = models.TextField(null=True, blank=True, default='', verbose_name='Explanatory variables')
+    RESPONSE_VARIABLE_CHOICES = (
+        ('absence/presence of species', 'absence/presence of species'),
+        ('species richness of taxon', 'species richness of taxon'),
+    )
+    response_variable = models.CharField(null=True, blank=True, choices=RESPONSE_VARIABLE_CHOICES, verbose_name='Response variable', max_length=255)
+    additional_information_response_variable = models.TextField(null=True, blank=True, default='', verbose_name='Additional information about response variable')
+    DISTRIBUTION_RESPONSE_CHOICES = (
+        ('Binomial', 'Binomial'),
+        ('Poisson', 'Poisson'),
+    )
+    distribution_response_variable = models.CharField(null=True, blank=True, choices=DISTRIBUTION_RESPONSE_CHOICES, verbose_name='Distribution of response variable', max_length=255)
+    parameters = models.TextField(null=True, blank=True, default='', verbose_name='Parameters')
+    additional_info_parameters = models.TextField(null=True, blank=True, default='', verbose_name='Additional Information about Parameters')
+    SOFTWARE_FUNCTION_CHOICES = (
+        ('gam()', 'gam()'),
+        ('gbm()', 'gbm()'),
+        ('randomForest()', 'randomForest()'),
+        ('maxent()', 'maxent()')
+    )
+    software_function = models.CharField(null=True, blank=True, choices=SOFTWARE_FUNCTION_CHOICES, verbose_name='Software function', max_length=255)
+    SOFTWARE_PACKAGE_CHOICES = (
+        ('mgcv', 'mgcv'),
+        ('gbm', 'gbm'),
+        ('dismo', 'dismo'),
+        ('randomForest', 'randomForest')
+    )
+    software_package = models.CharField(null=True, blank=True, choices=SOFTWARE_PACKAGE_CHOICES, verbose_name='Software package', max_length=255)
+    software_program = models.TextField(null=True, blank=True, default='', verbose_name='Software program')
+    MODEL_OUTPUT_CHOICES = (
+        ('probability of occurrence', 'probability of occurrence'),
+        ('relative probability of occurrence', 'relative probability of occurrence'),
+        ('summed probability of occurrence', 'summed probability of occurrence'),
+    )
+    model_output = models.CharField(null=True, blank=True, choices=MODEL_OUTPUT_CHOICES, verbose_name='Model output', max_length=255)
+    additional_info_model_output = models.TextField(null=True, blank=True, default='', verbose_name='Additional Information about Model output')
+
+    class Meta:
+        verbose_name = 'Biodiversity'
+        verbose_name_plural = 'Biodiversity'
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        generic = super(Biodiversity, self).values_to_tuples()
+        return [
+            ('Model specifications', [
+                (vname('model_algorithm'), self.model_algorithm),
+                (vname('explanatory_variables'), self.explanatory_variables),
+                (vname('response_variable'), self.response_variable),
+                (vname('additional_information_response_variable'), self.additional_information_response_variable),
+                (vname('distribution_response_variable'), self.distribution_response_variable),
+                (vname('parameters'), self.parameters),
+                (vname('additional_info_parameters'), self.additional_info_parameters),
+                (vname('software_function'), self.software_function),
+                (vname('software_package'), self.software_package),
+                (vname('software_program'), self.software_program),
+                (vname('model_output'), self.model_output),
+                (vname('additional_info_model_output'), self.additional_info_model_output),
+            ]),
+        ] + generic
 
 
 class Health(BaseSector):
@@ -1140,11 +1391,51 @@ class OutputData(models.Model):
         duplicate.scenarios.set(self.scenarios.all())
         duplicate.drivers.set(self.drivers.all())
         return duplicate
-
+    
     def __str__(self):
         if self.model:
             return "%s : %s" % (self.model.base_model.sector, self.model.base_model.name)
         return "%s" % self.pk
+
+
+def impact_model_path(instance, filename):
+    return 'impact_model_attachments/{0}-{1}'.format(instance.impact_model.id, filename)
+
+
+class Attachment(models.Model):
+    impact_model = models.OneToOneField(ImpactModel)
+    attachment1 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment1_description = models.TextField(null=True, blank=True, verbose_name="Description")
+    attachment2 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment2_description = models.TextField(null=True, blank=True, verbose_name="Description")
+    attachment3 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment3_description = models.TextField(null=True, blank=True, verbose_name="Description")
+    attachment4 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment4_description = models.TextField(null=True, blank=True, verbose_name="Description")
+    attachment5 = models.FileField(null=True, blank=True, verbose_name="Attachment", upload_to=impact_model_path, validators=[FileExtensionValidator(allowed_extensions=['pdf', 'txt', 'csv'])])
+    attachment5_description = models.TextField(null=True, blank=True, verbose_name="Description")
+
+    def _get_verbose_field_name(self, field):
+        fieldmeta = self._meta.get_field(field)
+        ret = fieldmeta.verbose_name.title()
+        if fieldmeta.help_text:
+            ret = generate_helptext(fieldmeta.help_text, ret)
+        return ret
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        tuples = []
+        if self.attachment1:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment1.url, os.path.basename(self.attachment1.name), filesizeformat(self.attachment1.size), self.attachment1_description or '')))
+        if self.attachment2:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment2.url, os.path.basename(self.attachment2.name), filesizeformat(self.attachment2.size), self.attachment2_description or '')))
+        if self.attachment3:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment3.url, os.path.basename(self.attachment3.name), filesizeformat(self.attachment3.size), self.attachment3_description or '')))
+        if self.attachment4:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment4.url, os.path.basename(self.attachment4.name), filesizeformat(self.attachment4.size), self.attachment4_description or '')))
+        if self.attachment5:
+            tuples.append(('', '<a href="%s" target="_blank"><i class="fa fa-download"></i> %s (%s)</a> %s' % (self.attachment5.url, os.path.basename(self.attachment5.name), filesizeformat(self.attachment5.size), self.attachment5_description or '')))
+        return [('Attachments', tuples )]
 
 
 class DataPublicationConfirmation(models.Model):

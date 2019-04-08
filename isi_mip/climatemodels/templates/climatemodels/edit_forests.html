@@ -7,13 +7,23 @@
 	{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Model set-up specifications' %}
-		{{ nf.simulate_bioenergy }}
-		{{ nf.transition_cropland }}
-		{{ nf.simulate_pasture }}
+		{{ nf.initialize_model }}
+		{{ nf.data_profound_db }}
+		{{ nf.management_implementation }}
+		{{ nf.harvesting_simulated }}
+		{{ nf.regenerate }}
+		{{ nf.unmanaged_simulations }}
+		{{ nf.noco2_scenario }}
+		{{ nf.leap_years }}
+		{{ nf.simulate_minor_tree }}
+		{{ nf.nitrogen_simulation }}
+		{{ nf.soil_depth }}
+		{{ nf.stochastic_element }}
+		{{ nf.upload_parameter_list }}
 	</fieldset>
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Key model processes' %}
-		<p>Please provide yes/no and a short description how the process is included</p>
+		<p>Please provide yes/no and a short description how the process is included and it depends on temperature, light, co2, nutrient supply, drought stress and other factors.</p>
 		{{ nf.dynamic_vegetation }}
 		{{ nf.nitrogen_limitation }}
 		{{ nf.co2_effects }}
@@ -29,11 +39,13 @@
 		{{ nf.soil_moisture_surface_temperature_coupling }}
 		{{ nf.latent_heat }}
 		{{ nf.sensible_heat }}
-		{{ nf.compute_soil_carbon }}
-		{{ nf.seperate_soil_carbon }}
-		{{ nf.harvest_npp_crops }}
-		{{ nf.treat_biofuel_npp }}
-		{{ nf.npp_litter_output }}
+		{{ nf.assimilation }}
+		{{ nf.respiration }}
+		{{ nf.carbon_allocation }}
+		{{ nf.regeneration_planting }}
+		{{ nf.soil_water_balance }}
+		{{ nf.carbon_nitrogen_balance }}
+		{{ nf.feedbacks_considered }}
 	</fieldset>
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Causes of mortality in vegetation models' %}
@@ -64,8 +76,11 @@
 	</fieldset>
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Model output specifications' %}
+		{{ nf.initial_state }}
 		{{ nf.output }}
 		{{ nf.output_per_pft }}
+		{{ nf.total_calculation }}
+		{{ nf.output_dbh_class }}
 		{{ nf.considerations }}
 	</fieldset>
 	{% for group in form.generic_groups %}

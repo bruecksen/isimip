@@ -151,6 +151,20 @@ select.form-control {
 }
 .form-group {
 	margin-bottom: 25px;
+	&.file {
+		label.field-label {
+			display: block;
+		}
+		input[type=file] {
+			display: inline-block;
+		}
+	}
+	&.text {
+		margin-top: -20px;
+		label {
+			font-weight: normal;
+		}
+	}
 }
 
 
