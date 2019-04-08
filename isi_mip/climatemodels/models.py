@@ -333,6 +333,7 @@ class ImpactModel(models.Model):
                                               help_text='Other papers describing aspects of this model')
     responsible_person = models.CharField(max_length=500, null=True, blank=True, verbose_name='Person responsible for model simulations in this simulation round',
                                help_text='Contact information for person responsible for model simulations in this simulation round, if not the model contact person')
+    model_output_license = models.CharField(max_length=500, null=True, blank=True, verbose_name='Model Output License')
     public = models.BooleanField(default=False)
 
     class Meta:
@@ -382,7 +383,9 @@ class ImpactModel(models.Model):
             version=self.version,
             main_reference_paper=self.main_reference_paper,
             responsible_person=self.responsible_person,
+            model_output_license=self.model_output_license,
             public=True,
+
         )
         duplicate.save(is_duplication=True)
         duplicate.other_references.set(self.other_references.all())
@@ -441,6 +444,7 @@ class ImpactModel(models.Model):
         return [
             ('Basic information', [
                 (vname('version'), self.version),
+                (vname('model_output_license'), self.model_output_license),
                 (vname('main_reference_paper'),
                  self.main_reference_paper.entry_with_link() if self.main_reference_paper else None),
                 (vname('other_references'), other_references),
