@@ -258,8 +258,8 @@ class BaseImpactModel(index.Indexed, models.Model):
     sector = models.ForeignKey(Sector, help_text='The sector to which this information pertains. Some models may have further entries for other sectors.')
     region = models.ManyToManyField(Region, help_text="Region for which model produces results")
     short_description = models.TextField(
-        null=True, blank=True, default='', verbose_name="Short model description",
-        help_text="This information applies to all modeling rounds. Please do not erase this information, just add when necessary. This short description should assist other researchers in getting an understanding of your model, including the main differences between model versions used for different ISIMIP simulation rounds.")
+        null=True, blank=True, default='', verbose_name="Short model description (all rounds)",
+        help_text="This short description should assist other researchers in getting an understanding of your model, including the main differences between model versions used for different ISIMIP simulation rounds.")
 
     search_fields = [
         index.SearchField('name', partial_match=True, boost=10),
