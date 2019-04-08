@@ -379,6 +379,14 @@ class BiomesForm(BaseSectorForm):
             'nbp_comments': MyTextInput(textarea=True),
             'list_of_pfts': MyTextInput(textarea=True),
             'pfts_comments': MyTextInput(textarea=True),
+            'compute_soil_carbon': MyTextInput(textarea=True),
+            'seperate_soil_carbon': MyTextInput(textarea=True),
+            'harvest_npp_crops': MyTextInput(textarea=True),
+            'treat_biofuel_npp': MyTextInput(textarea=True),
+            'npp_litter_output': MyTextInput(textarea=True),
+            'simulate_bioenergy': MyTextInput(textarea=True),
+            'transition_cropland': MyTextInput(textarea=True),
+            'simulate_pasture': MyTextInput(textarea=True),
         }
 
 

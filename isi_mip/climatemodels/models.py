@@ -884,9 +884,80 @@ class BiomesForests(BaseSector):
 
 
 class Biomes(BiomesForests):
+    # key model processes
+    compute_soil_carbon = models.TextField(null=True, blank=True, default='', verbose_name='How do you compute soil organic carbon during land use (do you mix the previous PFT SOC into agricultural SOC)?')
+    seperate_soil_carbon = models.TextField(null=True, blank=True, default='', verbose_name='Do you separate soil organic carbon in pasture from natural grass?')
+    harvest_npp_crops = models.TextField(null=True, blank=True, default='', verbose_name='Do you harvest NPP of crops? Do you including grazing? How does harvested NPP decay?')
+    treat_biofuel_npp = models.TextField(null=True, blank=True, default='', verbose_name='How do you to treat biofuel NPP and biofuel harvest?')
+    npp_litter_output = models.TextField(null=True, blank=True, default='', verbose_name='Does non-harvested crop NPP go to litter in your output?')
+    # model setup
+    simulate_bioenergy = models.TextField(null=True, blank=True, default='', verbose_name='How do you simulate bioenergy? I.e. What PFT do you simulate on bioenergy land?')
+    transition_cropland = models.TextField(null=True, blank=True, default='', verbose_name='How do you simulate the transition from cropland to bioenergy?')
+    simulate_pasture = models.TextField(null=True, blank=True, default='', verbose_name='How do you simulate pasture (which PFT)?')
+    
     class Meta:
         verbose_name_plural = 'Biomes'
         verbose_name = 'Biomes'
+
+    def values_to_tuples(self):
+        vname = self._get_verbose_field_name
+        generic = super(BiomesForests, self).values_to_tuples()
+        return [
+            ('Model set-up specifications', [
+                (vname('simulate_bioenergy'), self.simulate_bioenergy),
+                (vname('transition_cropland'), self.transition_cropland),
+                (vname('simulate_pasture'), self.simulate_pasture),
+            ]),
+            ('Key model processes', [
+                (vname('dynamic_vegetation'), self.dynamic_vegetation),
+                (vname('nitrogen_limitation'), self.nitrogen_limitation),
+                (vname('co2_effects'), self.co2_effects),
+                (vname('light_interception'), self.light_interception),
+                (vname('light_utilization'), self.light_utilization),
+                (vname('phenology'), self.phenology),
+                (vname('water_stress'), self.water_stress),
+                (vname('heat_stress'), self.heat_stress),
+                (vname('evapotranspiration_approach'), self.evapotranspiration_approach),
+                (vname('rooting_depth_differences'), self.rooting_depth_differences),
+                (vname('root_distribution'), self.root_distribution),
+                (vname('permafrost'), self.permafrost),
+                (vname('closed_energy_balance'), self.closed_energy_balance),
+                (vname('soil_moisture_surface_temperature_coupling'), self.soil_moisture_surface_temperature_coupling),
+                (vname('latent_heat'), self.latent_heat),
+                (vname('sensible_heat'), self.sensible_heat),
+                (vname('compute_soil_carbon'), self.compute_soil_carbon),
+                (vname('seperate_soil_carbon'), self.seperate_soil_carbon),
+                (vname('harvest_npp_crops'), self.harvest_npp_crops),
+                (vname('treat_biofuel_npp'), self.treat_biofuel_npp),
+                (vname('npp_litter_output'), self.npp_litter_output),
+            ]),
+            ('Causes of mortality in vegetation models', [
+                (vname('mortality_age'), self.mortality_age),
+                (vname('mortality_fire'), self.mortality_fire),
+                (vname('mortality_drought'), self.mortality_drought),
+                (vname('mortality_insects'), self.mortality_insects),
+                (vname('mortality_storm'), self.mortality_storm),
+                (vname('mortality_stochastic_random_disturbance'), self.mortality_stochastic_random_disturbance),
+                (vname('mortality_other'), self.mortality_other),
+                (vname('mortality_remarks'), self.mortality_remarks),
+            ]),
+            ('NBP components', [
+                (vname('nbp_fire'), self.nbp_fire),
+                (vname('nbp_landuse_change'), self.nbp_landuse_change),
+                (vname('nbp_harvest'), self.nbp_harvest),
+                (vname('nbp_other'), self.nbp_other),
+                (vname('nbp_comments'), self.nbp_comments),
+            ]),
+            ('Species / Plant Functional Types (PFTs)', [
+                (vname('list_of_pfts'), self.list_of_pfts),
+                (vname('pfts_comments'), self.pfts_comments),
+            ]),
+            ('Model output specifications', [
+                (vname('output'), self.output),
+                (vname('output_per_pft'), self.output_per_pft),
+                (vname('considerations'), self.considerations),
+            ]),
+        ] + generic
 
 
 class Forests(BiomesForests):

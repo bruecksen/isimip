@@ -6,6 +6,12 @@
 	{% template_form form as nf %}
 	{% include 'widgets/richtext-content.html' with content='This information is specific to each simulation round.' %}
 	<fieldset>
+		{% include 'widgets/heading3.html' with text='Model set-up specifications' %}
+		{{ nf.simulate_bioenergy }}
+		{{ nf.transition_cropland }}
+		{{ nf.simulate_pasture }}
+	</fieldset>
+	<fieldset>
 		{% include 'widgets/heading3.html' with text='Key model processes' %}
 		<p>Please provide yes/no and a short description how the process is included</p>
 		{{ nf.dynamic_vegetation }}
@@ -23,6 +29,11 @@
 		{{ nf.soil_moisture_surface_temperature_coupling }}
 		{{ nf.latent_heat }}
 		{{ nf.sensible_heat }}
+		{{ nf.compute_soil_carbon }}
+		{{ nf.seperate_soil_carbon }}
+		{{ nf.harvest_npp_crops }}
+		{{ nf.treat_biofuel_npp }}
+		{{ nf.npp_litter_output }}
 	</fieldset>
 	<fieldset>
 		{% include 'widgets/heading3.html' with text='Causes of mortality in vegetation models' %}
