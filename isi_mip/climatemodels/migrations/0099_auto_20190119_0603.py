@@ -15,7 +15,7 @@ def set_drkz_folder_name(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('climatemodels', '0091_auto_20190119_0603'),
+        ('climatemodels', '0098_auto_20190119_0603'),
     ]
 
     operations = [
