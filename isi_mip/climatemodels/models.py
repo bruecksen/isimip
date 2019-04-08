@@ -334,6 +334,10 @@ class ImpactModel(models.Model):
     responsible_person = models.CharField(max_length=500, null=True, blank=True, verbose_name='Person responsible for model simulations in this simulation round',
                                help_text='Contact information for person responsible for model simulations in this simulation round, if not the model contact person')
     model_output_license = models.CharField(max_length=500, null=True, blank=True, verbose_name='Model Output License')
+    simulation_round_specific_description = models.TextField(
+        null=True, blank=True, default='', verbose_name="Simulation round specific description",
+        help_text="")
+
     public = models.BooleanField(default=False)
 
     class Meta:
@@ -384,6 +388,7 @@ class ImpactModel(models.Model):
             main_reference_paper=self.main_reference_paper,
             responsible_person=self.responsible_person,
             model_output_license=self.model_output_license,
+            simulation_round_specific_description=self.simulation_round_specific_description,
             public=True,
 
         )
@@ -445,6 +450,7 @@ class ImpactModel(models.Model):
             ('Basic information', [
                 (vname('version'), self.version),
                 (vname('model_output_license'), self.model_output_license),
+                (vname('simulation_round_specific_description'), self.simulation_round_specific_description),
                 (vname('main_reference_paper'),
                  self.main_reference_paper.entry_with_link() if self.main_reference_paper else None),
                 (vname('other_references'), other_references),
