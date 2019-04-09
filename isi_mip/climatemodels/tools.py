@@ -42,6 +42,7 @@ SKIP_FIELDS = [
     'outputdata',
     'confirmation',
     'contactperson',
+    'attachment',
 ]
 
 SORT_ORDER = {
