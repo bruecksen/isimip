@@ -987,6 +987,8 @@ class Forests(BiomesForests):
     nitrogen_simulation = models.TextField(null=True, blank=True, default='', verbose_name='How did you simulate nitrogen deposition from 2005 onwards in the 2b picontrol run? Please confirm you kept them constant at 2005-levels?')
     soil_depth = models.TextField(null=True, blank=True, default='', verbose_name='What is the soil depth you assumed for each site and how many soil layers (including their depths) do you assume in each site? Please upload a list of the soil depth and soil layers your model assumes for each site as an attachment (Section 7).')
     stochastic_element = models.TextField(null=True, blank=True, default='', verbose_name='Is there any stochastic element in your model (e.g. in the management or mortality submodel) that will lead to slightly different results if the model is re-run, even though all drivers etc. remain the same?')
+    minimum_diameter_tree = models.TextField(null=True, blank=True, default='', verbose_name='What is the minimum diameter at which a „tree is considered a tree“? and is there a similar threshold for the minimum harvestable diameter?')
+    model_historically_calibrated = models.TextField(null=True, blank=True, default='', verbose_name='Has your model been "historically calibrated" to any of the sites you simulated? e.g. has the site been used for model testing during model development?')
     upload_parameter_list = models.TextField(null=True, blank=True, default='', verbose_name='Please upload a list of your parameters as an attachment (Section 7). The list should include species-specific parameters and other parameters not depending on initialization data including the following information: short name, long name, short explanation, unit, value, see here for an example (http://www.pik-potsdam.de/4c/web_4c/theory/parameter_table_0514.pdf)')
     # key model processes , help_text="Please provide yes/no and a short description how the process is included"
     assimilation = models.TextField(null=True, blank=True, default='', verbose_name='Assimilation')
@@ -1023,6 +1025,8 @@ class Forests(BiomesForests):
                 (vname('nitrogen_simulation'), self.nitrogen_simulation),
                 (vname('soil_depth'), self.soil_depth),
                 (vname('stochastic_element'), self.stochastic_element),
+                (vname('minimum_diameter_tree'), self.minimum_diameter_tree),
+                (vname('model_historically_calibrated'), self.model_historically_calibrated),
                 (vname('upload_parameter_list'), self.upload_parameter_list),
             ]),
             ('Key model processes', [
