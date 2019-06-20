@@ -64,6 +64,15 @@ def soft_deploy():
     reload_webserver()
     ping()
 
+
+def pip():
+    with cd(env.path):
+        run("git pull %(push_remote)s %(push_branch)s" % env)
+        with prefix("source %(virtualenv_path)s/bin/activate" % env):
+            run("pip install -Ur requirements/production.txt")
+
+    reload_webserver()
+
 #
 # def init_fixtures():
 #     with virtualenv(env.virtualenv_path):
