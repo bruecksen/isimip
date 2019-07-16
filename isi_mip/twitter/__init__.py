@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import tweepy
 from django.conf import settings
@@ -40,15 +41,15 @@ class TwitterTimeline:
         stati = []
         for status in timeline:
             update = {}
-
+            if status.in_reply_to_status_id or status.retweeted:
+                continue
             if getattr(status, 'retweeted_status', None):
                 status = status.retweeted_status
-
             update['id_str'] = status.user.id_str
             update['screen_name'] = status.user.screen_name
             update['name'] = status.user.name
             update['profile_image_url_https'] = status.user.profile_image_url_https
-            update['created_at'] = status.created_at
+            update['created_at'] = status.created_at.date()
             update['text'] = self.linkify(status.text)
 
             if getattr(status, 'quoted_status', None):
@@ -72,16 +73,16 @@ class TwitterTimeline:
     def get_timeline(self, username):
         result = cache.get(self.KEY)
         if not result:
-            try:
-                api = self.connect()
-                timeline = api.user_timeline(username, count=self.count)
-                result = self.extract_tweets(timeline)
-                cache.set(self.KEY, result, self.cache_timeout)
-                cache.set(self.KEY_LT, result, self.cache_long_term_timeout)
-            except:
-                result = cache.get(self.KEY_LT)
-                if not result:
-                    result = ''
+            # try:
+            api = self.connect()
+            timeline = api.user_timeline(username, count=self.count)
+            result = self.extract_tweets(timeline)
+            cache.set(self.KEY, result, self.cache_timeout)
+            cache.set(self.KEY_LT, result, self.cache_long_term_timeout)
+            # except:
+            #     result = cache.get(self.KEY_LT)
+            #     if not result:
+            #         result = ''
         return result
 
 if __name__ == '__main__':
