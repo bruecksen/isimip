@@ -41,7 +41,8 @@ class TwitterTimeline:
         stati = []
         for status in timeline:
             update = {}
-            if status.in_reply_to_status_id or status.retweeted:
+            # filter replies
+            if status.in_reply_to_status_id:
                 continue
             if getattr(status, 'retweeted_status', None):
                 status = status.retweeted_status
