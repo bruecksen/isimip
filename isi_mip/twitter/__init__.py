@@ -73,16 +73,16 @@ class TwitterTimeline:
     def get_timeline(self, username):
         result = cache.get(self.KEY)
         if not result:
-            # try:
-            api = self.connect()
-            timeline = api.user_timeline(username, count=self.count)
-            result = self.extract_tweets(timeline)
-            cache.set(self.KEY, result, self.cache_timeout)
-            cache.set(self.KEY_LT, result, self.cache_long_term_timeout)
-            # except:
-            #     result = cache.get(self.KEY_LT)
-            #     if not result:
-            #         result = ''
+            try:
+                api = self.connect()
+                timeline = api.user_timeline(username, count=self.count)
+                result = self.extract_tweets(timeline)
+                cache.set(self.KEY, result, self.cache_timeout)
+                cache.set(self.KEY_LT, result, self.cache_long_term_timeout)
+            except:
+                result = cache.get(self.KEY_LT)
+                if not result:
+                    result = ''
         return result
 
 if __name__ == '__main__':
