@@ -283,6 +283,7 @@ def input_data_details(page, request, id):
                        'notoggle': True,
                        'opened': True,
                        'definitions': [
+                           {'text': 'Protocol relation: %s' % data.get_protocol_relation_display()},
                            {'text': 'Data Type: %s' % data.data_type},
                            {'text': 'Simulation rounds: %s' % ', '.join((x.name for x in data.simulation_round.all()))},
                            {'text': 'Scenarios: %s' % ', '.join((x.name for x in data.scenario.all()))},
