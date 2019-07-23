@@ -288,7 +288,7 @@ def input_data_details(page, request, id):
                            {'text': 'Protocol relation: %s' % data.get_protocol_relation_display()},
                            {'text': 'Data Type: %s' % data.data_type},
                            {'text': 'Simulation rounds: %s' % ', '.join((x.name for x in data.simulation_round.all()))},
-                           {'text': 'Description: <br><br>%s' % description},
+                           {'text': 'Description: %s' % description},
                            {'text': 'Scenarios: %s' % ', '.join((x.name for x in data.scenario.all()))},
                            {'text': 'Variables: %s' % ', '.join((x.as_span() for x in data.variables.all()))},
                        ]
