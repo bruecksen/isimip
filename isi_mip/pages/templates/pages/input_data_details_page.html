@@ -6,7 +6,6 @@
 		{% breadcrumb %}
 		{% include 'widgets/heading1.html' with text=subpage.title %}
 		{% block content %}
-			{{ description | safe }}<br/><br/>
 			{% include "widgets/expandable.html" %}
 		{% endblock %}
 	</div>
