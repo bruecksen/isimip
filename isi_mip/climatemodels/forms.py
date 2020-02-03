@@ -288,6 +288,8 @@ class ForestsForm(BaseSectorForm):
             'nitrogen_simulation': MyTextInput(textarea=True),
             'soil_depth': MyTextInput(textarea=True),
             'upload_parameter_list': MyTextInput(textarea=True),
+            'minimum_diameter_tree': MyTextInput(textarea=True),
+            'model_historically_calibrated': MyTextInput(textarea=True),
             'stochastic_element': MyTextInput(textarea=True),
             # Forest Model Output Specifications
             'initial_state': MyTextInput(textarea=True),

@@ -18,6 +18,7 @@ from django.template import Context, RequestContext, Template
 from django.template.loader import render_to_string
 from django.utils.html import urlize, linebreaks
 from django.utils.text import slugify
+from django.utils.safestring import mark_safe
 from django.template import Template, Context, RequestContext
 
 from easy_pdf.rendering import render_to_pdf_response, render_to_pdf, make_response
@@ -266,25 +267,28 @@ def participant_download(page, request):
 def input_data_details(page, request, id):
     data = InputData.objects.get(id=id)
     template = 'pages/input_data_details_page.html'
+    admin_link = ''
     if data.description:
         description = urlize(linebreaks(data.description))
     else:
         description = page.input_data_description or ''
     if request.user.is_superuser:
-        description += ' <a href="{}">admin edit</a>'.format(
+        admin_link += ' <a href="{}">admin edit</a>'.format(
             urlresolvers.reverse('admin:climatemodels_inputdata_change', args=(data.id,)))
 
     subpage = {'title': 'Input data set: %s' % data.name, 'url': ''}
     context = {'page': page,
                'subpage': subpage,
-               'description': description,
+               'description': admin_link,
                'list': [
                    {
                        'notoggle': True,
                        'opened': True,
                        'definitions': [
+                           {'text': 'Protocol relation: %s' % data.get_protocol_relation_display()},
                            {'text': 'Data Type: %s' % data.data_type},
                            {'text': 'Simulation rounds: %s' % ', '.join((x.name for x in data.simulation_round.all()))},
+                           {'text': 'Description: %s' % description},
                            {'text': 'Scenarios: %s' % ', '.join((x.name for x in data.scenario.all()))},
                            {'text': 'Variables: %s' % ', '.join((x.as_span() for x in data.variables.all()))},
                        ]

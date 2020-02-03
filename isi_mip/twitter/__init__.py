@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import tweepy
 from django.conf import settings
@@ -40,15 +41,16 @@ class TwitterTimeline:
         stati = []
         for status in timeline:
             update = {}
-
+            # filter replies
+            if status.in_reply_to_status_id:
+                continue
             if getattr(status, 'retweeted_status', None):
                 status = status.retweeted_status
-
             update['id_str'] = status.user.id_str
             update['screen_name'] = status.user.screen_name
             update['name'] = status.user.name
             update['profile_image_url_https'] = status.user.profile_image_url_https
-            update['created_at'] = status.created_at
+            update['created_at'] = status.created_at.date()
             update['text'] = self.linkify(status.text)
 
             if getattr(status, 'quoted_status', None):
