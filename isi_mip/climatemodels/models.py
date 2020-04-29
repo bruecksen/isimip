@@ -328,7 +328,7 @@ class ImpactModel(models.Model):
         help_text="The ISIMIP simulation round for which these model details are relevant"
     )
     version = models.CharField(max_length=500, null=True, blank=True, verbose_name='Model version',
-                               help_text='The model version with which these simulations were run. Please indicate if the model version used for ISIMIP2b can be evaluated based on comparison of the ISIMIP2a runs with observed impacts.')
+                               help_text='The model version with which these simulations were run. If possible provide the git hash for later reproducibility. Indicate if the model version used for ISIMIP2b/3b can be evaluated against the ISIMIP2a/3a runs with observed forcings.')
     main_reference_paper = models.ForeignKey(
         ReferencePaper, null=True, blank=True, related_name='main_ref', verbose_name='Reference paper: main reference',
         help_text="The single paper that should be cited when referring to simulation output from this model",
