@@ -22,7 +22,7 @@ django-file-resubmit==0.5.2
 wagtail>=2.3,<2.4
 wagtail-blog==2.0.2
 
-html5lib==0.9999999
+html5lib==0.999999999
 elasticsearch>=2.0.0,<3.0.0
 
 django-easy-pdf==0.1.1
